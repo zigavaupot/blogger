@@ -1,6 +1,6 @@
-![OCI Language AI and Oracle Analytics](./language-ai-and-oac.png)
+![OCI Language AI and Oracle Analytics](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/language-ai-and-oac.png?raw=true)
 
-I have been writing about [OCI Vision services](https://zigavaupot.blogspot.com/2022/08/oracle-ai-vision-just-like-box-of.html) and [integration between OCI Vision to Oracle Analytics](https://zigavaupot.blogspot.com/2022/09/using-ai-vision-model-for-image.html)in previous blog post and how these services can integrate and be used with Oracle Analytics Cloud. In the meantime Oracle has released the Oracle Analytics January 2023 release, which comes with an option to integrate OAC with another OCI AI service, Language.
+I have been writing about [OCI Vision services](https://zigavaupot.blogspot.com/2022/08/oracle-ai-vision-just-like-box-of.html) and [integration between OCI Vision to Oracle Analytics](https://zigavaupot.blogspot.com/2022/09/using-ai-vision-model-for-image.html)in previous blog posts and how these services can integrate and be used with Oracle Analytics Cloud. In the meantime Oracle has released the Oracle Analytics January 2023 release, which comes with an option to integrate OAC with another OCI AI service, Language.
 
 In this blog post I am focusing on the integration between OAC and OCI Language service. This means, I am not focusing on the training of a custom model, but I am using pre-trained model available within OCI Language service.
 Assuming that model already exists, connecting OAC instance to OCI Language has to follow the following steps:
@@ -29,7 +29,7 @@ In this blog, I am focusing on pre-trained models, which are frequently retraine
 * sentiment analysis,
 * text translation.
 
-![OCI Language AI services](./oci-language-ai-service.png)
+![OCI Language AI services](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/oci-language-ai-service.png?raw=true)
 
 When working with all models (not just pre-trained, but custom also) you have to understand that the best results are achieved when using English. There is no auto-correction for misspelling.You might also find some other rules and constraints, which are described in more details in OCI Language documentation.
 
@@ -39,19 +39,19 @@ Let’s take a look at an example of a hotel review. For example, we would like 
 
 If you navigate to **text analytics** in **Language** console, simply copy the text from above in text box field.
 
-![Analyze text](./analyze-text-in-console.png)
+![Analyze text](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/analyze-text-in-console.png?raw=true)
 
 On **Analyze**, text analysis in a generic language model is performed automatically and results are displayed.
 
-![Results of text analysis](./results-of-text-analysis-1.png)
+![Results of text analysis](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/results-of-text-analysis-1.png?raw=true)
 
 **Sentiment analysis** is performed on document, on aspect (word) and on sentence level. Sentiment (positive, neutral, mixed, negative) is easily detectable using color coding.
 
-![Results of text analysis](./results-of-text-analysis-2.png)
+![Results of text analysis](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/results-of-text-analysis-2.png?raw=true)
 
 In the last results section, **Personal identifiable information** (PII) is displayed. For any PII, users can configure masking. In text example above, there aren't any PII, hence text has not been affected.
 
-![Results of text analysis](./results-of-text-analysis-3.png)
+![Results of text analysis](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/results-of-text-analysis-3.png?raw=true)
 
 In our example little further on this blog post, generic language model is used to integrate it with Oracle Analytics where bulk sentiment analysis is performed.
 
@@ -64,11 +64,12 @@ Before you can use AI Language service, users require some policies to be set fo
 ```text
 allow group <group-name> to use ai-service-language-family in tenancy
 ```
-![Policy to allow user group to use AI Language Service](./allow-user-group-use-ai-language.png)
+
+![Policy to allow user group to use AI Language Service](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/allow-user-group-use-ai-language.png?raw=true)
 
 And there is another prerequisite: Language requires a staging bucket for storing temporary results. This bucket needs to be created and policies for managing it have to granted to the user group which is using Language service.
 
-![Staging bucket for AI Language Service](./staging-bucket-for-language.png)
+![Staging bucket for AI Language Service](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/staging-bucket-for-language.png?raw=true)
 
 ```text
 allow group <group_in_tenancy> to read objectstorage-namespaces in compartment <compartment>
@@ -76,21 +77,21 @@ allow group <group_in_tenancy> to read buckets in compartment <compartment>
 allow group <group_in_tenancy> to manage objects in compartment <compartment> where target.bucket.name='<staging_bucket_name>'
 ```
 
-![Policy to allow user group to use and manage staging bucket](./policies-for-staging-bucket.png)
+![Policy to allow user group to use and manage staging bucket](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/policies-for-staging-bucket.png?raw=true)
 
 ### Establishing a connection to Language from Analytics
 
 Connecting from Analytics to Language is same as for Vision. When defining a new connection, **OCI Resource** connection type is available in Analytics. What is needed is some parameters from OCI environment and information for the user connecting to OCI resource.
 
-![Creating connection to OCI Resource](./oci-resource-connection.png)
+![Creating connection to OCI Resource](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/oci-resource-connection.png?raw=true)
 
 Based on valid connection generic language model can be registered with Analytics.
 
-![Register Language Model](./register-language-model-menu.png)
+![Register Language Model](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/register-language-model-menu.png?raw=true)
 
 And then, users can choose between several pre-trained models. For example, sentiment analysis.
 
-![Select pre-trained sentiment analysis model](./select-sentiment-analysis.png)
+![Select pre-trained sentiment analysis model](https://github.com/zigavaupot/blogger/blob/main/images/another-box-of-chocolates-language-ai-and-oac/select-sentiment-analysis.png?raw=true)
 
 ### Deploying model for Sentiment Analysis
 
@@ -102,7 +103,7 @@ Data flow itself is pretty straight forward. As any other activity within Analyt
 * Apply language model on provided dataset.
 * Store results into a new dataset.
 
-![Apply Language model for Sentiment Analysis](./apply-ai-model.png)
+![Apply Language model for Sentiment Analysis](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/apply-ai-model.png?raw=true)
 
 Based on the selection in the 2nd, Apply AI Model, sentiment analysis is performed on different sentiment levels:
 
@@ -110,7 +111,7 @@ Based on the selection in the 2nd, Apply AI Model, sentiment analysis is perform
 * Sentence,
 * Both, Aspect and Sentence
 
-![Sentiment Analysis Levels](./sentiment-analysis-levels.png).
+![Sentiment Analysis Levels](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/sentiment-analysis-levels.png?raw=true).
 
 Based on this selection, result of different granularity are generated. In any case, sentiment analysis for the document level (in our case, restaurant review) is performed.
 
@@ -122,12 +123,10 @@ Once a new sentiment analysis dataset is created, it can be instantly used in a 
 
 For example, number of reviews by sentiment by restaurant can lead to detailed analysis of each given review.
 
-![Sentiment Analysis Workbook](./trip-advisor-sentiment-analysis-workbook.png).
+![Sentiment Analysis Workbook](https://github.com/zigavaupot/blogger/blob/main/another-box-of-chocolates-language-ai-and-oac/images/trip-advisor-sentiment-analysis-workbook.png?raw=true).
 
 ## Conclusion
 
 In this short example, we can see (again) how easy is to use machine learning services within Oracle Cloud Infrastructure. Just like Vision, Language service is really easy to use as a stand-alone service. To analyze text, users don't have to be data scientist. What they need is just a couple of clicks and of course basic understanding of AI service they are using.
 
 And on top of it, this short example also demonstrates how easy is to connect Analytics to Language service. The only technical stuff is to set policies and create connection between the two OCI services. But once these are done (usually by OCI administrator), then users can take it from there and deploy their data and visualize it in Analytics. Just like any other dataset they might use in their analyses. Or as the title suggest: Just another box of chocolates.
-
-
