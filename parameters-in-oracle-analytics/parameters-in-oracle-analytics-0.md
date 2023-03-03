@@ -16,7 +16,7 @@ We’ll start things off by taking a look at what functionality existed in OBIEE
 * Request Variable - This variable enables the value of a session variable to be overridden.
 * Global Variables - Similar to the Presentation Variable in that this variable is created in the “front end” and can be used to store the results of an intermediate calculation step for example.
 
-### Using Parameters in Oracle Analytics
+# Using Parameters in Oracle Analytics
 
 Let’s start off with a look back at the equivalent OBIEE feature. The parameters functionality that has been incorporated into Oracle Analytics Cloud matches with the Presentation Variables functionality described above that have been available in OBIEE.
 

@@ -32,8 +32,12 @@ In the first, initial workbook, we have created:
 
 There is also requirement to create a new Action Link which will open the 2nd workbook and pass to it selected parameter value.
 
-In the second workbook, a new parameter has to be created (I created identical parameter as I did in the 1st workbook). I also created another expression filter in order to capture passed parameter and filter data based on it. Actually, this filter's definition is also like the one we used in the first workbook:
+You can see that there is an additional placeholder for specifying parameters to pass.
 
 ![Customer Segments Parameter](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-03-007.png?raw=true)
 
-![Expression filter](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-03-008.png?raw=true)
+In the second workbook, a new parameter has to be created (I created identical parameter as I did in the 1st workbook). I also created another expression filter in order to capture passed parameter and filter data based on it. Actually, this filter's definition is also like the one we used in the first workbook:
+
+![Customer Segments Parameter](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-03-008.png?raw=true)
+
+![Expression filter](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-03-009.png?raw=true)
