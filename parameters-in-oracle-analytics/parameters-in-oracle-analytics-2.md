@@ -36,30 +36,3 @@ And finally, test the results. In the first example, all values (default) are se
 ![Using parameter in column filters - default](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-006.png?raw=true)
 
 ![Using parameter in column filters - one customer segment selected](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-007.png?raw=true)
-
-
-
-
-we need to create a new parameter. In your workbook you will find additional menu option **Parameters** at the top of the main panel.
-
-![Parameters tab in main panel](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-01-002.png?raw=true)
-
-You can create a new parameter simply by pressing **+** next to the **Search** field. Parameter that is created in this case is very simple, it is based on the list of values that is manually entered with the initial value set to one of these entered values.
-
-![Create or Edit Parameter](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-01-003.png?raw=true)
-
-And this is all that is required to define a parameter. Now, we need to create a calculation that would use this parameter.
-
-![Create a new calculation using parameter](./images/par-01-004.png)
-
-In analysis below another calculation is created, simply to display selected parameter. For example, new table could look like this:
-
-![Updated parameterized table](./images/par-01-005.png)
-
-When creating a new data visualization, previously created parameter's values have to be selectable, hence it needs to be put in Filters tab, where user can select one of the values 'no', 'K' or 'M' ...
-
-![Select new parameter value](./images/par-01-006.png)
-
-... and table is updated with the selected choice.
-
-![Table with abbreviated values](./images/par-01-007.png)
