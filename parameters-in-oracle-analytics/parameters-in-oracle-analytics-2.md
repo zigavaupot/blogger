@@ -31,8 +31,18 @@ To be able to use newly created parameter, a new calculation is created.
 
 ![New calculation using column filter](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-005.png?raw=true)
 
-And finally, test the results. In the first example, all values (default) are selected, and in the second example, only one customer segment is selected.
+And finally, test the results. In the first example, all values (default) are selected ...
 
 ![Using parameter in column filters - default](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-006.png?raw=true)
 
+... and in the second example, only one customer segment is selected.
+
 ![Using parameter in column filters - one customer segment selected](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-007.png?raw=true)
+
+Now, we can play further. Measure that uses parameter value, can be used in another calculated measure. For example, to calculate % profit of selected Product Categories in the total profit. In this case a new calculation is created ...
+
+![Calculate % profit using parametrized measures](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-008.png?raw=true)
+
+... and then added to existing table.
+
+![New calculation for % profit included in a table](https://github.com/zigavaupot/blogger/blob/main/parameters-in-oracle-analytics/images/par-02-009.png?raw=true)
