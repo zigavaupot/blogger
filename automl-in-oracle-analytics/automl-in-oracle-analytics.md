@@ -20,11 +20,11 @@ For more information, you can also check out my blog post [Housing Price Predict
 
 Oracle Machine Learning is one of the development tools within Oracle Autonomous Data Warehouse.
 
-![Database Actions in ADW - Oracle Machine Learning](./images/database-actions-oml.png)
+![Database Actions in ADW - Oracle Machine Learning](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/database-actions-oml.png?raw=true)
 
 Oracle Machine Learning is actually implementation of Zeppelin Notebooks with database. You can use notebooks to create and deploy machine learning models whereby Oracle Machine Learning supports use of SQL, PL/SQL, R and Python. When using AutoML, this is done by using so called **Experiments**. 
 
-![Create and run AutoML experiments](./images/quick-actions-automl.png)
+![Create and run AutoML experiments](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/quick-actions-automl.png?raw=true)
 
 AutoML runs experiments (ie. searching for the best model)using Python.
 
@@ -32,40 +32,74 @@ Using AutoML experiments is pretty straightforward. Users are not required to kn
 
 AutoML starts by creating an experiment.
 
-![Create a new AutoML experiments](./images/create-automl-experiment.png)
+![Create a new AutoML experiments](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/create-automl-experiment.png?raw=true)
 
 In the beginning, besides experiment name and comments, a database table with data for model training is selected. In this small experiment, HOUSING table is selected.
 
-![Select database table](./images/select-table-for-experiment.png)
+![Select database table](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/select-table-for-experiment.png?raw=true)
 
 Once database table is selected, parameters like predictor, case id and prediction type are selected. In our example, attribute MV is predictor, case ID is column IDX and predition type is already selected based on the predictor selection.
 
-![Create a new AutoML experiments](./images/define-model-parameters.png).
+![Create a new AutoML experiments](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/define-model-parameters.png?raw=true).
 
 There are some other Additional settings, which can be optionally set. For example, R2 is selected instead of Mean Squared Error as model metric.
 
-![Set additional settings](./images/additional-settings.png)
+![Set additional settings](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/additional-settings.png?raw=true)
 
 This is basically it! AutoML experiment is ready to be started. There are two options how you would like to run the experiment, Faster Results or Better Accuracy. Choose one and just start.
 
-![Start experiment](./images/start-experiment.png)
+![Start experiment](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/start-experiment.png?raw=true)
 
 Based on the setting, AutoML experiment will run. Progress can be tracked in **Running** window.
 
-![Running window](./images/running.png)
+![Running window](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/running.png?raw=true)
 
 In the main page, you can monitor results of models run and tested in the Leader Board.
 
-![Leader Board](./images/leader-board.png)
+![Leader Board](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/leader-board.png?raw=true)
 
+Once done, you can check the model details. In this example, you can see which attributes have the most important impact on prediction.
 
+![Model details - Prediction impact](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/model-details.png?raw=true)
 
+For easier understanding which model was selected as the best, model has been renamed into *THE_BEST_MODEL_FOR_HOUSING*.
 
+![Rename model](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/rename-model.png?raw=true)
 
+Let's check code generated. This can be done simply by creating notebook from selected model.
 
+![Create notebook](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/create-notebook.png?raw=true)
+
+Notebook is generated and it can be opened in Zeppelin Notebooks.
+
+![Show model details](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/show-model-details.png?raw=true)
+
+Model has been generated in Python. OML4Py is using transparency layer above OML4SQL so all results are basically running on top of "old-fashioned" Data Mining (of course much improved). So the results are presented as if you were running same model using OML4SQL.
 
 ### Registering AutoML model with Oracle Analytics Cloud
 
+When OML model is created in ADW, it can be registered with Oracle Analytics Cloud.
+
+![Register ML models](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/register-ml-models.png?raw=true)
+
+Wizard driven process drives registration of machine learning model with Oracle Analytics.
+
+![Select ML models](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/select-a-model-to-register.png?raw=true)
+
+Registered model can now be used in Data Flows as any other machine learning model.
+
+Data Flow itself consists of 3 steps: read data, apply registered model and save predictions.
+
+![Select ML models](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/apply-model-step.png?raw=true)
+
+When data model runs it creates data with attributes that were defined as outputs. In case above, this is prediction, and then attributes with weights and conditions as a result of applying selected model.
+
+Deployment of the AutoML models is no different than applying any other machine learning model from ADW. Model needs to be available for registration in Oracle Analytics and then it can be used in Data Flows for performing predictions.
+
 ### Using AutoML from OAC Data Flows
+
+The process described above is a bit long and involves quite a lot of steps, having in mind that machine learning process is *automated*.
+
+We can now use AutoML functionality from ADW directly by using AutoML step in Data Flows. Data Flows have additinal step calle AutoML. Using this step, AutoML really becomes what the name suggests, automated, and can be used by any (business) user from Oracle Analytics.
 
 ### Conclusion
