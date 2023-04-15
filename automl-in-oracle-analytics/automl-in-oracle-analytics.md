@@ -110,10 +110,39 @@ As already mentioned, AutoML that is used in OAC is currently using AutoML in AD
 
 ![Create database user with OML_Developer - Granted roles](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/adw-user-granted-roles.png?raw=true)
 
+When database user is properly created/updated in ADW, a new connection (if not yet created) is created:
+
 ![Create connection using database user with OML_Developer role](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/create-connection-oml-developer.png?raw=true)
 
+Using the new connection to ADW, training dataset is created, ie. *BOSTON_HOUSING* dataset.
 
+![Create a new dataset](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/create-a-new-dataset.png?raw=true)
 
+When data is prepared (in this example no preparation steps are required), a new data flow using AutoML step is used. This functionality is new and is available in March 2023 release.
+
+Begin creating a new data flow using newly created dataset. Select AutoML step in the 2nd step in data flow.
+
+![Create a new dataflow using AutoML step](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/create-dataflow-with-automl-step.png?raw=true)
+
+AutoML step is simplified as much as it is possible. First, the target column is selected.
+
+![Select target column](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/select-a-target-column.png?raw=true)
+
+Based on the selection, Task Type is automatically proposed. In our example, target column is a numeric value, hence Task Type proposed is *Regression*. If this is not the case, and the exercise is a classification problem, this can still be changed manually.
+
+![Select target column](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/select-a-target-column.png?raw=true)
+
+Model Ranking Metric is obviously dependent on Task Type selected. For both Task Types, user can pick one metric from the list.
+
+![Regression metrics](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/regression-metrics.png?raw=true)
+
+![Classification metrics](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/classification-metrics.png?raw=true)
+
+In our example, R2 (R-squared) is selected.
+
+The last step of the data flow is Save Model.
+
+![Save Model](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/save-model.png?raw=true)
 
 
 ### Conclusion
