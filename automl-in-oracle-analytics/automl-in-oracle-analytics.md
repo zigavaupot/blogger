@@ -12,7 +12,7 @@ Let’s look at example. And let’s start with “traditional” approach. Late
 
 ### Data
 
-Before we start with an example, let’s check select data. Let’s take one that is already prepared and is used more than frequently in these kind of show cases. We’ll use the [Boston Housing dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/housing/). 
+Before we start with an example, let’s check select data. Let’s take one that is already prepared and is used more than frequently in these kind of show cases. We’ll use the [Boston Housing dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/housing/).
 
 For more information, you can also check out my blog post [Housing Price Prediction in Oracle Data Visualisation](https://zigavaupot.blogspot.com/2020/05/housing-price-prediction-in-oracle-data.html).
 
@@ -100,6 +100,20 @@ Deployment of the AutoML models is no different than applying any other machine 
 
 The process described above is a bit long and involves quite a lot of steps, having in mind that machine learning process is *automated*.
 
-We can now use AutoML functionality from ADW directly by using AutoML step in Data Flows. Data Flows have additinal step calle AutoML. Using this step, AutoML really becomes what the name suggests, automated, and can be used by any (business) user from Oracle Analytics.
+We can now use AutoML functionality from ADW directly by using AutoML step in Data Flows. Data Flows have additional step called AutoML. Using this step, AutoML really becomes what the name suggests, automated, and can be used by any (business) user from Oracle Analytics.
+
+In the example below, I am using the same dataset as above, the Boston Housing dataset [Boston Housing dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/housing/).
+
+As already mentioned, AutoML that is used in OAC is currently using AutoML in ADW. When using AutoML in OAC, then OAS connection to ADW must use a database user with role *OML_Developer*. It is also required that this user is not *admin* user.
+
+![Create database user with OML_Developer role](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/adw-user-oml-developer.png?raw=true)
+
+![Create database user with OML_Developer - Granted roles](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/adw-user-granted-roles.png?raw=true)
+
+![Create connection using database user with OML_Developer role](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/create-connection-oml-developer.png?raw=true)
+
+
+
+
 
 ### Conclusion
