@@ -144,5 +144,26 @@ The last step of the data flow is Save Model.
 
 ![Save Model](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/save-model.png?raw=true)
 
+> **IMPORTANT:** In this step, please make sure all characters in Model name are capital and that there are no spaces in the name.
+
+Save and run data flow.
+
+When data flow run completes, check the model under **Machine Learning** menu.
+
+![Inspect Model](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/inspect-model.png?raw=true)
+
+Under the *Details* tab, we can see that SVM algorithm has been selected and in *parameters* section, parameters which have been used are displayed.
+
+![Model Details](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/automl-oac-model-details.png?raw=true)
+
+More details are listed under *Related* tab where the list of generated DM$ views are displayed. These database views contain all relevant detailed information about the model. However I am not 100% sure if the list is correct as it show GLM parameters and not SVM (bug ?!).
+
+![Model Related Views](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/model-related-views.png?raw=true)
+
+These database views can be viewed in database in the schema specified in OAC connection. In my case, ML_USER schema:
+
+![DM$ Views](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/dm$-related-views.png?raw=true)
+
+
 
 ### Conclusion
