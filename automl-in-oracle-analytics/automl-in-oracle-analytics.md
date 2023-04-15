@@ -164,6 +164,10 @@ These database views can be viewed in database in the schema specified in OAC co
 
 ![DM$ Views](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/dm$-related-views.png?raw=true)
 
-
-
 ### Conclusion
+
+Using Machine Learning in OAC was very easy even before. With AutoML support in Data Flows, OAC is enabling business users with even easier option to augment and enrich their analyses. What could be simpler than having Oracle Analytics do all the machine learning work for them.
+
+In this blog post I have presented two options how to use AutoML in Oracle Analytics. However, both are tied to Oracle Machine Learning support in Oracle database (ADW). For some user, who are not using Oracle databases for machine learning, this could be quite limiting.
+
+But luckily, these two options aren't the only options of using AutoML in OAC. For example, machine learning model can be trained in Oracle Data Science Cloud Service using ie. Tensorflow and then integrated and used in OAC. Check out one my future blog posts about this topic.
