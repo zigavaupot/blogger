@@ -130,8 +130,6 @@ AutoML step is simplified as much as it is possible. First, the target column is
 
 Based on the selection, Task Type is automatically proposed. In our example, target column is a numeric value, hence Task Type proposed is *Regression*. If this is not the case, and the exercise is a classification problem, this can still be changed manually.
 
-![Select target column](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/select-a-target-column.png?raw=true)
-
 Model Ranking Metric is obviously dependent on Task Type selected. For both Task Types, user can pick one metric from the list.
 
 ![Regression metrics](https://github.com/zigavaupot/blogger/blob/main/automl-in-oracle-analytics/images/regression-metrics.png?raw=true)
