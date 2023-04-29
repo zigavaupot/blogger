@@ -1,4 +1,4 @@
-### About watchists
+### About Watchists
 
 In this short post, I am discussing a very nice usability feature in Oracle Analytics called the Watchlist.
 
@@ -10,7 +10,7 @@ The idea is give users ability to run analyses and review results, like "visuali
 
 For example, using Watchlists can be particularly useful if there are a lot of workbooks stored in the catalog and users would spend a lot of time just by searching and locating their analyses in the catalog.
 
-When you Customize your home page, you can see that the Watchlists is one of the sections of the home page, and there is also an option to enable Feautured Watchlists in the top of the Home Page.
+When you Customize your home page, you can see that the Watchlists is one of the sections of the home page, and there is also an option to enable Featured Watchlists in the top of the Home Page.
 
 ![Customize Home Page](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/analytics-home-page.png?raw=true)
 
