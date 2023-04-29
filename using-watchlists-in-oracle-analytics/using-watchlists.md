@@ -1,4 +1,4 @@
-### About Watchists
+### About Watchlists
 
 In this short post, I am discussing a very nice usability feature in Oracle Analytics called the Watchlist.
 
@@ -30,7 +30,7 @@ Other visualizations can be added to an existing watchlist now or new watchlists
 
 ![Add to existing watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/add-to-existing-watchlist.png?raw=true)
 
-In case there are more than one vizulization added to a watchlist, then one can always be defined as a first card of that watchlist.
+In case there are more than one vizualization added to a watchlist, then one can always be defined as a first card of that watchlist.
 
 ![Add as a first card in a watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/add-as-a-first-card-in-watchlist.png?raw=true)
 
@@ -40,7 +40,7 @@ Homepage will now display favorite watchlist at the top of the page.
 
 If there are more than one watchlist created, these can be selected from a menu that is available next to the selected watchlist name.
 
-![Switching between watchlists](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/home-page-with-favorite-watchlist.png?raw=true)
+![Switching between watchlists](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/switching-between-watchlists.png?raw=true)
 
 Otherwise, all watchlists are listed in the home page. If *Watchlist* is selected in search field, the list of existing watchlist is displayed. 
 
