@@ -20,11 +20,21 @@ If we now try to explore the example above and look into Natural Language Genera
 
 For example, if I changed the Horizontal Stacked visualization type of the visualization above to Language Narrative, ...
 
-![Switch to Language Narrative](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/switch
--to-language-narrative.png?raw=true)
+![Switch to Language Narrative](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/switch-to-language-narrative.png?raw=true)
 
 ... and the result is as follows:
 
 ![Switch to Language Narrative](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/language-narrative-visualization.png?raw=true)
 
-So how does this visualization work? In fact there are some ground rules for text generation and, of course, not everything can be generated as text. So let's explore it!
+So how does this visualization work? As you might have observed, the example above is not really a stated of the art explanation of the chart on the right. In fact there are some ground rules for text generation and, of course, not everything can be generated as text. So let's explore what are the options here!
+
+First of all, the query in the example above, contains two dimension and one measure with one additional dimension in filter. It seems it was able to generate "something", however the result was not really a good one. Working with Language Narrative has some limitations and one these is how many attributes can be used in a query. Currently the following combination of attributes are supported:
+
+* one measure with two dimensional attributes
+
+![One measure with two dimensional attributes](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/one-measure-two-attributes.png?raw=true)
+
+* two measures with one dimensional attribute
+
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/one-measure-two-attributes.png?raw=true)
+
