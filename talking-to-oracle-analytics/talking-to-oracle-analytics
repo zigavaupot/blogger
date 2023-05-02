@@ -36,7 +36,7 @@ First of all, the query in the example above, contains two dimension and one mea
 
 * two measures with one dimensional attribute
 
-![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/two-measures-one-attribure.png?raw=true)
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/two-measures-one-attribute.png?raw=true)
 
 Well, this doesn't give us much insight isn't? It looks like, it doesn't really provide some meaningful insights. So, what happens if we make one step back, and try to build this visualization from scratch. There is also another thing to pay attention. Messages above mention *chronological order* which infer use of time dimension.
 
