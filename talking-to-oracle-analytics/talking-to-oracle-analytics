@@ -1,0 +1,30 @@
+Being able to talk, by using natural language, to computers, especially with the advancements in general AI models like ChatGPT, has become very fashionable in the last couple of months. Everybody does it. It is simple, easy to use and let's be frank, it can be also very useful. Something that has been around for a while, remember Siri or Alexa or TV remote controllers, has been lifted to a new level and has wide spread use in business already.
+
+In Oracle Analytics, Natural Language Recognition has already been around for a while, at least for some years now. I remember those early days when Oracle Day by Day mobile application has been introduced. One of the coolest features in Day by Day was actually the ability to ask a question using natural language. Something like *What is revenue by region and channel for seniors?* would provide you an answer in the form of charts, tables, etc. This feature is still available, and you can ask this question in the **Search** field located in the Oracle Analytics home page.
+
+![Ask the question in Search](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/ask-a-question.png?raw=true)
+
+Oracle Analytics would then provide the following answer:
+
+![Get an anwser](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/get-an-answer.png?raw=true)
+
+Further navigation takes a user to more details in a newly generated workbook that can be further enhanced and improved by the user himself.
+
+![Generated workbook](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/generated-workbook.png?raw=true)
+
+Just a note on the above workbook: Oracle Analytics have, based on its index recognized *revenue* as a measure, and *channel* and *region* as dimensions. The *for seniors* part of the question resulted in a filter set for *Segment is equal to "Seniors"*.
+
+This answer is not yet based on some crazy AI technology (it may very well be as well, and maybe this is coming soon), but uses simple parsing and search index to formulate the answer. So it is not at the level of ChatGPT or something similar, however I guess it is still good enough to be used by end users, In particular in a mobile application like Oracle Analytics Mobile, where it is easier to speak than type.
+
+If we now try to explore the example above and look into Natural Language Generation capabilities, we can see that this is available in several places. For example, *Explain* function can generate quite a lot of text, and quite detailed descriptions can be seen when using *Insights*. But beside these two features (and by the way, there is AI behind the scenes), Oracle Analytics comes with out-of-the-box *Language Narrative* visualization.
+
+For example, if I changed the Horizontal Stacked visualization type of the visualization above to Language Narrative, ...
+
+![Switch to Language Narrative](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/switch
+-to-language-narrative.png?raw=true)
+
+... and the result is as follows:
+
+![Switch to Language Narrative](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/language-narrative-visualization.png?raw=true)
+
+So how does this visualization work? In fact there are some ground rules for text generation and, of course, not everything can be generated as text. So let's explore it!
