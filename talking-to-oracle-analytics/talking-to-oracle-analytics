@@ -36,5 +36,49 @@ First of all, the query in the example above, contains two dimension and one mea
 
 * two measures with one dimensional attribute
 
-![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/one-measure-two-attributes.png?raw=true)
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/two-measures-one-attribute.png?raw=true)
+
+Well, this doesn't give us much insight isn't? It looks like, it doesn't really provide some meaningful insights. So, what happens if we make one step back, and try to build this visualization from scratch. There is also another thing to pay attention. Messages above mention *chronological order* which infer use of time dimension.
+
+So let's see what happens if time dimension attribute (*Month*) is used instead of categorical (*Region*).
+
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/two-measures-time-dimension.png?raw=true)
+
+Well, now visualization generates a bit more narrative than in previous example, and provides some insights sych as minimums, maximums, strongest decline, ... etc. Interesting enough, it also talks about *fixed costs* missing objectives, failing to meet goals and so on. This is weird, but sentences like that imply that *variable costs* are somehow targeted values for *fixed costs* (?).
+
+Can this be corrected somehow? Or put in some context? Navigating to the Visualization Properties panel gives users some additional flexibility in terms for controlling the Language Narrative.
+
+First, the *Language*. Currently, only English and French are supported. So let's keep this in mind for other languages. Another thing is level of detail, which I'll skip for a moment, so the next property is *Analysis*. This property has an immediate effect on the visualization.
+
+![Language Narrative properties](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/language-narrative-properties.png?raw=true)
+
+Default value, in this case, is set to *Trend*. Changing it to *Breakdown* has the following effect:
+
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/two-values-time-dimension-breakdown.png?raw=true)
+
+You can observe that text that has been generated is truly broken down quite substantially and much more insight was generated because there was much more details available (we are looking at 36 months period). Of course, a bit more study of what was generated, but I guess the text captures information in the table quite well. From the table, details like that can't be easily spotted. 
+
+*Level of Detail* has been set to 7. This is value for maximum level of detail. If this is changed to 5, for example, than genarated text in Language Narrative is obviously much shorter and with less detail:
+
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/level-of-detail-set-to-5.png?raw=true)
+
+So let's take a look at our initial example when we tried to generated Language Narrative for one measure and two dimensions. One of these is now time dimension.
+
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/one-measure-time-and-categorical.png?raw=true)
+
+Language Narrative in the example above generates quite a lot of text. For *Analysis = "Trend"* it generated quite a lot of insights in textual format. First, it analyzes the overall trend and then it breaks down trend by distinct values of selected categorical attribute.
+
+Switching *Analysis* property to *Breakdown*, provides breakdown by the time dimension attribute.
+
+![Two measures with one dimensional attribute](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-analytics/images/one-measure-time-and-categorical-breakdown.png?raw=true)
+
+### Conclusion
+
+In my short exploration for Language Narrative visualization type I have observed some really nice automatically generated texts by Oracle Analytics. Some of these were not really useful, but some actually provided useful textual insights. However using these just because it looks cool, that just might not work. Therefore users should make sure that they know how and when to use it.
+
+More details on working with Language Narrative visualization can be found in *Visualize and Analyze Data* chapter of[Visualizing Data and Building Reports in Oracle Analytics Cloud](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acubi/) documentation. I strongly recommend to check it before using these in your visualization projects as you might find a lot of messages like this:
+
+```console
+The comparison of two unordered measures is not yet available. Unordered means that the data is not in chronological order. The application will generate a separate analysis for each measure. Stay tuned, future releases will add functionalities for unordered dimensions.
+```
 
