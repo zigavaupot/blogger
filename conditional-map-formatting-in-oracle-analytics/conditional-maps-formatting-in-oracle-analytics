@@ -1,0 +1,25 @@
+# Maps Conditional Formatting
+
+![Maps Conditional Formatting](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting.png?raw=true)
+
+Oracle Analytics Cloud (OAC) is now frequently updated on bi-monthly basis. May Update release has been announced a week or so ago, and I was able to take a look at preview version which brings again several nice new [features and functionalities](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acswn/index.html#ACSWN-GUID-CFF90F44-BCEB-49EE-B40B-8D040F02D476).
+
+The one that draw attention to me was **Maps Conditional Formatting**, an option to highlight important data events in map visualizations along with other visualization types.
+
+So how does this work? Actually, it is very straight forward as the same model is used as with any other conditional formatting.
+
+![Initial Map](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/initial-map.png?raw=true)
+
+The map above is the starting point and presents profitability by country. Couldn't be more simple, right?
+
+In order to implement conditional formatting on the map, click on the traffic light icon (*Manage Conditional Formatting Rules*). This will open **Conditional Formatting** popup window. 
+
+![Conditional Formatting Window](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting-window.png?raw=true)
+
+Select to what this particular conditional formatting applies to, the whole workbook or just selected visualization. Provide a name for the rule and choose a measure. *Profit Ratio %* in this case. And then specify the bands and limits for the selected coloring.
+
+Voila, map is instantly conditionally formatted. Very easy, very efficient.
+
+![Conditional Formatting Completed](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting-completed.png?raw=true)
+
+
