@@ -1,14 +1,14 @@
 # My SQL beginnings
 
-It was approx. 35 years ago (gosh, that long!?) when I first met SQL. Structured Query Language to those who might not be 100% sure of what I am talking about. It was during labs at faculty when we went to IBM's training center in Radovljica, Slovenia, to learn and play with this (at least for me) new programming language. The language of the 4th generation, so they said. With its roots in boolean algebra and simple structure, we were told that this was almost the same as natural language (english of course, who would thought one day you would use Slovenian language to query databases). With all those SELECTs, FROMs, WHEREs, GROUP BYs, HAVINGs, ORDER BYs, etc. it actually sounded realy cool and easy. I remember that we successfully crashed that poor thing of that IBM mainframe within first 5 minutes and labs were finished. And we have proven once again that the 3rd generation programming languages still ruled the world.
+It was approx. 35 years ago (gosh, that long!?) when I first met SQL. Structured Query Language to those who might not be 100% sure of what I am talking about. It was during labs at faculty when we went to IBM's training center in Radovljica, Slovenia, to learn and play with this (at least for me) new programming language. The language of the 4th generation, so they said. With its roots in boolean algebra and simple structure, we were told that this was almost the same as natural language (english of course, who would thought one day you would use Slovenian language to query databases). With all those SELECTs, FROMs, WHEREs, GROUP BYs, HAVINGs, ORDER BYs, etc. it actually sounded really cool and easy.
 
 # My Select AI beginnings
 
 The other day I finally found some time to invest into something else than just daily work, which is obviously something different than the rest of this blog post.
 
-The one that caught my attention was one of the latest Oracle's blogs ([Introducing Select AI - Natural Language to sQL Generation on Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-89407FB6-05DC-4202-93DE-35DAB7F93EBB)) which is discussing the use of generative AI with Large Language Models (LLMs), such as ChatCPT, Cohere or Azure OpenAI Service with Oracle Autonomous Database.
+The one that caught my attention was one of the latest Oracle's blogs [Introducing Select AI - Natural Language to sQL Generation on Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-89407FB6-05DC-4202-93DE-35DAB7F93EBB) which is discussing the use of generative AI with Large Language Models (LLMs), such as ChatCPT, Cohere or Azure OpenAI Service with Oracle Autonomous Database.
 
-More details can be found in Oracle Autonomous Database documentation: ([Use Select AI to Generate SQL from Natural Language Prompts](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-9CE75F94-7455-4C09-A3F3-118C08E82B7E)).
+More details can be found in Oracle Autonomous Database documentation: [Use Select AI to Generate SQL from Natural Language Prompts](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-9CE75F94-7455-4C09-A3F3-118C08E82B7E).
 
 # Let's talk now
 
@@ -21,7 +21,7 @@ select ai what is total revenue
 
 And the response is?
 
-![Simple SELECT Ai Query](../select-ai-simple.png?raw=true)
+![Simple SELECT Ai Query](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-simple.png?raw=true)
 
 For experienced ChatGPT users this is probably nothing really spectacular. For me, it is. The response is obviously coming from underlying database table and is correct. Encouraging.
 
@@ -34,7 +34,7 @@ select ai what is the revenue by customer segments in the last year
 
 ```
 
-![A bit more complex SELECT AI query](../select-ai-complex.png?raw=true)
+![A bit more complex SELECT AI query](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-complex.png?raw=true)
 
 In this case result is a bit more complex and it can be display in various formats, for example as a graph.
 
@@ -51,42 +51,42 @@ As already indicated, same natural language query can return different results. 
 For example, if *narrate* keyword is used in the query above:
 
 ```console
-select ai **narrate** what is the revenue by customer segments in the last year
+select ai narrate what is the revenue by customer segments in the last year
 ```
 
 The results formulates the following narrative:
 
-![A bit more complex SELECT AI query using narrate keyword](../select-ai-complex-narrate.png?raw=true)
+![A bit more complex SELECT AI query using narrate keyword](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-complex-narrate.png?raw=true)
 
 If we want to show SQL that is generated, then *showsql* keyword can be used:
 
 ```console
-select ai **showsql** what is the revenue by customer segments in the last year
+select ai showsql what is the revenue by customer segments in the last year
 ```
 
 The results formulates the following SQL query:
 
-![A bit more complex SELECT AI query using showsql keyword](../select-ai-complex-showsql.png?raw=true)
+![A bit more complex SELECT AI query using showsql keyword](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-complex-showsql.png?raw=true)
 
 If you want simply to execute the query, then keyword is *runsql*:
 
 ```console
-select ai **runsql** what is the revenue by customer segments Íin the last year
+select ai runsql what is the revenue by customer segments Íin the last year
 ```
 
 The results formulates the following - it is the same as when on keyword was used:
 
-![A bit more complex SELECT AI query using runsql keyword](../select-ai-complex-runsql.png?raw=true)
+![A bit more complex SELECT AI query using runsql keyword](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-complex-runsql.png?raw=true)
 
 The last keyword option, *chat* is probably the most interesting as conversational AI response is generated:
 
 ```console
-select ai **chat** what is the revenue by customer segments Íin the last year
+select ai chat what is the revenue by customer segments in the last year
 ```
 
 The results formulates the following - it is the same as when on keyword was used:
 
-![A bit more complex SELECT AI query using chat keyword](../sselect-ai-complex-explain-query.png?raw=true)
+![A bit more complex SELECT AI query using chat keyword](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-complex-explain-query.png?raw=true)
 
 We can see that in this case the answer is a bit more explanatory. It seems that query went to LLM and returned back with prescription what needs to be done, not the result itself.
 
@@ -105,7 +105,28 @@ select ai chat explain the following SQL
 ```
 The results formulates the following - it is the same as when on keyword was used:
 
-![A bit more complex SELECT AI query using chat keyword](../select-ai-complex-chat.png?raw=true)
+![A bit more complex SELECT AI query using chat keyword](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-complex-chat.png?raw=true)
 
+# Let's have some more ...
 
+... and check some more questions:
 
+![Top 5 product by revenue](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-top-5.png?raw=true)
+
+![Top 5 product by revenue comparing previous years](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-top-5-comparing-years.png?raw=true)
+
+![Compare years and show growth - relative](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-top-5-growth-percentage.png?raw=true)
+
+![Customer distribution by segments](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database/images/select-ai-customers-by-segments.png?raw=true)
+
+Well?
+
+# To wrap up
+
+My first encounter with LLM in a database is quite positive. I've read that we should be careful for hallucinations and one should always verify generated results.
+
+Anyway, Rome was not built in one day, right? It's quite common that not everything works error-free at first.
+
+Afterall, I remember that we managed to successfully crash that poor thing of that IBM mainframe within first 5 minutes and labs were finished for good. Again, we have proven once more that the 3rd generation programming languages still ruled the world.
+
+And still, look at us know!
