@@ -1,0 +1,111 @@
+# My SQL beginnings
+
+It was approx. 35 years ago (gosh, that long!?) when I first met SQL. Structured Query Language to those who might not be 100% sure of what I am talking about. It was during labs at faculty when we went to IBM's training center in Radovljica, Slovenia, to learn and play with this (at least for me) new programming language. The language of the 4th generation, so they said. With its roots in boolean algebra and simple structure, we were told that this was almost the same as natural language (english of course, who would thought one day you would use Slovenian language to query databases). With all those SELECTs, FROMs, WHEREs, GROUP BYs, HAVINGs, ORDER BYs, etc. it actually sounded realy cool and easy. I remember that we successfully crashed that poor thing of that IBM mainframe within first 5 minutes and labs were finished. And we have proven once again that the 3rd generation programming languages still ruled the world.
+
+# My Select AI beginnings
+
+The other day I finally found some time to invest into something else than just daily work, which is obviously something different than the rest of this blog post.
+
+The one that caught my attention was one of the latest Oracle's blogs ([Introducing Select AI - Natural Language to sQL Generation on Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-89407FB6-05DC-4202-93DE-35DAB7F93EBB)) which is discussing the use of generative AI with Large Language Models (LLMs), such as ChatCPT, Cohere or Azure OpenAI Service with Oracle Autonomous Database.
+
+More details can be found in Oracle Autonomous Database documentation: ([Use Select AI to Generate SQL from Natural Language Prompts](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-9CE75F94-7455-4C09-A3F3-118C08E82B7E)).
+
+# Let's talk now
+
+Enough said. Let's try the simplest query of all and let's ask my database what is the total revenue recorded:
+
+``` console
+select ai what is total revenue
+
+```
+
+And the response is?
+
+![Simple SELECT Ai Query](../select-ai-simple.png?raw=true)
+
+For experienced ChatGPT users this is probably nothing really spectacular. For me, it is. The response is obviously coming from underlying database table and is correct. Encouraging.
+
+Let's dig a bit further and try to get back a bit more complex result.
+
+In the next query I'try to ask a question that will force using a join. For example this:
+
+```console
+select ai what is the revenue by customer segments in the last year
+
+```
+
+![A bit more complex SELECT AI query](../select-ai-complex.png?raw=true)
+
+In this case result is a bit more complex and it can be display in various formats, for example as a graph.
+
+I believe everybody already figured it out, that the magic word is **SELECT AI** which is a secret ingredient that enables us to query data using natural language.
+
+So what is happening. I'll borrow the following image from the blog mentioned above and written by Mark Hornick:
+
+![SELECT AI - what's happening](https://blogs.oracle.com/content/published/api/v1.1/assets/CONTB49C0E2E55304F2D8E2A08AAAC0F33CD/native?cb=_cache_969a&channelToken=161740a11b3b4626aa4ae9070abed5dc)
+
+SELECT AI natural language query is using metadata from the schema that is identified in the user's profile. This information is provided to the LLM (for example ChatGPT), to create a proper SQL query. The query is the executed within the database and results are fed back, if requested (use option *narrate*), through the LLM to generate the answer.
+
+As already indicated, same natural language query can return different results. This is dependent on the keyword that can be added to the SELECT AI syntax.
+
+For example, if *narrate* keyword is used in the query above:
+
+```console
+select ai **narrate** what is the revenue by customer segments in the last year
+```
+
+The results formulates the following narrative:
+
+![A bit more complex SELECT AI query using narrate keyword](../select-ai-complex-narrate.png?raw=true)
+
+If we want to show SQL that is generated, then *showsql* keyword can be used:
+
+```console
+select ai **showsql** what is the revenue by customer segments in the last year
+```
+
+The results formulates the following SQL query:
+
+![A bit more complex SELECT AI query using showsql keyword](../select-ai-complex-showsql.png?raw=true)
+
+If you want simply to execute the query, then keyword is *runsql*:
+
+```console
+select ai **runsql** what is the revenue by customer segments Íin the last year
+```
+
+The results formulates the following - it is the same as when on keyword was used:
+
+![A bit more complex SELECT AI query using runsql keyword](../select-ai-complex-runsql.png?raw=true)
+
+The last keyword option, *chat* is probably the most interesting as conversational AI response is generated:
+
+```console
+select ai **chat** what is the revenue by customer segments Íin the last year
+```
+
+The results formulates the following - it is the same as when on keyword was used:
+
+![A bit more complex SELECT AI query using chat keyword](../sselect-ai-complex-explain-query.png?raw=true)
+
+We can see that in this case the answer is a bit more explanatory. It seems that query went to LLM and returned back with prescription what needs to be done, not the result itself.
+
+Quick idea: we can ask what SELECT statement actually does, remember the one generated just earlier using *showsql* keyword. I guess we are now more in ChatGPT area now.
+
+```console
+select ai chat explain the following SQL
+    SELECT
+        C.CUST_SEGMENT,
+        SUM(B.REVENUE) AS TOTAL_REVENUE
+    FROM OABOOTCAMP.D_CUSTOMERS C INNER JOIN OABOOTCAMP.F_BILL_REV B ON C.CUST_NUMBER = B.CUST_NUMBER
+    WHERE
+        B.TIME_BILL_DT >= ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), -12)
+    GROUP BY
+        C.CUST_SEGMENT
+```
+The results formulates the following - it is the same as when on keyword was used:
+
+![A bit more complex SELECT AI query using chat keyword](../select-ai-complex-chat.png?raw=true)
+
+
+
