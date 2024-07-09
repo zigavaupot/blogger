@@ -1,0 +1,58 @@
+# Introduction
+
+In one of my recent projects, the customer had a requirement to integrate visualizations from Oracle Analytics into Oracle APEX application that is running within Oracle Cloud Infrastructure.
+
+It is not my prime focus, the integrations, so I checked Oracle's documentation first. There is no "cook book" in there, so I looked it up for some good resources on the internet.  Actually, you can find quite a lot of content out there, from blog posts, articles, even videos, however most of these are a bit old (not exactly obsolete) as both products have developed rapidly over the last couple of years.
+
+But still, I found some really good ones that I was able to help myself with. For example [Mike Durran's blog](https://medium.com/@insight2action) is usually the ultimate go-to source for these kind of things, and you can find quite a lot of content on this subject there. For example, you definitely want to check his article [A Guide to Embedding Oracle Analytics into Oracle APEX](https://medium.com/oracledevs/a-guide-to-embedding-oracle-analytics-into-oracle-application-express-apex-1799f6ba4626).
+
+In this blog post, I will try to describe my experience with integrating Oracle Analytics visualizations into Oracle APEX application, and point out some of the issues I encountered when I was following Mark's guide.
+
+### Let's begin with Oracle Analytics first.
+
+Our starting point is data visualization that shows company's sales.
+
+![CEO Dashboard](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/ceo-dashboard.png?raw=true)
+
+There is one thing that we should pay attention to. In **Developer options**, besides performanece stastics, you can find, under **Embed** tab, developer options that enable developers to embed analytics content in other applications, for example in Oracle APEX.
+
+To embed specific visualization in some other application, developer can simply copy HTML code into another application to display and present Oracle Analytics content.
+
+![HTML Code](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/embed-scripts.png?raw=true)
+
+Two notes:
+
+1. To open **Developer Options** click on the Workbook Menu. **Developer** is the last option in the menu:
+
+![Developer option](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/developer-options.png?raw=true)
+
+2. If **Developer** is not displayed in the menu, than Developer Options is not enabled. To enable them, click on user icon (top right corner) and choose **Profile**.
+
+![Profile option](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/profile-option.png?raw=true)
+
+Then, click on **Advanced** tab and click to **Enable developer options**:
+
+![Enable developer options](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/enable-developer-options.png?raw=true)
+
+
+
+
+
+
+Two scripts:
+
+<script src="https://qbxanalytics-frly8pi3k85f-fr.analytics.ocp.oraclecloud.com/public/dv/v1/embedding/<embeddingMode>/embedding.js" type="application/javascript">
+</script>
+
+<script> 
+	 requirejs(['knockout', 'ojs/ojcore', 'ojs/ojknockout', 'ojs/ojcomposite', 'jet-composites/oracle-dv/loader'],function(ko) { 
+ 	 ko.applyBindings(); 
+ 	 }); 
+</script>
+
+
+<oracle-dv project-path="/@Catalog/shared/Demos/CEO Dashboard (Sales)" active-page="insight" active-tab-id="snapshot!canvas!1">
+</oracle-dv>
+
+<oracle-dv project-path="/@Catalog/shared/Demos/CEO Dashboard (Sales)" active-page="insight" active-tab-id="snapshot!canvas!3">
+</oracle-dv>
