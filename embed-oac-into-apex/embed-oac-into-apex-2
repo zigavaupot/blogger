@@ -1,4 +1,21 @@
-### Now, we create an APEX application
+### APEX application
+
+In this example, I have simply created a simple APEX application.
+
+![APEX Application Created](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apex-application-created.png?raw=true)
+
+A new region <body> has been created where all of the *coding* would happen. Actually in this simple scenario, no real coding will be needed, except a few bits here and there.
+
+![Body Region](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/body-region.png?raw=true)
+
+Actually, the *coding* is happening in two places:
+* on the <page> level and 
+* on the <body> level.
+
+Let's check out the <page> level first. In the two fields: **File URLs** and **Function and Global Variable Declaration**,  the code snippets that we observed under **Developer** / **Embed** tab of data visualization workbook should be copied:
+
+![Java Script](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/java-script.png?raw=true)
+
 
 
 

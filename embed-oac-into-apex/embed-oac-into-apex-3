@@ -44,6 +44,6 @@ When setting up OAuth enter the following:
         ```htm
         https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
         ```
-    + check *Add resources* checkbox and add your analytics service
+    + check **Add resources** checkbox and add your analytics service
 
 ![Client configuration](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration.png?raw=true)
