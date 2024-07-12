@@ -23,17 +23,28 @@ Then follow the wizard that guides you through the process of setting a new appl
 Important entries are as follows:
 
 * Application URL in URLs section: enter APEX application URL.
+
+![Application URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/application-url.png?raw=true)
+
 * Check *Enforce grants as authorisation* in Authentication and Authorisation section.
+
+![Enforce grants as authorization](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/enforce-grants-as-authorization.png?raw=true)
 
 When setting up OAuth enter the following:
 
 * Resource server configuration: check *No resource server configuration*
 
-* Client configuration: check *Configure this application as a client now
-** check Authorization code checkbox
-** Redirect URL: https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/apex_authentication.callback
-** Post-logout redirect URL: https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
-** check *Add resources* checkbox and add your analytics service
+* Client configuration: check *Configure this applicaton as a client now
+    + check Authorization code checkbox
+    + Redirect URL:
+    ```htm
+    https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/apex_authentication.callback
+    ```
+    + Post-logout redirect URL: 
+    ```htm
+    https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
+    ```
+    + check *Add resources* checkbox and add your analytics service
 
 
 
