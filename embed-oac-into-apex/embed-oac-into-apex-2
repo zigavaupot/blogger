@@ -4,23 +4,45 @@ In this example, I have simply created a simple APEX application.
 
 ![APEX Application Created](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apex-application-created.png?raw=true)
 
-A new region <body> has been created where all of the *coding* would happen. Actually in this simple scenario, no real coding will be needed, except a few bits here and there.
+From the three available pages, select **1 - Home**.
+
+![APEX Application pages](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apex-application-pages.png?raw=true)
+
+A new region `<body>` has been created where all of the *coding* would happen. Actually in this simple scenario, no real coding will be needed, except a few bits here and there.
 
 ![Body Region](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/body-region.png?raw=true)
 
 Actually, the *coding* is happening in two places:
-* on the <page> level and 
-* on the <body> level.
+* on the `<page>` level and 
+* on the `<body>` level.
 
-Let's check out the <page> level first. In the two fields: **File URLs** and **Function and Global Variable Declaration**,  the code snippets that we observed under **Developer** / **Embed** tab of data visualization workbook should be copied:
+Let's check out the `<page>` level first. In the two fields: **File URLs** and **Function and Global Variable Declaration**,  the code snippets that we observed under **Developer** / **Embed** tab of data visualization workbook (see details and explanaition above) should be copied:
 
 ![Java Script](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/java-script.png?raw=true)
 
+![Page Level](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/page-level.png?raw=true)
 
+Once completed, navigate to the `<body>` region.
 
+In **Identification** section, *Static Content* should be selected for **Type**.
 
-<iframe src="https://qbxanalytics-frly8pi3k85f-fr.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&reportmode=full&noheader=true&reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)&viewermode=true" width="100%" height="800px" frameborder="0"></iframe>
+In **Source** section, enther the following code snipped in *HTML Code* field:
 
+```htm
+<iframe src=<iframe src="https://qbxanalytics-frly8pi3k85f-fr.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&viewermode=true&noheader=true&reportmode=full&reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)"  width="1200px" height="900px" frameborder="0"></iframe>
+```
 
+Alternatively I tried to use the code snippet, prepared under **Developer**, but wasn't able to make it work. Any suggestion, what I was missing or doing wrong is more then welcome!
 
+The following code should have worked, but ...:
 
+```htm
+<div style='width: 1200px; height: 900px'>
+<oracle-dv project-path="/@Catalog/shared/Demos/CEO Dashboard (Sales)" active-page="insight" active-tab-id="snapshot!canvas!1">
+</oracle-dv>
+</div>
+```
+
+Since, `<iframe>` based solution worked, I decided to deal with this at some later point.
+
+Here, one would expect OAC Data Visualization can be embedded and run within APEX application. I have found a few blog posts which were claiming this works. **However, if you try and run your application now, it won't work.** At least, it didn't for me. The reason is that we still need to sort out **authentication**. APEX is using its own authentication, where Oracle Analytics cloud is using Oracle Identity Cloud (IDCS), and these two are not working together by default.
