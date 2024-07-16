@@ -44,6 +44,70 @@ When setting up OAuth enter the following:
         ```htm
         https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
         ```
-    + check **Add resources** checkbox and add your analytics service
+        ![Client configuration -1 ](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration.png?raw=true)
 
-![Client configuration](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration.png?raw=true)
+    + Check **Add resources** checkbox and add your analytics service in the resource list. This is needed to access API of Oracle Analytics application.
+
+    ![Client configuration - 2](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration-2.png?raw=true)
+
+There is one more thing that is important. Each application provides two variables: **Client ID** and **Client Secret**. These are required in the next step when we create **Web Credentials**.
+
+Information about **Client ID** and **Client Secret** can be found in **OAuth Configuration** section under **General Information**.
+
+![Client ID and Client Secret](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-id-and-client-secret.png?raw=true)
+
+### Web Credentials
+
+In order to access other applications from APEX application, we need to create **Web Credentials** using **Client ID** and **Client Secret** created and stored in the previous step.
+
+Navigate to the **AppBuilder** page in APEX and open **Workspace Utilities**.
+
+![Workspace Utilities](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/workspace-utilities.png?raw=true)
+
+From the list of available utilities choose **Web Credentials**
+
+![Web Credentials](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/web-credentials.png?raw=true)
+
+**Web Credentials** page opens. Besides *Name* and *Static ID, provide the following information:
+
+* **Authentication Type**: choose *Basic Authentication*
+* Enter *Client ID* in **Client ID or Username** field.
+* Enter *Client Secret* into **Client Secrete or Password** field. Reenter **Client Secret** into **Verify Client Secrete or Password** field.
+
+![Create Web Credentials](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/create-web-credentials.png?raw=true)
+
+### Create Authentication Scheme
+
+The last step in our configuration exercise is to create an Authentication Scheme. There are several sections that require settings:
+
+* Name
+
+Provide **Authentication Scheme Name** and choose *Social Sing-in* for **Scheme Type**.
+
+![Authentication Scheme - Settings](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/authentication-scheme-settings.png?raw=true)
+
+* Settings
+
+Under **Settings** select **Credentials Store** that was created in the previous step in **Web Credentials** step.
+
+Select *OpenID Connect Provider* for **Authentication Provider**
+
+In the **Discovery URL** enter the following URL:
+
+```htm
+https://<Identity Domain URL>.identity.oraclecloud.com/.well-known/openid-configuration
+```
+
+IDCS Domain URL can be found in Identity Domain Page:
+
+![Identity Domain URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/identity-domain-url.png?raw=true)
+
+Use Domain URL and add `/.well-known/openid-configuration` to complete **Discovery URL**.
+
+Enter *profile* in **Scope** field, and *sub* into **Username** field.
+
+* Post Log-in Processing
+
+Choose *URL* for **Go to** and enter *APEX application URL* in **URL**.
+
+![Identity Domain URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/authentication-schema-post-login.png?raw=true)
