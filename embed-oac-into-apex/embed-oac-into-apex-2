@@ -26,10 +26,10 @@ Once completed, navigate to the `<body>` region.
 
 In **Identification** section, *Static Content* should be selected for **Type**.
 
-In **Source** section, enther the following code snipped in *HTML Code* field:
+In **Source** section, enter the following code snipped in *HTML Code* field:
 
 ```htm
-<iframe src=<iframe src="https://qbxanalytics-frly8pi3k85f-fr.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&viewermode=true&noheader=true&reportmode=full&reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)"  width="1200px" height="900px" frameborder="0"></iframe>
+<iframe src=<iframe src="https://<Oracle Analytics Cloud URL>.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&viewermode=true&noheader=true&reportmode=full&reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)"  width="1200px" height="900px" frameborder="0"></iframe>
 ```
 
 Alternatively I tried to use the code snippet, prepared under **Developer**, but wasn't able to make it work. Any suggestion, what I was missing or doing wrong is more then welcome!

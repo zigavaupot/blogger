@@ -38,11 +38,11 @@ When setting up OAuth enter the following:
     + check **Authorization code** checkbox
     + Redirect URL:
         ```htm
-        https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/apex_authentication.callback
+        https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/apex_authentication.callback
         ```
     + Post-logout redirect URL: 
         ```htm
-        https://ibvkgpzfnomehue-sharedadw23ai.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
+        https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
         ```
         ![Client configuration -1 ](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration.png?raw=true)
 
@@ -111,3 +111,35 @@ Enter *profile* in **Scope** field, and *sub* into **Username** field.
 Choose *URL* for **Go to** and enter *APEX application URL* in **URL**.
 
 ![Identity Domain URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/authentication-schema-post-login.png?raw=true)
+
+### Almost Ready to go!
+
+Now, there is only one small bit to do before going live. Still under **Shared Components**, locate **Security Attributes**.
+
+![Security Attributes](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/security-attributes.png?raw=true)
+
+Update the following fields and then apply changes:
+
+* In **Authentication** section:
+    + Leave *APEX_PUBLIC_USER* as **Public User**
+    + Select **Authentication Scheme** that was created in the previous step.
+
+* In Authorization section:
+    + Choose *No application autorization required* for **Authorization Scheme**
+    + Choose *Custom Code* in **Source for Roles or Group Schemes**
+
+![Apply Security Attributes](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apply-security-attributes.png?raw=true)
+
+### Run APEX Application
+
+We are now ready to go:
+
+![Run Application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/run-application.png?raw=true)
+
+or simply enter URL in browser pointing to APEX application:
+
+```htm
+https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
+```
+
+![Embed OAC into APEX Application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/running-application.png?raw=true)
