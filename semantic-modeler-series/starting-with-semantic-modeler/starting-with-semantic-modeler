@@ -4,7 +4,7 @@ Metadata management used to be one of the key strengths of Oracle Business Intel
 
 OBIEE developer designs and develops a metadata model, a repository, using BI Administration Tool, which results in a RPD file. This binary file is then deployed on BI Server. BI Server is a component of Oracle Business Intelligence architecture and is responsible for processing user requests and data queries against underlying data sources.
 
-![Oracle BI Server Architecture](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/oracle-bi-server-architecture.png?raw=true)
+![Oracle BI Server Architecture](https://github.com/zigavaupot/blogger/blob/main/semantics-modeler-series/starting-with-semantic-modeler/images/oracle-bi-server-architecture.png?raw=true)
 
 BI Server uses metadata information from repository to perform the following two tasks:
 
@@ -34,9 +34,9 @@ Presentation layer is often referred to as *Subject Area* (actually it contains 
 
 As mentioned above, there can be several subject areas in presentation layer. These subject areas can map to one business model, and can be designed to enable analyses of particular business area.
 
-![Oracle BI Repository Layers](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/repository-layers.png?raw=true)
+![Oracle BI Repository Layers](https://github.com/zigavaupot/blogger/blob/main/semantics-modeler-series/starting-with-semantic-modeler/images/repository-layers.png?raw=true)
 
-In my experience working with Oracle Business Intelligence (before) and Oracle Analytics (now) having single enterprise metadata model is one of the most important features of this product. It can support really diverse data warehouse arhcitectures from single data warehouse schema to distributed architectures running on technologically totally different server platform supporting one single analytical application, for example:
+In my experience working with Oracle Business Intelligence (before) and Oracle Analytics (now) having single enterprise metadata model is one of the most important features of this product. It can support really diverse data warehouse architectures from single data warehouse schema to distributed architectures running on technologically totally different server platform supporting one single analytical application, for example:
 
 * most detailed granular data stored in a relational database (ie. Oracle Database),
 * aggregated data stored in multidimensional OLAP database (ie. Oracle Essbase) and
