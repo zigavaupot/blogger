@@ -43,3 +43,4 @@ In my experience working with Oracle Business Intelligence (before) and Oracle A
 * specific aggregations stored in in-memory database (ie. TimesTen).
 
 All these in one single model, single application, complexity of the model completely hidden from the end user. There are not many tools out there to do that so efficiently.
+
