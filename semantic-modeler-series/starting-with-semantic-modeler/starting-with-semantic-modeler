@@ -23,7 +23,7 @@ There are a few important things that you can do in physical layer. First, one p
 Another really important feature is modeling aggregated data into same enterprise model. This gives developers possibility to use aggregates transparently - aggregates are used whenever conditions are met (ie. query on specified level). And this is completely hidden from the end-user.
 
 **Business Model and Mapping layer**
-This layer is often called also *Logical Layer. This layer defines the business or logical model of the data and specifies the mapping between the business model and the physical schemas. This layer determines business logic of analytical application which objects and relationships available to users that is easy to understand and to use by hiding the complexity of the source data models. Models that are accessible to end users are defined as star schemas.
+This layer is often called also *Logical Layer*. This layer defines the business or logical model of the data and specifies the mapping between the business model and the physical schemas. This layer determines business logic of analytical application which objects and relationships available to users that is easy to understand and to use by hiding the complexity of the source data models. Models that are accessible to end users are defined as star schemas.
 
 Oracle BI Server evaluates logical SQL requests against the business model, and then uses the mappings to identify physical tables that are needed for query generation.
 
