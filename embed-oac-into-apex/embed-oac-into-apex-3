@@ -143,3 +143,9 @@ https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexde
 ```
 
 ![Embed OAC into APEX Application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/running-application.png?raw=true)
+
+### Conclusion
+
+What to say for the end. As far my exercise goes, it is working nicely. There are quite a few steps, but mostly is about configurations. I had to play a bit to get all pieces working, but anyway it was nice exercise. At least I had to create my first APEX application. I must admit I haven't been playing with these tools since APEX' predecessors WebDB and Oracle Portal :).
+
+I hope this post will help someone and I also believe this is not the last post on this topic as there are some interesting  use cases to be tested. We also have a case where a customer wants to integration Oracle Analytics Server and APEX, all running on premise. And as I said, any comment to my private email is welcome.
