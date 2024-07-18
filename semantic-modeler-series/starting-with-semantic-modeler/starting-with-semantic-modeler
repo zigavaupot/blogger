@@ -63,7 +63,7 @@ Oracle Analytics Semantic Modeler is replacing BI Administration Tool. This does
 
 * Improved collaborative development using Git. Git can now become part of the development environment where developers can use all features of Git in order to manage their own projects, merge them back into single repository, and probably most importantly, we have finally got proper versioning support.
 
-![Semantic modeler - Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-git.png?raw=true)
+![Semantic modeler - Git Integration](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-git-integration.png?raw=true)
 
 I think these three features are probably enough to decide to start using Semantic Modeler. Developers will obviously observe different user interface, even though logically all components are there slightly adopted to a new web user interface.
 
