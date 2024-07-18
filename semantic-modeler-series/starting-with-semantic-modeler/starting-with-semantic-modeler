@@ -57,7 +57,7 @@ Oracle Analytics Semantic Modeler is replacing BI Administration Tool. This does
 
 * Semantic model is no longer one big binary file. Each part of the semantic model is now stored in SMML (Semantic Model Markup Language), readable, notation. SMML is basically a JSON file.
 
-* Improved collaborative development using Git. Git can now become part of the development environment where developers can use all features of Git in order to manage their own projects, merge the back into single repository, and probably most importantly, we have finally got proper versioning support.
+* Improved collaborative development using Git. Git can now become part of the development environment where developers can use all features of Git in order to manage their own projects, merge them back into single repository, and probably most importantly, we have finally got proper versioning support.
 
 I think these three features are probably enough to decide to start using Semantic Modeler. Developers will obviously observe different user interface, even though logically all components are there slightly adopted to a new web user interface.
 
