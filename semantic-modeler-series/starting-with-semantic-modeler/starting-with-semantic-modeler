@@ -1,10 +1,10 @@
-### Metadata Management
+### Oracle BI Administration Tool
 
 Metadata management used to be one of the key strengths of Oracle Business Intelligence. Using BI Administration Tool developers were able to design and implement enterprise data models that were sitting on top of data warehouse data schemas.
 
 OBIEE developer designs and develops a metadata model, a repository, using BI Administration Tool, which results in a RPD file. This binary file is then deployed on BI Server. BI Server is a component of Oracle Business Intelligence architecture and is responsible for processing user requests and data queries against underlying data sources.
 
-![Oracle BI Server Architecture](https://github.com/zigavaupot/blogger/blob/main/semantics-modeler-series/starting-with-semantic-modeler/images/oracle-bi-server-architecture.png?raw=true)
+![Oracle BI Server Architecture](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/oracle-bi-server-architecture.png?raw=true)
 
 BI Server uses metadata information from repository to perform the following two tasks:
 
@@ -34,7 +34,7 @@ Presentation layer is often referred to as *Subject Area* (actually it contains 
 
 As mentioned above, there can be several subject areas in presentation layer. These subject areas can map to one business model, and can be designed to enable analyses of particular business area.
 
-![Oracle BI Repository Layers](https://github.com/zigavaupot/blogger/blob/main/semantics-modeler-series/starting-with-semantic-modeler/images/repository-layers.png?raw=true)
+![Oracle BI Repository Layers](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/oracle-bi-repository-layers.png?raw=true)
 
 In my experience working with Oracle Business Intelligence (before) and Oracle Analytics (now) having single enterprise metadata model is one of the most important features of this product. It can support really diverse data warehouse architectures from single data warehouse schema to distributed architectures running on technologically totally different server platform supporting one single analytical application, for example:
 
@@ -44,3 +44,20 @@ In my experience working with Oracle Business Intelligence (before) and Oracle A
 
 All these in one single model, single application, complexity of the model completely hidden from the end user. There are not many tools out there to do that so efficiently.
 
+### Oracle Analytics Semantic Modeler
+
+Oracle Analytics Semantic Modeler is replacing BI Administration Tool. This doesn't mean that BI Administration Tool is retiring. Well, not just yet. Developers can continue using it as they are used to, however there might be some features that would drive adoption of Semantic Modeler in the future:
+
+* Semantic Modeler is a web based development tool, included with the rest of Oracle Analytics. This means you don't need to install BI Administration Tool on your desktop. This was in particular annoying for those who are not using Windows.
+
+* Semantic model is no longer one big binary file. Each part of the semantic model is now stored in SMML (Semantic Model Markup Language), readable, notation. SMML is basically a JSON file.
+
+* Improved collaborative development using Git. Git can now become part of the development environment where developers can use all features of Git in order to manage their own projects, merge the back into single repository, and probably most importantly, we have finally got proper versioning support.
+
+I think these three features are probably enough to decide to start using Semantic Modeler. Developers will obviously observe different user interface, even though logically all components are there slightly adopted to a new web user interface.
+
+Funny enough, there might be some other, equally important, reasons to start using Semantic Modeler. The following example has become anecdotal and the following story is 100% true:
+
+Just recently we encountered some tough system administrator with one of our new clients. We asked for BI Administration Tool installation as we wanted to create a new repository. But, the tool's name contains word *Administration* which was enough for our request to be rejected (!?). Lucky enough, in the same time Oracle Analytics Server 7.6, with Semantic Modeler included for the 1st time, became generally available. This meant that BI Administration Tool was no longer mandatory ... can you imagine?
+
+But let's not jump too quickly. There are some things to pay attention to too. Currently Semantic Modeler doesn't support all data sources - for example, Essbase is not supported, however it is in the plan. So working with Semantic Modeler is favorable, but be careful to verify if data sources are supported. Find out more about supported data sources [here](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsds/supported-data-sources.html).
