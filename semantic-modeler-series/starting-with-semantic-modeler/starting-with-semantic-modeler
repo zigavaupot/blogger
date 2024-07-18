@@ -55,9 +55,15 @@ Oracle Analytics Semantic Modeler is replacing BI Administration Tool. This does
 
 * Semantic Modeler is a web based development tool, included with the rest of Oracle Analytics. This means you don't need to install BI Administration Tool on your desktop. This was in particular annoying for those who are not using Windows.
 
+![Semantic modeler web based tool - Data Lineage](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-data-lineage.png?raw=true)
+
 * Semantic model is no longer one big binary file. Each part of the semantic model is now stored in SMML (Semantic Model Markup Language), readable, notation. SMML is basically a JSON file.
 
+![Semantic modeler - SMML](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-smml.png?raw=true)
+
 * Improved collaborative development using Git. Git can now become part of the development environment where developers can use all features of Git in order to manage their own projects, merge them back into single repository, and probably most importantly, we have finally got proper versioning support.
+
+![Semantic modeler - Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-git.png?raw=true)
 
 I think these three features are probably enough to decide to start using Semantic Modeler. Developers will obviously observe different user interface, even though logically all components are there slightly adopted to a new web user interface.
 
