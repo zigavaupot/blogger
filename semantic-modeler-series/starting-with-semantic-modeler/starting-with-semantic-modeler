@@ -1,3 +1,5 @@
+![Metadata Management](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/metadata-management.png?raw=true)
+
 ### Oracle BI Administration Tool
 
 ![BI Administration Tool](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/repository-admin-tool.png?raw=true)
@@ -10,7 +12,7 @@ OBIEE developer designs and develops a metadata model, a repository, using BI Ad
 
 BI Server uses metadata information from repository to perform the following two tasks:
 
-* use logical SQL query and tranform it into corresponding query (ie. SQL, MDX), depending on the underlying data source (ie. Oracle Database, Microsoft SQL Server, Oracle Essbase, ...)
+* use logical SQL query and transform it into corresponding query (ie. SQL, MDX), depending on the underlying data source (ie. Oracle Database, Microsoft SQL Server, Oracle Essbase, ...)
 * transform and combine physical datasets retrieved and perform required calculations.
 
 Typical metadata model consists of three layers:
