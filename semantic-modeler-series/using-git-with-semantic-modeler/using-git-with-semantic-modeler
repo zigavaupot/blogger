@@ -30,7 +30,7 @@ Because we haven't configured Git, Git has to be initialized first.
 
 Initialize Git window opens. It is assumed that Git repository has already been created, so Git repository URL should be provided.
 
-![Initilize Git - empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/initialize-git.png?raw=true)
+![Initialize Git - empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/initialize-git.png?raw=true)
 
 Just for the further reference, here is my Git repository for this case:
 
@@ -42,10 +42,59 @@ As it is also shown in instructions, there are two options for providing require
 
 ![URL SSH](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/url-ssh.png?raw=true)
 
-Copy URL into *Git Repository URL* and leave *Branch Name* set to **main** (assuming this is main branch).
+Copy URL into *Git Repository URL* and leave *Branch Name* set to **main** (assuming this is main branch). And click Continue.
 
-![Initilize Git - complete](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/complete-initialize-git.png?raw=true)
+![Initialize Git - complete](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/complete-initialize-git.png?raw=true)
 
+On the next page of this setup steps, user profile is required. I am using a new profile which we will define in this step. Besides profile name and user name (for connection to Git), password is required. This actually isn't the password to login into Git, but **Personal Access Token**, which is generated for the user that in logging into Git.
 
+If you haven't got **Personal Access Token** generated, here are the steps to do that:
 
+In Git, navigate to user's *Settings* and then to *Developer Settings*. Open *Personal access tokens* and then click on *Fine-grained tokens*.
 
+![Git - Developer Settings](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/git-developer-settings.png?raw=true)
+
+Click *Generate new token*.
+
+![Git - Generate token](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/generate-fine-grained-token.png?raw=true)
+
+Provide a new token name, set expiration date, optionally define for which repository is this token valid, and then *Generate token*.
+
+![Git - Copy token](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/copy-token.png?raw=true)
+
+When token is generated, copy it in clipboard. Use this token and fill the *password* field in **Initialize Git** popup window.
+
+![Git - Finish initilizing token](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/finish-initializing-git.png?raw=true)
+
+After a couple of second, Git is initialized.
+
+![Git Initialized](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/git-initilized.png?raw=true)
+
+We can check now what is the result of Git initialization:
+
+![Updated Git repository](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/updated-git-repository.git?raw=true)
+
+There are 4 folders created: 
+* three folders for each layer of semantic model: **physical**, **logical** and **presentation**,
+* additional folder for **variables**.
+
+Drilling down the folder structures shows semantic model structure and its definitions in SMML (JSON). When comparing with Semantic Model that resides on OAC, we can see that the content is exactly the same.
+
+![Model in Semantic modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-semantic-modeler.git?raw=true)
+
+![Model in Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-git.git?raw=true)
+
+In the Semantic Models list, connection with Git repository is now displayed:
+
+![Model in Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-model-using-git-repository.git?raw=true)
+
+And detailed description of connection is available as well:
+
+![Semantic Model definition](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-modeler-share-using-git.git?raw=true)
+
+### Conclusion
+
+This short use case shows how can we set connection between Semantic Modeler and Git repository. In the next few posts, we will take a look at some examples of using Git with Semantic Modeler, when using Git for:
+* migrating semantic models between environments,
+* multi-user development environment,
+* model versioning.
