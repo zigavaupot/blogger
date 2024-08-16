@@ -1,4 +1,4 @@
-![Using Git with Semantic Modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/xxx.png?raw=true)
+![Using Git with Semantic Modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/start-configuring-git.png?raw=true)
 
 ### Setting up
 
@@ -20,7 +20,7 @@ Both options for setting multi-user development environment are available under 
 **Git**
 ![Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/git.png?raw=true)
 
-As you can see, **Git** is preferred option, however in my case it hasn't been configured yet. To configure git integration, one must open Semantic Model and click Git icon (located in bottom-left corner).
+As you can see, **Git** is preferred option, however in my case it hasn't been configured yet. To configure git integration, one must open Semantic Model and click Git icon (located in bottom-right corner).
 
 ![Configure Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/configure-git.png?raw=true)
 
