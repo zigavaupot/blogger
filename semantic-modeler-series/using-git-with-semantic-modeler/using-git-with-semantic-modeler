@@ -10,7 +10,7 @@ I will assume that I have already created a semantic model that is already deplo
 
 Integrating Semantic Modeler with Git is relatively straight forward process that can be accomplished within a few steps. Each Semantic Modeler in the list of models has associated menu (accessible on the right hand side). Open a menu and select **Inspect**.
 
-![Inspect Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git- with-semantic-modeler/images/inspect-semantic-model.png?raw=true)
+![Inspect Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/inspect-semantic-model.png?raw=true)
 
 Both options for setting multi-user development environment are available under **Sharing** tab on the right:
 
@@ -28,6 +28,23 @@ Because we haven't configured Git, Git has to be initialized first.
 
 ![Start configuring Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/start-configuring-git.png?raw=true)
 
+Initialize Git window opens. It is assumed that Git repository has already been created, so Git repository URL should be provided.
+
+![Initilize Git - empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/initialize-git.png?raw=true)
+
+Just for the further reference, here is my Git repository for this case:
+
+![Create a new Git repository](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/create-a-new-repository.png?raw=true)
+
+As it is also shown in instructions, there are two options for providing required URL, HTTPS or SSH. In our example, the following URLs can be used:
+
+![URL HTTPS](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/url-https.png?raw=true)
+
+![URL SSH](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/url-ssh.png?raw=true)
+
+Copy URL into *Git Repository URL* and leave *Branch Name* set to **main** (assuming this is main branch).
+
+![Initilize Git - complete](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/complete-initialize-git.png?raw=true)
 
 
 
