@@ -68,11 +68,11 @@ When token is generated, copy it in clipboard. Use this token and fill the *pass
 
 After a couple of second, Git is initialized.
 
-![Git Initialized](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/git-initilized.png?raw=true)
+![Git Initialized](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/git-initilized-and-connected.png?raw=true)
 
 We can check now what is the result of Git initialization:
 
-![Updated Git repository](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/updated-git-repository.git?raw=true)
+![Updated Git repository](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/updated-git-repository.png?raw=true)
 
 There are 4 folders created:
 * three folders for each layer of semantic model: **physical**, **logical** and **presentation**,
@@ -80,17 +80,17 @@ There are 4 folders created:
 
 Drilling down the folder structures shows semantic model structure and its definitions in SMML (JSON). When comparing with Semantic Model that resides on OAC, we can see that the content is exactly the same.
 
-![Model in Semantic modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-semantic-modeler.git?raw=true)
+![Model in Semantic modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-semantic-modeler.png?raw=true)
 
-![Model in Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-git.git?raw=true)
+![Model in Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-git.png?raw=true)
 
 In the Semantic Models list, connection with Git repository is now displayed:
 
-![Model in Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-model-using-git-repository.git?raw=true)
+![Model in Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-model-using-git-repository.png?raw=true)
 
 And detailed description of connection is available as well:
 
-![Semantic Model definition](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-modeler-share-using-git.git?raw=true)
+![Semantic Model definition](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-modeler-share-using-git.png?raw=true)
 
 ### Conclusion
 
