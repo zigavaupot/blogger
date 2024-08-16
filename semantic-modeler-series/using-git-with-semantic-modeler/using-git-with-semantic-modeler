@@ -1,0 +1,34 @@
+![Using Git with Semantic Modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/xxx.png?raw=true)
+
+### Setting up
+
+I will assume that I have already created a semantic model that is already deployed. My intention is to share this semantic model with other developers. In OBIEE this was only possible by setting up **Multi-User Development Environment** (MUDE). In general, Oracle Analytics gives developers two options to setup (much stronger) collaborative environment by:
+*giving **permissions** to make updates to the model to other users - Semantic Modeler is, in a waz, by default multi-user development environment, and
+*using **Git**, which provides proper multi-user development environment. In this case, access rights are given through Git directly.
+
+![Starting with existing Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/using-with-semantic-modeler.png?raw=true)
+
+Integrating Semantic Modeler with Git is relatively straight forward process that can be accomplished within a few steps. Each Semantic Modeler in the list of models has associated menu (accessible on the right hand side). Open a menu and select **Inspect**.
+
+![Inspect Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git- with-semantic-modeler/images/inspect-semantic-model.png?raw=true)
+
+Both options for setting multi-user development environment are available under **Sharing** tab on the right:
+
+**Permissions**
+![Permissions](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/permissions.png?raw=true)
+
+**Git**
+![Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/git.png?raw=true)
+
+As you can see, **Git** is preferred option, however in my case it hasn't been configured yet. To configure git integration, one must open Semantic Model and click Git icon (located in bottom-left corner).
+
+![Configure Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/configure-git.png?raw=true)
+
+Because we haven't configured Git, Git has to be initialized first.
+
+![Start configuring Git](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/start-configuring-git.png?raw=true)
+
+
+
+
+
