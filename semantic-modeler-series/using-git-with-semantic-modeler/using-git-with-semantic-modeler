@@ -1,7 +1,5 @@
 ![Using Git with Semantic Modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/using-git-with-semantic-modeler/images/start-configuring-git.png?raw=true)
 
-### Setting up
-
 I will assume that I have already created a semantic model which has been deployed in my OAC environment. My intention is to share this semantic model with other developers who are working on this same model in the same time. 
 
 In OBIEE this was only possible by setting up **Multi-User Development Environment** (MUDE). My experience with MUDE is that it wasn't perfect, often, if not careful, it was leading to problems with locking, merging, deployments.
