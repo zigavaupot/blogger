@@ -129,5 +129,21 @@ After a new vector index is created, the last step - set the new profile active.
 
 ![Set profile](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/set-profile.png?raw=true)
 
-Let's test:
+We have seen that one of the text files that I've uploaded to OCI Object Storage is talking about kangaroos. So let's ask a question of how long a kangaroo lives?
 
+![How long does kangaroo live?](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-kangaroo.png?raw=true)
+
+We can see that response consists of two parts:
+
+* actual generated answer: *The average life expectancy of a kangaroo is about 4-6 years. However, in captivity, kangaroos may live as long as 20 years*.
+* reference to a file that actually contains required information: *Sources:   - files/S08_set1_a1.txt.txt (https://swiftobjectstorage.eu-frankfurt-1.oraclecloud.com/v1/frllu0v1kplh/select-ai-rag-data/files/S08_set1_a1.txt.txt)*
+
+Another example is about Gustav Klimt, famous Austrian painter:
+
+![Gustav Klimt?](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-klimt.png?raw=true)
+
+Now, the response is a bit more complex. There are actually more the one response, embedding model has identified 5 documents which have been used to augment the prompt (question *tell me about gustav klimt*).
+
+In image below, the same response is in a form of the table. Beside generated response and source file that was used in prompt augmentation, score is presented - the higher score, the higher influence specific document has on the response.
+
+![Gustav Klimt?](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-klimt-table.png?raw=true)
