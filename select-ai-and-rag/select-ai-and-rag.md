@@ -138,7 +138,7 @@ We can see that response consists of two parts:
 * actual generated answer: *The average life expectancy of a kangaroo is about 4-6 years. However, in captivity, kangaroos may live as long as 20 years*.
 * reference to a file that actually contains required information: *Sources:   - files/S08_set1_a1.txt.txt (https://swiftobjectstorage.eu-frankfurt-1.oraclecloud.com/v1/frllu0v1kplh/select-ai-rag-data/files/S08_set1_a1.txt.txt)*
 
-Another example is about Gustav Klimt, famous Austrian painter:
+Another example is for instance a question about Gustav Klimt, famous Austrian painter:
 
 ![Gustav Klimt?](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-klimt.png?raw=true)
 
@@ -147,3 +147,7 @@ Now, the response is a bit more complex. There are actually more the one respons
 In image below, the same response is in a form of the table. Beside generated response and source file that was used in prompt augmentation, score is presented - the higher score, the higher influence specific document has on the response.
 
 ![Gustav Klimt?](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-klimt-table.png?raw=true)
+
+### Conclusion
+
+In this very simple example, we can see that it is relatively easy to set up an object store and enable it for RAG by using vector index in Oracle 23ai database. With a few steps, you can enrich your PL/SQL database to become GenAI enabled. You just have to bring one of popular Large Language Models and register it with Oracle 23ai database. In one of my future blogs, I'll test it how all of these perform on non-english texts.
