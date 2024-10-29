@@ -27,54 +27,24 @@ In my example, I am using OpenAI for my LLM. Oracle allows other LLMs as well, a
 First, we need to make sure that database allows HTTP connection to OpenAI API endpoint. For example, I am using database user OML_USER to access api.open.com.
 
 Database administrator (ADMIN) needs to run the following code (i.e. SQL Developer):
-
-```console
+```script
 DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
         host => 'api.openai.com',
         ace  => xs$ace_type(privilege_list => xs$name_list('http'),
         principal_name => 'OML_USER',
         principal_type => xs_acl.ptype_db)
     );
-END;
 ```
 
 We also need to create credentials to connect to OpenAI. All next steps are executed in Zeppelin notebook (included with Oracle 23ai):
 
 ![Create credential](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-credential.png?raw=true)
 
-```console
-%script
 
-begin
-    dbms_cloud.create_credential (
-        credential_name  => 'OPENAI_CRED35',
-        username         => 'OPENAI',
-        password         => '******************'
-        );
-exception
-    when others then
-        dbms_output.put_line(sqlerrm);
-end;
-```
 
 Then creadential to connect to OCI Object Storage needs to be set:
 
 ![Create OCI credential](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-oci-credential.png?raw=true)
-
-```console
-%script
-
- BEGIN
-
-    DBMS_CLOUD.DROP_CREDENTIAL('OCI_CRED');
-
-    DBMS_CLOUD.CREATE_CREDENTIAL(
-        credential_name => 'OCI_CRED',
-        username => '**********************',
-        password => '*************'
-    );
-END;
-```
 
 Make sure that username includes also identity domain as prefix: `identity_domain/username`.
 
@@ -84,46 +54,9 @@ In the next step, a new AI profile needs to be created:
 
 With *create profile* vector index is specified:
 
-```console
-%script
-
-BEGIN
-
-    DBMS_CLOUD_AI.DROP_PROFILE('OPENAI_ORACLE');
-
-    DBMS_CLOUD_AI.CREATE_PROFILE(
-        profile_name =>'OPENAI_ORACLE',
-        attributes   =>'{"provider": "openai",
-        "credential_name": "OPENAI_CRED",
-        "vector_index_name": "RAG_DEMO_IDX",
-        "temperature": 0.2,
-        "max_tokens": 4096,
-        "model": "gpt-3.5-turbo-1106"
-    }');
-end;
-```
-
 We can now create a new vector index using files stored in OCI Object Storage.
 
 ![Create a new vector index](https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-vector-index.png?raw=true)
-
-```console
-%script
-
-BEGIN
-       DBMS_CLOUD_AI.CREATE_VECTOR_INDEX(
-         index_name  => 'RAG_DEMO_IDX',
-         attributes  => '{"vector_db_provider": "oracle",
-                          "location": "https://swiftobjectstorage.eu-frankfurt-1.oraclecloud.com/v1/<namespace>/select-ai-rag-data",
-                          "object_storage_credential_name": "OCI_CRED",
-                          "profile_name": "OPENAI_ORACLE",
-                          "vector_dimension": 1536,
-                          "vector_distance_metric": "cosine",
-                          "chunk_overlap":128,
-                          "chunk_size":1024
-      }');
-END;
-```
 
 After a new vector index is created, the last step - set the new profile active.
 
@@ -151,3 +84,62 @@ In image below, the same response is in a form of the table. Beside generated re
 ### Conclusion
 
 In this very simple example, we can see that it is relatively easy to set up an object store and enable it for RAG by using vector index in Oracle 23ai database. With a few steps, you can enrich your PL/SQL database to become GenAI enabled. You just have to bring one of popular Large Language Models and register it with Oracle 23ai database. In one of my future blogs, I'll test it how all of these perform on non-english texts.
+
+### Notebook Script
+
+```script
+%script
+
+BEGIN
+    DBMS_CLOUD.CREATE_CREDENTIAL(
+        credential_name  => 'OPENAI_CRED35',
+        username         => 'OPENAI',
+        password         => '******************'
+        );
+EXCEPTION
+    WHEN others THEN
+        DBMS_OUTPUT.PUL_LINE(sqlerrm);
+END;
+
+BEGIN
+    DBMS_CLOUD.DROP_CREDENTIAL('OCI_CRED');
+    DBMS_CLOUD.CREATE_CREDENTIAL(
+        credential_name => 'OCI_CRED',
+        username => '**********************',
+        password => '*************'
+    );
+END;
+
+BEGIN
+    DBMS_CLOUD_AI.DROP_PROFILE('OPENAI_ORACLE');
+    DBMS_CLOUD_AI.CREATE_PROFILE(
+        profile_name =>'OPENAI_ORACLE',
+        attributes   =>'{"provider": "openai",
+        "credential_name": "OPENAI_CRED",
+        "vector_index_name": "RAG_DEMO_IDX",
+        "temperature": 0.2,
+        "max_tokens": 4096,
+        "model": "gpt-3.5-turbo-1106"
+    }');
+END;
+
+BEGIN
+    DBMS_CLOUD_AI.CREATE_VECTOR_INDEX(
+         index_name  => 'RAG_DEMO_IDX',
+         attributes  => '{"vector_db_provider": "oracle",
+                          "location": "https://swiftobjectstorage.eu-frankfurt-1.oraclecloud.com/v1/<namespace>/select-ai-rag-data",
+                          "object_storage_credential_name": "OCI_CRED",
+                          "profile_name": "OPENAI_ORACLE",
+                          "vector_dimension": 1536,
+                          "vector_distance_metric": "cosine",
+                          "chunk_overlap":128,
+                          "chunk_size":1024
+    }');
+END;
+
+BEGIN
+    DBMS_CLOUD_AI.SET_PROFILE(
+        profile_name => 'OPENAI_ORACLE'
+    );
+END;
+```
