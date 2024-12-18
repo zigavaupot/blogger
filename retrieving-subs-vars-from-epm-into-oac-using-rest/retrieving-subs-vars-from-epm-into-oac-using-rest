@@ -1,6 +1,3 @@
-
-### Starting point
-
 Since a few releases ago, Oracle has introduced native connectors that connect Oracle Analytics to Oracle EPM Application. That way, planning data from Oracle EPM Cloud can be retrieved into Oracle Analytics for reporting and analysis.
 
 However, this was just a first step in to EPM/Essbase world. There are several others required as well, for example:
@@ -9,6 +6,27 @@ However, this was just a first step in to EPM/Essbase world. There are several o
 * Selection Steps is a functionality known from "classic" Oracle Analytics (Dashboards and Answers) where users can select specific member of the hierarchy and display only its descendants based on hierarchy or similar relationship (ie. leaves of hierarchy).
 
 This post is about retrieving Substitution Variables using REST API.
+
+And here is our initial workbook:
+
+As we can see, there is *Vision.Vis1ASO* dataset. It is using direct native connection to the application/cube used in this example.
+
+![Initial Analysis](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/initial-analysis.png?raw=true)
+
+**Vision.Vis1ASO** dataset is using connection called **EPM direct connection**, from which 5 plan types or cubes can be read. In our example we are using **Vis1ASO** plan type.
+
+![Vision.Vis1ASO dataset](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/vis1aso-dataset.png?raw=true)
+
+**EPM direct connection** is defined as follows:
+
+![EPM Direct Connection](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/epm-direct-connection.png?raw=true)
+
+URL is EPM Cloud Service base URL, for example, if service URL is `https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com/epmcloud` then required **URL** is `https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com
+
+EPM Connector allows three different options how users are authenticated:
+1. Always use credentials that are used in connection definition.
+2. Require users to enter their own credentials. This means every time user wants to use this connection he or she would be required to manually provide his or her credentials.
+3. Use active user credentials. In this scenario, credentials used to connect into Oracle Analytics would be automatically used to connect to EPM Cloud.
 
 ### What are Substitution Variables?
 
