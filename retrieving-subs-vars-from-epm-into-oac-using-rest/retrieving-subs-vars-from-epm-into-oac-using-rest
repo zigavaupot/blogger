@@ -1,0 +1,76 @@
+### Create a new connection using REST API
+
+The first step is to create a new connection to Oracle EPM Cloud using REST API. How to access and use Oracle EPM Cloud REST API interface is documented in full in Oracle's documentation, so I'm not going into details of that. More can be found [here](https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/prest/planning_getting_and_setting_subst_variables_intro.html).
+
+Begin creating a new connection by clicking **Create** and choosing **Connection**.
+
+![Create Connection](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/create-connection-menu.png?raw=true)
+
+When **Create Connection** window pops up, scroll down till you get to **REST API (Preview)**.
+
+![Create Connection](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/select-rest-api-connetion.png?raw=true)
+
+Click on it and continue with connection definition. Give your connect a name, ie. *EPM REST API Connection*.
+
+Then specify **REST base URL**. 
+
+When working with Oracle EPM Planning as a data source the following is required to understand regarding URLs that need to be specified. 
+
+The URL syntax is the following:
+
+``` script
+https://<BASE-URL>/HyperionPlanning/rest/{api_version}/{path}
+```
+where:
+
+* **BASE-URL** is the first part of EPM service URL. If service URL is https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com/epmcloud then **BASE_URL** is https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com.
+
+* **api_version**: API version you are developing with. The current REST API version for Planning is v3.
+
+* path: Identifies the resource. In case of Substitution Variables path is */HyperionPlanning/rest/{api_version}/applications/{application}/substitutionvariables*. For example, I am using planning application called **Vision**.
+
+In my case, let's say that I am using an instance with the following **BASE_URL**: 
+
+``` script
+https://epm-1234567890-plan.demoservices.oraclepdemos.com
+```
+
+The next fields are **REST Endpoints**, as there may be more than one restpoint. In our case we have only one REST Endpoint which is URL that combines **BASE_URL** and **path**:
+
+``` script
+https://epm-1234567890-plan.demoservices.oraclepdemos.com/HyperionPlanning/rest/v3/applications/Vision/substitutionvariables
+```
+
+Click **Add Endpoint** and replace suggested REST Endpoint with URL described above.
+
+For **Authentication** select **Basic** and provide your **username** and **password**.
+
+![Create Connection](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/define-rest-api-connection.png?raw=true)
+
+Once entered, click **Save**. If all done properly, message that connection was defined successfully appears for a bit.
+
+### Create a new dataset
+
+Creating a new dataset that will capture Substitution Variables using REST API Connection is the next step.
+
+From the list of available connections, select connection you've just created and open **Actions** menu on the right side. Choose Create Dataset.
+
+![Create Dataset](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/create-dataset.png?raw=true?raw=true)
+
+In the **New Dataset** page, on the left panel, expand **Schemas** and then **AUTOREST**. 
+
+![Navigate to AUTOREST](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/navigate-to-schemas-autorest.png?raw=true)
+
+Double-click or drag and drop object **ITEM** to the canvas.
+
+What you would get is the list of all Substitution Variables read from Oracle EPM Planning application (Vision) using REST API.
+
+![Import ITEMS](https://github.com/zigavaupot/blogger/blob/main/retrieving-subs-vars-from-epm-into-oac-using-rest/images/import-items.png?raw=true)
+
+We can see there are four columns:
+* *POSITION*: Substitution Variable id
+* *NAME*: Substitution Variable name, ie. ActVersion
+* *VALUE*: Substitution Variable value, ie. Working
+* *PLANTYPE*: plan type or cube for which this Substitution Variable is being used with.
+
+And now, we have *yet another dataset* which can be used as any other dataset in OAC.
