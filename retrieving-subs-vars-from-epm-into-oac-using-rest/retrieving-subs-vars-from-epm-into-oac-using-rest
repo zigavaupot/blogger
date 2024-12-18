@@ -1,3 +1,33 @@
+
+### Starting point
+
+Since a few releases ago, Oracle has introduced native connectors that connect Oracle Analytics to Oracle EPM Application. That way, planning data from Oracle EPM Cloud can be retrieved into Oracle Analytics for reporting and analysis.
+
+However, this was just a first step in to EPM/Essbase world. There are several others required as well, for example:
+* Support for EPM Cloud/Essbase data sources in Semantic Modeler: this hasn't been provided yet, however we can expect it in January 2025 release of Oracle Analytics Cloud.
+* Substitution Variables can not be imported directly with the data. But there is an option to use REST API to get all of these variables.
+* Selection Steps is a functionality known from "classic" Oracle Analytics (Dashboards and Answers) where users can select specific member of the hierarchy and display only its descendants based on hierarchy or similar relationship (ie. leaves of hierarchy).
+
+This post is about retrieving Substitution Variables using REST API.
+
+### What are Substitution Variables?
+
+Substitution variables are variables that are defined at the EPM Cloud or Essbase data source that serves as a placeholder for specific members that change regularly.
+
+Substitution variables are variables that are defined at the EPM Cloud or Essbase data source that serves as a placeholder for specific members that change regularly.
+
+The idea is to bring Substitution Variables in Oracle Analytics to maintain consistency in reporting and analysis. 
+
+
+### The Workflow
+
+The workflow to start using Substitution Variables in Oracle Analytics is the following:
+
+1. Create a new connection that is using REST API to connect to Oracle EPM Cloud service
+2. Create a dataset in Oracle Analytics with retrieved Substitution Variables that is using REST API connection
+3. Use Substitution Variables dataset in a workbook to create Parameters
+4. Bind parameters to filter or use them independently in analyses (ie. Expression Filters, Calculations, etc.)
+
 ### Create a new connection using REST API
 
 The first step is to create a new connection to Oracle EPM Cloud using REST API. How to access and use Oracle EPM Cloud REST API interface is documented in full in Oracle's documentation, so I'm not going into details of that. More can be found [here](https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/prest/planning_getting_and_setting_subst_variables_intro.html).
