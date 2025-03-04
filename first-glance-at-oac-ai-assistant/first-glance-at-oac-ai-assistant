@@ -8,11 +8,46 @@ Is that a reasonable limitation? Probably. But for those of us who aren’t spen
 
 With the March 2025 release, this is finally changing! Oracle has enhanced the Oracle Analytics AI Assistant by adding the option to use third-party LLMs. And of course, I immediately put it to the test.
 
-### Registering custom LLM with Oracle Analytics
+### Registering and activating custom LLM with Oracle Analytics
 
 There are a couple of steps that users who would want to connect their custom LLMs with Oracle Analytics need to perform. Registering a custom LLM with Oracle Analytics is one of them.
 
 **Large Language Models** is a new choice option under **Extensions and Enrichments** in **Console**
+
+![Administration Console](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/oac-admin-console.png?raw=true)
+
+Image below shows one registered LLM model with name ChatGPT (custom name given). This LLM model is than active model used with **Assistant** feature (will there be more features in the future?). So registering and activating a custom LLM model is a two-step process:
+
+* Register LLM
+
+To register LLM with OAC click *Register LLM to use in Oracle Analytics Features*.
+
+![Register LLM to use in OA Features](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/register-llm-to-use-in-oa-features.png?raw=true)
+
+*Register LLM* is pop-up window where detailed information about the model is entered. Currently, it is only possible to select **OpenAI** as a *LLM Service* and **gpt-4-turbo** as a *Model*.
+
+Users have to provide **API Key** which can be generated and obtained from [OpenAI API Platform](https://platform.openai.com/docs/overview). 
+
+During creation process of a **new secret key**, **API Key** is generated. Users are advised to copy to a safe location as there's no way to obtain once process is completed.
+
+![Create API Key](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/api_keys.png?raw=true)
+
+Anyways, copy and paste API Key in requested field in *Register LLM* form. Before adding, API Key needs to be validated.
+
+In my example, I can see two LLMs registered:
+
+![Registered LLMs list](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/registered-llm-list.png?raw=true)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
