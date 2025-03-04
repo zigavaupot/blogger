@@ -1,0 +1,145 @@
+![Finally](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/about-oracle-analytics-llm.png?raw=true)
+
+### It’s Finally Here!
+
+AI Assistant has been available in Oracle Analytics for a few months now, but until recently, I hadn’t been able to test or use it. Why? Because Oracle only enabled its built-in LLM in select regions and on instances with at least 10 OCPUs.
+
+Is that a reasonable limitation? Probably. But for those of us who aren’t spending thousands of Universal Credits on our OAC instances every month, it’s also pretty frustrating. A powerful temptating feature—so close, yet still out of reach.
+
+With the March 2025 release, this is finally changing! Oracle has enhanced the Oracle Analytics AI Assistant by adding the option to use third-party LLMs. And of course, I immediately put it to the test.
+
+### Registering and activating 3rd Party LLM with Oracle Analytics
+
+There are a couple of steps that users who would want to connect their 3rd party LLMs with Oracle Analytics need to perform. Registering a 3rd party LLM with Oracle Analytics is one of them.
+
+**Large Language Models** is a new choice option under **Extensions and Enrichments** in **Console**
+
+![Administration Console](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/oac-admin-console.png?raw=true)
+
+Image below shows one registered LLM model with name ChatGPT (custom name given). This LLM model is than active model used with **Assistant** feature (will there be more features in the future?). So registering and activating 3rd party LLM model is a two-step process:
+
+* Register LLM
+
+To register LLM with OAC click *Register LLM to use in Oracle Analytics Features*.
+
+![Register LLM to use in OA Features](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/register-llm-to-use-in-oa-features.png?raw=true)
+
+*Register LLM* is pop-up window with a form where detailed information about the model is entered. Currently, it is only possible to select **OpenAI** as a *LLM Service* and **gpt-4-turbo** as a *Model*.
+
+Users have to provide **API Key** which can be generated and obtained from [OpenAI API Platform](https://platform.openai.com/docs/overview). 
+
+During creation process of a **new secret key**, **API Key** is generated. Users are advised to copy it to a safe location as there's no way to obtain once process is completed.
+
+![Create API Key](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/api-keys.png?raw=true)
+
+Anyways, copy and paste API Key into requested field in *Register LLM* form. Before adding, API Key needs to be validated.
+
+In my example, I can see two LLMs registered:
+
+![Registered LLMs list](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/registered-llm-list.png?raw=true)
+
+In the list above, we can see that model with name **ChatGPT** is active (check *Status* column) and **Feature Usage** is *Assistant*. For model named **ChatGPT-4T**, **Feature Usage** is set to *None*.
+
+* Activate Analytics Features
+
+Once model is registered, it has to be actived. 
+
+![Activate LLM](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/activate-llm.png?raw=true)
+
+New LLM has to be chosen from the LLM Name list. Selection has to be additionally confirmed by **Update**.
+
+Newly registered model has been activated successfully:
+
+![New active LLM](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/new-active-llm.png?raw=true)
+
+### Let's test it!
+
+I must admit I was caught unprepared. In order to save my credits, I have only one **OAC Professional Edition** active, which is nothing wrong, my ChatGPT will work, but I can't test how it would work with **Subject Areas**. So this is still to come (after my new OAC Enterprise Edition instance is updated with March 2025 release), but for initial tests, this will be good enough.
+
+For my first glance at AI Assistant, I am using more or less standard *cloud_sample_data_denorm*, simple flattened sales data, dataset.
+
+![Sample dataset](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/cloud-sample-data-denorm.png?raw=true)
+
+Two steps are still required:
+
+* Enable Insights 
+
+Open **Inspect** for dataset, check **Enable Insights** checkbox under **General** tab.
+
+![Enable insights](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/inspect-general-enable-insights.png?raw=true)
+
+* Index Dataset
+
+Navigate to **Search** in **Inspect** pop-up window. Set parameters that define dataset indexing.
+
+![Search](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/inspect-search.png?raw=true)
+
+Before using dataset with AI Assistent, dataset needs to be indexed. **Run now** will index dataset as defined. I will finish in a minute or so.
+
+![Indexing](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/dataset-indexing.png?raw=true)
+
+Very useful tip: use *synonyms* as these will improve model performance.
+
+And now, we are ready. Let's create a new workbook using dataset that was just indexed.
+
+![Open AI Assistant](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/open-ai-assistant.png?raw=true)
+
+Click *light bulb* in the top black ribbon. This will open **Watchlists/Insights/Assistant** window. Navigate to **Assistant** tab.
+
+![Open AI Assistant](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/open-ai-assistant.png?raw=true)
+
+Questions can be posted in **Ask a question ...** field:
+
+![Ask a question](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/ask-questions.png?raw=true)
+
+For example, let's ask `What is total revenue?`. 
+
+**AI assitant** repsonds with the following answer.
+
+![Question 1](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-1.png?raw=true)
+
+Seems correct, but let's ask a bit more detailed question, ie. `What is revenue by month?`
+
+![Question 2](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-2.png?raw=true)
+
+Ok, fine so far. What about breaking revenue down by customer segments?
+
+![Question 3](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-3.png?raw=true)
+
+I had something else in my mind, but got correct revenue split by customer segments. I wanted to have break down also using time dimension, but wasn't very specific about it.
+
+Let's see if we could get that breakdown as I wanted. I was thinking of something like this:
+
+![Question 4](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-4.png?raw=true)
+
+I can now change chart type to something else, ie. to *stacked area* chart.
+
+![Question 5](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-5.png?raw=true)
+
+This results in the following chart:
+
+![Question 6](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-6.png?raw=true)
+
+I can now add this last visualisation to my canvas and start building my analysis. There is a **+** sign (if you hover visualisation) which would add visualisation onto canvas.
+
+![Add to canvas](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/add-to-canvas.png?raw=true)
+
+Something like that:
+
+![Canvas](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/canvas.png?raw=true)
+
+### Summary
+
+Registering custom AI Assistant seems to be working in Oracle Analytics. My first questions have been answered promptly and correct. However, I started to play with more complex questions, adding some more Oracle Analytics content into it, and results were not that great. 
+
+But fine, Rome wasn't built in one day. I tried questions in Slovenian language, and (of course, I am using ChatGPT) questions can be asked in Slovenian language too - let's remind ourselves that dataset I used is ENGLISH ONLY. So that checkbox, at least initially, checked.
+
+I was writing about similar case when I used SELECT AI in Oracle Autonomous Database. I was realy surprised as SELECT AI was able to interpret questions using measures that were not described in dataset. For example, even though Profit Ration measure was not defined anywhere, SELECT AI was able to calculate it. In this case, Oracle Analytics returns something like this:
+
+![Question 7](https://github.com/zigavaupot/blogger/blob/main/first-glance-at-oac-ai-assistant/images/question-7.png?raw=true)
+
+Similar question, SELECT AI answers the following question `What is revenue, total costs, profit, profit ratio, fixed costs share, variable costs share by product brand, customer segment and regions for this year?` in Slovenian language. And answer is 100% right!
+
+![Really complex one](https://github.com/zigavaupot/blogger/blob/main/talking-to-oracle-database-slovenian/images/select-ai-realy-complex-one-si.png?raw=true)
+
+And this is what I am looking for in future improvements. Stay tuned as I plan to test a bit more in forthcoming days.
