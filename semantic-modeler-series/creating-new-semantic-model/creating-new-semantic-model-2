@@ -1,0 +1,63 @@
+We have created a new **system connection** in our Oracle Analytics instance. A system connection is a prerequisite for the next step: creating a new semantic model. As we will see shortly, Oracle Analytics provides several ways to create a semantic model. For this guide, we will create a new empty semantic model and build it from scratch.
+
+---
+
+### Create a New Semantic Model
+
+Open the **Navigator** on the Oracle Analytics home page and select the **Semantic Model** menu option. The list of available semantic models will appear. In our case, the list is empty, so we need to create one.
+
+![Semantic Models List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/semantic-models-list.png?raw=true)
+
+Creating a new semantic model follows the same steps as creating any other object in Oracle Analytics. Click the **Create** button located in the top-right corner.
+
+From the menu that appears, choose **Semantic Model**.
+
+![Create Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/create-semantic-model.png?raw=true)
+
+In the first step, provide a name for your model — for example, `OA Bootcamp Semantic Model` — and click **Create**.
+
+![Create Semantic Model dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/create-semantic-model-dialog.png?raw=true)
+
+Next, the administrator needs to choose how the model will be created. Oracle Analytics offers four options:
+
+- **Start with an Empty Model**  
+  Creates a blank semantic model. The administrator can manually import table definitions from existing connections and build any required objects.
+  
+- **Import a File**  
+  Allows importing an existing `.rpd` file — a binary metadata file familiar to users of previous Oracle Analytics versions or Oracle Business Intelligence (OBIEE). Although we now work with a visual semantic model, deployed models are still represented as `.rpd` files on the BI Server.
+  
+- **Import the Deployed Model**  
+  Imports an existing deployed model from your Oracle Analytics instance into the Semantic Modeler.
+  
+- **Clone a Git Repository**  
+  Enables working with a Git-based version of the semantic model. This is useful for collaborative development and version control. Git must be configured beforehand.
+
+![Four options to create](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/four-options-to%20create.png?raw=true)
+
+Once an option is selected, a new semantic model workspace is created.
+
+---
+
+### Main Menu Options
+
+The top-left menu presents six tabs that structure the semantic model environment:
+
+- **Connections**  
+  ![Connections](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-connections.png?raw=true)
+
+- **Physical Layer**  
+  ![Physical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-physical-layer.png?raw=true)
+
+- **Logical Layer**  
+  ![Logical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-logical-layer.png?raw=true)
+
+- **Presentation Layer**  
+  ![Presentation Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-presentation-layer.png?raw=true)
+
+- **Variables**  
+  ![Variables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-variables.png?raw=true)
+
+- **Invalid Files**  
+  ![Invalid Files](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-invalid-files.png?raw=true)
+
+As we proceed to build the semantic model, we will cover each of these tabs in more detail.
