@@ -1,6 +1,6 @@
 We have created a new system connection in Oracle Analytics instance. System connection is prerequisite for the next step which is creating a new semantic model. As we will see shortly, we can create a new semantic model in several ways. For now, we will create a new empty semantic model and build it from scratch.
 
-### Create a new semantic model
+# Create a new semantic model
 
 Open Navigator on Oracle Analytics home page and navigate to Semantic Model menu option. Semantic Models list will appear, and in our case the list is empty, hence we need to create one first.
 

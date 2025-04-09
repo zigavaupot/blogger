@@ -1,0 +1,23 @@
+
+# Physical Layer
+
+Physical Layer in the first of the three layers in our metadata model (repository). It defines how Oracle Analytics connects to and retrieves data from external data sources, such as databases.
+
+It includes:
+
+- **Connections** to data sources (e.g., relational databases on-prem or in cloud, such as Oracle Autonomous Database, Snowflate, SQL Server, ...). Connections are defined system-wide and can be reused across different models. As we already learnt, they can be regular or system. 
+
+- **Schemas** and **tables/views**: when creating physical layer, tables (or even better, their definitions) can be imported. Besides tables, view or SQL expressions are also supported. Once imported tables can be renamed (underlying database tables are not affected). It is a good practice to create aliases for imported tables and then work with these aliases rather than directly database tables. There are several benefits for that which we will look into a bit later.
+
+- **Joins** between tables define the relations between physical table in the model. BI Server genarates queries that are executed against database tables using join definitions between tables. Therefore joins definition is very important and has to handled with great care. It is worth to mention that there is no prescription what physical model should be implemented in the database before import. It can be 3NF, star or snow-flake schema, even flat, denormalized, table. Physical layer hasn't got any constraint, whereas we will see that logical model requires star schema model.
+
+- Optional **data source filters**, **caching settings**, and **descriptions**:
+    - data source filters can be directly applied on the physical data sources, which allows us to define row-level filter security setup
+    - we can define caching strategy for each table in the physical layer.
+
+Physical layer is important because:
+- It abstracts the raw data from your users. Business users don’t have to deal with tables or SQL — they interact with the Logical and Presentation layers.
+- It ensures performance tuning at the lowest level.
+-  gives you control over source metadata, joins, and security before transforming it into business-friendly formats.
+
+![Database tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/tables.png?raw=true)
