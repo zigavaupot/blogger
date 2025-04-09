@@ -1,0 +1,50 @@
+Working with data in databases requires from Oracle Analytics administrators to create connections. There are two types of connections:
+
+- "regular" connections which connects Oracle Analytics with data in databases and help users to retrieve those data, and
+- "system" connections which are used to create and maintain semantic models, metadata repositories.
+
+In Oracle Analytics, we would require both. 
+
+### Regular Connections
+
+I am using term "regular" here as there isn't specific naming for this type of connections. It's just a connection that allows users to retrieve data and analyse it using Data Visualisation.
+
+Oracle Bootcam uses the following tables:
+
+![Database tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/tables.png?raw=true)
+
+To create such a connection, navigate to **Data** in **Navigator** menu in Oracle Analyitcs. Under the 2nd tab, all connections are listed. In our case, the list is empty:
+
+![Connections](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/connections-empty.png?raw=true)
+
+In order to create a new connection, click **Create** on the top bar (right corner) and select **Connection**.
+
+![Create a new connection](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/create-connection.png?raw=true)
+
+**Create Connection** dialog appears. Select database type, in our example, we are using Oracle Autonomous Datawarehouse.
+
+![Create Connection Dialog 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/create-connection-dialog-1.png?raw=true)
+
+Upon database type selection, dialog takes us to the second step, which is about connection details:
+
+![Create Connection Dialog 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/create-connection-dialog-2.png?raw=true)
+
+Provide meaningful connection name and description. In case of Autonomous DataWarehouse, select *Mutual TLS* as Encription Type. Select *Wallet* that was downloaded from your database console. Provide username and password, and select *_high* as a Service Name. For Authentication, leave *Always use these credentials*. Click **Save** and connection should have been successfully created. 
+
+This connection can be used for retrieving data from database and, for example, when creating datasets. However, it CANNOT be used in Semantic Modeler for creating and modeling semantic models or repositories. For these connections have to be declared **System Connections".
+
+### System Connections
+
+System Connections are required when creating a new or updating existing semantic modeler. Creating one is similar to creating "regular" connection with one small but important difference. System connection have to be specifically declared by checking the **System Connection** checkbox in the **Create Connection** dialog.
+
+So, we need another connection created, and in the last step, check **System Connection** checkbox:
+
+![Create System Connection](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/create-system-connection.png?raw=true)
+
+Connections list should have two entries now:
+
+![Connections List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-system-connection/images/connections-list.png?raw=true)
+
+Let me add here one observation. If you are using earlier version of Oracle Analytics, you might find some difficulties when connecting to database from Semantic Modeler. Use shorter name for your connection, 8 characters or less should do the job.
+
+In our labs, we will use the system connection.
