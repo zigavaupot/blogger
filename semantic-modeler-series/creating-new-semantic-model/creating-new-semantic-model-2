@@ -1,17 +1,17 @@
 ### Connections
 
-We can see that **OABootcamp SYSTEM Connection** has been automatically selected. 
+We can see that the **OABootcamp SYSTEM Connection** has been automatically selected.
 
 ![Connections](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-connections.png?raw=true)
 
-By expanding list of database **Schemas**, we can find all tables we are going to use in our lab in **OABOOTCAMP** schema:
+By expanding the list of database **Schemas**, we can find all the tables we’ll use in our lab under the **OABOOTCAMP** schema:
 
 ![Connections and Schemas](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/connections-schemas.png?raw=true)
 
-We can initiate a new connection creation from here as well. There is a *small plus* next to *Search* field (top-left). By clicking on the <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="20"/> icon, a new connection dialog will open.
+You can also initiate the creation of a new connection from this screen. There is a *small plus icon* located next to the *Search* field in the top-left corner. By clicking on the <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="16"/> icon, a new connection dialog will open.
 
-![Creata Connection](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/create-connection-from-semantic-modeler.png?raw=true)
+![Create Connection](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/create-connection-from-semantic-modeler.png?raw=true)
 
-This will lead developer through the same process as described in <a href="https://zigavaupot.blogspot.com/2025/04/semantic-model-series-creating-new.html" target="_blank">Creating a new System Connection</a> with a small change - developer can't check or un-check **System connection** checkbox, which is automatically checked.
+This will guide the developer through the same steps as outlined in <a href="https://zigavaupot.blogspot.com/2025/04/semantic-model-series-creating-new.html" target="_blank">Creating a new System Connection</a>, with one notable difference: the **System connection** checkbox is automatically checked and cannot be modified.
 
-![Creata Connection with System Connection checked by default](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/system-connection-by-default.png?raw=true)
+![Create Connection with System Connection checked by default](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/system-connection-by-default.png?raw=true)

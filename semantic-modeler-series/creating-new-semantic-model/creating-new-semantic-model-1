@@ -4,17 +4,17 @@ We have created a new system connection in Oracle Analytics instance. System con
 
 Open Navigator on Oracle Analytics home page and navigate to Semantic Model menu option. Semantic Models list will appear, and in our case the list is empty, hence we need to create one first.
 
-![Semantic Models List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/semantic-models-list.png?raw=true)
+![Semantic Models List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/semantic-models-list.png?raw=true)
 
 Creating a new semantic model takes the same steps as any other object creation within Oracle Analytics. Click **Create** that can be located in the top bar on the right.
 
 When clicked, menu opens and we should choose Semantic Model option.
 
-![Create Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/create-semantic-model.png?raw=true)
+![Create Semantic Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/create-semantic-model.png?raw=true)
 
 As a first step, we need to provide our model a **model name**, for example OA Bootcamp Semantic Model and click **Create**.
 
-![Create Semantic Model dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/create-semantic-model-dialog.png?raw=true)
+![Create Semantic Model dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/create-semantic-model-dialog.png?raw=true)
 
 In the next step, administrator creating a new model has to decide how the model should be created. There are four options available:
 
@@ -23,7 +23,7 @@ In the next step, administrator creating a new model has to decide how the model
 - **Import the Deployed Model**: If there was a model already deployed in Oracle Analytics, by choosing this option, that model would be imported in Semantic Model.
 - **Clone a Git Repository**: With Semantic Model, Oracle Analytics supports working with Git repositories. This option allows developers to clone an existing Git repository and to create a new semantic model using it. Administrators need to configure Git connections, before that is possible.
 
-![Four options to create](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/four-options-to create.png?raw=true)
+![Four options to create](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/four-options-to-create.png?raw=true)
 
 Once one of the choices is chosen, a new empty semantic model is created.
 
@@ -33,26 +33,26 @@ Menu options are available top left where 6 tabs are shown:
 
 - **Connections**
 
-![Connections](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/top-menu-connections.png?raw=true)
+![Connections](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-connections.png?raw=true)
 
 - **Physical Layer**
 
-![Physical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/top-menu-physical-layer.png?raw=true)
+![Physical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-physical-layer.png?raw=true)
 
 - **Logical Layer**
 
-![Logical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/top-menu-logical-layer.png?raw=true)
+![Logical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-logical-layer.png?raw=true)
 
 - **Presentation Layer**
 
-![Presentation Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/top-menu-presentation-layer.png?raw=true)
+![Presentation Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-presentation-layer.png?raw=true)
 
 - **Variables**
 
-![Variables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/top-menu-variables.png?raw=true)
+![Variables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-variables.png?raw=true)
 
 - **Invalid Files**
 
-![Invalid Files](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/create-new-semantic-model/top-menu-invalid-files.png?raw=true)
+![Invalid Files](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/top-menu-invalid-files.png?raw=true)
 
 While creating a new semantic model, we will address all of the above in detail.
