@@ -1,3 +1,4 @@
+![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
 
 # Physical Layer
 
@@ -18,6 +19,8 @@ It includes:
 Physical layer is important because:
 - It abstracts the raw data from your users. Business users don’t have to deal with tables or SQL — they interact with the Logical and Presentation layers.
 - It ensures performance tuning at the lowest level.
--  gives you control over source metadata, joins, and security before transforming it into business-friendly formats.
+- Gives developers and administrators control over source metadata, joins, and security before transforming it into business-friendly formats.
+
+In this lab, we will demonstrate how to create a physical layer
 
 ![Database tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/tables.png?raw=true)

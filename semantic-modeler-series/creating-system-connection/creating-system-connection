@@ -1,3 +1,5 @@
+![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
+
 Working with data in databases requires Oracle Analytics administrators to create connections. There are two types of connections:
 
 - **"Regular" connections** connect Oracle Analytics to databases and allow users to retrieve data.
