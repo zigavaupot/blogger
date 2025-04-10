@@ -21,6 +21,130 @@ Physical layer is important because:
 - It ensures performance tuning at the lowest level.
 - Gives developers and administrators control over source metadata, joins, and security before transforming it into business-friendly formats.
 
-In this lab, we will demonstrate how to create a physical layer
+In this lab, we will demonstrate how to create a physical layer. So, let's crack on!
 
-![Database tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/tables.png?raw=true)
+## Create a new database
+
+Navigate to **Physical layer** first. 
+
+![Physical Layer](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/empty-physical-layer.png?raw=true)
+
+We can observe that there is one database called *MyDatabase* available. This database is a dummy one and needs updating. We can do that or simply create a new one. Let's begin from scratch, hence simply delete any existing database (be careful with deletions if you are not working on a brand new semantic model!).
+
+Click on plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="16"/> next to Search field and select **Create Database** option:
+
+![Create Database](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-database.png?raw=true)
+
+**Create Database** dialog window opens. Enter **Name**, optionally **Description** and select your **Database Type**. Choose your database type, however in our case, we need to switch to *Oracle Autonomous Data Warehouse* option.
+
+![Create Database dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-database-dialog.png?raw=true)
+
+Click **Ok** to create a new database.
+
+Newly created database is opened in the main part of the canvas. Currently everything is still empty:
+
+![OA Bootcamp Database created](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/oabootcamp-database-empty.png?raw=true)
+
+There are 5 tabs which will define our database:
+
+- **General**: These are genaral database definitions like database name and database type. 
+- **Tables**: This tab lists all the physical tables (and aliases) that belong to the database.
+- **Advanced**: The Advanced tab allows configuration of database-specific SQL behavior.
+- **Connection Pools**: This tab shows all connection pools defined for the database.
+- **Query Limits**: This tab allows setting query-level restrictions at the database level.
+
+We will focus on **Tables** and **Connection Pools**.
+
+### Connection Pools
+
+Connection pool defines how Oracle Analytics connects to the database — including credentials, max connections, timeouts, etc. There can be more than one connection pool defined for a database. For example, it is a good practice to have a separate connection pool defined for variables initialisation, hence typically we would expect more that one connection pool defined here. But for our lab, one will be enough.
+
+Navigate to **Connection Pools** tab. As we expected, connection pool list is empty. 
+
+![Connection Pools](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/connection-pools-empty.png?raw=true)
+
+So to be able to connect to any database, one connection pool needs to be created.
+
+Look for a plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/plus-sign.png?raw=true" alt="plus" width="16"/>), it is next to Search filed, and click on it. This will automatically add a new connection pool.
+
+![Adding a new Connection Pool](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-connection-pool.png?raw=true)
+
+Click on details icon: 
+
+![Details Icon](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/details-icon.png?raw=true)
+
+This icon has the same behavour throughout Semantic Model. It opens details for the selected object. In our case, selected object is connection pool *New Connection Pool_1*. 
+
+We can now update connection pool details, such as **Name** - let's rename it to *OA Bootcamp Connection Pool - Main*. We will look into more details for connection pool in later chapters.
+
+Let's save what we've so far done. Save icon is located in the top bar on the right side, a diskette icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/diskette-icon.png?raw=true" alt="plus" width="16"/>).
+
+### Tables
+
+**Tables** is the main part of database definition. Here we import tables, views or results of a sql query, and here we define joins between tables.
+
+We'll begin with dimension tables first. As we saw, there are four dimension tables - tables that begin with *D_*. There are various ways to bring tables into database. 
+
+We'll use the simplest, drag and drop approach for these.
+
+In the navigation bar on the left, switch to the **Connections** tab. Expand **Schemas** and click on **OABOOTCAMP** schema. Click on the following tables:
+- D_CUSTOMERS
+- D_GEOGRAPHY
+- D_PRODUCTS
+- D_TIME
+
+![Import Dimension Tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/import-dimension-tables.png?raw=true)
+
+Drag selected tables onto canvas, onto **Tables** section and drop them there. Four dimension tables should now be in included in the database.
+
+![After Import Dimension Tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/after-import-dimension-tables.png?raw=true)
+
+Alternative approach is to add a new table to the database by clicking on a plus sign (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="16"/>) next to **Tables**. 
+
+![Add Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-table.png?raw=true)
+
+When clicked, menu shows. Select **Add Table**. **Select Table** dialog opens. Expand **Schemas** and navigate to fact table **F_REVENUE**. Select it and click **Select**.
+
+![Add Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/select-table.png?raw=true)
+
+After table list is refreshed, we should see five tables, 4 dimension and 1 fact table. 
+
+![Tables list](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/tables-list.png?raw=true)
+
+We will add one more table. Table will be another dimension table, called **D_ORDERS** and its columns will be subset of columns from F_REVENUE table.
+
+Click again on plus sign  (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="16"/>) next to **Tables**.
+
+This time select **Create Physical Table**.
+
+![Create Physical Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-physical-table.png?raw=true)
+
+In the first step of **Create Physical Table** dialog we need to provide a name for a new table, **D_ORDERS** in our case.
+
+![Create Physical Table Dialog 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-physical-table-dialog-1.png?raw=true)
+
+Click **Ok** to continue.
+
+New tab for **D_ORDERS** is opened. We have now several options how to further define columns for this new Physical table. We will use SQL Query to populate the table.
+
+First, let' navigate to **General** tab. Observe that **Source** is set to *Table*. Change it to *Select Statement*.
+
+![Select Source to Select Statement](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/change-source-to-select-statement.png?raw=true)
+
+Navigate to the **Columns** tab and populate **Select Statement** with the following **SQL** code:
+
+```sql
+SELECT  ORDER_KEY,
+        ORDER_STATUS, 
+        CHANNEL_NAME,
+        TIME_BILL_DT,  
+        TIME_PAID_DT
+FROM F_REVENUE
+```
+
+![Select Statement SQL](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/select-statement-sql.png?raw=true)
+
+Now, let's add columns, which should match results of the SQL statement.
+
+![Add new columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-new-columns.png?raw=true)
+
