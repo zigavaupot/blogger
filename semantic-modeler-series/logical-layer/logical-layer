@@ -1,0 +1,251 @@
+![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
+
+In the next step, we will create a logical or business layer. The Logical Layer in Oracle Analytics is a key part of the data modeling process, specifically in the Semantic Model (RPD). 
+
+It plays a crucial role in abstracting and organizing data for analysis. Among many functions, these are considered as the key Functions of the Logical Layer:
+
+- Abstracting Physical Data
+    - Maps complex, normalized database schemas into business-friendly models.
+	- Users don’t see table joins, foreign keys, or source complexity.
+- Defining Logical Tables and Columns
+    - Logical Tables: Represent business entities like *Customer*, *Sales*, *Product*.
+    - Logical Columns: Can be mapped from physical columns or calculated expressions.
+- Joins and Relationships
+    - Define logical joins (business relationships) between entities (e.g., *Customers have Orders*).
+    - These differ from physical joins; they are metadata-level and help generate optimized SQL.
+- Aggregation Rules
+    - Set up default aggregation (SUM, AVG, COUNT) for measures.
+    - Important for rolling up data in dashboards or analyses.
+- Level-Based Measures
+    - Create measures that behave differently depending on hierarchy level (e.g., monthly vs. yearly revenue).
+- Calculation Logic
+    - Derived metrics, KPIs, or business rules can be embedded here.
+
+Simplication of data for end users is definitely its major benefit. Besides that, Logical Layer is responsible also for:
+- improvements in query performance through optimization,
+- consistency provisioning across dashboards and reports,
+- encapsulating business logic in a single source of truth.
+
+# Create a new Logical Model
+
+To start with, navigate to **Logical Layer** tab.
+
+![Logical Layer - empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/logical-layer.png?raw=true)
+
+Currently, there aren't any logical models available. One has yet to be created. So let's create one. 
+
+As we are already used to, there is a plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>) with which we open an associated menu. Select **Create Business Model**.
+
+![Create Business Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/create-business-model.png?raw=true)
+
+Create Business Model dialog opens. Provide a name for the logical model.
+
+![Create Business Model dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/create-business-model-dialog.png?raw=true)
+
+Click **Ok** to create a new business model. New business model opens and you can check the main canvas. It consists of three areas (**Logical Layer** tab):
+- Facts
+- Dimensions
+- Logical Joins
+
+The requirement now is to import tables that we created from Physical Layer. We will have to split between dimensions and facts. Joins will be created manually. 
+
+There are at least two ways how to import and create logical tables (facts and dimensions). One is again by using plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>). Let's go with this option first and later we will investigate the other option.
+
+Let's bring fact table FACT_REVENUE into logical model that way.
+
+## Facts
+
+Click on the plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>) next to **Facts**. A menu with two items will open. **Add Table** option allows users to import table directly from Physical Layer and the other, **Create New Table** option allows us to create logical tables step by step. At the end all columns of such tables must be mapped to tables and columns from physical layer, or are defined as calculations. 
+
+At this point, we will pick **Add Table**. 
+
+![Add Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/add-table.png?raw=true)
+
+**Select Fact Table** dialog pops up. Search for and select FACT_REVENUE table.
+
+![Select Fact Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/select-fact-table-dialog.png?raw=true)
+
+We can see that FACT_REVENUE table has been placed under **Facts**.
+
+![Facts Table List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/facts-tables-list.png?raw=true)
+
+Double click on fact table FACT_REVENUE. We will explore what we can do with imported table and will make some adjustments to it.
+
+![Logical fact table FACT_REVENUE](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/logical-fact-table-fact_revenue.png?raw=true)
+
+There are five tabs that allows as to manage **logical fact table** (note: we are using term *logical* to distinguish these tables from physical tables):
+
+- **General**: one of the things we can do in logical layer is to rename tables and columns to be more business user friendly (this can be done in presentation layer also, but can be done at this point already). 
+
+![Fact Table - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/fact-table-general.png?raw=true)
+
+- **Columns**: we will split detailed explanations at this point and will come back here. However it is important to acknowledge that we can rename columns, remove/hide them, set default agreegations etc. 
+
+- **Joins**: in this tab, users can create and manage logical joins between logical tables. These joins are based on physical joins and as we will see, nothing much can be done with them.
+
+- **Sources**: Oracle Analytics' Semantic Model is particularly strong when it gets to data sources. Logical tables and columns are not limited to only single data source. For example, a logical column can have multiple sources. One data source can be database table on the lowest possible granularity and another column might derive from aggregated table. They don't necessary need to be on the same system. For example, aggregated measures might come from an OLAP cube and detailed data are stored in a relational table. One of the strongest Oracle Analytics features.
+
+![Fact Table - Sources](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/fact-table-sources.png?raw=true)
+
+In the screenshot above, we can see that FACT_REVENUE table has only one **Table Mapping**, currently there are no **Joins** and we can see **Column Mappings**.
+
+- **Data Filter**: this feature is to implement explicit and implicit filtering of data. For example, row-level security based on user name can be implemented using this feature.
+
+Now, let's return back to **Columns**.
+
+![Fact Table - Sources](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/fact-table-columns.png?raw=true)
+
+As we already discussed, there are two types of columns in fact tables:
+
+- measures and
+- foreign keys. 
+
+We need to specify **default aggregation** for each and every measure. We would normaly remove foreign key columns, but we will see these can still be used, for measures (!).
+
+Scroll down to column REVENUE. Double click on column name first. This will open *edit* mode, but still in a table. Make two adjustments:
+
+- Rename *REVENUE* into *Revenue* and
+- Set **Aggregation** to *Sum*
+
+![Columns - Revenue](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-revenue.png?raw=true)
+
+We can repeat this for other *obvious measures* such as *UNITS*, *COST_FIXED*, *COST_VARIABLE*, *DISCNT_VALUE*.
+
+![Columns - Measures](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-measures.png?raw=true)
+
+The next group of measures are not that obvious, but some might come in handy. Very often reports and analyses require to present number of customers or number of various products sold or number of order aggregate by certain criteria. We can efficiently use foreign key columns and define default aggregations for these as well.
+
+For each column, we can open and review it's details by clicking **Details** icon: 
+
+![Details Icon](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/details-icon.png?raw=true)
+
+Scroll to ORDER_KEY column and click on it and then click **Details** icon.
+
+Details screen for ORDER_KEY opens:
+
+![Columns - Details](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-details.png?raw=true)
+
+We will use this column to count distinct orders. Let's rename column into *# of Orders* and set default **Aggregation rule** to *Count Distinct*
+
+![Columns - Details - ORDER_KEY](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-details-order_key.png?raw=true)
+
+We can update in the same way other foreign key columns. Those which are not required, don't update.
+
+![All Columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-all.png?raw=true)
+
+We have made minimal updates to our fact table. We will come back later, but now we will forward and look at dimension tables.
+
+## Dimensions
+
+**Dimension tables** are in general treated in the same way as **Facts**, but we will see that there are some quite important differences.
+
+Let's bring our first dimension table, which we'll (for learning purposes) create manually. Click on plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>) next to **Dimensions**.
+
+![Dimensions - Create New Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-create-new-table.png?raw=true)
+
+This time we will create logical table from scratch, therefore select **Create New Table**. **Create Logical Table** dialog opens.
+
+![Create Logical Table dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-logical-table-dialog.png?raw=true)
+
+We need to provide a name and click **Ok**. New page with a name of new logical table opens. There aren't any columns available, hence we need create some.
+
+Click on a **plus icon** and select **Add Physical Column** from the menu. 
+
+**Select Physical Column** opens. Let's **select** *ORDER_KEY*, *ORDER_STATUS and CHANNEL_NAME* from **DIM_ORDERS**. 
+
+![Select Physical Column dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/select-physical-column-dialog.png?raw=true)
+
+Rename columns as follows:
+
+![Rename columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/rename-columns-d_orders.png?raw=true)
+
+Let's briefly review tabs that are available for **dimension tables**:
+
+- **General**: same as with **Facts**, except for the **Primary Key** which can be defined here:
+
+![Dimensions - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-general.png?raw=true)
+
+- columns **Columns**, **Joins**, **Sources** and **Data Filter** have same role as with **Facts**.
+
+- **Hierarchy**: this is **Dimensions** specific. Only dimension tables can have hierarchies. As we will see throughout this workshop, dimensions are very important for data presentation and aggregation. We can have multiple hierarchies, depending on how user would like to present and analyze data. 
+
+This particular table doesn't have many attributes, so its hierarchies will be pretty simple, but still, we can have them. For example, if we wanted to aggregate and present revenue by channel or by order status - and we already have two candidates for hierarchies. So let's implement them:
+
+Navigate to **Hierarchy**. There aren't any hierarchies for this new logical dimension table. As we can see, there is a field **Hierarchy Type** which is currently set to *None*
+
+![Dimensions - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-hierarchy.png?raw=true)
+
+In general, we have three different **Hierarchy Types**:
+
+- *Level-Based*
+- *Parent-Child*
+- *Time*
+
+![Dimensions - Hierarchy Types](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-hierarchy-types.png?raw=true)
+
+**D Orders** dimension is *Level-Based*, therefore select that value from the list.
+
+Default or initial hierarchy is displayed. 
+
+![Dimensions - Default Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-hierarchy-levelbased-default.png?raw=true)
+
+One default hierachy has been created - *H1* and it has 2 levels: *Total* and *Detail*. We can rename these as we want, and what is more important, we can add levels between top and bottom level:
+
+- Click on *H1* hierarchy in **Hierarchies** and rename it to *Order Statuses Hierarchy*
+
+![Hierarchy - Rename hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-rename-hierarchy.png?raw=true)
+
+- Click on *Total* (this is always total level of aggregation) and rename it to *All Orders*. The total level is used in all hierarchies we might have created. Same as the detail level.
+
+![Hierarchy - Total Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-total-level.png?raw=true)
+
+- Click on *Detail* (always the lowest level of granularity). Rename it to *Order*. It is always good to provide the number of elements at specific level as this can affect and improve performance of query execution. We want rollup to higher levels, so that particular check-box has to be checked. Primary key is *Order Nr.*, same is for *Display key*. We'll leave all three associated columns as they are - we will see later, them moved to different level.
+
+![Hierarchy - Detail Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-detail-level.png?raw=true)
+
+Let's add a new level below Total and above Detail levels:
+
+- click on *All Orders* and then click **<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>) Level** next to hierarchy.
+
+![Hierarchy - Add Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarchies-add-level.png?raw=true)
+
+New level is added between *Total* and *Detail* levels. We can provide details:
+
+![Hierarchy Defining a new Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-define-new-level.png?raw=true)
+
+In the same way, we can now define second hierarchy for *Channels*:
+
+![Hierarchy Defining a new Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-second-hierarchy.png?raw=true)
+
+Before we conclude this section, we need to create a join between the two tables we've defined so far, **F Revenue** and **D Orders**.
+
+Expand Logical Model **OA Bootcamp Business Model** in the navigation pane on the left.
+
+![Expand Logical Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/expand-logical-model.png?raw=true)
+
+Select both logical tables and then right-mouse click on one of them. Associated menu would appear. Select **Show Logical Diagram** and expand it. Select **Selected Tables Only**.
+
+![Show logical diagram](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/show-logical-diagram.png?raw=true)
+
+When diagram appears, click on the *handle* on one of the tables, i.e. **F Revenue**, and drag the line onto the other table, i.e. D Orders. 
+
+![Join Logical Tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/join-logical-tables.png?raw=true)
+
+**Add Join** dialog will appear. In most cases, defaults can be confirmed, however if different **join type** is required, i.e. *Left Outer* instead of *Inner* or for some reason **Driving Table** is required, then choose one.
+
+![Add Logical Join](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-logical-join.png?raw=true)
+
+
+
+
+
+
+With this, we have defined our first dimension table. But there are still five to go. Close **D Orders** page and navigate back to **OA Bootcamp Business Model**.
+
+Now, we will explore *drag and drop approach* of importing physical tables into logical model. For that, keep **OA Bootcamp Business Model** page open. Then click **Physical Layer** and display all physical tables.
+
+![Select dimension tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/select-dimension-tables-to-import.png?raw=true)
+
+Drag all five dimension tables now onto **Dimensions** area in **OA Bootcamp Business Model** page and drop them there.
+
+
