@@ -148,3 +148,128 @@ Now, let's add columns, which should match results of the SQL statement.
 
 ![Add new columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-new-columns.png?raw=true)
 
+Let's run a **Preview** and check our SQL query:
+
+![Preview](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/preview-data.png?raw=true)
+
+We can save our work now.
+
+So far, we have imported some of dimension tables into our database. We have added fact table and we have created a new physical table based on the SQL query.
+
+In the next step, we will remove some of the columns that are not a foreign key or are not treated as measure from the fact table (by defualt fact tables should contain only columns that are either a measure or foreign key that relates to one of dimensions).
+
+In our **F_REVENUE** fact table we have two such candidates: **ORDER_STATUS** and **CHANNEL_NAME**. Both columns have been included in **D_ORDERS** table and will relate to the fact table using **ORDER_KEY**, therefore it is safe to remove them from the **F_REVENUE** fact table.
+
+Double click on **F_REVENUE** table in the navigation bar on the left side. New page is opened with definition of **F_REVENUE** table:
+
+![F_REVENUE](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/f_revenue-table-definition.png?raw=true)
+
+Right-Mouse click on **ORDER_STATUS** column in the column list and select **Delete** from the menu:
+
+![Delete ORDER_STATUS column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/delete-column.png?raw=true)
+
+Repeat deletion also for **CHANNEL_NAME**.
+
+**F_REVENUE** has now the following columns:
+
+- Measures
+    - UNITS
+    - COST_FIXED
+    - COST_VARIABLE
+    - REVENUE
+    - DISCNT_VALUE
+- Foreign Keys
+    - ORDER_KEY
+    - PROD_ITEM_KEY
+    - ADDR_KEY
+    - CUST_NUMBER
+    - TIME_BILL_DT
+    - TIME_PAID_DT
+
+### Table Aliases
+
+It is good practice and recommended approach to create aliases for all of physical tables in database. In some cases, which we will also review, we simply must create aliases.
+
+Currently we have 6 tables in our database, 5 dimension tables and 1 fact table. We will create an alias for each one of the as follows:
+
+Right-mouse click on selected table name in the **Tables** list. Table associated menu opens and the first option in the menu is **Create Physical Table Alias**. Let's select that option.
+
+![Create Physical Table Alias](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-physical-table-alias.png?raw=true)
+
+When Create Physical Table Alias dialog opens, the only option is to provide a name for that specific table alias. 
+
+![Create Physical Table Alias dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-physical-table-alias-dialog.png?raw=true)
+
+Let's repeat the steps above for all tables except dimension table D_TIME. 
+
+Once finished, **Tables** list should look like this:
+
+![Alias tables before D_TIME](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/alias-tables-before-d_time.png?raw=true)
+
+The reason that we wanted to expose D_TIME is in the fact that we have two DATETIME columns in the fact table which are both important:
+- TIME_BILL_DT: billing date
+- TIME_PAID_DT: payment date
+
+Both relate to the same dimension table, D_TIME. However, if we had only one dimension table for time, which of the 2 dates should we join with D_TIME as both are important. Solution is easy. Simply create 2 alias tables and problem solved:
+- D_TIME_BILL_DT
+- D_TIME_PAID_DT
+
+We don't need a separate database table in our database schema, for Oracle Analytics one time dimension is enough and we are resolving this issue simply by introducing that many alias table as we need.
+
+![D_TIME alias tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/d_time_alias_tables.png?raw=true)
+
+So, finally we have the following alias tables created:
+
+- DIM_CUSTOMERS
+- DIM_GEOGRAPHY
+- DIM_PRODUCTS
+- DIM_ORDERS
+- DIM_TIME_BILL_DT
+- DIM_TIME_PAID_DT
+- FACT_REVENUE
+
+We are ready now to do some **Joins**.
+
+### Joins
+
+Joins are important because these can be understood as explicit instructions to BI Server to generate queries. Unless we have implemented constraints in a database already (which is not very often in data warehouses), we need to create joins manually.
+
+We have got two options:
+- use dialog driven approach to define and specify each relation between two tables or
+- use graphical user interface and draw relations between tables.
+
+Let's just demonstrate dialog driven approach first.
+
+Under **Tables** tab we can observe that there is also **Joins** section. 
+
+![Joins section - empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/joins-section-empty.png?raw=true)
+
+If we wanted to add a new join, there is a plus sign (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="16"/>) next to **Joins**. When clicked, **Add Physical Join** dialog pops up. Define a new join as follows:
+
+![Add Physical Join](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-physical-join.png?raw=true)
+
+Click **Add** to save and add a new join to the list.
+
+![Updated Joins list](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/updated-joins-list.png?raw=true)
+
+We could continue defining joins one by one. Alternative approach is to do this graphically. 
+
+Select all *Dim_* and *Fact_* tables from the list of tables and right-mouse click to open a menu. From the menu select **Show Physical Diagram** and then **Selected Tables Only**. Instead of selecting all required tables, we could have included them one by one, simply by adding (drag and drop) them to the diagram when required.
+
+![Physical Diagram - 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/physical-diagram-1.png?raw=true)
+
+As we can see in the diagram above, there is already one join displayed. It is join that we've created in previous step. Note the direction of the arrow. It is pointing from fact table into direction of dimension table. This indicates Many-to-One relationship between the two tables, looking from fact table. 
+
+![Physical Diagram - 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/physical-diagram-2.png?raw=true)
+
+Now we just need to add all other joins. Pay attention to the direction, drag from fact table out.
+
+![Physical Diagram - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/physical-diagram-3.png?raw=true)
+
+When done, simply close **Physical Diagram 1** tab.
+
+Final joins list should contain the following Joins:
+
+![Final Joins List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/joins-list-final.png?raw=true)
+
+This also concludes the session on **Physical Layer**. **Physical Layer** is now prepared and we can move to the next session which is about **Logical Layer** or **Business Layer** as it is also often called.
