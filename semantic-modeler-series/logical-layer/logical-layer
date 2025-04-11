@@ -107,11 +107,11 @@ Scroll down to column REVENUE. Double click on column name first. This will open
 - Rename *REVENUE* into *Revenue* and
 - Set **Aggregation** to *Sum*
 
-![Columns - Revenue](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-revenue.png?raw=true)
+![Columns - Revenue](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/phylogicalsical-layer/images/columns-revenue.png?raw=true)
 
 We can repeat this for other *obvious measures* such as *UNITS*, *COST_FIXED*, *COST_VARIABLE*, *DISCNT_VALUE*.
 
-![Columns - Measures](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-measures.png?raw=true)
+![Columns - Measures](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/columns-measures.png?raw=true)
 
 The next group of measures are not that obvious, but some might come in handy. Very often reports and analyses require to present number of customers or number of various products sold or number of order aggregate by certain criteria. We can efficiently use foreign key columns and define default aggregations for these as well.
 
@@ -123,15 +123,15 @@ Scroll to ORDER_KEY column and click on it and then click **Details** icon.
 
 Details screen for ORDER_KEY opens:
 
-![Columns - Details](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-details.png?raw=true)
+![Columns - Details](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/columns-details.png?raw=true)
 
 We will use this column to count distinct orders. Let's rename column into *# of Orders* and set default **Aggregation rule** to *Count Distinct*
 
-![Columns - Details - ORDER_KEY](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-details-order_key.png?raw=true)
+![Columns - Details - ORDER_KEY](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/columns-details-order_key.png?raw=true)
 
 We can update in the same way other foreign key columns. Those which are not required, don't update.
 
-![All Columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/columns-all.png?raw=true)
+![All Columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/columns-all.png?raw=true)
 
 We have made minimal updates to our fact table. We will come back later, but now we will forward and look at dimension tables.
 
@@ -141,11 +141,11 @@ We have made minimal updates to our fact table. We will come back later, but now
 
 Let's bring our first dimension table, which we'll (for learning purposes) create manually. Click on plus icon (<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>) next to **Dimensions**.
 
-![Dimensions - Create New Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-create-new-table.png?raw=true)
+![Dimensions - Create New Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/dimensions-create-new-table.png?raw=true)
 
 This time we will create logical table from scratch, therefore select **Create New Table**. **Create Logical Table** dialog opens.
 
-![Create Logical Table dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/create-logical-table-dialog.png?raw=true)
+![Create Logical Table dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/create-logical-table-dialog.png?raw=true)
 
 We need to provide a name and click **Ok**. New page with a name of new logical table opens. There aren't any columns available, hence we need create some.
 
@@ -153,17 +153,17 @@ Click on a **plus icon** and select **Add Physical Column** from the menu.
 
 **Select Physical Column** opens. Let's **select** *ORDER_KEY*, *ORDER_STATUS and CHANNEL_NAME* from **DIM_ORDERS**. 
 
-![Select Physical Column dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/select-physical-column-dialog.png?raw=true)
+![Select Physical Column dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/select-physical-column-dialog.png?raw=true)
 
 Rename columns as follows:
 
-![Rename columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/rename-columns-d_orders.png?raw=true)
+![Rename columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/rename-columns-d_orders.png?raw=true)
 
 Let's briefly review tabs that are available for **dimension tables**:
 
 - **General**: same as with **Facts**, except for the **Primary Key** which can be defined here:
 
-![Dimensions - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-general.png?raw=true)
+![Dimensions - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/dimensions-general.png?raw=true)
 
 - columns **Columns**, **Joins**, **Sources** and **Data Filter** have same role as with **Facts**.
 
@@ -173,7 +173,7 @@ This particular table doesn't have many attributes, so its hierarchies will be p
 
 Navigate to **Hierarchy**. There aren't any hierarchies for this new logical dimension table. As we can see, there is a field **Hierarchy Type** which is currently set to *None*
 
-![Dimensions - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-hierarchy.png?raw=true)
+![Dimensions - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/dimensions-hierarchy.png?raw=true)
 
 In general, we have three different **Hierarchy Types**:
 
@@ -181,13 +181,13 @@ In general, we have three different **Hierarchy Types**:
 - *Parent-Child*
 - *Time*
 
-![Dimensions - Hierarchy Types](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-hierarchy-types.png?raw=true)
+![Dimensions - Hierarchy Types](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/dimensions-hierarchy-types.png?raw=true)
 
 **D Orders** dimension is *Level-Based*, therefore select that value from the list.
 
 Default or initial hierarchy is displayed. 
 
-![Dimensions - Default Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/dimensions-hierarchy-levelbased-default.png?raw=true)
+![Dimensions - Default Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/dimensions-hierarchy-levelbased-default.png?raw=true)
 
 One default hierachy has been created - *H1* and it has 2 levels: *Total* and *Detail*. We can rename these as we want, and what is more important, we can add levels between top and bottom level:
 
@@ -197,55 +197,234 @@ One default hierachy has been created - *H1* and it has 2 levels: *Total* and *D
 
 - Click on *Total* (this is always total level of aggregation) and rename it to *All Orders*. The total level is used in all hierarchies we might have created. Same as the detail level.
 
-![Hierarchy - Total Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-total-level.png?raw=true)
+![Hierarchy - Total Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/hierarhcies-total-level.png?raw=true)
 
 - Click on *Detail* (always the lowest level of granularity). Rename it to *Order*. It is always good to provide the number of elements at specific level as this can affect and improve performance of query execution. We want rollup to higher levels, so that particular check-box has to be checked. Primary key is *Order Nr.*, same is for *Display key*. We'll leave all three associated columns as they are - we will see later, them moved to different level.
 
-![Hierarchy - Detail Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-detail-level.png?raw=true)
+![Hierarchy - Detail Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/hierarhcies-detail-level.png?raw=true)
 
 Let's add a new level below Total and above Detail levels:
 
 - click on *All Orders* and then click **<img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png?raw=true" alt="plus" width="24"/>) Level** next to hierarchy.
 
-![Hierarchy - Add Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarchies-add-level.png?raw=true)
+![Hierarchy - Add Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/hierarchies-add-level.png?raw=true)
 
 New level is added between *Total* and *Detail* levels. We can provide details:
 
-![Hierarchy Defining a new Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-define-new-level.png?raw=true)
+![Hierarchy Defining a new Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/hierarhcies-define-new-level.png?raw=true)
 
 In the same way, we can now define second hierarchy for *Channels*:
 
-![Hierarchy Defining a new Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/hierarhcies-second-hierarchy.png?raw=true)
+![Hierarchy Defining a new Level](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/hierarhcies-second-hierarchy.png?raw=true)
 
 Before we conclude this section, we need to create a join between the two tables we've defined so far, **F Revenue** and **D Orders**.
 
 Expand Logical Model **OA Bootcamp Business Model** in the navigation pane on the left.
 
-![Expand Logical Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/expand-logical-model.png?raw=true)
+![Expand Logical Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/expand-logical-model.png?raw=true)
 
 Select both logical tables and then right-mouse click on one of them. Associated menu would appear. Select **Show Logical Diagram** and expand it. Select **Selected Tables Only**.
 
-![Show logical diagram](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/show-logical-diagram.png?raw=true)
+![Show logical diagram](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/show-logical-diagram.png?raw=true)
 
 When diagram appears, click on the *handle* on one of the tables, i.e. **F Revenue**, and drag the line onto the other table, i.e. D Orders. 
 
-![Join Logical Tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/join-logical-tables.png?raw=true)
+![Join Logical Tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/join-logical-tables.png?raw=true)
 
 **Add Join** dialog will appear. In most cases, defaults can be confirmed, however if different **join type** is required, i.e. *Left Outer* instead of *Inner* or for some reason **Driving Table** is required, then choose one.
 
-![Add Logical Join](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/add-logical-join.png?raw=true)
+![Add Logical Join](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/add-logical-join.png?raw=true)
 
+We have successfully joined two logical tables now. Note that no specific join conditions were required, just the type of join. Join conditions were defined in the Physical Layer.
 
+![Logical Join completed](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/logical-join-competed.png?raw=true)
 
+When you navigate back to logical model page, there should be a new join displayed:
 
-
+![Logical Joins list - one entry](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/logical-joins-new-join.png?raw=true)
 
 With this, we have defined our first dimension table. But there are still five to go. Close **D Orders** page and navigate back to **OA Bootcamp Business Model**.
 
+## Adding additional dimensions
+
 Now, we will explore *drag and drop approach* of importing physical tables into logical model. For that, keep **OA Bootcamp Business Model** page open. Then click **Physical Layer** and display all physical tables.
 
-![Select dimension tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/physical-layer/images/select-dimension-tables-to-import.png?raw=true)
+![Select dimension tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/select-dimension-tables-to-import.png?raw=true)
 
 Drag all five dimension tables now onto **Dimensions** area in **OA Bootcamp Business Model** page and drop them there.
 
+Two things will happen:
 
+- selected **dimenisional tables** are added to the **Dimensions** list
+- **joins** were also added based on definitions in **Physical Layer**. 
+
+![Logical Layer - all tables and joins](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/logical-layer-tables-joins.png?raw=true)
+
+What we need to do now is to make **dimensions** user friendly (for example, rename columns) and we need to add **hierarchies** where applicable.
+
+**Dimensions** *DIM_CUSTOMERS*, *DIM_GEOGRAPHY* and *DIM_PRODUCTS* are easy fix, so lets just review final results:
+
+### D Customers dimension
+
+![D Customers - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_customers-general.png?raw=true)
+
+![D Customers - Columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_customers-columns.png?raw=true)
+
+![D Customers - Hierarchy - Gender](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_customers-hierarchy-1.png?raw=true)
+
+![D Customers - Hierarchy - Marital Status](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_customers-hierarchy-2.png?raw=true)
+
+![D Customers - Hierarchy - Customer Segment](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_customers-hierarchy-3.png?raw=true)
+
+### D Geography dimension
+
+![D Geography - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-general.png?raw=true)
+
+![D Geography - Columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-columns.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-1.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-2.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-3.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-4.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-5.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-6.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-7.png?raw=true)
+
+![D Geography - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_geography-hierarchy-8.png?raw=true)
+
+### D Products dimension
+
+![D Products - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-general.png?raw=true)
+
+![D Products - Columns](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-columns.png?raw=true)
+
+![D Products - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-hierarchy-1.png?raw=true)
+
+![D Products - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-hierarchy-2.png?raw=true)
+
+![D Products - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-hierarchy-3.png?raw=true)
+
+![D Products - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-hierarchy-4.png?raw=true)
+
+![D Products - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-hierarchy-5.png?raw=true)
+
+![D Products - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_products-hierarchy-6.png?raw=true)
+
+## Time Dimensions
+
+We have two dimensions in our logical model that can be qualified as **Time Dimension**. 
+
+Time dimensions are usually modeled as hierarchies, such as: Year -> Quarter -> Month -> Date, or similar. Setting hierarhies like this enables users to drill down/up in visualisations and to aggregate (roll-up) at different levels of hierarchy.
+
+Besides that, declaring a dimension as **Time Dimension** allows developers to introduce **Chronological Key** which helps BI Server understand the order of periods for time-series functions, such as AGO, TODATE or PERIODROLLING. These functions work only when a **Time Dimension** is configured properly (!). 
+
+With **time dimensions** Oracle Analytics support *gregorian calendar*. Besides that, devopers can implement additionl calendars, such as *fiscal calendars*, for example if company's fiscal year begins in July. 
+
+With **Time Dimension** we can introduce **level-based measures** (this is valid for all dimensions!). For example, *Total Monthly Sales* which summarizes *Sales* at *Monthly* level. For this type of funcionality, it is enough to specify corresponding level of aggregation. There is no need for complicated formulas or similar.
+
+So whenever we would like to define a dimension with *dates data*, don't forget to define it as a **Time Dimension**, otherwise it will behave as any other dimension.
+
+As already stated we have two candidates for **Time Dimension**:
+
+- DIM_TIME_BILL_DT and
+- DIM_TIME_PAID_DT.
+
+We will define DIM_TIME_BILL_DT first, and then will repeat the same process for DIM_TIME_PAID_DT.
+
+### Time Dimension: DIM_TIME_BILL_DT 
+
+Double click on *DIM_TIME_BILL_DT* in the **Dimensions** are in **OA Bootcamp Business Model** page.
+
+**DIM_TIME_BILL_DT** page opens. The first observation is that we've got 30+ attributes which are all *somewhat derivates* of attribute **DAY_DT**. 
+
+But let's navigate to **General** tab first. **General** tab has standard attributes, and we will rename dimension from *DIM_TIME_BILL_DT* into *D Billing Date*. 
+
+![D Billing Date - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-general.png?raw=true)
+
+Navigate now to **Columns** tab. Next task is a bit time consuming, however make sure that only the following columns are kept (delete all other columns):
+
+- DAY_DT
+- DAY_TS
+- PER_NAME_WEEK
+- PER_NAME_MONTH
+- PER_NAME_QTR
+- PER_NAME_YEAR
+- DAY_OF_WEEK
+
+![D Billing Date - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-columns-all.png?raw=true)
+
+We have an option to go line by line and delete each column separately. This might be quite a long and time consuming process. Let's use another option, which is to use **SMML Editor**, which allows us to update definition presented as *JSON-like* code.
+
+Save whatever change has been to **D Billing Date** made so far. In navigation pane, navigate to **Logical Layer** and click on **D Billing Date** logical table.
+
+![D Billing Date - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/open-in-smml-editor.png?raw=true)
+
+**SMML Editor** will open with columns definitions. Careful examination shows that each column defines a chunk of code using the following syntax:
+
+```json
+{
+    "name": "DATE_ID",
+    "dataType": "NUMERIC",
+    "writeable": false,
+    "logicalColumnSource": {
+        "derivedFrom": "PHYSICAL_COLUMNS",
+        "physicalMappings": [
+            {
+                "logicalTableSource": "DIM_TIME_BILL_DT",
+                "physicalExpression": {
+                "expressionTemplate": "%1",
+                "expressionObjects": [
+                    "physicalColumn:OABootcamp Database.OABOOTCAMP.DIM_TIME_BILL_DT.DATE_ID"
+                ]
+                }
+            }
+        ]
+    }
+},
+```
+
+Removing chunks of code for all columns that are not required will significantly shorten time for removing columns. This is also an example, how to work with any object in **Semantic Model**.
+
+updated-column-definition-smml
+
+Note that whenever you want to delete part of the code, dialog pops up to verify your decision:
+
+![Delete logical column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/delete-logical-column.png?raw=true)
+
+Once done, save changes and close **SMML Editor**. 
+
+![Updated column definition in SMML Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/updated-column-definition-smml.png?raw=true)
+
+Open **D Billing Date** logical table page and check which columnshave been left. If you haven't renamed column already in **SMML Editor**, this can be done now.
+
+Now, navigate to **Hierarchy** tab. We don't have any hierarchies created, therefore we need to choose *Time* for **Hierarchy Type**.
+
+![Hierarchy Type - Time](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/hierarchy-type-time.png?raw=true)
+
+The rest of the hierarhy definition is same as we have already learnt.
+
+![D Billing Date - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-hierarchy-1.png?raw=true)
+
+![D Billing Date - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-hierarchy-2.png?raw=true)
+
+![D Billing Date - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-hierarchy-3.png?raw=true)
+
+![D Billing Date - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-hierarchy-4.png?raw=true)
+
+![D Billing Date - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-hierarchy-5.png?raw=true)
+
+![D Billing Date - Hierarchy](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/d_billing_date-hierarchy-6.png?raw=true)
+
+**REMARK**: Pay attention to the **Chronological Key** that is populated. Otherwise time series functions won't work properly.
+
+Repeat the exact sames steps as above for the other time dimension DIM_TIME_PAID_DT.
+
+This concludes this session. We will return to **Logical Model** in later sessions, but so far, we've come this far:
+
+![Logical Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/logical-model.png?raw=true)
