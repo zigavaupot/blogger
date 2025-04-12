@@ -1,0 +1,123 @@
+![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
+
+In Oracle Analytics Semantic Modeler, the Presentation Layer is the final layer in the data modeling flow — it’s what the end users see when building analyses and dashboards.
+
+Presentation layer provides a business-friendly view of your data model, organizes and simplifies logical objects (tables, columns, hierarchies) and controls visibility, naming, and grouping of subject areas.
+
+![Semantic model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/semantic-model.png?raw=true)
+
+Presentation layer consists of the following components:
+
+- **Subject Areas**
+	- Each subject area is a collection of related tables and measures — like “Sales”, “Finance”, or “Inventory”.
+	- Typically maps to one Business Model in the logical layer.
+
+- **Presentation Tables**
+	- Business entities, such as “Customer”, “Product”, “Revenue Metrics”.
+	- You can rename these to be more user-friendly than the logical layer.
+
+- **Presentation Columns**
+	- Derived directly from logical columns in the BMM layer.
+	- You can rename, reorder, and hide/show these.
+	
+- **Hierarchies and Folders**
+	- If you have time or geographic hierarchies, they’ll appear here for drill-down functionality.
+	- You can organize columns into folders or nested tables.
+
+- **Column and Table Permissions**
+	- Control which users/roles can see or interact with each element.
+	- Good for data security and simplifying the user experience.
+
+Typical tasks performed in **presentation layer** are:
+
+- Rename tables and columns to business terms.
+- Hide technical columns or those not needed for end users.
+- Organize columns into folders (e.g., “Sales Metrics”, “Customer Details”).
+- Control display order and descriptions/tooltips.
+- Add column formatting (dates, currencies, etc.).
+- Enable drill paths via hierarchies.
+
+### Creating a new subject area
+
+Presentation Layer is the fourth tab in main Semantic Modeler menu. As we are creating a new model from scratch, presentation layer is empty.
+
+![Presentation Layer - empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/presentation-layer-empty.png?raw=true)
+
+The content in presentation layer is organised by **Subject Areas**. 
+
+**Subject Area** is the top-level container in the **Presentation Layer** of the **Semantic Model**. It’s what end users interact with when they build dashboards, reports, or ad-hoc analyses — essentially, it’s how you organize and expose your business data in a way that’s intuitive and user-friendly.
+
+When comparing a **subject area** with **logical model**, very often the good practice is to have one single **business and mapping model** from which multiple **subject areas** are created. This allows users to retrieve data from various business areas and combine them in one single report - of course under condition that the same dimensions are used in both **subject areas**.
+
+To create a new **Subject Area**, click on the **plus icon** next to the **Search**. This opens a menu with two choices, we'll pick **Create Subject Area**.
+
+![Create Subject Area - menu](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/create-subject-area-menu.png?raw=true)
+
+**Create Subject Area dialog** opens, and a name needs to be provided.
+
+![Create Subject Area - dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/create-subject-area-menu.png?raw=true)
+
+**Subject Area page** opens with subject area definition:
+
+- **General**: Define basic properties of the subject area, including its name, description, and associated business model.
+- **Tables**: Manage and organize the presentation tables and columns exposed to users, including hierarchies and folder structures.
+- **Permissions**: Control visibility and access to the subject area and its components based on user roles and groups.
+- **Localisation**: Configure multilingual labels and descriptions for subject area elements to support localized user experiences.
+
+We'll focus on the **Tables**. The task here is to bring tables and columns defined in logical model, into subject area. Again there are several paths to that, however we have already prepared our logical model with nice namings etc. So we will skip manual adding presentation tables and will use a shortcut by draging and droping tables and columns from the logical model directly.
+
+In main navigation bar, switch to **Logical Layer** tab and expand existing business model so all tables are displayed. Mark (select) all tables that you want to import into **Subject Area**.
+
+![Expand business model and select tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/expand-business-model.png?raw=true)
+
+With **Subject Area page** open in **Tables** tab, drag tables from the Logical Layer navigation pane and drop them onto *Tables* canvas.
+
+![Drag and drop Logical table into Subject area](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/drag-and-drop-tables.png?raw=true)
+
+For example, we can now reorganize the order of tables in **Subject Area**:
+
+![Reorganize tables in Subject area](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/reorganize-tables.png?raw=true)
+
+We can also *drill down* to specific **presentation table** and provide detailed definition if needed. This can be done by **double-clicking** on the presentation table name. **Presentation Table page** opens with all the details. As we can see, we can manage:
+
+- **General**
+- **Columns**: We can rename columns or even replace logical columns for particular presentation column.
+- **Hierarchies**: we can create a new hierarchy here, however we can add, remove or edit it.
+- **Permissions**: permissions can be applied to any object in presentation layer. For example, we can hide a column from certain group of users.
+- **Localisations**: we can provide translations or localisations for each column in the system.
+- **Data Filters**: data filters are applied in presentation or logical layer.
+
+For now, we are not going to make any additional changes, hence we are good to move on and deploy the model.
+
+### Semantic Model Deployment
+
+We are now ready to deploy and test the model. But before that we need to make sure, the model is correct. We can do this by running **Consistency Check**.
+
+**Consistency Check** is a validation process that ensures the semantic model is logically correct, complete, and free of errors before it’s published or deployed.
+
+We should run **Consistency Check**:
+- after changes to logical models, joins, hierarchies, or subject areas,
+- before publishing a model to production or sharing with end users,
+- in case of debugging issues in reports or queries.
+
+To initiate and run **consistency check**, click on **Consistency Check** icon on the top bar:
+
+![Run consistency check](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/run-consistency-check.png?raw=true)
+
+When finished, a report is prepared. In our case, there aren't any errors.
+
+**Consistency Check** report looks like this:
+
+![Consistency check report](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/consistency-check-report.png?raw=true)
+
+If **Consistency check** doesn't report any **errors** (there might be **warnings** though), the model can be deployed. To deploy a model, click on the page menu (*three dots* top right) and select **Deploy**.
+
+![Deploy model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/page-menu-deploy.png?raw=true)
+
+**Deploy Semantic Model dialog** pops up. Click **Deploy**.
+
+![Deploy Semantic Model dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/deploy-semantic-model-dialog.png?raw=true)
+
+If everything ran error-free, **Deploy Successful** message is displayed in bottom-right corner.
+
+![Deploy Successful](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/deploy-successful.png?raw=true)
