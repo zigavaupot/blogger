@@ -126,6 +126,26 @@ Now, we can change only those attributes that need changing:
 
 ![Level-Based Measure - Year/Customer Segment](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year-segment.png?raw=true)
 
+### Expressions in Dimension Tables
+
+We can create calculations/expressions also on columns in **Dimension Tables**. Let's take a look at example. 
+
+*D Customer* logical table contains column *Birth Date*:
+
+![Birth Date](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/d_customer-birth_date.png?raw=true)
+
+Instead of using birth date, we might be better off with customer age in years. We can introduce a new column *Age* which will calculate actual customer's age based on the difference between *CURRENT_DATE* (this is predefined session variable) and *Birth Date*
+
+We need to create a new column in *D Customer* first.
+
+![Create a new column in dimension](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-new-column-in-dimension.png?raw=true)
+
+Using **Expression Editor** we will use *TimeStampDiff* function to calculate difference between *CURRENT_DATE* and *Birth Date* which give *Age*.
+
+![Calculate Age](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculate-age.png?raw=true)
+
+Similarly, we could created additinal columns in **Dimension Tables**. This simple example shows that we are not constraint only on fact tables when creating calculations but we can use expression in dimensions as well.
+
 ### Updating Subject Area
 
 We have now added some new measures. These measures are not reflected in our deployed **Subject Area**, so we need to make changes in **Presentation Layer** and deploy all of these changes to BI Server.
