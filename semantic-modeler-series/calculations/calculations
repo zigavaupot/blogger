@@ -98,3 +98,135 @@ Additionally, create *Revenue Year-over-Year* and *Revenue Year-over-Year Growth
 ![YoY calculation](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year-idx.png?raw=true)
 
 ### Level-Based Measures
+
+**Level-Based Measures** are a powerful feature in the Business Model (Logical Layer) that allow developers to create aggregated measures at a specific dimension level. Regardless of how the data is grouped in an analysis, these measures always apply and present data at required level.
+
+A **Level-Based Measure** is a metric (i.e. *Revenue* or *Sales*) that is pre-aggregated at a specific hierarchy level — such as Year, Region, or Product Brand — instead of dynamically responding to the query level.
+
+Let's create a *Total Anual Revenue* measure first. From its name we know that we need to **agreegate all revenues by all dimensions at the top level, except by Year**.
+
+We are using **Physical Expression** in this case and not **Logical Expression** as we did in previous cases. We need to define which measure is *base* for our **level-based measure**. In our case, we are using *Revenue*. 
+
+And then we have to specify the aggregation:
+
+- select **Aggregation Rule** (*SUM* in this example)
+- define levels for all dimensions - all **Logical Levels** are set to the top level except for the *D Billing Date* dimension where we set **Logical Level** to *Year*.
+
+![Level-Based Measure - Year](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year.png?raw=true)
+
+This is example how we can set a level-based measure which is used to calculate revenue shares by, let's say customer segments, where we need to have total revenue in a specific year to be used in denominator in the revenue share calculation by segments.
+
+So let's add one more **level-based measure** which is simlar to the measure above, except it aggregates on *D Customer* dimension at *Customer Segment* level.
+
+Instead of creating a new measure from scratch, we can simply duplicate existing column:
+
+![Duplicate Column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/duplicate-column.png?raw=true)
+
+Now, we can change only those attributes that need changing:
+
+![Level-Based Measure - Year/Customer Segment](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year-segment.png?raw=true)
+
+### Updating Subject Area
+
+We have now added some new measures. These measures are not reflected in our deployed **Subject Area**, so we need to make changes in **Presentation Layer** and deploy all of these changes to BI Server.
+
+Therefore, open **Presentation Layer** first.
+
+**Subject Area** *OA Bootcamp Subject Area* looks like this:
+
+![Subject Area before update](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/subject-area-before-update.png?raw=true)
+
+We have introduced several measures, therefore we would like to reorganize **presentation folder** *F Revenue*. First if we open *F Revenue* presentation table, it shows all columns, even though we don't need all of them. And there are some missing. 
+
+First, we can delete columns that are not required. These columns are:
+
+- TIME_BILL_DT
+- TIME_PAID_DT
+- ADDR_KEY
+
+So, let's delete them.
+
+![Delete Column from Presentation Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/delete-column.png?raw=true)
+
+After deletion, *F Revenue* presentation table looks like this:
+
+![Presentation Table after deletion](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/after-delete-columns.png?raw=true)
+
+Let's reorganize *F Revenue* so we split measures that are *revenue* related, *profit* related and *counts*. We will create separate **presentation tables** for that:
+
+- **Revenue Metrics**
+- **Profit Metrics**
+- **Counts**
+
+Open **Subject Area page** and navigate to **Tables** tab. Click on **plus** icon to **create a new Presentation Table**.
+
+![Create Presentation Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-presentation-table.png?raw=true)
+
+Enter **presentation table** name *Profit Metrics* from the list above and click **Ok**. Repeat this for *Counts* as well.
+
+![Create Presentation Table dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-presentation-table-dialog.png?raw=true)
+
+Rename *F Revenue* into *Revenue Metrics*.
+
+Open *Profit Metrics*. We will now add all profit-related columns into this presentation table. Navigate into **Logical Layer** in the navigation pane on the left. Select all profit-related columns and drag them onto **Columns** area of *Profit Metrics* **presentation table page**.
+
+![Profit Metrics Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/profit-metrics-presentation-table.png?raw=true)
+
+Let's repeat this and add all *# of ...* columns into *Counts* presentation table.
+
+![Counts Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/counts-presentation-table.png?raw=true)
+
+Open *Revenue Metrics*. Remove columns that have been added to *Profit Metrics* or *Counts*, and after that add additional revenue-related metrics from logical layer.
+
+![Revenue Metrics Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/revenue-metrics-presentation-table.png?raw=true)
+
+We have now created three presentation tables in our Subject Area. Nevertheless, we would like to keep Subject Area nice and tidy, so we will group these three presentation tables under one folder, let's call it *F Sales*.
+
+First, let's create another new **Presentation Table** called *F Sales*.
+
+![F Sales Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/f_sales-presentation-table.png?raw=true)
+
+Now, drag and drop all three previously created presentation tables: *Revenue Metrics*, *Profit Metrics* and *Counts*, onto *F Sales* presentation table.
+
+![Subject Area reorganized](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/subject-area-reorganized.png?raw=true)
+
+We can now **save** our model, run **consistency check** and **deploy** it.
+
+Just to make sure, we can run **Advanced Consistency Check**.
+
+
+![Advanced Check](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/advanced-check.png?raw=true)
+
+Message that **Advanced Consistency Check** is running is displayed at bottom-right:
+
+![Advanced Check Message](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/advanced-check-message.png?raw=true)
+
+If check was successfully/unsuccessfully completed is also displayed at bottom-right. If successful, then let's deploy the model.
+
+![Deploy Successful](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/deploy-successful.png?raw=true)
+
+### Review and Test Changes
+
+First test is checking if presentation tables are properly configured and displayed. We can see that we have now one folder *F Sales* and subfolders / presentation tables:
+
+- *Revenue Metrics*
+- *Profit Metrics*
+- *Counts*
+
+![New Subject Area](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/new-subject-area.png?raw=true)
+
+More importantly is to test new metrics.
+
+First test is to check simple calculations. 
+
+![Simple Calculations Test](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/simple-calculations-test.png?raw=true)
+
+We can see all measures *Total Costs*, *Profit* and *Profit Margin %* are calculated properly. 
+
+Then let's check Time Series calculations.
+
+![Time Series Calculations Test](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/time-series-calculations-test.png?raw=true)
+
+Lastly, we have introduced **Level-Based Measures**:
+
+![Level Based Measures Test](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measures-test.png?raw=true)
