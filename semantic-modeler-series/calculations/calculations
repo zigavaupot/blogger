@@ -1,0 +1,100 @@
+![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
+
+In Oracle Analytics, calculations are a powerful way to create reusable business logic, KPIs, and metrics. These calculations live in the **logical layer** (**Business Model and Mapping**), where they can be defined once and reused across multiple dashboards and reports. 
+
+So far, when we created a new **Business Model** in **Logical Layer** we defined measures in two ways:
+
+- **Fact table** contains columns that are *natural* measures, such as *REVENUE* or *UNITS*.
+- We can also use foreing key columns in a **Fact Table** to create *count* **measures**, such as *# of Orders* or *# of Distinct Customers*.
+
+But of course, these are not the only **measures** we could create in our **Business Model**. **Calculations** or **Calculated Measures** are of course something that are *a must have*. They are usually included in **Facts**, but we can have calculated columns also in **Dimensions**. So let's take a look at **Facts** and **Calculated columns**.
+
+Open **semantic model** we created and navigate to **Logical Layer**. Expand **business model** and click on **fact table** *F Revenue* to open table page.
+
+![Open fact table page](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/open-fact-table-page.png?raw=true)
+
+### Simple Measure Calculations
+
+Analyzing existing measures, we can come to an idea to create additonal measures. For example, let's create the following measures:
+
+- `Total Costs = Fixed Costs + Variable Costs`
+- `Profit = Revenue - Total Costs`
+- `Profit Margin % = Profit / Revenue * 100`
+
+Adding a new measure starts with clicking on a **plus icon** next to *Search Columns* and **Creating New Column**
+
+![Create New Column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-new-column.png?raw=true)
+
+One new row for a new column has been added into **Columns list**.
+
+![New Column added](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/new-column-added.png?raw=true)
+
+Click on **Details Icon** (located above the list):
+
+![Details Icon](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/details-icon.png?raw=true)
+
+Name a new column and then click **Logical Expression** in the **Sources** section.
+
+![Check Logical Expression](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/check-logical-expression.png?raw=true)
+
+Simple formulas can be entered directly into the field in the **Sources** section. However, you can also click the <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-icon.png?raw=true" alt="Open Expression Editor Icon" width="24" height="24"> to open the **Expression Editor** for more complex calculations.
+
+**Expression Editor** allows developers to properly format and validate formulas before storing them back into **Business Model**.
+
+![Using Expression Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/using-expression-editor.png?raw=true)
+
+When formula is **validated** it can be saved and we can create additional calculations.
+
+![Calculation - Total Costs](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-total-costs.png?raw=true)
+
+We can now create additional two calculations (**Save** your model first!):
+
+![Calculation - Profit](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-profit.png?raw=true)
+
+![Calculation - Profit](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-profit-margin.png?raw=true)
+
+**Note**: We can discuss wheater multiplying by 100 is required as we can use percent value display options in data visualisation where we can explicitly instruct to multiply value by 100 to calculate percents.
+
+We have created now three measures which are now available to all users - there is no need for these users to create these measures in their reports.
+
+Next, we will look into special types of calculations that are very often used - Time Series Calculations.
+
+### Time Series Calculations
+
+**Time Series Calculations** allow users to perform powerful period-based comparisons, such as Year-over-Year (YoY), Month-to-Date (MTD), Year-to-Date (YTD), and rolling period averages. These are built using time-series functions in the semantic model and rely on a properly defined Time Dimension.
+
+We have created our two **Time Dimensions** and defined **Chronological Keys**, so both are ready to be used for **Time Series calculations**.
+
+**Time Series calculations** supported in Oracle Analytics are:
+
+- **AGO()**: Returns the value of a measure from a previous time period.
+- **TODATE**: Accumulates values from the beginning of the period to the current point (e.g., MTD, YTD).
+- **PERIODROLLING()**: Returns a rolling sum (or other aggregate) over a defined period window.
+
+Let's create two measures first using **AGO()** and **TODATE()** for a measure *Revenue*. We will use *D Billing Date* as **time dimension** in this case.
+
+We begin the same way as above by **creating a new column**. 
+
+In **Expression Editor**, if we don't know the function syntax, we can look for it on the right side of editor.
+
+![Expression Editor - Ago](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-ago.png?raw=true)
+
+We can check in detail syntax and examples for selected expression. Double click on function from the list will copy syntax into **Expression** area.
+
+![Expression Editor - Syntax](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-syntax.png?raw=true)
+
+Enter required attributes for formula by using business model and its tables/columns. Specifically pay attention to the *TIME_LEVEL* which derives from time hierarchy in time dimension.
+
+![Define and validate expression](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/define-and-validate-expression.png?raw=true)
+
+In similar way, create a new time series measure *Revenue Year-to-Date*.
+
+![TODATE expression](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/time-series-calculation-todate.png?raw=true)
+
+Additionally, create *Revenue Year-over-Year* and *Revenue Year-over-Year Growth Index*.
+
+![YoY calculation](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year.png?raw=true)
+
+![YoY calculation](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year-idx.png?raw=true)
+
+### Level-Based Measures
