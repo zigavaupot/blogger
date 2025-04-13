@@ -57,7 +57,7 @@ To create a new **Subject Area**, click the **plus icon** next to the **Search**
 
 In the **Create Subject Area** dialog, provide a meaningful name for the new subject area.
 
-![Create Subject Area - dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/create-subject-area-menu.png?raw=true)
+![Create Subject Area - dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/presentation-layer/images/create-subject-area-dialog.png?raw=true)
 
 Once created, the **Subject Area page** opens, which includes several definition tabs:
 
@@ -65,8 +65,6 @@ Once created, the **Subject Area page** opens, which includes several definition
 - **Tables**: Add and manage presentation tables and columns, including hierarchies and folders.
 - **Permissions**: Set visibility rules for different user roles or groups.
 - **Localisation**: Provide multilingual labels and descriptions for internationalized deployments.
-
----
 
 ### Adding Tables to a Subject Area
 
