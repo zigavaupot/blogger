@@ -391,15 +391,13 @@ Save whatever change has been to **D Billing Date** made so far. In navigation p
 
 Removing chunks of code for all columns that are not required will significantly shorten time for removing columns. This is also an example, how to work with any object in **Semantic Model**.
 
-updated-column-definition-smml
+![Updated column definition in SMML Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/updated-column-definition-smml.png?raw=true)
 
 Note that whenever you want to delete part of the code, dialog pops up to verify your decision:
 
 ![Delete logical column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/delete-logical-column.png?raw=true)
 
 Once done, save changes and close **SMML Editor**. 
-
-![Updated column definition in SMML Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/logical-layer/images/updated-column-definition-smml.png?raw=true)
 
 Open **D Billing Date** logical table page and check which columnshave been left. If you haven't renamed column already in **SMML Editor**, this can be done now.
 
