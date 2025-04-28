@@ -247,31 +247,31 @@ And this is also confirmed if we looked at query generated - we can see implicit
 ![Test data filters - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-3.png?raw=true)
 
 
+In previous steps, we have created also session variable about the **region** each user is allowed to see. Value of the *Region name* has been populated within *USERS_REGION* initialization block which populates *USERS_REGION_Variable* variable.
 
+We'll add two more rows for the two users we've created into that table:
 
+![Update users-regions table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/update-users-region-table.png?raw=true)
 
+Hard-coded part of the expression can now be replaced with session variable that gets populated by current user's name. 
 
+Filter definition for both **data filters** can be now replaced with **session variable** we've creaeted earlier. 
 
+![Update expression filter](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/update-expression-filter.png?raw=true)
 
-Our session variable contains information about the region user is allowed to see. Value of the *Region name* has been populated within *USERS_REGION* initialization block which populates *USERS_REGION_Variable* variable.
+We have to make this change for both filters we've defined, however we could remove one and introduce single filter that is not linked to neither of two **Application Roles** because filter value is now dinamically populated.
 
-Information about regions is stored in *D Geography* **dimension table**, so there we will deploy data filter.
+Let's save, deploy and test the model once more.
 
-Deploying filters is not that straight forward as we need to relate **Data Filter** to **Application Roles**. In our case we want to filter data regardless of **Application Role** an user has, therefore we will use *BI Consumer* application role as this is the most generic application role.
+![Test updated data filters](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-1.png?raw=true)
 
-First we pick application role, *BI Consumer* in this case. 
+We can also check the queries generated: 
 
-![Add Application Role](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-application-role.png?raw=true)
+![Test updated data filters](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-2.png?raw=true)
 
-Then open **Expression Editor** to define formula for data filter.
+Summary
 
-![Expression Filter](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/expression-editor.png?raw=true)
-
-We have now defined data filter which filters data on Region using Session Variable defined in relation to user.
-
-![Data Filter Defined](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/data-filter-defined.png?raw=true)
-
-Let's save, run consistency check and deploy the model.
+We have reviewed **variables** that can be set in **semantic modeler** and used in analyses and reports. It turns out that these variables are important. Especially, they enable us to set row-level security in our reports. It is not that rare that we see that users generate 100s of dupicated reports just to separate information which specific users are allowed to see. Using session variables which enable users to implicitly define and execute data filters in queries is very elegant way of developing a single report for all users. 
 
 
 
