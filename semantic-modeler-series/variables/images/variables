@@ -179,11 +179,79 @@ Before we conclude our session on **Variables** let's take a look at pracitical 
 
 In our first test example, we have seen that we can use **Session Variables** for filtering analyses and reports based on the dynamic value dependent on the current user. However, it doesn't make much sense to create these filters everytime on each report or analyses. It is much better idea to implement filters in the model. This will result, implicit filters on the reports without the need to create filters explicitly.
 
-Let's return back to **Semantic Modeler**. 
+Let's set the scenery first:
 
-Implemention of row-level security can be done in Business Model or in Subject Area. We will do it in Business Model, therefore let's open it. 
+1. We need two different users, let's say their names are: *OAC User Americas* and *OAC User EMEA*.
+
+![Row-level Security - Users](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-users.png?raw=true)
+
+2. These two users are assigned to two different groups: 
+
+![Row-level Security - Groups](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-groups.png?raw=true)
+
+We can see that each user is member of each of the groups. For example:
+
+![Row-level Security - Users/Groups](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-users-groups.png?raw=true)
+
+3. Two custom application roles have been created:
+
+![Row-level Security - AppRoles](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-approles.png?raw=true)
+
+and each of the two groups has been assigned to one of the two.
+
+![Row-level Security - Groups/AppRoles](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-groups-approles.png?raw=true)
+
+Let's return now back to **Semantic Modeler**. 
+
+Implemention of row-level security can be done either in Business Model, either in Subject Area. We will do it in Business Model, therefore let's open it. 
 
 ![Row-Level Security - Business Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/open-business-model.png?raw=true)
+
+We will set data filters using values in the *Region* column. To do that, we need to navigate to the logical table *D Geography*. We can see that there are no data filters created and applied.
+
+![Data Filter - Empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/data-filter-empty.png?raw=true)
+
+In the **Add** field we will search for **application role** for which we will specify or linked data filter to. In our case we have two **application roles** that we will use. Start typing **application role** name and select one from the list:
+
+![Data Filter - Add](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-select-approle.png?raw=true)
+
+A new line has been added, and now we need to define the condition that will be applied each time column *Region* will be selected:
+
+![Data Filter - New line](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-new-line.png?raw=true)
+
+Open **Expression Editor** and define filter:
+
+![Data Filter - Expression Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-expression-editor.png?raw=true)
+
+We have created one filter that is for one application role, now we need to apply another data filter for the second **application role**:
+
+![Data Filter - New line](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filters-defined.png?raw=true)
+
+We can save our model, run consistency check again and deploy the model.
+
+Login as one of the two users we've created. For example, we will use *OA User AMERICAS*. Let's create a new **Workbook** and select **OA Bootcamp Subject Area** as data source.
+
+![Test data filters - 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-1.png?raw=true)
+
+Create a new data visualisation that contains the following attributes: 
+
+- D Geography > City
+- F Sales > Revenue Metrics > Revenue
+
+We can see that map visualisation that has been created is not showing any cities outside of *AMERICAS*.
+
+![Test data filters - 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-2.png?raw=true)
+
+And this is also confirmed if we looked at query generated - we can see implicitly added data filter in *WHERE* clause:
+
+![Test data filters - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-3.png?raw=true)
+
+
+
+
+
+
+
 
 Our session variable contains information about the region user is allowed to see. Value of the *Region name* has been populated within *USERS_REGION* initialization block which populates *USERS_REGION_Variable* variable.
 
