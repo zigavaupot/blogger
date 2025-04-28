@@ -269,9 +269,9 @@ We can also check the queries generated:
 
 ![Test updated data filters](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-2.png?raw=true)
 
-Summary
+### Summary
 
-We have reviewed **variables** that can be set in **semantic modeler** and used in analyses and reports. It turns out that these variables are important. Especially, they enable us to set row-level security in our reports. It is not that rare that we see that users generate 100s of dupicated reports just to separate information which specific users are allowed to see. Using session variables which enable users to implicitly define and execute data filters in queries is very elegant way of developing a single report for all users. 
+We have reviewed **variables** that can be set in **semantic modeler** and used in analyses and reports. It turns out that these variables are important. Especially, they enable us to set row-level security in our reports. It is not that rare that we see that users generate 100s of duplicated reports just to separate information which specific users are allowed to see. Using session variables which enable users to implicitly define and execute data filters in queries is very elegant way of developing a single report for all users. 
 
 
 
