@@ -1,0 +1,109 @@
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true" alt="Oracle Analytics Bootcamp" style="max-width: 400px; height: auto;">
+</p>
+<h3>Using Session Variables in Row-Level Security Setup</h3>
+<p>Dynamic row-level security is essential for scalable and maintainable data governance. It allows data access to be tailored automatically based on the current user’s context, improving security while simplifying administration. Instead of hard-coding filters for each user or report, dynamic security ensures that as the user base grows or changes, the security model adapts seamlessly without requiring manual updates for every report or subject area, enhancing both performance and user experience.</p>
+<p>In our first test example, we saw that we can use <strong>Session Variables</strong> for filtering analyses and reports based on a dynamic value dependent on the current user. However, it doesn't make much sense to create these filters every time on each report or analysis. It is a much better idea to implement filters in the model itself. This results in implicit filters on all reports, without the need to create filters explicitly.</p>
+<p>Applying row-level security at the model level is preferable compared to applying filters manually at the report level because it ensures consistent enforcement of security rules, reduces the riskx of accidental data exposure, and greatly simplifies report development and maintenance.</p>
+<p>Let's set the scene first:</p>
+<ol>
+<li>We need two different users, let's say their names are: <em>OAC User Americas</em> and <em>OAC User EMEA</em>.</li>
+</ol>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-users.png?raw=true" alt="Row-level Security - Users" style="max-width: 600px; height: auto;">
+</p>
+<ol start="2">
+<li>These two users are assigned to two different groups:</li>
+</ol>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-groups.png?raw=true" alt="Row-level Security - Groups" style="max-width: 600px; height: auto;">
+</p>
+<p>Separating users into groups is beneficial for easier maintenance and enhanced security management. Groups allow administrators to apply permissions and roles collectively rather than individually, reducing administrative overhead and minimizing the risk of inconsistent security configurations.</p>
+<p>We can see that each user is member of each of the groups. For example:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-users-groups.png?raw=true" alt="Row-level Security - Users/Groups" style="max-width: 600px; height: auto;">
+</p>
+<ol start="3">
+<li>Two custom application roles have been created:</li>
+</ol>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-approles.png?raw=true" alt="Row-level Security - AppRoles" style="max-width: 600px; height: auto;">
+</p>
+<p>Application roles provide a centralized way to manage security across subject areas and models, making it easier to enforce consistent permissions and data access rules for different user groups.</p>
+<p>and each of the two groups has been assigned to one of the two.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-groups-approles.png?raw=true" alt="Row-level Security - Groups/AppRoles" style="max-width: 600px; height: auto;">
+</p>
+<p>Let's return now back to <strong>Semantic Modeler</strong>.</p>
+<p>Implementation of row-level security can be done either in the Business Model or in the Subject Area. We will do it in the Business Model, so let's open it.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/open-business-model.png?raw=true" alt="Row-Level Security - Business Model" style="max-width: 600px; height: auto;">
+</p>
+<p>We will set data filters using values in the <em>Region</em> column. Defining filters at the Business Model level enforces consistent security policies across all subject areas that use this model, ensuring uniform data access controls and reducing the risk of security gaps.</p>
+<p>To do that, we need to navigate to the logical table <em>D Geography</em>. We can see that there are no data filters created or applied.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/data-filter-empty.png?raw=true" alt="Data Filter - Empty" style="max-width: 600px; height: auto;">
+</p>
+<p>In the <strong>Add</strong> field, we will search for the <strong>application role</strong> to which we want to assign a data filter. In our case, we have two <strong>application roles</strong> that we will use. Start typing the <strong>application role</strong> name and select one from the list:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-select-approle.png?raw=true" alt="Data Filter - Add" style="max-width: 600px; height: auto;">
+</p>
+<p>A new line has been added, and now we need to define the condition that will be applied each time the <em>Region</em> column is selected:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-new-line.png?raw=true" alt="Data Filter - New line" style="max-width: 600px; height: auto;">
+</p>
+<p>Open the <strong>Expression Editor</strong> and define the filter:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-expression-editor.png?raw=true" alt="Data Filter - Expression Editor" style="max-width: 600px; height: auto;">
+</p>
+<p>We have created one filter for one application role. Now we need to apply another data filter for the second <strong>application role</strong>:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filters-defined.png?raw=true" alt="Data Filter - New line" style="max-width: 600px; height: auto;">
+</p>
+<p>We can save our model, run a consistency check again, and deploy the model.</p>
+<p>Login as one of the two users we've created. For example, we will use <em>OA User AMERICAS</em>. Let's create a new <strong>Workbook</strong> and select <strong>OA Bootcamp Subject Area</strong> as the data source.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-1.png?raw=true" alt="Test data filters - 1" style="max-width: 600px; height: auto;">
+</p>
+<p>Create a new data visualization that contains the following attributes:</p>
+<ul>
+<li>D Geography &gt; City</li>
+<li>F Sales &gt; Revenue Metrics &gt; Revenue</li>
+</ul>
+<p>We can see that the map visualization that has been created is not showing any cities outside of <em>AMERICAS</em>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-2.png?raw=true" alt="Test data filters - 2" style="max-width: 600px; height: auto;">
+</p>
+<p>And this is also confirmed if we look at the query generated — we can see the implicitly added data filter in the <em>WHERE</em> clause:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-3.png?raw=true" alt="Test data filters - 3" style="max-width: 600px; height: auto;">
+</p>
+<p>In previous steps, we have also created a session variable for the <strong>region</strong> each user is allowed to see. The value of the <em>Region name</em> has been populated within the <em>USERS_REGION</em> initialization block, which populates the <em>USERS_REGION_Variable</em> variable.</p>
+<p>We'll add two more rows for the two users we've created into the table:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/update-users-region-table.png?raw=true" alt="Update users-regions table" style="max-width: 600px; height: auto;">
+</p>
+<p>The hard-coded part of the expression can now be replaced with the session variable that gets populated by the current user's name. This transition from static, hard-coded filters to dynamic session variables makes the security model highly scalable and easier to maintain, as adding new users or roles no longer requires modifying the filter definitions manually.</p>
+<p>The filter definition for both <strong>data filters</strong> can now be replaced with the <strong>session variable</strong> we've created earlier.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/update-expression-filter.png?raw=true" alt="Update expression filter" style="max-width: 600px; height: auto;">
+</p>
+<p>We have to make this change for both filters we've defined; however, we could remove both and introduce a single filter that is not linked to either of the two <strong>Application Roles</strong> because the filter value is now dynamically populated.</p>
+<p>Let's save, deploy, and test the model once more.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-1.png?raw=true" alt="Test updated data filters" style="max-width: 600px; height: auto;">
+</p>
+<p>We can also check the queries generated:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-2.png?raw=true" alt="Test updated data filters" style="max-width: 600px; height: auto;">
+</p>
+<hr>
+<h3>Summary</h3>
+<p>This workflow demonstrates a best-practice approach to implementing dynamic row-level security in Oracle Analytics:</p>
+<ul>
+<li>First, users are grouped logically to simplify administration and security management.</li>
+<li>These groups are then assigned to application roles, which centralize security policies across subject areas.</li>
+<li>Data filters are defined at the Business Model level, ensuring consistent enforcement of security rules across all subject areas.</li>
+<li>Finally, hard-coded filters are replaced with session variables that dynamically adapt to the current user's context, making the security model scalable and maintainable.</li>
+</ul>
+<p>The benefits of this approach include improved scalability as new users or regions are added, reduced maintenance overhead, enhanced security compliance by minimizing manual errors, and a smoother user experience with automatic data filtering. Future enhancements could involve combining session variables with additional contextual information, such as time zones or department-specific filters, to enable even more dynamic and personalized reporting capabilities.</p>

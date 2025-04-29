@@ -1,31 +1,31 @@
 ![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
 
-In Oracle Analytics Semantic Modeler, variables play a critical role in customizing and controlling Analytics behavior at runtime. There are two main types of variables:
+In Oracle Analytics Semantic Modeler, variables play a critical role in customizing and controlling Analytics behavior at runtime. There are three main types of variables:
 - Session Variables
 - Global Variables
 - Static Variables
 
-A global or session variable's initialization block contains a default initialization query that is run to initialize or refresh the variables defined in the initialization block. The initialization query references the data source's tables that supply the variable values. A query can populate values into several variables, that is one variable for each column in the query. 
+A global or session variable's initialization block contains a default initialization query that is run to initialize or refresh the variables defined in the initialization block. The initialization query references the data source's tables that supply the variable values. A query can populate values into several variables, with one variable for each column in the query result.
 
-A static variable's initialization block doesn't contain an initialization query. To define a static variable, you specify the variable name and value.
+A static variable's initialization block doesn't contain an initialization query. To define a static variable, you specify the variable name and value directly.
 
 ### Session Variables
 
-**Session Variables** are dynamic variables set per user session, typically at login or when a report is run. They help personalize content, enforce security, or pass contextual info into your semantic model or reports.
+**Session Variables** are dynamic variables set per user session, typically at login or when a report is run. They help personalize content, enforce security, or pass contextual information into your semantic model or reports. Using session variables reduces the need for redundant report development, as the same report can dynamically adapt to different users or contexts.
 
-They are ideal in the following use cases:
+Session variables are ideal in the following use cases:
 - Row-level data security
-- Personalized filtering (e.g. region, department)
+- Personalized filtering (e.g., region, department)
 - Current user context
-- Time-based logic (e.g. user's timezone)
+- Time-based logic (e.g., user's timezone)
 
-When using **Session Variables**, for example in formulas, they are referenced using the following notation:
+When using **Session Variables** in formulas, they are referenced using the following notation:
 
 ```sql
 VALUEOF(NQ_SESSION."VARIABLE_NAME")
 ```
 
-Oracle Analytics provides several session variables, for example:
+Oracle Analytics provides several built-in session variables, for example:
 
 - `USER`: The logged-in username
 - `GROUP`: The user's assigned groups
@@ -34,31 +34,33 @@ Oracle Analytics provides several session variables, for example:
 - `AUTHENTICATED_USER`: Authenticated username
 - `TIMEZONE`: User's timezone setting
 
-In **Semantic Modeler** navigate to **Variables** tab in top-left navigation panel. 
+In **Semantic Modeler**, navigate to the **Variables** tab in the top-left navigation panel.
 
 ![Variables in Navigation Panel](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/variables-navigation.png?raw=true)
 
-To create a new session variable click **plus** next to **Search** field. This will open a menu with one option **Create Initialisation Block**.
+To create a new session variable, click the **plus** next to the **Search** field. This will open a menu with one option: **Create Initialization Block**.
 
 ![Create Initialization Block menu](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/create-initialization-block-menu.png?raw=true)
 
-Upon selection, **Create Initialization Block** dialog opens.
+Upon selection, the **Create Initialization Block** dialog opens.
 
 ![Create Initialization Block dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/create-initialization-block-session-dialog.png?raw=true)
 
-We will create a new **session** variable called *USERS_REGION* which will use system session variable *USER* to assign region to the users. This region can be later used for implicit filtering data, hence implementation of row-level security. Pay attention to the **Type** which is set to *Session*.
+We will create a new **session** variable called *USERS_REGION*, which will use the system session variable *USER* to assign a region to the users. This region can later be used for implicit data filtering, enabling the implementation of row-level security. Pay attention to the **Type**, which is set to *Session*.
 
-All variables are created using **Initialization Block**. We have created one. We can see, under **General** tab in the screenshot below, that variables can be refreshed periodically. In our case this is not required, but we might have variables that required frequent refreshing.
+All variables are created using an **Initialization Block**. We have created one. Under the **General** tab in the screenshot below, you can see that variables can be refreshed periodically. In our case this is not required, but you might have variables that require frequent refreshing.
+
+Note: Initialization blocks can also be sequenced if dependencies exist between variables. For example, if one variable depends on the value of another, you can order the initialization blocks accordingly.
 
 ![Initialization Block - General](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/initialization-block-session-general.png?raw=true)
 
-The main part of of **Initialisation Block** is **Variables** tab where we need to provide SQL statement that would initialize session variable we want to create.
+The main part of the **Initialization Block** is the **Variables** tab, where we need to provide the SQL statement that will initialize the session variable we want to create.
 
 First, we have created a table called *row-level-security-table* with the following content:
 
 ![row-level-security-table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-security-table.png?raw=true)
 
-We want to limit access of a user to a specific region. In **Variables** tab we'll provide SQL query that will use this table to identify to which region is current user entitled to:
+We want to limit access of a user to a specific region. In the **Variables** tab, we'll provide a SQL query that will use this table to identify which region the current user is entitled to:
 
 ```sql
 SELECT region_name 
@@ -66,11 +68,11 @@ FROM user_regions
 WHERE user_name = 'VALUEOF(NQ_SESSION.USER)'
 ```
 
-The next, we have to careful with **Connection Pool**. It is a good practice to have a separate **Connection Pool** for variables. 
+Next, we have to be careful with the **Connection Pool**. It is a best practice to have a separate **Connection Pool** for variables. This helps avoid locking or overloading transactional connection pools, ensuring that variable initialization queries do not interfere with regular reporting queries.
 
 ![Connection Pool for variables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/variables-dedicated-connection-pool.png?raw=true)
 
-In our case, 2nd connection pool was created and used:
+In our case, a second connection pool was created and used:
 
 ![Initialization Block - Variables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/initialization-block-session-variables.png?raw=true)
 
@@ -78,27 +80,27 @@ Click **Test Query** to test the query:
 
 ![Query preview](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/query-preview.png?raw=true)
 
-We can see that value *AMERICAS* has been retrieved. And we also see that there is no **Variable Name** defined.
+We can see that the value *AMERICAS* has been retrieved. We also notice that there is no **Variable Name** defined yet.
 
-To add a new variable, simply click on **plus** next to **Search Variables** field:
+To add a new variable, simply click on the **plus** next to the **Search Variables** field:
 
 ![Add variable](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-variable.png?raw=true)
 
-... and then define details for a new variable:
+... and then define the details for the new variable:
 
 ![Variable details](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/variable-details.png?raw=true)
 
-We have now created a **new session variable** based on another (system) session variable, *USER*, which will help us to implement *row level security* in our analyses and dashboards. We will test this a bit later.
+We have now created a **new session variable** based on another (system) session variable, *USER*, which will help us implement *row-level security* in our analyses and dashboards. We will test this a bit later.
 
 ### Global Variables
 
-**Global variables** refer to repository variables that are shared across all users and sessions — effectively acting as dynamically updated globals in your Semantic Model.
+**Global variables** refer to repository variables that are shared across all users and sessions — effectively acting as dynamically updated global values in your Semantic Model.
 
-Creating **Global variables** follow the same process as we've seen with **Session variables**. We start by **Creating Initialization Block**, however this time we leave **Type** set to *Global*. 
+Creating **Global variables** follows the same process as we've seen with **Session variables**. We start by **Creating Initialization Block**, but this time we leave **Type** set to *Global*.
 
 ![Create initialization block - Global](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/create-initialization-block-global.png?raw=true)
 
-For example, from whatever reason we need to know and store as a global varible *First day of business* which is, let's assume again,   equal to *MIN(time_bill_dt)* in *F_REVENUE* table.
+For example, suppose we need to know and store as a global variable the *First day of business*, which is, let's assume, equal to *MIN(time_bill_dt)* in the *F_REVENUE* table.
 
 ```sql
 SELECT DISTINCT MIN(time_bill_dt) 
@@ -109,55 +111,57 @@ FROM oabootcamp.f_revenue
 
 ### Static Variables
 
-**Static Variables** are as name suggest **constants**. We will use a static variable when we need a variable with a fixed value.
+**Static Variables** are, as the name suggests, **constants**. You should use a static variable when you need a variable with a fixed value.
 
-Basically, static variables are a type of  global (repository) variable that hold a fixed value — one that doesn’t change unless manually updated by a model developer.
+Basically, static variables are a type of global (repository) variable that hold a fixed value — one that doesn’t change unless manually updated by a model developer.
 
-For example, we could define COMPANY_EXCHANGE_RATE_USD_TO_EUR for converting all values in USD to EUR at company rate (fixed rate defined by company's finance department).
+For example, we could define COMPANY_EXCHANGE_RATE_USD_TO_EUR for converting all values in USD to EUR at a fixed company rate defined by the company's finance department.
 
-We start creating a new **static variable** the same way as any other variables in Semantic Modeleler.
+It is appropriate to use Static Variables when you need to store company-wide constants or values that rarely change, such as fiscal year start dates, standard rates, or other reference values.
+
+We start creating a new **static variable** the same way as any other variable in Semantic Modeler.
 
 ![Create initialization block - Static](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/create-initialization-block-static.png?raw=true)
 
-However, value is a constant so there isn't much to define:
+However, since the value is a constant, there isn't much to define:
 
 ![Static variable](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/static-variable.png?raw=true)
 
 ### Using variables in analyses and reports
 
-We have created three variables, all of a different type: **Session**, **Global** and **Static**.
+We have created three variables, each of a different type: **Session**, **Global**, and **Static**.
 
 ![Initialization blocks and variables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/initialization-block-and-variables.png?raw=true)
 
-We can now test them. Before doing that, we need to **save** our model, **run consistency check** and **deploy** it.
+Before testing the variables, it is mandatory to **save** your model, **run a consistency check**, and **deploy** it. These steps ensure that your changes are applied and validated in the environment, and that the variables are available for use in analyses and reports.
 
-Let's begin with the following scatter chart that is showing countries group by region (color) with metrics applied: *Revenue*, *Profit* and *Profit Margin %*.
+Let's begin with the following scatter chart that shows countries grouped by region (color) with metrics applied: *Revenue*, *Profit*, and *Profit Margin %*.
 
 ![Session Variable Test - 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/session-variables-test-1.png?raw=true)
 
-We can then apply **Expression Filter** which filter data based on **Session Variable** value. 
+We can then apply an **Expression Filter** that filters data based on the **Session Variable** value.
 
 ![Session Variable Test - 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/session-variables-test-2.png?raw=true)
 
-And, finally only countries from the region defined by **Session Variable** are shown on chart. 
+And finally, only countries from the region defined by the **Session Variable** are shown on the chart.
 
 ![Session Variable Test - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/session-variables-test-3.png?raw=true)
 
-Note: **Session Variable** is dynamically populated depending on the user logged in. We can no extend this into proper *row level security* that is not applied at report level, but on semantic model level. We will take a look at this a bit later.
+Note: The **Session Variable** is dynamically populated depending on the user logged in. We can now extend this into proper *row-level security* that is not applied at the report level, but at the semantic model level. We will take a look at this a bit later.
 
-Let's check two other variables that we've created.
+Let's check the two other variables that we've created.
 
-We can easily test **Static Variable**, starting reshaping current report into something like this:
+We can easily test the **Static Variable** by reshaping the current report into something like this:
 
 ![Static Variable Test - 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/static-variables-test-1.png?raw=true)
 
-Then, let's create the following calculation - we want to calculate values in USD into EUR using company exchange rate.
+Then, let's create the following calculation — we want to convert values in USD into EUR using the company exchange rate.
 
 ![Static Variable Test - 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/static-variables-test-2.png?raw=true)
 
 ![Static Variable Test - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/static-variables-test-3.png?raw=true)
 
-Now, we have another example to test, **Global Variable** we created earlied.
+Now, we have another example to test: the **Global Variable** we created earlier.
 
 We need a simple report to start with:
 
@@ -167,111 +171,24 @@ Then we introduce a new expression filter, which filters on date:
 
 ![Global Variable Test - 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/global-variables-test-2.png?raw=true)
 
-Active filter results in the following result.
+The active filter results in the following output.
 
 ![Global Variable Test - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/global-variables-test-3.png?raw=true)
 
-This last example doesn't have much business value, however I guess we have seen how we can use session and global (dynamic and static) variables in analyses.
+This last example doesn't have much business value, however, it demonstrates how we can use session, global (dynamic), and static variables in analyses.
 
-Before we conclude our session on **Variables** let's take a look at pracitical example how we could use s**ession variables** in **row-level security** settings in Semantic Model.
-
-### Using Session Variables in Row-Level Security Setup
-
-In our first test example, we have seen that we can use **Session Variables** for filtering analyses and reports based on the dynamic value dependent on the current user. However, it doesn't make much sense to create these filters everytime on each report or analyses. It is much better idea to implement filters in the model. This will result, implicit filters on the reports without the need to create filters explicitly.
-
-Let's set the scenery first:
-
-1. We need two different users, let's say their names are: *OAC User Americas* and *OAC User EMEA*.
-
-![Row-level Security - Users](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-users.png?raw=true)
-
-2. These two users are assigned to two different groups: 
-
-![Row-level Security - Groups](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-groups.png?raw=true)
-
-We can see that each user is member of each of the groups. For example:
-
-![Row-level Security - Users/Groups](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-users-groups.png?raw=true)
-
-3. Two custom application roles have been created:
-
-![Row-level Security - AppRoles](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-approles.png?raw=true)
-
-and each of the two groups has been assigned to one of the two.
-
-![Row-level Security - Groups/AppRoles](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/row-level-sec-groups-approles.png?raw=true)
-
-Let's return now back to **Semantic Modeler**. 
-
-Implemention of row-level security can be done either in Business Model, either in Subject Area. We will do it in Business Model, therefore let's open it. 
-
-![Row-Level Security - Business Model](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/open-business-model.png?raw=true)
-
-We will set data filters using values in the *Region* column. To do that, we need to navigate to the logical table *D Geography*. We can see that there are no data filters created and applied.
-
-![Data Filter - Empty](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/data-filter-empty.png?raw=true)
-
-In the **Add** field we will search for **application role** for which we will specify or linked data filter to. In our case we have two **application roles** that we will use. Start typing **application role** name and select one from the list:
-
-![Data Filter - Add](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-select-approle.png?raw=true)
-
-A new line has been added, and now we need to define the condition that will be applied each time column *Region* will be selected:
-
-![Data Filter - New line](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-new-line.png?raw=true)
-
-Open **Expression Editor** and define filter:
-
-![Data Filter - Expression Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filter-expression-editor.png?raw=true)
-
-We have created one filter that is for one application role, now we need to apply another data filter for the second **application role**:
-
-![Data Filter - New line](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/add-data-filters-defined.png?raw=true)
-
-We can save our model, run consistency check again and deploy the model.
-
-Login as one of the two users we've created. For example, we will use *OA User AMERICAS*. Let's create a new **Workbook** and select **OA Bootcamp Subject Area** as data source.
-
-![Test data filters - 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-1.png?raw=true)
-
-Create a new data visualisation that contains the following attributes: 
-
-- D Geography > City
-- F Sales > Revenue Metrics > Revenue
-
-We can see that map visualisation that has been created is not showing any cities outside of *AMERICAS*.
-
-![Test data filters - 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-2.png?raw=true)
-
-And this is also confirmed if we looked at query generated - we can see implicitly added data filter in *WHERE* clause:
-
-![Test data filters - 3](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/test-data-filters-3.png?raw=true)
-
-
-In previous steps, we have created also session variable about the **region** each user is allowed to see. Value of the *Region name* has been populated within *USERS_REGION* initialization block which populates *USERS_REGION_Variable* variable.
-
-We'll add two more rows for the two users we've created into that table:
-
-![Update users-regions table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/update-users-region-table.png?raw=true)
-
-Hard-coded part of the expression can now be replaced with session variable that gets populated by current user's name. 
-
-Filter definition for both **data filters** can be now replaced with **session variable** we've creaeted earlier. 
-
-![Update expression filter](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/update-expression-filter.png?raw=true)
-
-We have to make this change for both filters we've defined, however we could remove one and introduce single filter that is not linked to neither of two **Application Roles** because filter value is now dinamically populated.
-
-Let's save, deploy and test the model once more.
-
-![Test updated data filters](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-1.png?raw=true)
-
-We can also check the queries generated: 
-
-![Test updated data filters](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/variables/images/updated-data-filters-test-2.png?raw=true)
+Before we conclude our session on **Variables**, let's take a look at a practical example of how we could use **session variables** in **row-level security** settings in the Semantic Model.
 
 ### Summary
 
-We have reviewed **variables** that can be set in **semantic modeler** and used in analyses and reports. It turns out that these variables are important. Especially, they enable us to set row-level security in our reports. It is not that rare that we see that users generate 100s of duplicated reports just to separate information which specific users are allowed to see. Using session variables which enable users to implicitly define and execute data filters in queries is very elegant way of developing a single report for all users. 
+We have reviewed the different types of **variables** that can be set in **Semantic Modeler** and used in analyses and reports. These variables are extremely important, especially for enabling row-level security in reports. Without variables, it is not uncommon to see users generate hundreds of duplicated reports just to separate information for specific users. Using session variables allows users to implicitly define and execute data filters in queries, providing a very elegant way of developing a single report for all users.
+
+Additional benefits of using session variables and dynamic filters include:
+- **Improved maintenance**: Centralized filters and logic reduce the need for repetitive changes across multiple reports.
+- **Better scalability**: As new users, roles, or business rules are introduced, adapting security and personalization is much easier.
+- **Enhanced security compliance**: Model-level security ensures consistent enforcement of data access policies and reduces the risk of accidental data leaks.
+
+By leveraging variables and dynamic filtering, Oracle Analytics Semantic Modeler empowers you to build robust, secure, and efficient analytics solutions that scale with your organization’s needs.
 
 
 
