@@ -1,0 +1,72 @@
+<p>Being able to talk to computers using natural language, especially with the recent advancements in general AI models like ChatGPT, has become very popular in the last few months. Everyone is doing it. It's simple, easy to use, and frankly, it can be very useful. What has been around for a while—think Siri, Alexa, or TV remote controllers—has now been taken to a new level and is already widely used in business.</p>
+<p>In Oracle Analytics, Natural Language Recognition has been available for several years. I remember the early days when the Oracle Day by Day mobile application was introduced. One of the coolest features in Day by Day was the ability to ask questions using natural language. For example, <em>What is revenue by region and channel for seniors?</em> would provide an answer in the form of charts, tables, and more. This feature is still available today, and you can ask such questions in the <strong>Search</strong> field located on the Oracle Analytics home page.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/ask-a-question.png" alt="Ask the question in Search" style="max-width: 100%; height: auto;">
+</div>
+<p>Oracle Analytics then provides the following answer:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/get-an-answer.png" alt="Get an anwser" style="max-width: 100%; height: auto;">
+</div>
+<p>Further navigation takes the user to more details in a newly generated workbook that can be further enhanced and customized by the user.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/generated-workbook.png" alt="Generated workbook" style="max-width: 100%; height: auto;">
+</div>
+<p>A quick note about the workbook above: Oracle Analytics recognized <em>revenue</em> as a measure, and <em>channel</em> and <em>region</em> as dimensions based on its index. The phrase <em>for seniors</em> in the question resulted in a filter being applied where <em>Segment is equal to &quot;Seniors&quot;</em>.</p>
+<p>This response is not yet based on advanced AI technology (though it may well be in the future), but rather uses simple parsing and search indexing to formulate the answer. So, while it is not at the level of ChatGPT or similar models, it is still useful for end users—especially in mobile applications like Oracle Analytics Mobile, where speaking is easier than typing.</p>
+<p>If we now explore the example above and look into Natural Language Generation capabilities, we see that these are available in several places. For instance, the <em>Explain</em> function can generate detailed textual descriptions, and the <em>Insights</em> feature also provides rich explanations. Beyond these, Oracle Analytics offers an out-of-the-box <em>Language Narrative</em> visualization.</p>
+<p>For example, if I change the visualization type from Horizontal Stacked to Language Narrative, ...</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/switch-to-language-narrative.png" alt="Switch to Language Narrative" style="max-width: 100%; height: auto;">
+</div>
+<p>... the result looks like this:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/language-narrative-visualization.png" alt="Switch to Language Narrative" style="max-width: 100%; height: auto;">
+</div>
+<p>So, how does this visualization work? As you might have noticed, the example above is not a state-of-the-art explanation of the chart on the right. There are certain ground rules for text generation, and of course, not everything can be expressed as text. Let's explore the options available!</p>
+<p>First, the query in the example contains two dimensions and one measure, with an additional dimension in the filter. It was able to generate &quot;something,&quot; but the result was not very effective. Working with Language Narrative has some limitations, one of which is how many attributes can be used in a query. Currently, the following combinations are supported:</p>
+<ul>
+<li>One measure with two dimensional attributes</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/one-measure-two-attributes.png" alt="One measure with two dimensional attributes" style="max-width: 100%; height: auto;">
+</div>
+<ul>
+<li>Two measures with one dimensional attribute</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/two-measures-one-attribute.png" alt="Two measures with one dimensional attribute" style="max-width: 100%; height: auto;">
+</div>
+<p>However, these examples don’t provide much insight. So, what happens if we take a step back and build this visualization from scratch? Another important factor is the mention of <em>chronological order</em> in the messages, which implies the use of a time dimension.</p>
+<p>Let's see what happens if we use a time dimension attribute (<em>Month</em>) instead of a categorical one (<em>Region</em>).</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/two-measures-time-dimension.png" alt="Two measures with one dimensional attribute" style="max-width: 100%; height: auto;">
+</div>
+<p>Now, the visualization generates more narrative than before and provides insights such as minimums, maximums, strongest declines, and so on. Interestingly, it also mentions <em>fixed costs</em> missing objectives and failing to meet goals. This is a bit odd, as sentences like these imply that <em>variable costs</em> are somehow targeted values for <em>fixed costs</em>.</p>
+<p>Can this be corrected or put into context? Navigating to the Visualization Properties panel gives users additional control over the Language Narrative.</p>
+<p>First, there is the <em>Language</em> option. Currently, only English and French are supported, so this is important to keep in mind for other languages. Another property is the level of detail, which I will address shortly. The next property is <em>Analysis</em>, which has an immediate effect on the visualization.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/language-narrative-properties.png" alt="Language Narrative properties" style="max-width: 100%; height: auto;">
+</div>
+<p>The default value is <em>Trend</em>. Changing it to <em>Breakdown</em> produces the following effect:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/two-values-time-dimension-breakdown.png" alt="Two measures with one dimensional attribute" style="max-width: 100%; height: auto;">
+</div>
+<p>You can see that the generated text is now broken down much more thoroughly, providing deeper insight because there is more detail available (we are looking at a 36-month period). Of course, a bit more review of the generated text is needed, but it seems to capture the information in the table quite well. From the table alone, such details are not easily spotted.</p>
+<p>The <em>Level of Detail</em> property was set to 7, which is the maximum level of detail. If this is changed to 5, for example, the generated text in Language Narrative becomes shorter and less detailed:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/level-of-detail-set-to-5.png" alt="Two measures with one dimensional attribute" style="max-width: 100%; height: auto;">
+</div>
+<p>Let's revisit our initial example where we tried to generate a Language Narrative for one measure and two dimensions, with one of those being a time dimension.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/one-measure-time-and-categorical.png" alt="Two measures with one dimensional attribute" style="max-width: 100%; height: auto;">
+</div>
+<p>In this case, Language Narrative generates quite a lot of text. For <em>Analysis = &quot;Trend&quot;</em>, it provides many textual insights. First, it analyzes the overall trend, then breaks down the trend by distinct values of the selected categorical attribute.</p>
+<p>Switching the <em>Analysis</em> property to <em>Breakdown</em> changes the focus to a breakdown by the time dimension attribute.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-analytics/images/one-measure-time-and-categorical-breakdown.png" alt="Two measures with one dimensional attribute" style="max-width: 100%; height: auto;">
+</div>
+<h2>Conclusion</h2>
+<p>In my brief exploration of the Language Narrative visualization type, I observed some impressive automatically generated texts by Oracle Analytics. While some outputs were less useful, many provided valuable textual insights that can enhance data understanding. However, using this feature simply because it looks impressive might not always be effective. Users should understand its capabilities and limitations and apply it thoughtfully in their visualizations.</p>
+<p>For more details on working with the Language Narrative visualization, refer to the <em>Visualize and Analyze Data</em> chapter in the <a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acubi/">Visualizing Data and Building Reports in Oracle Analytics Cloud</a> documentation. I strongly recommend reviewing this before incorporating Language Narrative into your projects, as you may encounter messages like this:</p>
+<pre><code class="language-console">The comparison of two unordered measures is not yet available. Unordered means that the data is not in chronological order. The application will generate a separate analysis for each measure. Stay tuned, future releases will add functionalities for unordered dimensions.
+</code></pre>

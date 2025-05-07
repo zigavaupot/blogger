@@ -1,0 +1,98 @@
+<div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai.png" alt="A bit more complex SELECT AI query" style="max-width: 100%; height: auto;">
+</div>
+<h1>My SQL beginnings</h1>
+<p>It was approximately 35 years ago (gosh, that long!?) when I first encountered SQL—Structured Query Language, for those who might not be 100% sure what I am talking about. It happened during labs at faculty when we visited IBM's training center in Radovljica, Slovenia, to learn and experiment with this (at least for me) new programming language. They called it a 4th generation language. With its roots in Boolean algebra and simple structure, we were told that it was almost like natural language (English, of course—who would have thought one day you would use Slovenian to query databases?). With all those SELECTs, FROMs, WHEREs, GROUP BYs, HAVINGs, ORDER BYs, etc., it actually sounded really cool and easy.</p>
+<h1>My Select AI beginnings</h1>
+<p>Fast forward to today, the other day I finally found some time to explore something different from my usual daily work. What caught my attention was one of the latest Oracle blogs: <a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-89407FB6-05DC-4202-93DE-35DAB7F93EBB">Introducing Select AI - Natural Language to SQL Generation on Autonomous Database</a>. This blog discusses the use of generative AI with Large Language Models (LLMs) such as ChatGPT, Cohere, or Azure OpenAI Service integrated with Oracle Autonomous Database.</p>
+<p>More details can be found in Oracle Autonomous Database documentation: <a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/sql-generation-ai-autonomous.html#GUID-9CE75F94-7455-4C09-A3F3-118C08E82B7E">Use Select AI to Generate SQL from Natural Language Prompts</a>.</p>
+<h2>Let's talk now</h2>
+<p>Enough said. Let's try the simplest query of all and ask my database: what is the total revenue recorded?</p>
+<pre><code class="language-console">select ai what is total revenue
+
+</code></pre>
+<p>And the response is?</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-simple.png" alt="Simple SELECT Ai Query" style="max-width: 100%; height: auto;">
+</div>
+<p>For experienced ChatGPT users, this might not be very surprising. But for me, it was impressive. The response obviously comes from the underlying database table and is correct. Encouraging.</p>
+<p>Let's dig a bit deeper and try to get a more complex result.</p>
+<p>In the next query, I try to ask a question that requires a join. For example:</p>
+<pre><code class="language-console">select ai what is the revenue by customer segments in the last year
+
+</code></pre>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-complex.png" alt="A bit more complex SELECT AI query" style="max-width: 100%; height: auto;">
+</div>
+<p>Here, the result is more complex and can be displayed in various formats, for example as a graph.</p>
+<p>I believe everyone has figured out by now that the magic phrase is <strong>SELECT AI</strong>, which is the secret ingredient that enables us to query data using natural language.</p>
+<p>So what is happening behind the scenes? I'll borrow the following image from the blog mentioned above, written by Mark Hornick:</p>
+<div style="text-align: center;">
+<img src="https://blogs.oracle.com/content/published/api/v1.1/assets/CONTB49C0E2E55304F2D8E2A08AAAC0F33CD/native?cb=_cache_969a&amp;channelToken=161740a11b3b4626aa4ae9070abed5dc" alt="SELECT AI - what's happening" style="max-width: 100%; height: auto;">
+</div>
+<p>The SELECT AI natural language query uses metadata from the schema identified in the user's profile. This information is provided to the LLM (for example, ChatGPT) to create a proper SQL query. The query is then executed within the database, and the results are fed back through the LLM to generate the answer if requested (using the <em>narrate</em> option).</p>
+<p>As already indicated, the same natural language query can return different results depending on the keyword added to the SELECT AI syntax.</p>
+<p>For example, if the <em>narrate</em> keyword is used in the query above:</p>
+<pre><code class="language-console">select ai narrate what is the revenue by customer segments in the last year
+</code></pre>
+<p>The result is a narrative explanation:</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-complex-narrate.png" alt="A bit more complex SELECT AI query using narrate keyword" style="max-width: 100%; height: auto;">
+</div>
+<p>If we want to see the SQL that is generated, then the <em>showSQL</em> keyword can be used:</p>
+<pre><code class="language-console">select ai showSQL what is the revenue by customer segments in the last year
+</code></pre>
+<p>The result displays the generated SQL query:</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-complex-showsql.png" alt="A bit more complex SELECT AI query using showSQL keyword" style="max-width: 100%; height: auto;">
+</div>
+<p>If you simply want to execute the query, then the keyword is <em>runsql</em>:</p>
+<pre><code class="language-console">select ai runsql what is the revenue by customer segments in the last year
+</code></pre>
+<p>The result is the same as when no keyword is used:</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-complex-runsql.png" alt="A bit more complex SELECT AI query using runsql keyword" style="max-width: 100%; height: auto;">
+</div>
+<p>The last keyword option, <em>chat</em>, is probably the most interesting as it generates a conversational AI response:</p>
+<pre><code class="language-console">select ai chat what is the revenue by customer segments in the last year
+</code></pre>
+<p>The result is more explanatory, similar to when no keyword was used:</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-complex-explain-query.png" alt="A bit more complex SELECT AI query using chat keyword" style="max-width: 100%; height: auto;">
+</div>
+<p>We can see that in this case, the answer is more detailed. It seems that the query went to the LLM and returned a prescription of what needs to be done, not just the result itself.</p>
+<p>A quick idea: we can ask what a SELECT statement actually does. Remember the one generated earlier using the <em>showSQL</em> keyword? I guess now we are more in the ChatGPT territory.</p>
+<pre><code class="language-console">select ai chat explain the following SQL
+    SELECT
+        C.CUST_SEGMENT,
+        SUM(B.REVENUE) AS TOTAL_REVENUE
+    FROM OABOOTCAMP.D_CUSTOMERS C INNER JOIN OABOOTCAMP.F_BILL_REV B ON C.CUST_NUMBER = B.CUST_NUMBER
+    WHERE
+        B.TIME_BILL_DT &gt;= ADD_MONTHS(TRUNC(SYSDATE, 'YEAR'), -12)
+    GROUP BY
+        C.CUST_SEGMENT
+</code></pre>
+<p>The result is a detailed explanation:</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-complex-chat.png" alt="A bit more complex SELECT AI query using chat keyword" style="max-width: 100%; height: auto;">
+</div>
+<h2>Let's have some more ...</h2>
+<p>... and check some additional questions:</p>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-top-5.png" alt="Top 5 product by revenue" style="max-width: 100%; height: auto;">
+</div>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-top-5-comparing-years.png" alt="Top 5 product by revenue comparing previous years" style="max-width: 100%; height: auto;">
+</div>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-top-5-growth-percentage.png" alt="Compare years and show growth - relative" style="max-width: 100%; height: auto;">
+</div>
+<div style="text-align: center;">
+<img src="https://zigavaupot.github.io/blogger/talking-to-oracle-database/images/select-ai-customers-by-segments.png" alt="Customer distribution by segments" style="max-width: 100%; height: auto;">
+</div>
+<p>Well?</p>
+<h2>To wrap up</h2>
+<p>My first encounter with LLM integration in a database has been quite positive. While it’s important to be cautious of hallucinations and always verify generated results, the practical value of being able to query databases using natural language is clear.</p>
+<p>Rome was not built in a day, and it’s common that not everything works perfectly at first. I still remember crashing that poor IBM mainframe within the first five minutes during those early labs, which ended the session abruptly. Once again, we proved that 3rd generation programming languages ruled the world back then.</p>
+<p>Today, however, we stand at the frontier of a new era where LLMs and AI are transforming how we interact with data. The potential is enormous, and I am excited to see where this journey will take us.</p>
+<p>And still, look at us now!</p>

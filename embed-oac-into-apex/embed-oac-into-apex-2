@@ -1,40 +1,36 @@
-### APEX application
+### APEX Application
 
-In this example, I have simply created a simple APEX application.
+In this example, I created a straightforward APEX application to demonstrate how Oracle Analytics Cloud (OAC) can be embedded into an APEX environment. The application itself is simple, serving primarily as a container for the embedded analytics content.
 
-![APEX Application Created](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apex-application-created.png?raw=true)
+![APEX Application Created](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/apex-application-created.png)
 
-From the three available pages, select **1 - Home**.
+From the available pages, select **1 - Home**.
 
-![APEX Application pages](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apex-application-pages.png?raw=true)
+![APEX Application pages](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/apex-application-pages.png)
 
-A new region `<body>` has been created where all of the *coding* would happen. Actually in this simple scenario, no real coding will be needed, except a few bits here and there.
+Within this page, a new region called `<body>` has been created. This region is where the main embedding takes place. While the application requires minimal coding overall, the integration involves specific configurations at two levels:
+* The `<page>` level, where global JavaScript and variables are defined, and
+* The `<body>` region, where the actual embedding of the OAC content occurs.
 
-![Body Region](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/body-region.png?raw=true)
+Let’s first look at the `<page>` level. In the two fields labeled **File URLs** and **Function and Global Variable Declaration**, you should paste the code snippets provided under the **Developer** / **Embed** tab of the Data Visualization workbook (refer to the explanation above for details):
 
-Actually, the *coding* is happening in two places:
-* on the `<page>` level and 
-* on the `<body>` level.
+![Java Script](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/java-script.png)
 
-Let's check out the `<page>` level first. In the two fields: **File URLs** and **Function and Global Variable Declaration**,  the code snippets that we observed under **Developer** / **Embed** tab of data visualization workbook (see details and explanaition above) should be copied:
+![Page Level](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/page-level.png)
 
-![Java Script](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/java-script.png?raw=true)
+After completing the page-level setup, navigate to the `<body>` region.
 
-![Page Level](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/page-level.png?raw=true)
+In the **Identification** section, set the **Type** to *Static Content*.
 
-Once completed, navigate to the `<body>` region.
-
-In **Identification** section, *Static Content* should be selected for **Type**.
-
-In **Source** section, enter the following code snipped in *HTML Code* field:
+In the **Source** section, enter the following HTML snippet into the *HTML Code* field:
 
 ```htm
-<iframe src=<iframe src="https://<Oracle Analytics Cloud URL>.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&viewermode=true&noheader=true&reportmode=full&reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)"  width="1200px" height="900px" frameborder="0"></iframe>
+<iframe src="https://<Oracle Analytics Cloud URL>.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&viewermode=true&noheader=true&reportmode=full&reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)"  width="1200px" height="900px" frameborder="0"></iframe>
 ```
 
-Alternatively I tried to use the code snippet, prepared under **Developer**, but wasn't able to make it work. Any suggestion, what I was missing or doing wrong is more then welcome!
+I initially attempted to use the code snippet provided under the **Developer** tab that utilizes the `<oracle-dv>` custom element, but I was unable to get it to work. Any suggestions on what I might have missed or done incorrectly are more than welcome!
 
-The following code should have worked, but ...:
+Here is the snippet that should have worked but did not:
 
 ```htm
 <div style='width: 1200px; height: 900px'>
@@ -43,6 +39,8 @@ The following code should have worked, but ...:
 </div>
 ```
 
-Since, `<iframe>` based solution worked, I decided to deal with this at some later point.
+Since the `<iframe>`-based solution worked reliably, I decided to postpone troubleshooting the `<oracle-dv>` approach for now.
 
-Here, one would expect OAC Data Visualization can be embedded and run within APEX application. I have found a few blog posts which were claiming this works. **However, if you try and run your application now, it won't work.** At least, it didn't for me. The reason is that we still need to sort out **authentication**. APEX is using its own authentication, where Oracle Analytics cloud is using Oracle Identity Cloud (IDCS), and these two are not working together by default.
+At this point, you might expect that embedding Oracle Analytics Cloud Data Visualization directly within an APEX application would be straightforward. Indeed, several blog posts claim this integration works seamlessly. **However, if you try to run your application now, it will not function as expected.** This is because APEX uses its own authentication mechanism, while Oracle Analytics Cloud relies on Oracle Identity Cloud Service (IDCS). These two authentication systems are not integrated by default, which prevents the embedded content from loading properly.
+
+In summary, while it is possible to embed OAC content within an APEX application using an `<iframe>`, resolving the authentication challenge between APEX and Oracle Analytics Cloud is essential for a fully functional integration. Addressing this will be the next critical step in enabling seamless embedding and user experience.

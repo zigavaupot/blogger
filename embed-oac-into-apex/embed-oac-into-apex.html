@@ -1,0 +1,253 @@
+<p>In a recent project, a customer required integrating visualizations from Oracle Analytics into an Oracle APEX application running within Oracle Cloud Infrastructure. This article shares my experience with this integration, highlighting useful resources and addressing some challenges I encountered along the way.</p>
+<p>Integration is not my primary focus, so I started by reviewing Oracle's documentation. Unfortunately, there is no comprehensive &quot;cookbook&quot; available, which led me to explore various resources online. While many blog posts, articles, and videos exist, most are somewhat dated, though still relevant, as both products have evolved rapidly over the past few years.</p>
+<p>Despite this, I found some excellent resources that helped me significantly. For instance, <a href="https://medium.com/@insight2action">Mike Durran's blog</a> is an invaluable source for topics like this. I highly recommend his article <a href="https://medium.com/oracledevs/a-guide-to-embedding-oracle-analytics-into-oracle-application-express-apex-1799f6ba4626">A Guide to Embedding Oracle Analytics into Oracle APEX</a> for a thorough understanding.</p>
+<h2>Let's begin with Oracle Analytics first</h2>
+<p>Our starting point is a data visualization that displays the company's sales.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/ceo-dashboard.png" alt="CEO Dashboard" style="max-width: 100%; height: auto;">
+</div>
+<p>One important aspect to note is the <strong>Developer options</strong> in Oracle Analytics. Under the <strong>Embed</strong> tab, developers can find options that facilitate embedding analytics content into other applications, such as Oracle APEX.</p>
+<p>To embed a specific visualization into another application, a developer can simply copy the provided HTML code to display Oracle Analytics content.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/embed-scripts.png" alt="HTML Code" style="max-width: 100%; height: auto;">
+</div>
+<p>The following two JavaScript snippets must be included in the HTML page, typically at the page level:</p>
+<pre><code class="language-htm">&lt;script src=&quot;https://&lt;your analytics instance&gt;.analytics.ocp.oraclecloud.com/public/dv/v1/embedding/&lt;embeddingMode&gt;/embedding.js&quot; type=&quot;application/javascript&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>Pay close attention to the <em>embeddingMode</em> part of the URL, which can take two possible values: <em>jet</em> and <em>standalone</em>.</p>
+<ul>
+<li>Use <em>jet</em> if the analytics content is embedded within an existing Oracle JET application.</li>
+<li>Use <em>standalone</em> when embedding visualization content in a generic application that does not use Oracle JET.</li>
+</ul>
+<p>When using the <em>standalone</em> option, Knockout bindings must be applied after the visualization is fully loaded. This can be done by including the following script after the <code>&lt;oracle-dv&gt;</code> tag or by executing it in a body onload handler:</p>
+<pre><code class="language-htm">&lt;script&gt;
+  requirejs(['knockout', 'ojs/ojcore', 'ojs/ojknockout', 'ojs/ojcomposite', 'jet-composites/oracle-dv/loader'], function(ko) {
+    ko.applyBindings();
+  });
+&lt;/script&gt;
+</code></pre>
+<p>Finally, the <code>&lt;oracle-dv&gt;</code> tag is used to display the visualization canvas in the target application, which in our case is Oracle APEX. For example, to display the first canvas, use:</p>
+<pre><code class="language-htm">&lt;oracle-dv project-path=&quot;/@Catalog/shared/Demos/CEO Dashboard (Sales)&quot; active-page=&quot;insight&quot; active-tab-id=&quot;snapshot!canvas!1&quot;&gt;
+&lt;/oracle-dv&gt;
+</code></pre>
+<p>To display a different canvas, such as <em>canvas3</em>, update the <code>active-tab-id</code> accordingly:</p>
+<pre><code class="language-htm">&lt;oracle-dv project-path=&quot;/@Catalog/shared/Demos/CEO Dashboard (Sales)&quot; active-page=&quot;insight&quot; active-tab-id=&quot;snapshot!canvas!3&quot;&gt;
+&lt;/oracle-dv&gt;
+</code></pre>
+<p><strong>REMARKS:</strong></p>
+<ol>
+<li>To open <strong>Developer Options</strong>, click on the Workbook Menu. The <strong>Developer</strong> option is the last item in the menu:</li>
+</ol>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/developer-options.png" alt="Developer option" style="max-width: 100%; height: auto;">
+</div>
+<ol start="2">
+<li>If the <strong>Developer</strong> option does not appear in the menu, Developer Options are not enabled. To enable them, click on the user icon (top right corner) and select <strong>Profile</strong>.</li>
+</ol>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/profile-option.png" alt="Profile option" style="max-width: 100%; height: auto;">
+</div>
+<p>Then, navigate to the <strong>Advanced</strong> tab and enable <strong>Developer options</strong>:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/enable-developer-options.png" alt="Enable developer options" style="max-width: 100%; height: auto;">
+</div>
+<h2>APEX Application</h2>
+<p>In this example, I created a straightforward APEX application to demonstrate how Oracle Analytics Cloud (OAC) can be embedded into an APEX environment. The application itself is simple, serving primarily as a container for the embedded analytics content.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/apex-application-created.png" alt="APEX Application Created" style="max-width: 100%; height: auto;">
+</div>
+<p>From the available pages, select <strong>1 - Home</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/apex-application-pages.png" alt="APEX Application pages" style="max-width: 100%; height: auto;">
+</div>
+<p>Within this page, a new region called <code>&lt;body&gt;</code> has been created. This region is where the main embedding takes place. While the application requires minimal coding overall, the integration involves specific configurations at two levels:</p>
+<ul>
+<li>The <code>&lt;page&gt;</code> level, where global JavaScript and variables are defined, and</li>
+<li>The <code>&lt;body&gt;</code> region, where the actual embedding of the OAC content occurs.</li>
+</ul>
+<p>Let’s first look at the <code>&lt;page&gt;</code> level. In the two fields labeled <strong>File URLs</strong> and <strong>Function and Global Variable Declaration</strong>, you should paste the code snippets provided under the <strong>Developer</strong> / <strong>Embed</strong> tab of the Data Visualization workbook (refer to the explanation above for details):</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/java-script.png" alt="Java Script" style="max-width: 100%; height: auto;">
+</div>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/page-level.png" alt="Page Level" style="max-width: 100%; height: auto;">
+</div>
+<p>After completing the page-level setup, navigate to the <code>&lt;body&gt;</code> region.</p>
+<p>In the <strong>Identification</strong> section, set the <strong>Type</strong> to <em>Static Content</em>.</p>
+<p>In the <strong>Source</strong> section, enter the following HTML snippet into the <em>HTML Code</em> field:</p>
+<pre><code class="language-htm">&lt;iframe src=&quot;https://&lt;Oracle Analytics Cloud URL&gt;.analytics.ocp.oraclecloud.com/ui/dv/ui/project.jsp?pageid=visualAnalyzer&amp;viewermode=true&amp;noheader=true&amp;reportmode=full&amp;reportpath=%2F%40Catalog%2Fshared%2FDemos%2FCEO%20Dashboard%20(Sales)&quot;  width=&quot;1200px&quot; height=&quot;900px&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;
+</code></pre>
+<p>I initially attempted to use the code snippet provided under the <strong>Developer</strong> tab that utilizes the <code>&lt;oracle-dv&gt;</code> custom element, but I was unable to get it to work. Any suggestions on what I might have missed or done incorrectly are more than welcome!</p>
+<p>Here is the snippet that should have worked but did not:</p>
+<pre><code class="language-htm">&lt;div style='width: 1200px; height: 900px'&gt;
+&lt;oracle-dv project-path=&quot;/@Catalog/shared/Demos/CEO Dashboard (Sales)&quot; active-page=&quot;insight&quot; active-tab-id=&quot;snapshot!canvas!1&quot;&gt;
+&lt;/oracle-dv&gt;
+&lt;/div&gt;
+</code></pre>
+<p>Since the <code>&lt;iframe&gt;</code>-based solution worked reliably, I decided to postpone troubleshooting the <code>&lt;oracle-dv&gt;</code> approach for now.</p>
+<p>At this point, you might expect that embedding Oracle Analytics Cloud Data Visualization directly within an APEX application would be straightforward. Indeed, several blog posts claim this integration works seamlessly. <strong>However, if you try to run your application now, it will not function as expected.</strong> This is because APEX uses its own authentication mechanism, while Oracle Analytics Cloud relies on Oracle Identity Cloud Service (IDCS). These two authentication systems are not integrated by default, which prevents the embedded content from loading properly.</p>
+<p>In summary, while it is possible to embed OAC content within an APEX application using an <code>&lt;iframe&gt;</code>, resolving the authentication challenge between APEX and Oracle Analytics Cloud is essential for a fully functional integration. Addressing this will be the next critical step in enabling seamless embedding and user experience.</p>
+
+<h2>Update OracleIdentityCloud domain</h2>
+<p>In this section, we'll walk through creating a new user group for users who need access to data visualization workbooks in Oracle Analytics. This step is optional if the user group already exists.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/create-a-new-user-group.png" alt="Create a new user group" style="max-width: 100%; height: auto;">
+</div>
+<p>Next, assign the newly created group access to the analytics instance. In this example, we assign the <strong>ServiceAdministrator</strong> application role to the new group, though this role can be adjusted as needed.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/assign-group-to-analytics-service.png" alt="Assign group to Analytics service" style="max-width: 100%; height: auto;">
+</div>
+<p>Finally, let's create a new application under <strong>Integrated Applications</strong>. This involves two key parts:</p>
+<ul>
+<li>Configuring the APEX application, and</li>
+<li>Setting up OAuth.</li>
+</ul>
+<p>When creating a new application, select <strong>Confidential Application</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/add-confidential-application.png" alt="Add confidential application" style="max-width: 100%; height: auto;">
+</div>
+<p>Follow the wizard to guide you through the process of setting up the new application.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/create-integrated-application.png" alt="Create Integrated application" style="max-width: 100%; height: auto;">
+</div>
+<p>Important entries to note:</p>
+<ul>
+<li>In the <strong>URLs</strong> section, enter the APEX application URL as the <strong>Application URL</strong>.</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/application-url.png" alt="Application URL" style="max-width: 100%; height: auto;">
+</div>
+<ul>
+<li>In the <strong>Authentication and Authorization</strong> section, check <strong>Enforce grants as authorization</strong>.</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/enforce-grants-as-authorization.png" alt="Enforce grants as authorization" style="max-width: 100%; height: auto;">
+</div>
+<p>When setting up OAuth, use the following configurations:</p>
+<ul>
+<li>
+<p>For <strong>Resource Server Configuration</strong>, select <strong>No resource server configuration</strong>.</p>
+</li>
+<li>
+<p>For <strong>Client Configuration</strong>, select <strong>Configure this application as a client now</strong>.</p>
+<ul>
+<li>
+<p>Check the <strong>Authorization code</strong> checkbox.</p>
+</li>
+<li>
+<p>Set the <strong>Redirect URL</strong> to:</p>
+<pre><code class="language-htm">https://&lt;APEX instance URL&gt;.adb.eu-frankfurt-1.oraclecloudapps.com/ords/apex_authentication.callback
+</code></pre>
+</li>
+<li>
+<p>Set the <strong>Post-logout redirect URL</strong> to:</p>
+<pre><code class="language-htm">https://&lt;APEX instance URL&gt;.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
+</code></pre>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/client-configuration.png" alt="Client configuration -1 " style="max-width: 100%; height: auto;">
+</div>
+</li>
+<li>
+<p>Check <strong>Add resources</strong> and add your analytics service to the resource list. This is necessary to enable API access for the Oracle Analytics application.</p>
+</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/client-configuration-2.png" alt="Client configuration - 2" style="max-width: 100%; height: auto;">
+</div>
+</li>
+</ul>
+<p>One more important detail: each application provides two key variables—<strong>Client ID</strong> and <strong>Client Secret</strong>. These will be required in the next step when creating <strong>Web Credentials</strong>.</p>
+<p>You can find <strong>Client ID</strong> and <strong>Client Secret</strong> in the <strong>OAuth Configuration</strong> section under <strong>General Information</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/client-id-and-client-secret.png" alt="Client ID and Client Secret" style="max-width: 100%; height: auto;">
+</div>
+<h2>Web Credentials</h2>
+<p>To enable your APEX application to access other applications, create <strong>Web Credentials</strong> using the <strong>Client ID</strong> and <strong>Client Secret</strong> obtained earlier.</p>
+<p>Navigate to the <strong>App Builder</strong> page in APEX and select <strong>Workspace Utilities</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/workspace-utilities.png" alt="Workspace Utilities" style="max-width: 100%; height: auto;">
+</div>
+<p>From the list of utilities, choose <strong>Web Credentials</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/web-credentials.png" alt="Web Credentials" style="max-width: 100%; height: auto;">
+</div>
+<p>On the <strong>Web Credentials</strong> page, provide the following information alongside <em>Name</em> and <em>Static ID</em>:</p>
+<ul>
+<li><strong>Authentication Type</strong>: select <em>Basic Authentication</em>.</li>
+<li>Enter the <em>Client ID</em> in the <strong>Client ID or Username</strong> field.</li>
+<li>Enter the <em>Client Secret</em> in the <strong>Client Secret or Password</strong> field. Re-enter the <strong>Client Secret</strong> in the <strong>Verify Client Secret or Password</strong> field.</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/create-web-credentials.png" alt="Create Web Credentials" style="max-width: 100%; height: auto;">
+</div>
+<h2>Create Authentication Scheme</h2>
+<p>The final step in this configuration is to create an Authentication Scheme. Several sections require configuration:</p>
+<ul>
+<li><strong>Name</strong></li>
+</ul>
+<p>Provide a name for the <strong>Authentication Scheme</strong> and select <em>Social Sign-in</em> for the <strong>Scheme Type</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/authentication-scheme-settings.png" alt="Authentication Scheme - Settings" style="max-width: 100%; height: auto;">
+</div>
+<ul>
+<li><strong>Settings</strong></li>
+</ul>
+<p>Under <strong>Settings</strong>, select the <strong>Credentials Store</strong> created in the previous <strong>Web Credentials</strong> step.</p>
+<p>Choose <em>OpenID Connect Provider</em> for <strong>Authentication Provider</strong>.</p>
+<p>For the <strong>Discovery URL</strong>, enter:</p>
+<pre><code class="language-htm">https://&lt;Identity Domain URL&gt;.identity.oraclecloud.com/.well-known/openid-configuration
+</code></pre>
+<p>You can find the IDCS Domain URL on the Identity Domain page:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/identity-domain-url.png" alt="Identity Domain URL" style="max-width: 100%; height: auto;">
+</div>
+<p>Use the Domain URL and append <code>/.well-known/openid-configuration</code> to complete the <strong>Discovery URL</strong>.</p>
+<p>Enter <em>profile</em> in the <strong>Scope</strong> field and <em>sub</em> in the <strong>Username</strong> field.</p>
+<ul>
+<li><strong>Post Log-in Processing</strong></li>
+</ul>
+<p>Select <em>URL</em> for <strong>Go to</strong> and enter the APEX application URL in the <strong>URL</strong> field.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/authentication-schema-post-login.png" alt="Identity Domain URL" style="max-width: 100%; height: auto;">
+</div>
+<h2>Almost Ready to Go!</h2>
+<p>Before going live, update the <strong>Security Attributes</strong> under <strong>Shared Components</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/security-attributes.png" alt="Security Attributes" style="max-width: 100%; height: auto;">
+</div>
+<p>Update the following fields and apply the changes:</p>
+<ul>
+<li>
+<p>In the <strong>Authentication</strong> section:</p>
+<ul>
+<li>Leave <em>APEX_PUBLIC_USER</em> as the <strong>Public User</strong>.</li>
+<li>Select the <strong>Authentication Scheme</strong> created in the previous step.</li>
+</ul>
+</li>
+<li>
+<p>In the <strong>Authorization</strong> section:</p>
+<ul>
+<li>Choose <em>No application authorization required</em> for the <strong>Authorization Scheme</strong>.</li>
+<li>Choose <em>Custom Code</em> for the <strong>Source for Roles or Group Schemes</strong>.</li>
+</ul>
+</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/apply-security-attributes.png" alt="Apply Security Attributes" style="max-width: 100%; height: auto;">
+</div>
+<h2>Run APEX Application</h2>
+<p>You are now ready to run the application:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/run-application.png" alt="Run Application" style="max-width: 100%; height: auto;">
+</div>
+<p>Alternatively, enter the following URL in your browser to access the APEX application:</p>
+<pre><code class="language-htm">https:// ... APEX instance URL ... .adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
+</code></pre>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/running-application.png" alt="Embed OAC into APEX Application" style="max-width: 100%; height: auto;">
+</div>
+<h2>Conclusion</h2>
+<p>This exercise demonstrates how to integrate Oracle Analytics Cloud with an APEX application through careful configuration of user groups, OAuth settings, web credentials, and authentication schemes. While the process involves multiple steps, it primarily consists of configuration tasks that ensure secure and seamless access between the applications.</p>
+<p>Throughout this process, I gained valuable hands-on experience creating my first APEX application and integrating it with Oracle Analytics. Although the tools have evolved since the days of WebDB and Oracle Portal, this exercise highlights the power and flexibility of modern Oracle Cloud services.</p>
+<p>I hope this guide serves as a helpful resource for others looking to achieve similar integrations. Future posts will explore additional use cases, including integrating Oracle Analytics Server with APEX in on-premises environments. As always, feedback and comments are welcome via my private email.</p>

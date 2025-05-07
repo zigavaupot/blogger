@@ -1,25 +1,25 @@
 # Maps Conditional Formatting
 
-![Maps Conditional Formatting](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting.png?raw=true)
+![Maps Conditional Formatting](https://zigavaupot.github.io/blogger/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting.png)
 
-Oracle Analytics Cloud (OAC) is now frequently updated on bi-monthly basis. May Update release has been announced a week or so ago, and I was able to take a look at preview version which brings again several nice new [features and functionalities](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acswn/index.html#ACSWN-GUID-CFF90F44-BCEB-49EE-B40B-8D040F02D476).
+Oracle Analytics Cloud (OAC) is now updated frequently on a bi-monthly basis, continuously adding valuable features that enhance user experience and analytical capabilities. The recent May Update, announced just a week ago, introduces several exciting new [features and functionalities](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acswn/index.html#ACSWN-GUID-CFF90F44-BCEB-49EE-B40B-8D040F02D476).
 
-The one that draw attention to me was **Maps Conditional Formatting**, an option to highlight important data events in map visualizations along with other visualization types.
+One feature that caught my attention is **Maps Conditional Formatting**—a powerful option that allows you to highlight key data points directly within map visualizations, just as you can with other chart types.
 
-So how does this work? Actually, it is very straight forward as the same model is used as with any other conditional formatting.
+So, how does it work? It’s actually very straightforward, using the same conditional formatting model familiar to users from other visualization types.
 
-![Initial Map](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/initial-map.png?raw=true)
+![Initial Map](https://zigavaupot.github.io/blogger/conditional-map-formatting-in-oracle-analytics/images/initial-map.png)
 
-The map above is the starting point and presents profitability by country. Couldn't be more simple, right?
+The map above is our starting point, showing profitability by country. Simple and clear, but without any conditional highlights.
 
-In order to implement conditional formatting on the map, click on the traffic light icon (*Manage Conditional Formatting Rules*). This will open **Conditional Formatting** popup window. 
+To apply conditional formatting, click on the traffic light icon (*Manage Conditional Formatting Rules*). This opens the **Conditional Formatting** popup window.
 
-![Conditional Formatting Window](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting-window.png?raw=true)
+![Conditional Formatting Window](https://zigavaupot.github.io/blogger/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting-window.png)
 
-Select to what this particular conditional formatting applies to, the whole workbook or just selected visualization. Provide a name for the rule and choose a measure. *Profit Ratio %* in this case. And then specify the bands and limits for the selected coloring.
+Here, you can choose whether the formatting applies to the entire workbook or just the selected visualization. Then, name your rule, select a measure—in this case, *Profit Ratio %*—and specify the value ranges and corresponding colors.
 
-Voila, map is instantly conditionally formatted. Very easy, very efficient.
+With just a few clicks, your map instantly reflects the conditional formatting, making it easier to spot important trends and outliers.
 
-![Conditional Formatting Completed](https://github.com/zigavaupot/blogger/blob/main/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting-completed.png?raw=true)
+![Conditional Formatting Completed](https://zigavaupot.github.io/blogger/conditional-map-formatting-in-oracle-analytics/images/conditional-formatting-completed.png)
 
-
+In summary, Maps Conditional Formatting enhances your ability to communicate insights visually and effectively within Oracle Analytics Cloud. I encourage you to explore this feature in your own workbooks and see how it can bring your data stories to life.

@@ -1,151 +1,153 @@
 ### Update OracleIdentityCloud domain
 
-I'll create a new user group for useers who have access to data visualizaion workbook in Oracle Analyitcs. This particular step isn't required if user group already exists.
+In this section, we'll walk through creating a new user group for users who need access to data visualization workbooks in Oracle Analytics. This step is optional if the user group already exists.
 
-![Create a new user group](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/create-a-new-user-group.png?raw=true)
+![Create a new user group](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/create-a-new-user-group.png)
 
-In the next step, newly created group is given access to the analytics instance. For this example, we are assigning ServiceAdmistirator (doesn't have to be) application role to the new group.
+Next, assign the newly created group access to the analytics instance. In this example, we assign the **ServiceAdministrator** application role to the new group, though this role can be adjusted as needed.
 
-![Assign group to Analytics service](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/assign-group-to-analytics-service.png?raw=true)
+![Assign group to Analytics service](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/assign-group-to-analytics-service.png)
 
-And finally, let's create an new application under **Integrated applications**. There are two parts to it:
-* APEX application configuration and
-* OAuth configuration.
+Finally, let's create a new application under **Integrated Applications**. This involves two key parts:
+* Configuring the APEX application, and
+* Setting up OAuth.
 
-When creating a new application, select Confidential application.
+When creating a new application, select **Confidential Application**.
 
-![Add confidential application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/add-confidential-application.png?raw=true)
+![Add confidential application](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/add-confidential-application.png)
 
-Then follow the wizard that guides you through the process of setting a new application.
+Follow the wizard to guide you through the process of setting up the new application.
 
-![Create Integrated application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/create-integrated-application.png?raw=true)
+![Create Integrated application](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/create-integrated-application.png)
 
-Important entries are as follows:
+Important entries to note:
 
-* Application URL in URLs section: enter APEX application URL.
+* In the **URLs** section, enter the APEX application URL as the **Application URL**.
 
-![Application URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/application-url.png?raw=true)
+![Application URL](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/application-url.png)
 
-* Check *Enforce grants as authorization* in Authentication and Authorization section.
+* In the **Authentication and Authorization** section, check **Enforce grants as authorization**.
 
-![Enforce grants as authorization](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/enforce-grants-as-authorization.png?raw=true)
+![Enforce grants as authorization](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/enforce-grants-as-authorization.png)
 
-When setting up OAuth enter the following:
+When setting up OAuth, use the following configurations:
 
-* Resource server configuration: check **No resource server configuration**
+* For **Resource Server Configuration**, select **No resource server configuration**.
 
-* Client configuration: check **Configure this applicaton as a client now**
-    + check **Authorization code** checkbox
-    + Redirect URL:
+* For **Client Configuration**, select **Configure this application as a client now**.
+    + Check the **Authorization code** checkbox.
+    + Set the **Redirect URL** to:
         ```htm
         https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/apex_authentication.callback
         ```
-    + Post-logout redirect URL: 
+    + Set the **Post-logout redirect URL** to:
         ```htm
         https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
         ```
-        ![Client configuration -1 ](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration.png?raw=true)
+        ![Client configuration -1 ](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/client-configuration.png)
 
-    + Check **Add resources** checkbox and add your analytics service in the resource list. This is needed to access API of Oracle Analytics application.
+    + Check **Add resources** and add your analytics service to the resource list. This is necessary to enable API access for the Oracle Analytics application.
 
-    ![Client configuration - 2](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-configuration-2.png?raw=true)
+    ![Client configuration - 2](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/client-configuration-2.png)
 
-There is one more thing that is important. Each application provides two variables: **Client ID** and **Client Secret**. These are required in the next step when we create **Web Credentials**.
+One more important detail: each application provides two key variables—**Client ID** and **Client Secret**. These will be required in the next step when creating **Web Credentials**.
 
-Information about **Client ID** and **Client Secret** can be found in **OAuth Configuration** section under **General Information**.
+You can find **Client ID** and **Client Secret** in the **OAuth Configuration** section under **General Information**.
 
-![Client ID and Client Secret](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/client-id-and-client-secret.png?raw=true)
+![Client ID and Client Secret](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/client-id-and-client-secret.png)
 
 ### Web Credentials
 
-In order to access other applications from APEX application, we need to create **Web Credentials** using **Client ID** and **Client Secret** created and stored in the previous step.
+To enable your APEX application to access other applications, create **Web Credentials** using the **Client ID** and **Client Secret** obtained earlier.
 
-Navigate to the **AppBuilder** page in APEX and open **Workspace Utilities**.
+Navigate to the **App Builder** page in APEX and select **Workspace Utilities**.
 
-![Workspace Utilities](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/workspace-utilities.png?raw=true)
+![Workspace Utilities](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/workspace-utilities.png)
 
-From the list of available utilities choose **Web Credentials**
+From the list of utilities, choose **Web Credentials**.
 
-![Web Credentials](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/web-credentials.png?raw=true)
+![Web Credentials](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/web-credentials.png)
 
-**Web Credentials** page opens. Besides *Name* and *Static ID, provide the following information:
+On the **Web Credentials** page, provide the following information alongside *Name* and *Static ID*:
 
-* **Authentication Type**: choose *Basic Authentication*
-* Enter *Client ID* in **Client ID or Username** field.
-* Enter *Client Secret* into **Client Secrete or Password** field. Reenter **Client Secret** into **Verify Client Secrete or Password** field.
+* **Authentication Type**: select *Basic Authentication*.
+* Enter the *Client ID* in the **Client ID or Username** field.
+* Enter the *Client Secret* in the **Client Secret or Password** field. Re-enter the **Client Secret** in the **Verify Client Secret or Password** field.
 
-![Create Web Credentials](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/create-web-credentials.png?raw=true)
+![Create Web Credentials](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/create-web-credentials.png)
 
 ### Create Authentication Scheme
 
-The last step in our configuration exercise is to create an Authentication Scheme. There are several sections that require settings:
+The final step in this configuration is to create an Authentication Scheme. Several sections require configuration:
 
-* Name
+* **Name**
 
-Provide **Authentication Scheme Name** and choose *Social Sing-in* for **Scheme Type**.
+Provide a name for the **Authentication Scheme** and select *Social Sign-in* for the **Scheme Type**.
 
-![Authentication Scheme - Settings](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/authentication-scheme-settings.png?raw=true)
+![Authentication Scheme - Settings](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/authentication-scheme-settings.png)
 
-* Settings
+* **Settings**
 
-Under **Settings** select **Credentials Store** that was created in the previous step in **Web Credentials** step.
+Under **Settings**, select the **Credentials Store** created in the previous **Web Credentials** step.
 
-Select *OpenID Connect Provider* for **Authentication Provider**
+Choose *OpenID Connect Provider* for **Authentication Provider**.
 
-In the **Discovery URL** enter the following URL:
+For the **Discovery URL**, enter:
 
 ```htm
 https://<Identity Domain URL>.identity.oraclecloud.com/.well-known/openid-configuration
 ```
 
-IDCS Domain URL can be found in Identity Domain Page:
+You can find the IDCS Domain URL on the Identity Domain page:
 
-![Identity Domain URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/identity-domain-url.png?raw=true)
+![Identity Domain URL](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/identity-domain-url.png)
 
-Use Domain URL and add `/.well-known/openid-configuration` to complete **Discovery URL**.
+Use the Domain URL and append `/.well-known/openid-configuration` to complete the **Discovery URL**.
 
-Enter *profile* in **Scope** field, and *sub* into **Username** field.
+Enter *profile* in the **Scope** field and *sub* in the **Username** field.
 
-* Post Log-in Processing
+* **Post Log-in Processing**
 
-Choose *URL* for **Go to** and enter *APEX application URL* in **URL**.
+Select *URL* for **Go to** and enter the APEX application URL in the **URL** field.
 
-![Identity Domain URL](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/authentication-schema-post-login.png?raw=true)
+![Identity Domain URL](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/authentication-schema-post-login.png)
 
-### Almost Ready to go!
+### Almost Ready to Go!
 
-Now, there is only one small bit to do before going live. Still under **Shared Components**, locate **Security Attributes**.
+Before going live, update the **Security Attributes** under **Shared Components**.
 
-![Security Attributes](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/security-attributes.png?raw=true)
+![Security Attributes](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/security-attributes.png)
 
-Update the following fields and then apply changes:
+Update the following fields and apply the changes:
 
-* In **Authentication** section:
-    + Leave *APEX_PUBLIC_USER* as **Public User**
-    + Select **Authentication Scheme** that was created in the previous step.
+* In the **Authentication** section:
+    + Leave *APEX_PUBLIC_USER* as the **Public User**.
+    + Select the **Authentication Scheme** created in the previous step.
 
-* In Authorization section:
-    + Choose *No application autorization required* for **Authorization Scheme**
-    + Choose *Custom Code* in **Source for Roles or Group Schemes**
+* In the **Authorization** section:
+    + Choose *No application authorization required* for the **Authorization Scheme**.
+    + Choose *Custom Code* for the **Source for Roles or Group Schemes**.
 
-![Apply Security Attributes](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/apply-security-attributes.png?raw=true)
+![Apply Security Attributes](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/apply-security-attributes.png)
 
 ### Run APEX Application
 
-We are now ready to go:
+You are now ready to run the application:
 
-![Run Application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/run-application.png?raw=true)
+![Run Application](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/run-application.png)
 
-or simply enter URL in browser pointing to APEX application:
+Alternatively, enter the following URL in your browser to access the APEX application:
 
 ```htm
 https://<APEX instance URL>.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/apexdemo/embed-oac-into-apex-application/home
 ```
 
-![Embed OAC into APEX Application](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/running-application.png?raw=true)
+![Embed OAC into APEX Application](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/running-application.png)
 
 ### Conclusion
 
-What to say for the end. As far my exercise goes, it is working nicely. There are quite a few steps, but mostly is about configurations. I had to play a bit to get all pieces working, but anyway it was nice exercise. At least I had to create my first APEX application. I must admit I haven't been playing with these tools since APEX' predecessors WebDB and Oracle Portal :).
+This exercise demonstrates how to integrate Oracle Analytics Cloud with an APEX application through careful configuration of user groups, OAuth settings, web credentials, and authentication schemes. While the process involves multiple steps, it primarily consists of configuration tasks that ensure secure and seamless access between the applications.
 
-I hope this post will help someone and I also believe this is not the last post on this topic as there are some interesting  use cases to be tested. We also have a case where a customer wants to integration Oracle Analytics Server and APEX, all running on premise. And as I said, any comment to my private email is welcome.
+Throughout this process, I gained valuable hands-on experience creating my first APEX application and integrating it with Oracle Analytics. Although the tools have evolved since the days of WebDB and Oracle Portal, this exercise highlights the power and flexibility of modern Oracle Cloud services.
+
+I hope this guide serves as a helpful resource for others looking to achieve similar integrations. Future posts will explore additional use cases, including integrating Oracle Analytics Server with APEX in on-premises environments. As always, feedback and comments are welcome via my private email.

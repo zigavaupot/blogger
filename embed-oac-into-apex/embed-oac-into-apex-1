@@ -1,53 +1,51 @@
-In one of my recent projects, the customer had a requirement to integrate visualizations from Oracle Analytics into Oracle APEX application that is running within Oracle Cloud Infrastructure.
+In a recent project, a customer required integrating visualizations from Oracle Analytics into an Oracle APEX application running within Oracle Cloud Infrastructure. This article shares my experience with this integration, highlighting useful resources and addressing some challenges I encountered along the way.
 
-It is not my prime focus, the integrations, so I checked Oracle's documentation first. There is no "cook book" in there, so I looked it up for some good resources on the internet.  Actually, you can find quite a lot of content out there, from blog posts, articles, even videos, however most of these are a bit old (not exactly obsolete) as both products have developed rapidly over the last couple of years.
+Integration is not my primary focus, so I started by reviewing Oracle's documentation. Unfortunately, there is no comprehensive "cookbook" available, which led me to explore various resources online. While many blog posts, articles, and videos exist, most are somewhat dated, though still relevant, as both products have evolved rapidly over the past few years.
 
-But still, I found some really good ones that I was able to help myself with. For example [Mike Durran's blog](https://medium.com/@insight2action) is usually the ultimate go-to source for these kind of things, and you can find quite a lot of content on this subject there. For example, you definitely want to check his article [A Guide to Embedding Oracle Analytics into Oracle APEX](https://medium.com/oracledevs/a-guide-to-embedding-oracle-analytics-into-oracle-application-express-apex-1799f6ba4626).
-
-In this blog post, I will try to describe my experience with integrating Oracle Analytics visualizations into Oracle APEX application, and point out some of the issues I encountered when I was following Mark's guide.
+Despite this, I found some excellent resources that helped me significantly. For instance, [Mike Durran's blog](https://medium.com/@insight2action) is an invaluable source for topics like this. I highly recommend his article [A Guide to Embedding Oracle Analytics into Oracle APEX](https://medium.com/oracledevs/a-guide-to-embedding-oracle-analytics-into-oracle-application-express-apex-1799f6ba4626) for a thorough understanding.
 
 ### Let's begin with Oracle Analytics first
 
-Our starting point is data visualization that shows company's sales.
+Our starting point is a data visualization that displays the company's sales.
 
-![CEO Dashboard](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/ceo-dashboard.png?raw=true)
+![CEO Dashboard](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/ceo-dashboard.png)
 
-There is one thing that we should pay attention to. In **Developer options**, besides performance statistics, you can find, under **Embed** tab, developer options that enable developers to embed analytics content in other applications, for example in Oracle APEX.
+One important aspect to note is the **Developer options** in Oracle Analytics. Under the **Embed** tab, developers can find options that facilitate embedding analytics content into other applications, such as Oracle APEX.
 
-To embed specific visualization in some other application, developer can simply copy HTML code into another application to display and present Oracle Analytics content.
+To embed a specific visualization into another application, a developer can simply copy the provided HTML code to display Oracle Analytics content.
 
-![HTML Code](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/embed-scripts.png?raw=true)
+![HTML Code](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/embed-scripts.png)
 
-The following two JavaScript code snippets have to be copied into HTML page at the page level tag:
+The following two JavaScript snippets must be included in the HTML page, typically at the page level:
 
 ```htm
 <script src="https://<your analytics instance>.analytics.ocp.oraclecloud.com/public/dv/v1/embedding/<embeddingMode>/embedding.js" type="application/javascript">
 </script>
 ```
 
-Pay attention to the *embeddingMode* part of the URL above. It has to possible values: *jet* and *standalone*:
+Pay close attention to the *embeddingMode* part of the URL, which can take two possible values: *jet* and *standalone*.
 
-* use *jet* if analytics content is embedded within an existing Oracle JET application, and
-* use *standalone* when embedding visualization content in a generic application that doesn’t use Oracle JET.
+* Use *jet* if the analytics content is embedded within an existing Oracle JET application.
+* Use *standalone* when embedding visualization content in a generic application that does not use Oracle JET.
 
-In the case of *standalone* option, Knockout bindings have to be applied after the visualization is fully loaded. This should be placed inside of a `<script>` tag after the `<oracle-dv>` tag (see below), or executed in an onload body handler.
+When using the *standalone* option, Knockout bindings must be applied after the visualization is fully loaded. This can be done by including the following script after the `<oracle-dv>` tag or by executing it in a body onload handler:
 
 ```htm
 <script>
-  requirejs(['knockout', 'ojs/ojcore', 'ojs/ojknockout', 'ojs/ojcomposite', 'jet-composites/oracle-dv/loader'],function(ko) {
-   ko.applyBindings();
-   });
+  requirejs(['knockout', 'ojs/ojcore', 'ojs/ojknockout', 'ojs/ojcomposite', 'jet-composites/oracle-dv/loader'], function(ko) {
+    ko.applyBindings();
+  });
 </script>
 ```
 
-Finally, the following code will be used to display visualization canvas in other application, Oracle APEX application in our case. The following `<oracle-dv>` tag will be used:
+Finally, the `<oracle-dv>` tag is used to display the visualization canvas in the target application, which in our case is Oracle APEX. For example, to display the first canvas, use:
 
 ```htm
 <oracle-dv project-path="/@Catalog/shared/Demos/CEO Dashboard (Sales)" active-page="insight" active-tab-id="snapshot!canvas!1">
 </oracle-dv>
 ```
 
-Example above displays *canvas1*, in the example below, *canvas3* will be displayed.
+To display a different canvas, such as *canvas3*, update the `active-tab-id` accordingly:
 
 ```htm
 <oracle-dv project-path="/@Catalog/shared/Demos/CEO Dashboard (Sales)" active-page="insight" active-tab-id="snapshot!canvas!3">
@@ -56,14 +54,14 @@ Example above displays *canvas1*, in the example below, *canvas3* will be displa
 
 **REMARKS:**
 
-1. To open **Developer Options** click on the Workbook Menu. **Developer** is the last option in the menu:
+1. To open **Developer Options**, click on the Workbook Menu. The **Developer** option is the last item in the menu:
 
-![Developer option](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/developer-options.png?raw=true)
+![Developer option](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/developer-options.png)
 
-2. If **Developer** option is not displayed in the menu, than Developer Options is not enabled. To enable them, click on user icon (top right corner) and choose **Profile**.
+2. If the **Developer** option does not appear in the menu, Developer Options are not enabled. To enable them, click on the user icon (top right corner) and select **Profile**.
 
-![Profile option](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/profile-option.png?raw=true)
+![Profile option](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/profile-option.png)
 
-Then, click on **Advanced** tab and click to **Enable developer options**:
+Then, navigate to the **Advanced** tab and enable **Developer options**:
 
-![Enable developer options](https://github.com/zigavaupot/blogger/blob/main/embed-oac-into-apex/images/enable-developer-options.png?raw=true)
+![Enable developer options](https://zigavaupot.github.io/blogger/embed-oac-into-apex/images/enable-developer-options.png)
