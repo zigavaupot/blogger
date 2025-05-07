@@ -1,60 +1,59 @@
+![Watchlists](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/watchlists.png)
+
 ### About Watchlists
 
-In this short post, I am discussing a very nice usability feature in Oracle Analytics called the Watchlist.
+In this post, I will introduce a powerful usability feature in Oracle Analytics called Watchlists. Watchlists provide users with a convenient way to monitor and interact with their most important visualizations directly from the home page, without needing to open full reports or workbooks. This feature helps users stay informed with live data updates at a glance and improves productivity by reducing the time spent searching for frequently used content.
 
-Users at their everyday's work frequently use a specific and limited number of reports or analysis. Oracle Analytics let users to mark these reports or analyses as favorites, which means these analyses will be displayed in the Favorite Workbooks section of Oracle Analytics Home Page, hence enabling users with fast and easy access to their favorite analyses.
+Users often rely on a specific set of reports or analyses in their daily work. Oracle Analytics allows users to mark these reports or analyses as favorites, which places them in the Favorite Workbooks section on the Oracle Analytics Home Page for quick access. Watchlists take this concept further by enabling users to add individual visualizations from their workbooks to a dedicated section on the home page, allowing them to review key insights immediately.
 
-Another way of presenting frequently used content, available in the latest release of Oracle Analytics, is the Watchlists. This idea has already been used in Oracle Analytics mobile applications. It has been introduced in Day by Day mobile application, and same functionality is available in Oracle Analytics Mobile app.
+Watchlists were initially introduced in Oracle Analytics mobile applications, such as the Day by Day app, and are now available in the main Oracle Analytics platform. This feature lets users run analyses and view results as "visualization cards" on the home page, so they can quickly scan important information without opening each analysis. Users are not required to review every detail unless they want to, which helps increase efficiency.
 
-The idea is give users ability to run analyses and review results, like "visualization cards", in user's home page without actually opening any of them. Users are not require to review analyses if they don't require more details, hence they are more productive.
+For example, Watchlists are especially useful when there are many workbooks stored in the catalog, and users would otherwise spend considerable time searching and locating their analyses.
 
-For example, using Watchlists can be particularly useful if there are a lot of workbooks stored in the catalog and users would spend a lot of time just by searching and locating their analyses in the catalog.
+When you customize your home page, you will notice that Watchlists is one of the available sections. Additionally, there is an option to enable Featured Watchlists at the top of the Home Page.
 
-When you Customize your home page, you can see that the Watchlists is one of the sections of the home page, and there is also an option to enable Featured Watchlists in the top of the Home Page.
+![Customize Home Page](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/analytics-home-page.png)
 
-![Customize Home Page](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/analytics-home-page.png?raw=true)
+### How to Create Watchlists
 
-### So what is needed to create such Watchlists?
+To add a visualization to a Watchlist, open a workbook and hover over the desired visualization. As usual, several icons appear in the top-right corner. Now, there is a new action called **Add to Watchlist**.
 
-In order to add a visualization to the Watchlist, open a workbook. If you hover over specific visualization, as always, there are some icons displayed at the top right corner. There is a new action, Add to Watchlist, added.
+![Start adding visualization to a new watchlist](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/add-to-a-new-watchlist-icon.png)
 
-![Start adding visualization to a new watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/add-to-a-new-watchlist-icon.png?raw=true)
+Click the **Add to Watchlist** icon to add the visualization to a new or existing Watchlist.
 
-Simply click on **Add to Watchlist** icon and add visualization to the new watchlist.
+A dialog box titled **Add to a New Watchlist** will open, allowing you to provide more details.
 
-A new **Add to a New Watchlist** dialog box opens and a bit more details can be provided.
+![Add to a new watchlist](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/add-to-a-new-watchlist.png)
 
-![Add to a new watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/add-to-a-new-watchlist.png?raw=true)
+You can add other visualizations to an existing Watchlist or create new Watchlists as needed.
 
-Other visualizations can be added to an existing watchlist now or new watchlists can be created.
+![Add to existing watchlist](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/add-to-existing-watchlist.png)
 
-![Add to existing watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/add-to-existing-watchlist.png?raw=true)
+If a Watchlist contains multiple visualizations, you can designate one as the first card to be displayed.
 
-In case there are more than one vizualization added to a watchlist, then one can always be defined as a first card of that watchlist.
+![Add as a first card in a watchlist](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/add-as-a-first-card-in-watchlist.png)
 
-![Add as a first card in a watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/add-as-a-first-card-in-watchlist.png?raw=true)
+The home page will now display your favorite Watchlist at the top.
 
-Homepage will now display favorite watchlist at the top of the page.
+![Home page with favorite watchlist](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/home-page-with-favorite-watchlist.png)
 
-![Home page with favorite watchlist](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/home-page-with-favorite-watchlist.png?raw=true)
+If you have created more than one Watchlist, you can switch between them using a menu next to the selected Watchlist name.
 
-If there are more than one watchlist created, these can be selected from a menu that is available next to the selected watchlist name.
+![Switching between watchlists](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/switching-between-watchlists.png)
 
-![Switching between watchlists](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/switching-between-watchlists.png?raw=true)
+Alternatively, all Watchlists are listed on the home page. If you select *Watchlist* in the search field, the list of existing Watchlists will be displayed.
 
-Otherwise, all watchlists are listed in the home page. If *Watchlist* is selected in search field, the list of existing watchlist is displayed. 
+![Watchlists](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/watchlists.png)
 
-![Watchlists](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/watchlists.png?raw=true)
+Remember, Watchlist cards are live—they use live data and live queries to keep your insights up to date.
 
-Let's not forget, watchlist cards are live - using live data and live queries:
+![Watchlists use live data and live queries](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/live-watchlist.png)
 
-![Watchlists use live data and live queries](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/live-watchlist.png?raw=true)
+Navigating through a Watchlist takes you to the detailed view of the selected Watchlist, where you can open it in a workbook for deeper analysis.
 
-
-Further navigation through watchlists take user to details of selected watchlist. From this point, selected watchlist can be opened in a workbook:
-
-![Open a workbook from selected watchlist card](https://github.com/zigavaupot/blogger/blob/main/using-watchlists-in-oracle-analytics/images/open-workbook-from-watchlist.png?raw=true)
+![Open a workbook from selected watchlist card](https://zigavaupot.github.io/blogger/using-watchlists-in-oracle-analytics/images/open-workbook-from-watchlist.png)
 
 ### Conclusion
 
-Watchlists are really nice feature that helps users to focus on what really matters. Important information is available literally at finger tips and if users want to drill into more details, these are available just a click or two away. From end-user perspective this is quite useful feature.
+Watchlists are a valuable feature that helps users focus on what truly matters by providing immediate access to key insights. They deliver important information right at your fingertips with live, up-to-date data, while allowing you to drill down into details with just a few clicks. By reducing the need to search through numerous reports and enabling quick monitoring of critical visualizations, Watchlists significantly enhance productivity and the overall user experience in Oracle Analytics.
