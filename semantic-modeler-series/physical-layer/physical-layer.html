@@ -1,0 +1,258 @@
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/images/oabootcamp-logo.png" alt="Oracle Analytics Bootcamp" style="max-width: 100%; height: auto;">
+</div>
+<h1>Physical Layer</h1>
+<p>The Physical Layer is the foundational layer in the three-tier semantic modeling architecture. It plays a crucial role in connecting Oracle Analytics to external data sources—such as databases—and determines how raw data is retrieved and structured before being transformed into business-friendly formats in the subsequent Logical and Presentation Layers. By establishing the groundwork for data connectivity, structure, and relationships, the Physical Layer ensures that downstream modeling and analytics are both reliable and performant.</p>
+<h2>What Does the Physical Layer Include?</h2>
+<ul>
+<li>
+<p><strong>Connections</strong> to data sources (e.g., relational databases on-premises or in the cloud, such as Oracle Autonomous Database, Snowflake, SQL Server, etc.). Connections are defined system-wide and can be reused across different models. As we have already learned, they can be regular or system connections.</p>
+</li>
+<li>
+<p><strong>Schemas</strong> and <strong>tables/views</strong>: When building the Physical Layer, you can import tables (or, preferably, their definitions). In addition to tables, views or SQL expressions are also supported. Once imported, tables can be renamed without affecting the underlying database tables. It's best practice to create aliases for imported tables and work with these aliases rather than directly with database tables—a topic we will revisit later.</p>
+</li>
+<li>
+<p><strong>Joins</strong> between tables define relationships within the model. The BI Server generates queries executed against database tables using these join definitions. Therefore, join definitions are critical and must be handled with care. There is no requirement for a specific physical model in the database before import—it can be 3NF, star, snowflake, or even a flat, denormalized table. The Physical Layer imposes no constraints, whereas the Logical Layer will require a star schema.</p>
+</li>
+<li>
+<p>Optional <strong>data source filters</strong>, <strong>caching settings</strong>, and <strong>descriptions</strong>:</p>
+<ul>
+<li>Data source filters can be directly applied to physical data sources, enabling row-level security.</li>
+<li>You can define caching strategies for each table in the Physical Layer.</li>
+</ul>
+</li>
+</ul>
+<h2>Why Is the Physical Layer Important?</h2>
+<ul>
+<li>It abstracts raw data from end users. Business users never have to deal with tables or SQL—they interact with the Logical and Presentation Layers.</li>
+<li>It enables performance tuning at the lowest level.</li>
+<li>It gives developers and administrators control over source metadata, joins, and security before data is transformed into business-friendly formats.</li>
+</ul>
+<p>In this lab, we will walk through the process of creating a Physical Layer. Let’s get started!</p>
+<h2>Creating a New Database</h2>
+<p>First, navigate to the <strong>Physical Layer</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/empty-physical-layer.png" alt="Physical Layer" style="max-width: 100%; height: auto;">
+</div>
+<p>You may notice a default database called <em>MyDatabase</em>. This is a placeholder and needs updating. You can either update it or, as we recommend, start from scratch by deleting any existing database (be cautious with deletions unless you are working in a new semantic model!).</p>
+<p>To create a new database, click the plus icon (<img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png" alt="plus" width="16" style="max-width: 100%; height: auto;">) next to the Search field and select <strong>Create Database</strong>:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/create-database.png" alt="Create Database" style="max-width: 100%; height: auto;">
+</div>
+<p>The <strong>Create Database</strong> dialog will appear. Enter a <strong>Name</strong>, optionally a <strong>Description</strong>, and select your <strong>Database Type</strong>. In our case, choose <em>Oracle Autonomous Data Warehouse</em>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/create-database-dialog.png" alt="Create Database dialog" style="max-width: 100%; height: auto;">
+</div>
+<p>Click <strong>Ok</strong> to create the new database.</p>
+<p>The newly created database will open in the main canvas area, currently empty:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/oabootcamp-database-empty.png" alt="OA Bootcamp Database created" style="max-width: 100%; height: auto;">
+</div>
+<p>Your database is defined by five tabs:</p>
+<ul>
+<li><strong>General</strong>: General database definitions like database name and type.</li>
+<li><strong>Tables</strong>: Lists all physical tables (and aliases) in the database.</li>
+<li><strong>Advanced</strong>: Configure database-specific SQL behavior.</li>
+<li><strong>Connection Pools</strong>: Shows all connection pools defined for the database.</li>
+<li><strong>Query Limits</strong>: Set query-level restrictions at the database level.</li>
+</ul>
+<p>For this exercise, we will focus on <strong>Tables</strong> and <strong>Connection Pools</strong>.</p>
+<h2>Connection Pools</h2>
+<p>A connection pool defines how Oracle Analytics connects to the database—including credentials, maximum connections, timeouts, and more. You can define multiple connection pools for a database. For example, it's good practice to have a separate connection pool for variable initialization, so typically you might expect more than one connection pool here. For our lab, one will suffice.</p>
+<p>Navigate to the <strong>Connection Pools</strong> tab. As expected, the list is empty.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/connection-pools-empty.png" alt="Connection Pools" style="max-width: 100%; height: auto;">
+</div>
+<p>To enable database connectivity, you need to create at least one connection pool.</p>
+<p>Click the plus icon (<img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/plus-sign.png" alt="plus" width="16" style="max-width: 100%; height: auto;">) next to the Search field. This will automatically add a new connection pool.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/add-connection-pool.png" alt="Adding a new Connection Pool" style="max-width: 100%; height: auto;">
+</div>
+<p>Click the details icon:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/details-icon.png" alt="Details Icon" style="max-width: 100%; height: auto;">
+</div>
+<p>This icon behaves consistently throughout the Semantic Modeler: it opens the details for the selected object—in this case, the connection pool <em>New Connection Pool_1</em>.</p>
+<p>You can now update the connection pool details, such as the <strong>Name</strong>. Let's rename it to <em>OA Bootcamp Connection Pool - Main</em>. We will explore connection pools in greater depth in later chapters.</p>
+<p>Save your progress so far. The save icon (diskette) is located at the top right (<img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/diskette-icon.png" alt="plus" width="16" style="max-width: 100%; height: auto;">).</p>
+<h2>Tables</h2>
+<p>The <strong>Tables</strong> section is the core of the database definition. Here, you import tables, views, or SQL query results, and define joins between tables.</p>
+<p>We'll start by importing dimension tables. There are four dimension tables (tables beginning with <em>D_</em>). There are several ways to add tables, but we'll use the simplest: drag and drop.</p>
+<p>In the navigation bar on the left, switch to the <strong>Connections</strong> tab. Expand <strong>Schemas</strong> and select the <strong>OABOOTCAMP</strong> schema. Click on the following tables:</p>
+<ul>
+<li>D_CUSTOMERS</li>
+<li>D_GEOGRAPHY</li>
+<li>D_PRODUCTS</li>
+<li>D_TIME</li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/import-dimension-tables.png" alt="Import Dimension Tables" style="max-width: 100%; height: auto;">
+</div>
+<p>Drag the selected tables onto the <strong>Tables</strong> section of the canvas and drop them there. All four dimension tables should now appear in the database.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/after-import-dimension-tables.png" alt="After Import Dimension Tables" style="max-width: 100%; height: auto;">
+</div>
+<p>Alternatively, you can add a new table by clicking the plus sign (<img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png" alt="plus" width="16" style="max-width: 100%; height: auto;">) next to <strong>Tables</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/add-table.png" alt="Add Table" style="max-width: 100%; height: auto;">
+</div>
+<p>When clicked, a menu appears. Select <strong>Add Table</strong>. In the <strong>Select Table</strong> dialog, expand <strong>Schemas</strong> and navigate to the fact table <strong>F_REVENUE</strong>. Select it and click <strong>Select</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/select-table.png" alt="Add Table" style="max-width: 100%; height: auto;">
+</div>
+<p>After refreshing, you should see five tables: four dimension tables and one fact table.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/tables-list.png" alt="Tables list" style="max-width: 100%; height: auto;">
+</div>
+<p>Let’s add one more table—a new dimension table called <strong>D_ORDERS</strong>, whose columns will be a subset of columns from the F_REVENUE table.</p>
+<p>Click the plus sign (<img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png" alt="plus" width="16" style="max-width: 100%; height: auto;">) next to <strong>Tables</strong> again.</p>
+<p>This time, select <strong>Create Physical Table</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/create-physical-table.png" alt="Create Physical Table" style="max-width: 100%; height: auto;">
+</div>
+<p>In the first step of the <strong>Create Physical Table</strong> dialog, provide a name for the new table—<strong>D_ORDERS</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/create-physical-table-dialog-1.png" alt="Create Physical Table Dialog 1" style="max-width: 100%; height: auto;">
+</div>
+<p>Click <strong>Ok</strong> to continue.</p>
+<p>A new tab for <strong>D_ORDERS</strong> opens. There are several ways to define columns for this new Physical Table. We will use a SQL Query to populate the table.</p>
+<p>First, navigate to the <strong>General</strong> tab. Observe that <strong>Source</strong> is set to <em>Table</em>. Change it to <em>Select Statement</em>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/change-source-to-select-statement.png" alt="Select Source to Select Statement" style="max-width: 100%; height: auto;">
+</div>
+<p>Go to the <strong>Columns</strong> tab and enter the following SQL code in the <strong>Select Statement</strong>:</p>
+<pre><code class="language-sql">SELECT  ORDER_KEY,
+        ORDER_STATUS, 
+        CHANNEL_NAME,
+        TIME_BILL_DT,  
+        TIME_PAID_DT
+FROM F_REVENUE
+</code></pre>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/select-statement-sql.png" alt="Select Statement SQL" style="max-width: 100%; height: auto;">
+</div>
+<p>Now, add columns to match the results of the SQL statement.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/add-new-columns.png" alt="Add new columns" style="max-width: 100%; height: auto;">
+</div>
+<p>Run a <strong>Preview</strong> to check your SQL query:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/preview-data.png" alt="Preview" style="max-width: 100%; height: auto;">
+</div>
+<p>Save your work.</p>
+<p>At this point, you have imported several dimension tables, added a fact table, and created a new physical table based on a SQL query.</p>
+<p>Next, we will remove columns from the fact table that are neither foreign keys nor measures. By default, fact tables should only contain columns that are either measures or foreign keys relating to dimensions.</p>
+<p>In the <strong>F_REVENUE</strong> fact table, two such candidates are <strong>ORDER_STATUS</strong> and <strong>CHANNEL_NAME</strong>. Both columns have been included in the <strong>D_ORDERS</strong> table and will relate to the fact table using <strong>ORDER_KEY</strong>, so it is safe to remove them from <strong>F_REVENUE</strong>.</p>
+<p>Double-click <strong>F_REVENUE</strong> in the navigation bar on the left. A new page opens with the definition of <strong>F_REVENUE</strong>:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/f_revenue-table-definition.png" alt="F_REVENUE" style="max-width: 100%; height: auto;">
+</div>
+<p>Right-click <strong>ORDER_STATUS</strong> in the column list and select <strong>Delete</strong> from the menu:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/delete-column.png" alt="Delete ORDER_STATUS column" style="max-width: 100%; height: auto;">
+</div>
+<p>Repeat the deletion for <strong>CHANNEL_NAME</strong>.</p>
+<p><strong>F_REVENUE</strong> now contains the following columns:</p>
+<ul>
+<li><strong>Measures</strong>
+<ul>
+<li>UNITS</li>
+<li>COST_FIXED</li>
+<li>COST_VARIABLE</li>
+<li>REVENUE</li>
+<li>DISCNT_VALUE</li>
+</ul>
+</li>
+<li><strong>Foreign Keys</strong>
+<ul>
+<li>ORDER_KEY</li>
+<li>PROD_ITEM_KEY</li>
+<li>ADDR_KEY</li>
+<li>CUST_NUMBER</li>
+<li>TIME_BILL_DT</li>
+<li>TIME_PAID_DT</li>
+</ul>
+</li>
+</ul>
+<h2>Table Aliases</h2>
+<p>It is best practice—and often necessary—to create aliases for all physical tables in your database. In some scenarios, as we will see, aliases are required.</p>
+<p>Currently, we have six tables in our database: five dimension tables and one fact table. We will create an alias for each, as follows:</p>
+<p>Right-click the desired table name in the <strong>Tables</strong> list. The table menu opens; select <strong>Create Physical Table Alias</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/create-physical-table-alias.png" alt="Create Physical Table Alias" style="max-width: 100%; height: auto;">
+</div>
+<p>When the Create Physical Table Alias dialog opens, provide a name for the alias.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/create-physical-table-alias-dialog.png" alt="Create Physical Table Alias dialog" style="max-width: 100%; height: auto;">
+</div>
+<p>Repeat these steps for all tables except the dimension table D_TIME.</p>
+<p>When finished, your <strong>Tables</strong> list should look like this:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/alias-tables-before-d_time.png" alt="Alias tables before D_TIME" style="max-width: 100%; height: auto;">
+</div>
+<p>Why treat D_TIME differently? In the fact table, there are two important DATETIME columns:</p>
+<ul>
+<li>TIME_BILL_DT: billing date</li>
+<li>TIME_PAID_DT: payment date</li>
+</ul>
+<p>Both relate to the same dimension table, D_TIME. But if only one D_TIME table exists, which date should be joined? Since both are important, the solution is to create two alias tables:</p>
+<ul>
+<li>D_TIME_BILL_DT</li>
+<li>D_TIME_PAID_DT</li>
+</ul>
+<p>You do not need separate database tables for each—one time dimension table in your database schema is sufficient. In Oracle Analytics, you resolve this by introducing as many alias tables as needed.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/d_time_alias_tables.png" alt="D_TIME alias tables" style="max-width: 100%; height: auto;">
+</div>
+<p>In summary, the following alias tables have been created:</p>
+<ul>
+<li>DIM_CUSTOMERS</li>
+<li>DIM_GEOGRAPHY</li>
+<li>DIM_PRODUCTS</li>
+<li>DIM_ORDERS</li>
+<li>DIM_TIME_BILL_DT</li>
+<li>DIM_TIME_PAID_DT</li>
+<li>FACT_REVENUE</li>
+</ul>
+<p>Now we are ready to define <strong>Joins</strong>.</p>
+<h2>Joins</h2>
+<p>Joins are essential because they serve as explicit instructions for the BI Server on how to generate queries. Unless constraints have already been implemented in the database (which is rare in data warehouses), you must create joins manually.</p>
+<p>There are two options:</p>
+<ul>
+<li>Use a dialog-driven approach to define and specify each relationship between two tables.</li>
+<li>Use the graphical interface to draw relationships between tables.</li>
+</ul>
+<p>Let’s demonstrate the dialog-driven approach first.</p>
+<p>Under the <strong>Tables</strong> tab, there is a <strong>Joins</strong> section.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/joins-section-empty.png" alt="Joins section - empty" style="max-width: 100%; height: auto;">
+</div>
+<p>To add a new join, click the plus sign (<img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-new-semantic-model/images/plus-sign.png" alt="plus" width="16" style="max-width: 100%; height: auto;">) next to <strong>Joins</strong>. The <strong>Add Physical Join</strong> dialog appears. Define a new join as needed:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/add-physical-join.png" alt="Add Physical Join" style="max-width: 100%; height: auto;">
+</div>
+<p>Click <strong>Add</strong> to save and add the new join to the list.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/updated-joins-list.png" alt="Updated Joins list" style="max-width: 100%; height: auto;">
+</div>
+<p>You can continue defining joins one by one, or use the graphical approach.</p>
+<p>Select all <em>Dim_</em> and <em>Fact_</em> tables from the list, right-click, and choose <strong>Show Physical Diagram</strong> → <strong>Selected Tables Only</strong>. Alternatively, you can add required tables one by one by dragging and dropping them into the diagram.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/physical-diagram-1.png" alt="Physical Diagram - 1" style="max-width: 100%; height: auto;">
+</div>
+<p>In the diagram above, you can see the join created in the previous step. Note the direction of the arrow: it points from the fact table to the dimension table, indicating a Many-to-One relationship (from the fact table’s perspective).</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/physical-diagram-2.png" alt="Physical Diagram - 2" style="max-width: 100%; height: auto;">
+</div>
+<p>Now, add all other joins. Be mindful of direction—drag from the fact table outward.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/physical-diagram-3.png" alt="Physical Diagram - 3" style="max-width: 100%; height: auto;">
+</div>
+<p>When finished, simply close the <strong>Physical Diagram 1</strong> tab.</p>
+<p>The final joins list should contain the following joins:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/physical-layer/images/joins-list-final.png" alt="Final Joins List" style="max-width: 100%; height: auto;">
+</div>
+<hr>
+<h2>Conclusion</h2>
+<p>In this session, we have built out the Physical Layer: establishing connections, importing tables and views, creating aliases, cleaning up the fact table, and defining joins. This critical groundwork ensures that the raw data is ready for logical modeling and business transformation. With a well-prepared Physical Layer, you are now ready to move on to the next phase: designing the <strong>Logical Layer</strong> (also known as the Business Layer), where business meaning and usability come to the forefront.</p>
