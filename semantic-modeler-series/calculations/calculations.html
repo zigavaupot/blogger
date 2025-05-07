@@ -1,0 +1,253 @@
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true" alt="Oracle Analytics Bootcamp" style="max-width: 400px; height: auto;">
+</p>
+<p>In Oracle Analytics, calculations are a powerful way to create reusable business logic, KPIs, and metrics. These calculations reside in the <strong>logical layer</strong> (<strong>Business Model and Mapping</strong>), where they can be defined once and reused across multiple dashboards and reports, improving consistency and reducing maintenance effort.</p>
+<p>When we created a new <strong>Business Model</strong> in the <strong>Logical Layer</strong>, we defined measures in two main ways:</p>
+<ul>
+<li>The <strong>Fact table</strong> contains columns that are <em>natural</em> measures, such as <em>REVENUE</em> or <em>UNITS</em>.</li>
+<li>We can also use foreign key columns in a <strong>Fact Table</strong> to create count-based <strong>measures</strong>, such as <em># of Orders</em> or <em># of Distinct Customers</em>.</li>
+</ul>
+<p>However, these are not the only types of <strong>measures</strong> we can create in our <strong>Business Model</strong>. <strong>Calculations</strong> or <strong>Calculated Measures</strong> are essential for capturing business logic that may not exist as a raw column in your source data. While calculated measures are typically included in <strong>Facts</strong>, we can also define calculated columns in <strong>Dimensions</strong>. This separation between facts and dimensions is important: facts typically represent measurable events, while dimensions provide context for analysis (such as time, product, or customer). Keeping these distinct helps ensure clarity and performance in your model.</p>
+<p>Let’s take a look at creating calculations both in <strong>Facts</strong> and as calculated columns.</p>
+<p>Open the <strong>semantic model</strong> we created and navigate to the <strong>Logical Layer</strong>. Expand the <strong>business model</strong> and click on the <strong>fact table</strong> <em>F Revenue</em> to open its table page.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/open-fact-table-page.png?raw=true" alt="Open fact table page" style="max-width: 600px; height: auto;">
+</p>
+<h3>Simple Measure Calculations</h3>
+<p>Reviewing the existing measures, we often identify the need for additional business metrics that are not directly available in the source data. For example, let's create the following measures:</p>
+<ul>
+<li><code>Total Costs = Fixed Costs + Variable Costs</code></li>
+<li><code>Profit = Revenue - Total Costs</code></li>
+<li><code>Profit Margin % = Profit / Revenue * 100</code></li>
+</ul>
+<p>To add a new measure, start by clicking on the <strong>plus icon</strong> next to <em>Search Columns</em> and select <strong>Create New Column</strong>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-new-column.png?raw=true" alt="Create New Column" style="max-width: 600px; height: auto;">
+</p>
+<p>This action adds a new row for your column in the <strong>Columns list</strong>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/new-column-added.png?raw=true" alt="New Column added" style="max-width: 600px; height: auto;">
+</p>
+<p>Click on the <strong>Details Icon</strong> (located above the list):</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/details-icon.png?raw=true" alt="Details Icon" style="max-width: 600px; height: auto;">
+</p>
+<p>Name your new column and then click <strong>Logical Expression</strong> in the <strong>Sources</strong> section.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/check-logical-expression.png?raw=true" alt="Check Logical Expression" style="max-width: 600px; height: auto;">
+</p>
+<p>Simple formulas can be entered directly into the field in the <strong>Sources</strong> section. However, it is recommended to click the
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-icon.png?raw=true" alt="Open Expression Editor Icon" width="24" height="24">
+  to open the <strong>Expression Editor</strong>. The Expression Editor not only provides syntax highlighting and function lookup, but also helps you validate and troubleshoot your formulas before saving them to the <strong>Business Model</strong>. This is especially useful for new users or for more complex logic.
+</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/using-expression-editor.png?raw=true" alt="Using Expression Editor" style="max-width: 600px; height: auto;">
+</p>
+<p>Once your formula is <strong>validated</strong>, you can save it and proceed to create additional calculations as needed.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-total-costs.png?raw=true" alt="Calculation - Total Costs" style="max-width: 600px; height: auto;">
+</p>
+<p>We can now create additional two calculations (<strong>Save</strong> your model first!):</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-profit.png?raw=true" alt="Calculation - Profit" style="max-width: 600px; height: auto;">
+</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-profit-margin.png?raw=true" alt="Calculation - Profit" style="max-width: 600px; height: auto;">
+</p>
+<p><strong>Note</strong>: Whether multiplying by 100 is required depends on your reporting needs; many data visualization tools allow you to format values as percentages, automatically multiplying by 100 for display purposes.</p>
+<p>We have now created three measures which are available to all users—so there is no need for users to create these measures individually in their reports. This centralizes business logic and ensures consistency.</p>
+<p>Next, let's look at a special type of calculation frequently used in business analytics: Time Series Calculations.</p>
+<h3>Time Series Calculations</h3>
+<p><strong>Time Series Calculations</strong> enable users to perform powerful period-based comparisons, such as Year-over-Year (YoY), Month-to-Date (MTD), Year-to-Date (YTD), and rolling period averages. These calculations are built using specialized time-series functions within the semantic model and depend on a properly defined Time Dimension.</p>
+<p><strong>Why Chronological Keys Matter:</strong><br>
+For Time Series Calculations to work correctly, your Time Dimension must have <strong>Chronological Keys</strong> defined. These keys ensure that Oracle Analytics understands the order of your time periods, allowing functions like AGO and TODATE to return accurate results. Without chronological keys, period-based calculations may produce incorrect or unpredictable outputs.</p>
+<p><strong>Common Time Series functions in Oracle Analytics include:</strong></p>
+<ul>
+<li><strong>AGO()</strong>: Returns the value of a measure from a previous time period (for example, Revenue from the prior year).<br>
+<em>Example</em>: <code>AGO(&quot;Revenue&quot;, &quot;Year&quot;, 1)</code> returns last year's revenue.</li>
+<li><strong>TODATE()</strong>: Accumulates values from the beginning of a period to the current point (e.g., MTD, YTD).<br>
+<em>Example</em>: <code>TODATE(&quot;Revenue&quot;, &quot;Year&quot;)</code> returns year-to-date revenue.</li>
+<li><strong>PERIODROLLING()</strong>: Returns a rolling sum (or other aggregate) over a defined period window.<br>
+<em>Example</em>: <code>PERIODROLLING(&quot;Revenue&quot;, 1, 3)</code> returns the sum of revenue for the current and previous two periods.</li>
+</ul>
+<p>Let’s create two measures using <strong>AGO()</strong> and <strong>TODATE()</strong> for the measure <em>Revenue</em>. We’ll use <em>D Billing Date</em> as the <strong>Time Dimension</strong>.</p>
+<p>Start by <strong>creating a new column</strong> as described earlier.</p>
+<p>In the <strong>Expression Editor</strong>, if you are unsure about the function syntax, you can look it up on the right side of the editor. This is especially helpful for new users, as the editor provides function definitions and usage examples.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-ago.png?raw=true" alt="Expression Editor - Ago" style="max-width: 600px; height: auto;">
+</p>
+<p>You can review detailed syntax and examples for any selected function. Double-clicking a function from the list copies its syntax into the <strong>Expression</strong> area, helping you get started quickly.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-syntax.png?raw=true" alt="Expression Editor - Syntax" style="max-width: 600px; height: auto;">
+</p>
+<p>Enter the required attributes for your formula by referencing the business model and its tables/columns. Pay special attention to the <em>TIME_LEVEL</em> parameter, which is derived from the time hierarchy in your Time Dimension.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/define-and-validate-expression.png?raw=true" alt="Define and validate expression" style="max-width: 600px; height: auto;">
+</p>
+<p>In a similar way, create a new time series measure: <em>Revenue Year-to-Date</em> using the <strong>TODATE()</strong> function.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/time-series-calculation-todate.png?raw=true" alt="TODATE expression" style="max-width: 600px; height: auto;">
+</p>
+<p>You can also create <em>Revenue Year-over-Year</em> and <em>Revenue Year-over-Year Growth Index</em> using combinations of these functions. For example, YoY Growth Index can be calculated as:<br>
+<code>(&quot;Revenue&quot; / AGO(&quot;Revenue&quot;, &quot;Year&quot;, 1)) * 100</code></p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year.png?raw=true" alt="YoY calculation" style="max-width: 600px; height: auto;">
+</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year-idx.png?raw=true" alt="YoY calculation" style="max-width: 600px; height: auto;">
+</p>
+<h3>Level-Based Measures</h3>
+<p><strong>Level-Based Measures</strong> are a powerful feature in the Business Model (Logical Layer) that allow developers to create aggregated measures at a specific dimension level. Regardless of how the data is grouped in an analysis, these measures always present data at the required aggregation level.</p>
+<p>A <strong>Level-Based Measure</strong> is a metric (such as <em>Revenue</em> or <em>Sales</em>) that is pre-aggregated at a specific hierarchy level—such as Year, Region, or Product Brand—instead of dynamically responding to the query level.</p>
+<p>Let’s create a <em>Total Annual Revenue</em> measure as an example. From its name, we know that we need to <strong>aggregate all revenues by all dimensions at their top level, except for Year</strong>.</p>
+<p>Here, we use a <strong>Physical Expression</strong> rather than a <strong>Logical Expression</strong> as in previous cases. First, specify the base measure for your <strong>level-based measure</strong> (in this case, <em>Revenue</em>).</p>
+<p>Then, set up the aggregation:</p>
+<ul>
+<li>Select an <strong>Aggregation Rule</strong> (<em>SUM</em> in this example)</li>
+<li>Define levels for all dimensions: set all <strong>Logical Levels</strong> to the top level except for the <em>D Billing Date</em> dimension, where you set <strong>Logical Level</strong> to <em>Year</em>.</li>
+</ul>
+<p><strong>Why set all other dimensions to the top level?</strong><br>
+By setting all other dimensions to their top levels, you ensure that your measure aggregates across the entire dataset except for the dimension of interest (e.g., Year). This is crucial for calculations like market share, ratios, or benchmarks, where you often need a total value to use as a denominator or reference.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year.png?raw=true" alt="Level-Based Measure - Year" style="max-width: 600px; height: auto;">
+</p>
+<p>This approach is useful, for example, when calculating revenue shares by customer segments: you need the total revenue for a specific year to use as the denominator in the revenue share calculation by segments.</p>
+<p>Now, let's add another <strong>level-based measure</strong> similar to the one above, except it aggregates on the <em>D Customer</em> dimension at the <em>Customer Segment</em> level.</p>
+<p>Instead of creating a new measure from scratch, you can simply duplicate the existing column:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/duplicate-column.png?raw=true" alt="Duplicate Column"></p>
+<p>Now, update only the attributes that need to change:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year-segment.png?raw=true" alt="Level-Based Measure - Year/Customer Segment" style="max-width: 600px; height: auto;">
+</p>
+<h3>Expressions in Dimension Tables</h3>
+<p>We can also create calculations or expressions on columns in <strong>Dimension Tables</strong>. This is helpful for enriching your data model with derived attributes that provide more business value.</p>
+<p>For example, the <em>D Customer</em> logical table contains a column <em>Birth Date</em>:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/d_customer-birth_date.png?raw=true" alt="Birth Date" style="max-width: 600px; height: auto;">
+</p>
+<p>Instead of using birth date directly, it’s often more useful to have the customer’s age in years. We can introduce a new column <em>Age</em> that calculates the actual customer’s age based on the difference between <em>CURRENT_DATE</em> (a predefined session variable) and <em>Birth Date</em>.</p>
+<p>First, create a new column in <em>D Customer</em>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-new-column-in-dimension.png?raw=true" alt="Create a new column in dimension" style="max-width: 600px; height: auto;">
+</p>
+<p>Using the <strong>Expression Editor</strong>, use the <em>TimeStampDiff</em> function to calculate the difference between <em>CURRENT_DATE</em> and <em>Birth Date</em> to derive <em>Age</em>.<br>
+<em>Example</em>:<br>
+<code>TimeStampDiff(SQL_TSI_YEAR, &quot;D Customer&quot;.&quot;Birth Date&quot;, CURRENT_DATE)</code></p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculate-age.png?raw=true" alt="Calculate Age" style="max-width: 600px; height: auto;">
+</p>
+<p>Similarly, you can create additional derived columns in <strong>Dimension Tables</strong> as needed. This simple example shows that you are not limited to creating calculations only in fact tables; you can also use expressions within dimensions to enhance your data model.</p>
+<h3>Updating Subject Area</h3>
+<p>After adding new measures and calculations, these changes are not immediately reflected in your deployed <strong>Subject Area</strong>. To make them available to end-users, you need to update the <strong>Presentation Layer</strong> and deploy the changes to the BI Server.</p>
+<p>Open the <strong>Presentation Layer</strong> first.</p>
+<p>The <strong>Subject Area</strong> <em>OA Bootcamp Subject Area</em> currently looks like this:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/subject-area-before-update.png?raw=true" alt="Subject Area before update" style="max-width: 600px; height: auto;">
+</p>
+<p>Since we have introduced several new measures, it’s a good opportunity to reorganize the <strong>presentation folder</strong> <em>F Revenue</em> for better user experience and easier maintenance. When you open the <em>F Revenue</em> presentation table, you might see all columns—even those not needed by end-users—and notice some are missing.</p>
+<p>Start by deleting columns that are not required. These columns are:</p>
+<ul>
+<li>TIME_BILL_DT</li>
+<li>TIME_PAID_DT</li>
+<li>ADDR_KEY</li>
+</ul>
+<p>Remove them to streamline your presentation table.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/delete-column.png?raw=true" alt="Delete Column from Presentation Table" style="max-width: 600px; height: auto;">
+</p>
+<p>After deletion, the <em>F Revenue</em> presentation table looks like this:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/after-delete-columns.png?raw=true" alt="Presentation Table after deletion" style="max-width: 600px; height: auto;">
+</p>
+<p>Now, let’s further reorganize <em>F Revenue</em> by splitting measures into separate <strong>presentation tables</strong> based on their type: revenue-related, profit-related, and counts. This reorganization improves user navigation and makes it easier to find relevant metrics.</p>
+<p>Create the following <strong>presentation tables</strong>:</p>
+<ul>
+<li><strong>Revenue Metrics</strong></li>
+<li><strong>Profit Metrics</strong></li>
+<li><strong>Counts</strong></li>
+</ul>
+<p>Open the <strong>Subject Area page</strong> and navigate to the <strong>Tables</strong> tab. Click on the <strong>plus</strong> icon to <strong>create a new Presentation Table</strong>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-presentation-table.png?raw=true" alt="Create Presentation Table" style="max-width: 600px; height: auto;">
+</p>
+<p>Enter the <strong>presentation table</strong> name <em>Profit Metrics</em> from the list above and click <strong>OK</strong>. Repeat this process for <em>Counts</em> as well.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-presentation-table-dialog.png?raw=true" alt="Create Presentation Table dialog" style="max-width: 600px; height: auto;">
+</p>
+<p>Rename <em>F Revenue</em> to <em>Revenue Metrics</em>.</p>
+<p>Open <em>Profit Metrics</em>. Add all profit-related columns into this presentation table. To do this, navigate to the <strong>Logical Layer</strong> in the navigation pane on the left, select all profit-related columns, and drag them onto the <strong>Columns</strong> area of the <em>Profit Metrics</em> <strong>presentation table page</strong>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/profit-metrics-presentation-table.png?raw=true" alt="Profit Metrics Presentation table" style="max-width: 600px; height: auto;">
+</p>
+<p>Repeat this process to add all <em># of ...</em> columns into the <em>Counts</em> presentation table.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/counts-presentation-table.png?raw=true" alt="Counts Presentation table" style="max-width: 600px; height: auto;">
+</p>
+<p>Open <em>Revenue Metrics</em>. Remove columns that have already been added to <em>Profit Metrics</em> or <em>Counts</em>, and then add any additional revenue-related metrics from the logical layer.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/revenue-metrics-presentation-table.png?raw=true" alt="Revenue Metrics Presentation table" style="max-width: 600px; height: auto;">
+</p>
+<p>We have now created three presentation tables in our Subject Area. To keep the Subject Area organized and user-friendly, we’ll group these three presentation tables under a parent folder called <em>F Sales</em>. This reorganization improves user experience by making it easier for users to find related metrics and helps maintain the model as it grows.</p>
+<p>First, create another new <strong>Presentation Table</strong> called <em>F Sales</em>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/f_sales-presentation-table.png?raw=true" alt="F Sales Presentation table" style="max-width: 600px; height: auto;">
+</p>
+<p>Now, drag and drop all three previously created presentation tables (<em>Revenue Metrics</em>, <em>Profit Metrics</em>, and <em>Counts</em>) onto the <em>F Sales</em> presentation table.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/subject-area-reorganized.png?raw=true" alt="Subject Area reorganized" style="max-width: 600px; height: auto;">
+</p>
+<p>You can now <strong>save</strong> your model, run a <strong>consistency check</strong>, and <strong>deploy</strong> it.</p>
+<p>For added assurance, run the <strong>Advanced Consistency Check</strong>.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/advanced-check.png?raw=true" alt="Advanced Check" style="max-width: 600px; height: auto;">
+</p>
+<p>You’ll see a message indicating that the <strong>Advanced Consistency Check</strong> is running at the bottom-right of the screen:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/advanced-check-message.png?raw=true" alt="Advanced Check Message" style="max-width: 600px; height: auto;">
+</p>
+<p>Once the check completes (successfully or not), the result is displayed at the bottom-right. If successful, proceed to deploy the model.</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/deploy-successful.png?raw=true" alt="Deploy Successful" style="max-width: 600px; height: auto;">
+</p>
+<h3>Review and Test Changes</h3>
+<p>After deploying, the first test is to verify that your presentation tables are properly configured and displayed. You should now see a single folder <em>F Sales</em> with the following subfolders/presentation tables:</p>
+<ul>
+<li><em>Revenue Metrics</em></li>
+<li><em>Profit Metrics</em></li>
+<li><em>Counts</em></li>
+</ul>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/new-subject-area.png?raw=true" alt="New Subject Area" style="max-width: 600px; height: auto;">
+</p>
+<p>More importantly, test the new metrics to ensure they return correct results.</p>
+<p>Start by checking simple calculations:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/simple-calculations-test.png?raw=true" alt="Simple Calculations Test" style="max-width: 600px; height: auto;">
+</p>
+<p>You should see all measures (<em>Total Costs</em>, <em>Profit</em>, and <em>Profit Margin %</em>) calculated properly.</p>
+<p>Next, check Time Series calculations:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/time-series-calculations-test.png?raw=true" alt="Time Series Calculations Test" style="max-width: 600px; height: auto;">
+</p>
+<p>Lastly, verify the newly introduced <strong>Level-Based Measures</strong>:</p>
+<p style="text-align: center;">
+  <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measures-test.png?raw=true" alt="Level Based Measures Test" style="max-width: 600px; height: auto;">
+</p>
+<hr>
+<h2>Summary</h2>
+<p>In this guide, we covered several key types of calculations in Oracle Analytics:</p>
+<ul>
+<li><strong>Simple Measures</strong>: Direct formulas and business logic, such as profit and margin calculations.</li>
+<li><strong>Time Series Calculations</strong>: Functions such as AGO and TODATE for period-based analysis (e.g., Year-over-Year, Year-to-Date).</li>
+<li><strong>Level-Based Measures</strong>: Aggregations at specific dimension levels, enabling advanced analytics like market share and benchmarking.</li>
+<li><strong>Expressions in Dimensions</strong>: Derived attributes within dimension tables, such as customer age.</li>
+</ul>
+<p><strong>Business Benefits:</strong><br>
+Building calculations in the semantic model brings significant business benefits:</p>
+<ul>
+<li><strong>Reusability</strong>: Define once, use everywhere—ensuring consistent logic across reports and dashboards.</li>
+<li><strong>Performance Optimization</strong>: Centralized logic can be optimized for better query performance.</li>
+<li><strong>Easier Maintenance</strong>: Updates and corrections are made in one place, reducing errors and effort.</li>
+</ul>
+<p><strong>Important:</strong><br>
+Always thoroughly test and validate your calculations before deploying changes to production. This ensures accuracy, reliability, and a smooth experience for your business users.</p>

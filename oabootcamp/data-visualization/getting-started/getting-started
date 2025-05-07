@@ -1,0 +1,45 @@
+# Oracle Analytics – Data Visualization
+
+**Oracle Analytics – Data Visualization** is a modern tool for visual data analysis that allows users to easily explore, understand, and present insights from data. As part of the Oracle Analytics Cloud platform, it is designed for business users who want to independently create reports, analyses, and visualizations without requiring advanced technical knowledge.
+
+Users can import data from various sources—such as spreadsheets, relational databases, or cloud applications—and analyze it using a drag-and-drop interface. A wide range of visualizations is available, including bar and line charts, maps, KPI indicators, and heatmaps. The tool also includes support for geo-visualization, enabling the display of data on geographic layers, as well as advanced analytics functions like calculations, hierarchies, and predictive models.
+
+A key feature of Data Visualization is the use of artificial intelligence, which automatically suggests important insights such as correlations, market trends, or unusual deviations. Visualizations can be easily shared with other users, embedded into dashboards, or integrated into other applications. In addition, the tool is optimized for use on mobile devices, allowing access to analyses anytime and anywhere.
+
+**Oracle Analytics – Data Visualization** is an effective tool for quickly and clearly gaining insights from data, aimed at anyone looking to make better-informed business decisions.
+
+![Oracle Analytics Home Page](https://github.com/zigavaupot/blogger/blob/main/oabootcamp/data-visualization/getting-started/images/homepage.png?raw=true)
+
+### 🏠 Data Visualization Home Page Overview
+
+When you launch **Oracle Analytics – Data Visualization**, you are taken to the **Home Page**, which serves as your starting point for all analytics tasks. It is designed for ease of access, discovery, and quick action.
+
+#### Key Sections of the Home Page:
+
+- **Global Navigation Bar (Top)**
+  - Includes access to the **Home**, **Catalog**, **Projects**, **Datasets**, **Machine Learning**, and other modules.
+  - You’ll also find the **search bar**, **notifications**, and **user settings** here.
+
+- **Create Button**
+  - A prominent **“Create”** button allows you to quickly start new:
+    - Projects (visualizations)
+    - Data Flows (ETL pipelines)
+    - Datasets
+    - Connections
+    - Machine Learning models
+
+- **Recent Items**
+  - Displays the most recently accessed projects, datasets, or dashboards, making it easy to pick up where you left off.
+
+- **Suggestions Panel**
+  - AI-powered recommendations for datasets or visualizations you might find useful based on your activity.
+
+- **Data Sources Panel**
+  - Lists your most-used or favorite **data connections** and **datasets**.
+  - You can connect to new data directly from here.
+
+- **Sample Projects and Datasets**
+  - Especially useful for new users, these examples help you explore the capabilities of the tool before using your own data.
+
+#### Visual Design:
+The interface uses a **clean, card-based layout** with icons, labels, and previews that are intuitive and responsive. Hover actions let you rename, delete, or share assets easily.
