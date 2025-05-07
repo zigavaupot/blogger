@@ -1,0 +1,276 @@
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/start-configuring-git.png"
+    alt="Using Git with Semantic Modeler"
+  >
+</p>
+
+<p>
+  Let’s assume you already have a deployed semantic model in your Oracle Analytics Cloud (OAC) environment. Now, you want to enable collaboration by allowing multiple developers to work on this model simultaneously.
+</p>
+
+<p>
+  In the past, OBIEE supported collaboration through the
+  <strong>Multi-User Development Environment</strong> (MUDE). However, MUDE had its challenges—locking conflicts, merge complexities, and deployment issues were common pitfalls.
+</p>
+
+<p>
+  With the introduction of Semantic Modeler in Oracle Analytics, collaborative development is more robust and streamlined. Developers can either:
+</p>
+
+<ul>
+  <li>
+    assign <strong>permissions</strong> within Semantic Modeler, effectively making it a built-in multi-user environment, or
+  </li>
+  <li>
+    integrate with <strong>Git</strong>, which brings version control and true collaborative development via source control access rights.
+  </li>
+</ul>
+
+<p>
+  In this article, we’ll walk through how to integrate Semantic Modeler with Git for the first time.
+</p>
+
+<p>
+  Integrating Semantic Modeler with Git is relatively straight forward process that can be accomplished within a few steps. Each Semantic Modeler in the list of models has associated menu (accessible on the right hand side).
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/inspect-semantic-model.png"
+    alt="Inspect Semantic Model"
+  >
+</p>
+
+<p>
+  Selecting <strong>Inspect</strong> menu option opens a window in which users decide and set their development environments - under <strong>Sharing</strong> tab on the left side menu:
+</p>
+
+<p>
+  <strong>Permissions</strong>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/permissions.png"
+    alt="Permissions"
+  >
+</p>
+
+<p>
+  <strong>Git</strong>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/git.png"
+    alt="Git"
+  >
+</p>
+
+<p>
+  As you can see, <strong>Git</strong> is by default preferred option. However in my case it hasn't been configured yet. To configure git integration, one must open Semantic Model and click Git icon (located in bottom-right corner).
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/configure-git.png"
+    alt="Configure Git"
+  >
+</p>
+
+<p>
+  Because this is my first attempt to configure Git, it has to be initialized first.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/start-configuring-git.png"
+    alt="Start configuring Git"
+  >
+</p>
+
+<p>
+  Initialize Git window opens. It is assumed that Git repository has already been created, so Git repository URL should be provided.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/initialize-git.png"
+    alt="Initialize Git - empty"
+  >
+</p>
+
+<p>
+  Just for the further reference, here is my Git repository for this case:
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/create-a-new-repository.png"
+    alt="Create a new Git repository"
+  >
+</p>
+
+<p>
+  As it is also shown in instructions, there are two options for providing required URL, HTTPS or SSH. In my example, I am using HTTPS, but either of two URLs can be used:
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/url-https.png"
+    alt="URL HTTPS"
+  >
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/url-ssh.png"
+    alt="URL SSH"
+  >
+</p>
+
+<p>
+  Once URL has been copied into <em>Git Repository URL</em> and <em>Branch Name</em> provided, i.e. <strong>main</strong> (assuming this is <em>main</em> branch), setup can continue.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/complete-initialize-git.png"
+    alt="Initialize Git - complete"
+  >
+</p>
+
+<p>
+  In the next step, you’ll need to define a Git user profile. Along with the username, Git also requires a password. Note that this isn’t your Git login password, but rather a <strong>Personal Access Token</strong>, which you generate from your Git account.
+</p>
+
+<p>
+  Here are the steps to generate <strong>Personal Access Token</strong>:
+</p>
+
+<p>
+  In Git, navigate to user's <em>Settings</em> and then to <em>Developer Settings</em>. Open <em>Personal access tokens</em> and then click on <em>Fine-grained tokens</em>.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/git-developer-settings.png"
+    alt="Git - Developer Settings"
+  >
+</p>
+
+<p>
+  Click <em>Generate new token</em>.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/generate-fine-grained-token.png"
+    alt="Git - Generate token"
+  >
+</p>
+
+<p>
+  Provide a new token name, set expiration date, optionally define for which repository is this token valid, and then click <em>Generate token</em>.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/copy-token.png"
+    alt="Git - Copy token"
+  >
+</p>
+
+<p>
+  When token is generated, copy it into clipboard. Use this token and fill the <em>password</em> field in <strong>Initialize Git</strong> popup window.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/finish-initializing-git.png"
+    alt="Git - Finish initializing token"
+  >
+</p>
+
+<p>
+  After a couple of seconds, Git is initialized.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/git-initilized-and-connected.png"
+    alt="Git Initialized"
+  >
+</p>
+
+<p>
+  The results of Git initialization can be now reviewed in you Git environment, Github in my case:
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/updated-git-repository.png"
+    alt="Updated Git repository"
+  >
+</p>
+
+<p>
+  As you can see there are four folders created which replicate Semantic Modeler content:
+</p>
+
+<ul>
+  <li>
+    three folders for each layer of semantic model: <strong>physical</strong>, <strong>logical</strong> and <strong>presentation</strong>,
+  </li>
+  <li>
+    additional folder for <strong>variables</strong>.
+  </li>
+</ul>
+
+<p>
+  Drilling down the folder structures shows semantic model structure and its definitions in SMML (JSON). When comparing with Semantic Model that resides in OAC, we can see that the content is exactly the same.
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-semantic-modeler.png"
+    alt="Model in Semantic modeler"
+  >
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/model-in-git.png"
+    alt="Model in Git"
+  >
+</p>
+
+<p>
+  There is also one minor detailed available for inspection in Oracle Analytics' Semantic Models list - for the model that we initialised Git repository, connection to the Git repository is now displayed:
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-model-using-git-repository.png"
+    alt="Model in Git"
+  >
+</p>
+
+<p>
+  And detailed description of connection is available as well:
+</p>
+
+<p>
+  <img
+    src="https://zigavaupot.github.io/blogger/semantic-modeler-series/using-git-with-semantic-modeler/images/semantic-modeler-share-using-git.png"
+    alt="Semantic Model definition"
+  >
+</p>
+
+<h3>Final Thoughts</h3>
+
+<p>
+  This walkthrough demonstrated how to connect Semantic Modeler with a Git repository. In upcoming posts, we’ll explore real-world use cases of this integration, including:
+</p>
+
+<ul>
+  <li>migrating semantic models between environments,</li>
+  <li>multi-user development environment,</li>
+  <li>model versioning.</li>
+</ul>

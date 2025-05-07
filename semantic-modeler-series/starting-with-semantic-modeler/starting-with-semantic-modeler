@@ -1,78 +1,82 @@
-![Metadata Management](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/metadata-management.png?raw=true)
+![Metadata Management](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/metadata-management.png)
 
 ### Oracle BI Administration Tool
 
-![BI Administration Tool](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/repository-admin-tool.png?raw=true)
+Oracle BI Administration Tool has historically been one of the cornerstone components of Oracle Business Intelligence, widely recognized for its robust metadata management capabilities. It played a crucial role in enterprise BI environments by enabling developers to design and implement comprehensive data models that sit atop data warehouse schemas, facilitating consistent and efficient analytical reporting.
 
-Metadata management used to be one of the key strengths of Oracle Business Intelligence. Using BI Administration Tool developers were able to design and implement enterprise data models that were sitting on top of data warehouse data schemas.
+Using the BI Administration Tool, OBIEE developers design and develop a metadata model, known as a repository, which results in a binary RPD file. This file is then deployed on the BI Server, a key component of the Oracle Business Intelligence architecture responsible for processing user requests and executing data queries against underlying data sources.
 
-OBIEE developer designs and develops a metadata model, a repository, using BI Administration Tool, which results in a RPD file. This binary file is then deployed on BI Server. BI Server is a component of Oracle Business Intelligence architecture and is responsible for processing user requests and data queries against underlying data sources.
+![BI Administration Tool](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/repository-admin-tool.png)
 
-![Oracle BI Server Architecture](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/oracle-bi-server-architecture.png?raw=true)
+![Oracle BI Server Architecture](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/oracle-bi-server-architecture.png)
 
-BI Server uses metadata information from repository to perform the following two tasks:
+The BI Server uses metadata information from the repository to perform two primary tasks:
 
-* use logical SQL query and transform it into corresponding query (ie. SQL, MDX), depending on the underlying data source (ie. Oracle Database, Microsoft SQL Server, Oracle Essbase, ...)
-* transform and combine physical datasets retrieved and perform required calculations.
+* It takes logical SQL queries and transforms them into corresponding native queries (e.g., SQL, MDX), depending on the underlying data source (such as Oracle Database, Microsoft SQL Server, Oracle Essbase, etc.).
+* It transforms and combines the retrieved physical datasets and performs any required calculations.
 
-Typical metadata model consists of three layers:
+A typical metadata model consists of three layers, each serving a distinct purpose in the overall architecture:
 
-**Physical layer**
+**Physical Layer**
 
-Physical layer defines the objects and relationships that the Oracle BI Server required to write native queries against each physical data source. Developer defines connections to connect to data sources, importing tables (or possibly OLAP cubes or even flat files)from data sources.
+The physical layer defines the objects and relationships that the Oracle BI Server requires to generate native queries against each physical data source. Developers define connections to data sources and import tables (or possibly OLAP cubes or flat files) from these sources.
 
-The other important task is to define relationships between objects in the physical layer. Underlying database model can be dimensional, in 3rd normal form, flat files. It is not that important as long joins and relations between objects are defined. This is the base for query generation.
+An important aspect of the physical layer is defining relationships between objects. The underlying database model can be dimensional, normalized (3rd normal form), or flat files; what matters is that joins and relationships between objects are properly defined to enable accurate query generation.
 
-There are a few important things that you can do in physical layer. First, one physical table can be several times due to possibility to separate physical representation of objects from logical (aliases) that are being used in setting relations. This way,one physical table can be reused multiple times without replicating physical tables in the database.
+One key feature in the physical layer is the use of aliases, which allow developers to create multiple logical versions of a single physical table. This enables the reuse of one physical table multiple times without replicating it in the database, providing flexibility in modeling complex relationships.
 
-Another really important feature is modeling aggregated data into same enterprise model. This gives developers possibility to use aggregates transparently - aggregates are used whenever conditions are met (ie. query on specified level). And this is completely hidden from the end-user.
+Another significant capability is the modeling of aggregated data within the same enterprise model. This allows developers to incorporate aggregate tables transparently, improving query performance by using aggregates whenever query conditions are met (e.g., querying at a specified aggregation level). This optimization is completely hidden from the end user.
 
-**Business Model and Mapping layer**
+**Business Model and Mapping Layer**
 
-This layer is often called also *Logical Layer*. This layer defines the business or logical model of the data and specifies the mapping between the business model and the physical schemas. This layer determines business logic of analytical application which objects and relationships available to users that is easy to understand and to use by hiding the complexity of the source data models. Models that are accessible to end users are defined as star schemas.
+Also known as the *Logical Layer*, this layer defines the business or logical model of the data and maps it to the physical schemas. It encapsulates the business logic of the analytical application by presenting objects and relationships in a way that is easy for users to understand and use, abstracting away the complexity of the source data models.
 
-Oracle BI Server evaluates logical SQL requests against the business model, and then uses the mappings to identify physical tables that are needed for query generation.
+This layer is also where semantic consistency and unified business metrics are enforced, ensuring that all users and reports rely on the same definitions and calculations.
 
-Business model defines all dimensional data including hierarchies.
+Oracle BI Server evaluates logical SQL requests against this business model and uses the mappings to identify the physical tables required for query generation. The business model includes all dimensional data, including hierarchies.
 
-**Presentation layer**
+**Presentation Layer**
 
-Presentation layer is often referred to as *Subject Area* (actually it contains several Subject Areas) presents customized, secure, role-based views of a business model to end users. It adds a level of abstraction on top of logical layer and provides the view of the data seen by end users.
+Often referred to as the *Subject Area* layer (which can contain multiple subject areas), this layer presents customized, secure, and role-based views of the business model to end users. It adds an additional level of abstraction on top of the logical layer and defines the data view accessible to different user groups.
 
-As mentioned above, there can be several subject areas in presentation layer. These subject areas can map to one business model, and can be designed to enable analyses of particular business area.
+Subject areas enable tailored views for different departments or roles, ensuring users see only the relevant subset of data and metrics appropriate for their needs.
 
-![Oracle BI Repository Layers](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/oracle-bi-repository-layers.png?raw=true)
+![Oracle BI Repository Layers](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/oracle-bi-repository-layers.png)
 
-In my experience working with Oracle Business Intelligence (before) and Oracle Analytics (now) having single enterprise metadata model is one of the most important features of this product. It can support really diverse data warehouse architectures from single data warehouse schema to distributed architectures running on technologically totally different server platform supporting one single analytical application, for example:
+In my experience working with Oracle Business Intelligence (previously) and Oracle Analytics (currently), having a single enterprise metadata model is one of the most powerful features of the product. It supports a wide range of data warehouse architectures, from a single data warehouse schema to distributed architectures running on technologically diverse server platforms, all supporting a single analytical application. For example:
 
-* most detailed granular data stored in a relational database (ie. Oracle Database),
-* aggregated data stored in multidimensional OLAP database (ie. Oracle Essbase) and
-* specific aggregations stored in in-memory database (ie. TimesTen).
+* Most detailed granular data stored in a relational database (e.g., Oracle Database),
+* Aggregated data stored in multidimensional OLAP databases (e.g., Oracle Essbase), and
+* Specific aggregations stored in in-memory databases (e.g., TimesTen).
 
-All these in one single model, single application, complexity of the model completely hidden from the end user. There are not many tools out there to do that so efficiently.
+All these data sources can be integrated into one single model and application, with the complexity completely hidden from the end user. Few tools offer this level of integration and efficiency.
 
 ### Oracle Analytics Semantic Modeler
 
-Oracle Analytics Semantic Modeler is replacing BI Administration Tool. This doesn't mean that BI Administration Tool is retiring. Well, not just yet. Developers can continue using it as they are used to, however there might be some features that would drive adoption of Semantic Modeler in the future:
+Oracle Analytics Semantic Modeler is positioned as the successor to the BI Administration Tool. This does not mean that the BI Administration Tool is being retired immediately; developers can continue using it as before. However, Semantic Modeler introduces several features that are compelling reasons for adoption going forward:
 
-* Semantic Modeler is a web based development tool, included with the rest of Oracle Analytics. This means you don't need to install BI Administration Tool on your desktop. This was in particular annoying for those who are not using Windows.
+* Semantic Modeler is a web-based development tool included with Oracle Analytics, eliminating the need to install the BI Administration Tool on desktops. This is particularly beneficial for users on non-Windows platforms.
 
-![Semantic modeler web based tool - Data Lineage](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-data-lineage.png?raw=true)
+![Semantic modeler web based tool - Data Lineage](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-data-lineage.png)
 
-* Semantic model is no longer one big binary file. Each part of the semantic model is now stored in SMML (Semantic Model Markup Language), readable, notation. SMML is basically a JSON file.
+* The semantic model is no longer stored as one large binary file. Instead, each part of the model is saved in SMML (Semantic Model Markup Language), a readable JSON notation format.
 
-![Semantic modeler - SMML](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-smml.png?raw=true)
+![Semantic modeler - SMML](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-smml.png)
 
-* Improved collaborative development using Git. Git can now become part of the development environment where developers can use all features of Git in order to manage their own projects, merge them back into single repository, and probably most importantly, we have finally got proper versioning support.
+* Collaborative development is greatly enhanced through Git integration. Developers can use Git's full feature set to manage their own projects, merge changes back into a shared repository, and maintain proper version control. For example, multiple developers can work on different parts of the model simultaneously and later merge their updates seamlessly, resolving conflicts and preserving history.
 
-![Semantic modeler - Git Integration](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-git-integration.png?raw=true)
+![Semantic modeler - Git Integration](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler-git-integration.png)
 
-I think these three features are probably enough to decide to start using Semantic Modeler. Developers will obviously observe different user interface, even though logically all components are there slightly adopted to a new web user interface.
+These three features alone make a strong case for starting to use Semantic Modeler. While the user interface is different, all logical components from the BI Administration Tool are present, adapted to a modern web-based environment.
 
-![Semantic modeler](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler.png?raw=true)
+![Semantic modeler](https://zigavaupot.github.io/blogger/semantic-modeler-series/starting-with-semantic-modeler/images/semantic-modeler.png)
 
-Funny enough, there might be some other, equally important, reasons to start using Semantic Modeler. The following example has become anecdotal and the following story is 100% true:
+Interestingly, there are other practical reasons to adopt Semantic Modeler. A true story illustrates this: we recently encountered a strict system administrator at a new client who rejected our request to install the BI Administration Tool simply because its name contained the word *Administration*. Fortunately, Oracle Analytics Server 7.6, which included Semantic Modeler for the first time, had just become generally available. This meant that BI Administration Tool was no longer mandatory, enabling us to proceed without it.
 
-Just recently we encountered some tough system administrator with one of our new clients. We asked for BI Administration Tool installation as we wanted to create a new repository. But, the tool's name contains word *Administration* which was enough for our request to be rejected (!?). Lucky enough, in the same time Oracle Analytics Server 7.6, with Semantic Modeler included for the 1st time, became generally available. This meant that BI Administration Tool was no longer mandatory ... can you imagine?
+However, it’s important to note that Semantic Modeler does not yet support all data sources—for example, Essbase is currently not supported but is planned for future inclusion. Therefore, it’s advisable to verify data source compatibility before fully committing to Semantic Modeler. More information about supported data sources can be found [here](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsds/supported-data-sources.html).
 
-But let's not jump too quickly. There are some things to pay attention to too. Currently Semantic Modeler doesn't support all data sources - for example, Essbase is not supported, however it is in the plan. So working with Semantic Modeler is favorable, but be careful to verify if data sources are supported. Find out more about supported data sources [here](https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsds/supported-data-sources.html).
+### Conclusion
+
+In summary, Oracle Analytics Semantic Modeler offers significant improvements over the traditional BI Administration Tool, particularly through its web-based interface, modular and readable model storage, and enhanced collaboration via Git integration. These benefits not only streamline development workflows but also improve version control and team coordination.
+
+That said, the BI Administration Tool remains a mature and stable option, especially for environments relying on unsupported data sources or where existing workflows are deeply entrenched. Organizations should consider transitioning to Semantic Modeler when they seek improved collaboration, modern tooling, and web-based development, while continuing to use the BI Administration Tool where compatibility or organizational constraints require it.

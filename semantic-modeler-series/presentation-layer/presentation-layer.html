@@ -1,0 +1,189 @@
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/images/oabootcamp-logo.png" alt="Oracle Analytics Bootcamp" style="max-width: 100%; height: auto;">
+</div>
+<p>In Oracle Analytics Semantic Modeler, the <strong>Presentation Layer</strong> serves as the final stage in the data modeling process — it is the interface that end users engage with when creating analyses and dashboards.</p>
+<p>This layer offers a <strong>business-friendly view</strong> of your data model by organizing and simplifying logical objects such as tables, columns, and hierarchies. It also allows you to control the visibility, naming, and grouping of elements within subject areas, making the data more accessible and intuitive for users.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/semantic-model.png" alt="Semantic model" style="max-width: 100%; height: auto;">
+</div>
+
+<section>
+<h2>Components of the Presentation Layer</h2>
+<ul>
+<li>
+<p><strong>Subject Areas</strong></p>
+<ul>
+<li>A subject area is a collection of related tables and measures — for example, “Sales,” “Finance,” or “Inventory.”</li>
+<li>Each subject area typically corresponds to a single Business Model from the logical layer.</li>
+</ul>
+</li>
+<li>
+<p><strong>Presentation Tables</strong></p>
+<ul>
+<li>These represent business entities such as “Customer,” “Product,” or “Revenue Metrics.”</li>
+<li>Presentation tables can be renamed to more user-friendly labels compared to their logical counterparts.</li>
+</ul>
+</li>
+<li>
+<p><strong>Presentation Columns</strong></p>
+<ul>
+<li>Derived from logical columns in the Business Model and Mapping (BMM) layer.</li>
+<li>Columns can be renamed, reordered, or hidden to suit business needs.</li>
+</ul>
+</li>
+<li>
+<p><strong>Hierarchies and Folders</strong></p>
+<ul>
+<li>Hierarchies (e.g., time or geography) enable drill-down functionality.</li>
+<li>Columns can be organized into folders or nested groups to enhance clarity and navigation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Column and Table Permissions</strong></p>
+<ul>
+<li>Permissions control which users or roles can view or interact with specific elements.</li>
+<li>This is essential for ensuring data security and tailoring the user experience for different audiences.</li>
+</ul>
+</li>
+</ul>
+<h2>Common Tasks in the Presentation Layer</h2>
+<ul>
+<li>Renaming tables and columns to reflect business terminology.</li>
+<li>Hiding technical or irrelevant columns from end users.</li>
+<li>Organizing columns into folders like “Sales Metrics” or “Customer Details.”</li>
+<li>Controlling display order, tooltips, and descriptions.</li>
+<li>Applying formatting to columns (e.g., date or currency formats).</li>
+<li>Enabling drill-down paths through defined hierarchies.</li>
+</ul>
+</section>
+
+<hr>
+
+<section>
+<h2>Creating a New Subject Area</h2>
+<p>Access the Presentation Layer via the <strong>fourth tab</strong> in the main Semantic Modeler navigation. When you create a new model from scratch, this layer initially appears empty.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/presentation-layer-empty.png" alt="Presentation Layer - empty" style="max-width: 100%; height: auto;">
+</div>
+<p>All content in the Presentation Layer is organized into <strong>Subject Areas</strong>.</p>
+<p>A <strong>Subject Area</strong> acts as the top-level container within the Presentation Layer. It represents a logical grouping of data that users interact with when building dashboards, reports, or ad-hoc queries. Think of it as the user-facing lens through which your data model is viewed.</p>
+<p>A best practice is to create one <strong>Business Model</strong> in the logical layer and map multiple <strong>Subject Areas</strong> to it. This approach allows users to pull data from different business domains and combine it in a single report — provided that shared dimensions exist across the subject areas.</p>
+<p>To create a new <strong>Subject Area</strong>, click the <strong>plus icon</strong> next to the <strong>Search</strong> bar and select <strong>Create Subject Area</strong> from the dropdown menu.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/create-subject-area-menu.png" alt="Create Subject Area - menu" style="max-width: 100%; height: auto;">
+</div>
+<p>In the <strong>Create Subject Area</strong> dialog, enter a meaningful name for your new subject area.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/create-subject-area-dialog.png" alt="Create Subject Area - dialog" style="max-width: 100%; height: auto;">
+</div>
+<p>Once created, the <strong>Subject Area page</strong> opens, featuring several definition tabs:</p>
+<ul>
+<li><strong>General</strong>: Define the name, description, and link the subject area to its associated business model.</li>
+<li><strong>Tables</strong>: Add and manage presentation tables and columns, including hierarchies and folders.</li>
+<li><strong>Permissions</strong>: Set visibility rules for different user roles or groups.</li>
+<li><strong>Localisation</strong>: Provide multilingual labels and descriptions for internationalized deployments.</li>
+</ul>
+</section>
+
+<section>
+<h2>Adding Tables to a Subject Area</h2>
+<p>Within the <strong>Tables</strong> tab of the Subject Area, your task is to bring in tables and columns from the logical model. There are multiple methods to do this, but since our logical model already includes meaningful names and structure, we’ll use a shortcut.</p>
+<p>Switch to the <strong>Logical Layer</strong> tab in the main navigation and expand the existing business model to display all tables. Select the tables you want to import.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/expand-business-model.png" alt="Expand business model and select tables" style="max-width: 100%; height: auto;">
+</div>
+<p>With the <strong>Subject Area</strong> open in the <strong>Tables</strong> tab, drag the selected tables from the Logical Layer pane and drop them onto the Tables canvas.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/drag-and-drop-tables.png" alt="Drag and drop Logical table into Subject area" style="max-width: 100%; height: auto;">
+</div>
+<p>After adding the tables, you can reorganize their order for a cleaner and more intuitive view:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/reorganize-tables.png" alt="Reorganize tables in Subject area" style="max-width: 100%; height: auto;">
+</div>
+<p>To customize further, double-click any presentation table name to open the <strong>Presentation Table page</strong>, where you can access the following options:</p>
+<ul>
+<li><strong>General</strong></li>
+<li><strong>Columns</strong>: Rename columns or replace the associated logical column.</li>
+<li><strong>Hierarchies</strong>: Create or edit drill hierarchies.</li>
+<li><strong>Permissions</strong>: Set access control at the column level.</li>
+<li><strong>Localisations</strong>: Add translations or locale-specific labels.</li>
+<li><strong>Data Filters</strong>: Apply filters to restrict data exposure at the presentation level.</li>
+</ul>
+<p>With these configurations complete, you are ready to move on to the final step: deploying the model.</p>
+</section>
+
+<hr>
+
+<section>
+<h2>Deploying the Semantic Model</h2>
+<p>Before deploying, it is crucial to validate your model by running a <strong>Consistency Check</strong>.</p>
+<p>The <strong>Consistency Check</strong> verifies that the semantic model is logically sound, fully defined, and free of errors before publication.</p>
+<p>You should run a <strong>Consistency Check</strong>:</p>
+<ul>
+<li>After making changes to logical models, joins, hierarchies, or subject areas.</li>
+<li>Before deploying the model to production.</li>
+<li>When troubleshooting query or report issues.</li>
+</ul>
+<p>Click the <strong>Consistency Check</strong> icon in the top toolbar:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/run-consistency-check.png" alt="Run consistency check" style="max-width: 100%; height: auto;">
+</div>
+<p>If no errors are found (warnings may still appear), a summary report will be displayed:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/consistency-check-report.png" alt="Consistency check report" style="max-width: 100%; height: auto;">
+</div>
+<p>Once validation is successful, deploy the model by clicking the page menu (<strong>three-dot icon</strong> in the top right) and selecting <strong>Deploy</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/page-menu-deploy.png" alt="Deploy model" style="max-width: 100%; height: auto;">
+</div>
+<p>In the <strong>Deploy Semantic Model</strong> dialog, click <strong>Deploy</strong> to finalize the process.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/deploy-semantic-model-dialog.png" alt="Deploy Semantic Model dialog" style="max-width: 100%; height: auto;">
+</div>
+<p>A confirmation message will appear in the bottom-right corner upon successful deployment:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/deploy-successful.png" alt="Deploy Successful" style="max-width: 100%; height: auto;">
+</div>
+</section>
+
+<hr>
+
+<section>
+<h2>Testing the Model in Oracle Analytics</h2>
+<p>With the model deployed, you can now test it in Oracle Analytics.</p>
+<p>Begin by creating a new <strong>Data Visualization Workbook</strong>:</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/create-new-workbook.png" alt="Create a new Workbook" style="max-width: 100%; height: auto;">
+</div>
+<p>In the <strong>Add Data</strong> dialog, search for your newly created Subject Area and click <strong>Add to Workbook</strong>.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/add-data-to-workbook.png" alt="Add Data to Workbook" style="max-width: 100%; height: auto;">
+</div>
+<p>Select a few columns, such as:</p>
+<ul>
+<li><code>D Customer.Customer Segment</code></li>
+<li><code>D Orders.Channel</code></li>
+<li><code>F Revenue.# of Orders</code></li>
+<li><code>F Revenue.# of Products</code></li>
+<li><code>F Revenue.Revenue</code></li>
+</ul>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/create-best-visualisation.png" alt="Create Best Visualisation" style="max-width: 100%; height: auto;">
+</div>
+<p>Right-click on any selected column and choose <strong>Create Best Visualization</strong>.</p>
+<p>If your model is set up correctly, Oracle Analytics will automatically generate a meaningful chart — in this example, a scatter chart.</p>
+<div style="text-align: center;">
+  <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/presentation-layer/images/create-best-visualisation-displayed.png" alt="Create Best Visualisation displayed" style="max-width: 100%; height: auto;">
+</div>
+</section>
+
+<hr>
+
+<p>This concludes our walkthrough of the <strong>Presentation Layer</strong> in Oracle Analytics Semantic Modeler. Throughout this session, we have:</p>
+<ul>
+<li>Created a system connection and initialized the Semantic Modeler.</li>
+<li>Built the Physical and Logical Layers with facts and dimensions.</li>
+<li>Designed and deployed a new Subject Area within the Presentation Layer.</li>
+<li>Successfully tested the model in Oracle Analytics.</li>
+</ul>
+<p>Mastering the Presentation Layer is essential for delivering a polished, user-friendly data experience that empowers business users to explore and analyze data confidently. In the next session, we will delve deeper into advanced topics that are key to building powerful and flexible semantic models.</p>

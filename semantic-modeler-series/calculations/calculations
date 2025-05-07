@@ -1,4 +1,4 @@
-![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
+![Oracle Analytics Bootcamp](https://zigavaupot.github.io/blogger/semantic-modeler-series/images/oabootcamp-logo.png)
 
 In Oracle Analytics, calculations are a powerful way to create reusable business logic, KPIs, and metrics. These calculations reside in the **logical layer** (**Business Model and Mapping**), where they can be defined once and reused across multiple dashboards and reports, improving consistency and reducing maintenance effort.
 
@@ -13,7 +13,7 @@ Let’s take a look at creating calculations both in **Facts** and as calculated
 
 Open the **semantic model** we created and navigate to the **Logical Layer**. Expand the **business model** and click on the **fact table** *F Revenue* to open its table page.
 
-![Open fact table page](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/open-fact-table-page.png?raw=true)
+![Open fact table page](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/open-fact-table-page.png)
 
 ### Simple Measure Calculations
 
@@ -25,33 +25,33 @@ Reviewing the existing measures, we often identify the need for additional busin
 
 To add a new measure, start by clicking on the **plus icon** next to *Search Columns* and select **Create New Column**.
 
-![Create New Column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-new-column.png?raw=true)
+![Create New Column](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-new-column.png)
 
 This action adds a new row for your column in the **Columns list**.
 
-![New Column added](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/new-column-added.png?raw=true)
+![New Column added](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/new-column-added.png)
 
 Click on the **Details Icon** (located above the list):
 
-![Details Icon](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/details-icon.png?raw=true)
+![Details Icon](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/details-icon.png)
 
 Name your new column and then click **Logical Expression** in the **Sources** section.
 
-![Check Logical Expression](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/check-logical-expression.png?raw=true)
+![Check Logical Expression](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/check-logical-expression.png)
 
-Simple formulas can be entered directly into the field in the **Sources** section. However, it is recommended to click the <img src="https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-icon.png?raw=true" alt="Open Expression Editor Icon" width="24" height="24"> to open the **Expression Editor**. The Expression Editor not only provides syntax highlighting and function lookup, but also helps you validate and troubleshoot your formulas before saving them to the **Business Model**. This is especially useful for new users or for more complex logic.
+Simple formulas can be entered directly into the field in the **Sources** section. However, it is recommended to click the <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/expression-editor-icon.png" alt="Open Expression Editor Icon" width="48" height="48"> to open the **Expression Editor**. The Expression Editor not only provides syntax highlighting and function lookup, but also helps you validate and troubleshoot your formulas before saving them to the **Business Model**. This is especially useful for new users or for more complex logic.
 
-![Using Expression Editor](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/using-expression-editor.png?raw=true)
+![Using Expression Editor](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/using-expression-editor.png)
 
 Once your formula is **validated**, you can save it and proceed to create additional calculations as needed.
 
-![Calculation - Total Costs](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-total-costs.png?raw=true)
+![Calculation - Total Costs](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/calculation-total-costs.png)
 
 We can now create additional two calculations (**Save** your model first!):
 
-![Calculation - Profit](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-profit.png?raw=true)
+![Calculation - Profit](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/calculation-profit.png)
 
-![Calculation - Profit](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-profit-margin.png?raw=true)
+![Calculation - Profit](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/calculation-profit-margin.png)
 
 **Note**: Whether multiplying by 100 is required depends on your reporting needs; many data visualization tools allow you to format values as percentages, automatically multiplying by 100 for display purposes.
 
@@ -81,26 +81,26 @@ Start by **creating a new column** as described earlier.
 
 In the **Expression Editor**, if you are unsure about the function syntax, you can look it up on the right side of the editor. This is especially helpful for new users, as the editor provides function definitions and usage examples.
 
-![Expression Editor - Ago](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-ago.png?raw=true)
+![Expression Editor - Ago](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/expression-editor-ago.png)
 
 You can review detailed syntax and examples for any selected function. Double-clicking a function from the list copies its syntax into the **Expression** area, helping you get started quickly.
 
-![Expression Editor - Syntax](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/expression-editor-syntax.png?raw=true)
+![Expression Editor - Syntax](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/expression-editor-syntax.png)
 
 Enter the required attributes for your formula by referencing the business model and its tables/columns. Pay special attention to the *TIME_LEVEL* parameter, which is derived from the time hierarchy in your Time Dimension.
 
-![Define and validate expression](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/define-and-validate-expression.png?raw=true)
+![Define and validate expression](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/define-and-validate-expression.png)
 
 In a similar way, create a new time series measure: *Revenue Year-to-Date* using the **TODATE()** function.
 
-![TODATE expression](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/time-series-calculation-todate.png?raw=true)
+![TODATE expression](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/time-series-calculation-todate.png)
 
 You can also create *Revenue Year-over-Year* and *Revenue Year-over-Year Growth Index* using combinations of these functions. For example, YoY Growth Index can be calculated as:  
 `("Revenue" / AGO("Revenue", "Year", 1)) * 100`
 
-![YoY calculation](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year.png?raw=true)
+![YoY calculation](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/calculation-year-over-year.png)
 
-![YoY calculation](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculation-year-over-year-idx.png?raw=true)
+![YoY calculation](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/calculation-year-over-year-idx.png)
 
 ### Level-Based Measures
 
@@ -120,7 +120,7 @@ Then, set up the aggregation:
 **Why set all other dimensions to the top level?**  
 By setting all other dimensions to their top levels, you ensure that your measure aggregates across the entire dataset except for the dimension of interest (e.g., Year). This is crucial for calculations like market share, ratios, or benchmarks, where you often need a total value to use as a denominator or reference.
 
-![Level-Based Measure - Year](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year.png?raw=true)
+![Level-Based Measure - Year](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/level-based-measure-year.png)
 
 This approach is useful, for example, when calculating revenue shares by customer segments: you need the total revenue for a specific year to use as the denominator in the revenue share calculation by segments.
 
@@ -128,11 +128,11 @@ Now, let's add another **level-based measure** similar to the one above, except 
 
 Instead of creating a new measure from scratch, you can simply duplicate the existing column:
 
-![Duplicate Column](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/duplicate-column.png?raw=true)
+![Duplicate Column](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/duplicate-column.png)
 
 Now, update only the attributes that need to change:
 
-![Level-Based Measure - Year/Customer Segment](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measure-year-segment.png?raw=true)
+![Level-Based Measure - Year/Customer Segment](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/level-based-measure-year-segment.png)
 
 ### Expressions in Dimension Tables
 
@@ -140,19 +140,19 @@ We can also create calculations or expressions on columns in **Dimension Tables*
 
 For example, the *D Customer* logical table contains a column *Birth Date*:
 
-![Birth Date](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/d_customer-birth_date.png?raw=true)
+![Birth Date](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/d_customer-birth_date.png)
 
 Instead of using birth date directly, it’s often more useful to have the customer’s age in years. We can introduce a new column *Age* that calculates the actual customer’s age based on the difference between *CURRENT_DATE* (a predefined session variable) and *Birth Date*.
 
 First, create a new column in *D Customer*.
 
-![Create a new column in dimension](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-new-column-in-dimension.png?raw=true)
+![Create a new column in dimension](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-new-column-in-dimension.png)
 
 Using the **Expression Editor**, use the *TimeStampDiff* function to calculate the difference between *CURRENT_DATE* and *Birth Date* to derive *Age*.  
 *Example*:  
 `TimeStampDiff(SQL_TSI_YEAR, "D Customer"."Birth Date", CURRENT_DATE)`
 
-![Calculate Age](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/calculate-age.png?raw=true)
+![Calculate Age](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/calculate-age.png)
 
 Similarly, you can create additional derived columns in **Dimension Tables** as needed. This simple example shows that you are not limited to creating calculations only in fact tables; you can also use expressions within dimensions to enhance your data model.
 
@@ -164,7 +164,7 @@ Open the **Presentation Layer** first.
 
 The **Subject Area** *OA Bootcamp Subject Area* currently looks like this:
 
-![Subject Area before update](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/subject-area-before-update.png?raw=true)
+![Subject Area before update](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/subject-area-before-update.png)
 
 Since we have introduced several new measures, it’s a good opportunity to reorganize the **presentation folder** *F Revenue* for better user experience and easier maintenance. When you open the *F Revenue* presentation table, you might see all columns—even those not needed by end-users—and notice some are missing.
 
@@ -176,11 +176,11 @@ Start by deleting columns that are not required. These columns are:
 
 Remove them to streamline your presentation table.
 
-![Delete Column from Presentation Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/delete-column.png?raw=true)
+![Delete Column from Presentation Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/delete-column.png)
 
 After deletion, the *F Revenue* presentation table looks like this:
 
-![Presentation Table after deletion](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/after-delete-columns.png?raw=true)
+![Presentation Table after deletion](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/after-delete-columns.png)
 
 Now, let’s further reorganize *F Revenue* by splitting measures into separate **presentation tables** based on their type: revenue-related, profit-related, and counts. This reorganization improves user navigation and makes it easier to find relevant metrics.
 
@@ -191,49 +191,49 @@ Create the following **presentation tables**:
 
 Open the **Subject Area page** and navigate to the **Tables** tab. Click on the **plus** icon to **create a new Presentation Table**.
 
-![Create Presentation Table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-presentation-table.png?raw=true)
+![Create Presentation Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-presentation-table.png)
 
 Enter the **presentation table** name *Profit Metrics* from the list above and click **OK**. Repeat this process for *Counts* as well.
 
-![Create Presentation Table dialog](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/create-presentation-table-dialog.png?raw=true)
+![Create Presentation Table dialog](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-presentation-table-dialog.png)
 
 Rename *F Revenue* to *Revenue Metrics*.
 
 Open *Profit Metrics*. Add all profit-related columns into this presentation table. To do this, navigate to the **Logical Layer** in the navigation pane on the left, select all profit-related columns, and drag them onto the **Columns** area of the *Profit Metrics* **presentation table page**.
 
-![Profit Metrics Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/profit-metrics-presentation-table.png?raw=true)
+![Profit Metrics Presentation table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/profit-metrics-presentation-table.png)
 
 Repeat this process to add all *# of ...* columns into the *Counts* presentation table.
 
-![Counts Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/counts-presentation-table.png?raw=true)
+![Counts Presentation table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/counts-presentation-table.png)
 
 Open *Revenue Metrics*. Remove columns that have already been added to *Profit Metrics* or *Counts*, and then add any additional revenue-related metrics from the logical layer.
 
-![Revenue Metrics Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/revenue-metrics-presentation-table.png?raw=true)
+![Revenue Metrics Presentation table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/revenue-metrics-presentation-table.png)
 
 We have now created three presentation tables in our Subject Area. To keep the Subject Area organized and user-friendly, we’ll group these three presentation tables under a parent folder called *F Sales*. This reorganization improves user experience by making it easier for users to find related metrics and helps maintain the model as it grows.
 
 First, create another new **Presentation Table** called *F Sales*.
 
-![F Sales Presentation table](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/f_sales-presentation-table.png?raw=true)
+![F Sales Presentation table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/f_sales-presentation-table.png)
 
 Now, drag and drop all three previously created presentation tables (*Revenue Metrics*, *Profit Metrics*, and *Counts*) onto the *F Sales* presentation table.
 
-![Subject Area reorganized](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/subject-area-reorganized.png?raw=true)
+![Subject Area reorganized](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/subject-area-reorganized.png)
 
 You can now **save** your model, run a **consistency check**, and **deploy** it.
 
 For added assurance, run the **Advanced Consistency Check**.
 
-![Advanced Check](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/advanced-check.png?raw=true)
+![Advanced Check](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/advanced-check.png)
 
 You’ll see a message indicating that the **Advanced Consistency Check** is running at the bottom-right of the screen:
 
-![Advanced Check Message](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/advanced-check-message.png?raw=true)
+![Advanced Check Message](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/advanced-check-message.png)
 
 Once the check completes (successfully or not), the result is displayed at the bottom-right. If successful, proceed to deploy the model.
 
-![Deploy Successful](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/deploy-successful.png?raw=true)
+![Deploy Successful](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/deploy-successful.png)
 
 ### Review and Test Changes
 
@@ -243,23 +243,23 @@ After deploying, the first test is to verify that your presentation tables are p
 - *Profit Metrics*
 - *Counts*
 
-![New Subject Area](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/new-subject-area.png?raw=true)
+![New Subject Area](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/new-subject-area.png)
 
 More importantly, test the new metrics to ensure they return correct results.
 
 Start by checking simple calculations:
 
-![Simple Calculations Test](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/simple-calculations-test.png?raw=true)
+![Simple Calculations Test](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/simple-calculations-test.png)
 
 You should see all measures (*Total Costs*, *Profit*, and *Profit Margin %*) calculated properly.
 
 Next, check Time Series calculations:
 
-![Time Series Calculations Test](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/time-series-calculations-test.png?raw=true)
+![Time Series Calculations Test](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/time-series-calculations-test.png)
 
 Lastly, verify the newly introduced **Level-Based Measures**:
 
-![Level Based Measures Test](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/calculations/images/level-based-measures-test.png?raw=true)
+![Level Based Measures Test](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/level-based-measures-test.png)
 
 ---
 
