@@ -1,0 +1,115 @@
+<h1>Using SELECT AI with RAG</h1>
+<p>In my two previous blog posts, <a href="https://zigavaupot.blogspot.com/2023/12/talking-to-oracle-database.html">Talking to Oracle Database in plain English</a> and <a href="https://zigavaupot.blogspot.com/2023/12/talking-to-oracle-database-slovenian.html">Talking to Oracle Database, this time in plain Slovenian</a>, I explored <strong>Select AI</strong> within the <strong>Oracle 23ai</strong> database.</p>
+<p>In those posts, I tested how the <strong>Oracle 23ai</strong> feature called <strong>Select AI</strong> enables SQL access to generative AI by using Large Language Models (LLMs) to generate SQL queries that are then executed in the database.</p>
+<p>In this post, I will focus on using <strong>Select AI</strong> for <strong>Retrieval-Augmented Generation</strong> (RAG), a powerful approach that enhances natural language prompts by retrieving relevant documents from a <strong>vector store</strong> maintained within <strong>Oracle 23ai</strong>. This augmentation helps reduce hallucinations and provides more accurate, evidence-backed answers.</p>
+<hr>
+<h2>What is Select AI with RAG?</h2>
+<p>Select AI with RAG combines the power of generative AI with vector search capabilities. It uses <strong>Oracle 23ai AI Vector Search</strong> to perform similarity searches based on vector embeddings, retrieving relevant documents that enrich the prompt before generating a response.</p>
+<p>To set up <strong>Select AI with RAG</strong>, two main tasks are required:</p>
+<ul>
+<li>Setting up a <strong>Vector Store</strong> in <strong>OCI Object Storage</strong></li>
+<li>Creating a <strong>Vector Index</strong> in the database</li>
+</ul>
+<hr>
+<h2>Setting Up the Vector Store</h2>
+<p>For my example, I used the <em>rag-mini-wikipedia</em> dataset from <a href="https://huggingface.co/datasets/rag-datasets/rag-mini-wikipedia">Hugging Face datasets</a>. This dataset consists of over 100 text files, which I uploaded to my OCI Object Storage bucket.</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/object-storage.png?raw=true" alt="Upload data files to Object Storage"></p>
+<hr>
+<h2>Configuring Access to OpenAI API and OCI Object Storage</h2>
+<p>In this example, I use OpenAI as my LLM provider. Oracle 23ai supports other LLMs as well, and the setup process is very similar.</p>
+<p>First, ensure that the database user (e.g., <code>OML_USER</code>) has HTTP access to the OpenAI API endpoint (<code>api.openai.com</code>). A database administrator (ADMIN) needs to run the following code in SQL Developer:</p>
+<pre><code class="language-script">DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+        host =&gt; 'api.openai.com',
+        ace  =&gt; xs$ace_type(privilege_list =&gt; xs$name_list('http'),
+        principal_name =&gt; 'OML_USER',
+        principal_type =&gt; xs_acl.ptype_db)
+    );
+</code></pre>
+<p>Next, create credentials to connect to OpenAI and OCI Object Storage. These steps are performed in a Zeppelin notebook included with Oracle 23ai:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-credential.png?raw=true" alt="Create credential"></p>
+<p>Then, create the credential for OCI Object Storage access:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-oci-credential.png?raw=true" alt="Create OCI credential"></p>
+<p><strong>Note:</strong> Make sure the username includes the identity domain as a prefix, for example: <code>identity_domain/username</code>.</p>
+<hr>
+<h2>Creating an AI Profile and Vector Index</h2>
+<p>After setting up credentials, create a new AI profile that specifies the vector index to be used:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-profile.png?raw=true" alt="Create profile with Vector index"></p>
+<p>Next, create the vector index using the files stored in OCI Object Storage:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/create-vector-index.png?raw=true" alt="Create a new vector index"></p>
+<p>Finally, activate the new profile:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/set-profile.png?raw=true" alt="Set profile"></p>
+<hr>
+<h2>Testing with Real Queries</h2>
+<p>One of the text files I uploaded contains information about kangaroos. Let's ask: <em>How long does a kangaroo live?</em></p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-kangaroo.png?raw=true" alt="How long does kangaroo live?"></p>
+<p>The response includes two parts:</p>
+<ul>
+<li>The generated answer: <em>The average life expectancy of a kangaroo is about 4-6 years. However, in captivity, kangaroos may live as long as 20 years.</em></li>
+<li>A reference to the source file containing the information: <em>Sources: - files/S08_set1_a1.txt.txt (https://swiftobjectstorage.eu-frankfurt-1.oraclecloud.com/v1/frllu0v1kplh/select-ai-rag-data/files/S08_set1_a1.txt.txt)</em></li>
+</ul>
+<p>Another example is a question about Gustav Klimt, the famous Austrian painter:</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-klimt.png?raw=true" alt="Gustav Klimt?"></p>
+<p>This response is more complex. The embedding model identified <strong>more than one</strong> relevant document (five in total) to augment the prompt <em>tell me about Gustav Klimt</em>.</p>
+<p>The image below shows the same response in a table format, including the generated answer, source files used for prompt augmentation, and their respective similarity scores. The higher the score, the greater the influence of that document on the response.</p>
+<p><img src="https://github.com/zigavaupot/blogger/blob/main/select-ai-and-rag/images/question-klimt-table.png?raw=true" alt="Gustav Klimt?"></p>
+<hr>
+<h2>Conclusion</h2>
+<p>This example demonstrates how straightforward it is to set up an object store and enable Retrieval-Augmented Generation using vector indexes in Oracle 23ai. By integrating a vector store with Select AI, you can enrich your PL/SQL database with GenAI capabilities, allowing it to provide accurate, context-aware answers supported by relevant source documents.</p>
+<p>With just a few steps, you can leverage popular Large Language Models, register them with Oracle 23ai, and create powerful AI-driven applications that go beyond simple question answering. In future posts, I will explore how these techniques perform with non-English texts and more complex datasets.</p>
+<hr>
+<h2>Notebook Script</h2>
+<pre><code class="language-script">%script
+
+BEGIN
+    DBMS_CLOUD.CREATE_CREDENTIAL(
+        credential_name  =&gt; 'OPENAI_CRED35',
+        username         =&gt; 'OPENAI',
+        password         =&gt; '******************'
+        );
+EXCEPTION
+    WHEN others THEN
+        DBMS_OUTPUT.PUL_LINE(sqlerrm);
+END;
+
+BEGIN
+    DBMS_CLOUD.DROP_CREDENTIAL('OCI_CRED');
+    DBMS_CLOUD.CREATE_CREDENTIAL(
+        credential_name =&gt; 'OCI_CRED',
+        username =&gt; '**********************',
+        password =&gt; '*************'
+    );
+END;
+
+BEGIN
+    DBMS_CLOUD_AI.DROP_PROFILE('OPENAI_ORACLE');
+    DBMS_CLOUD_AI.CREATE_PROFILE(
+        profile_name =&gt;'OPENAI_ORACLE',
+        attributes   =&gt;'{&quot;provider&quot;: &quot;openai&quot;,
+        &quot;credential_name&quot;: &quot;OPENAI_CRED&quot;,
+        &quot;vector_index_name&quot;: &quot;RAG_DEMO_IDX&quot;,
+        &quot;temperature&quot;: 0.2,
+        &quot;max_tokens&quot;: 4096,
+        &quot;model&quot;: &quot;gpt-3.5-turbo-1106&quot;
+    }');
+END;
+
+BEGIN
+    DBMS_CLOUD_AI.CREATE_VECTOR_INDEX(
+         index_name  =&gt; 'RAG_DEMO_IDX',
+         attributes  =&gt; '{&quot;vector_db_provider&quot;: &quot;oracle&quot;,
+                          &quot;location&quot;: &quot;https://swiftobjectstorage.eu-frankfurt-1.oraclecloud.com/v1/&lt;namespace&gt;/select-ai-rag-data&quot;,
+                          &quot;object_storage_credential_name&quot;: &quot;OCI_CRED&quot;,
+                          &quot;profile_name&quot;: &quot;OPENAI_ORACLE&quot;,
+                          &quot;vector_dimension&quot;: 1536,
+                          &quot;vector_distance_metric&quot;: &quot;cosine&quot;,
+                          &quot;chunk_overlap&quot;:128,
+                          &quot;chunk_size&quot;:1024
+    }');
+END;
+
+BEGIN
+    DBMS_CLOUD_AI.SET_PROFILE(
+        profile_name =&gt; 'OPENAI_ORACLE'
+    );
+END;
+</code></pre>

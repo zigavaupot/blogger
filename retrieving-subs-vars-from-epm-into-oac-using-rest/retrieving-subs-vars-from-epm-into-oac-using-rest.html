@@ -1,0 +1,130 @@
+<p>Since a few releases ago, Oracle has introduced native connectors that link Oracle Analytics to Oracle EPM Applications. This integration enables planning data from Oracle EPM Cloud to be seamlessly retrieved into Oracle Analytics for reporting and analysis.</p>
+<p>However, this initial step only scratches the surface of the EPM/Essbase ecosystem. Several additional capabilities are needed to fully leverage these data sources, including:</p>
+<ul>
+<li>Support for EPM Cloud/Essbase data sources in the Semantic Modeler: This feature is not yet available but is expected in the January 2025 release of Oracle Analytics Cloud.</li>
+<li>Direct import of Substitution Variables with data is not currently supported. However, REST API provides a way to retrieve all substitution variables.</li>
+<li>Selection Steps, a functionality familiar from &quot;classic&quot; Oracle Analytics (Dashboards and Answers), allows users to select specific hierarchy members and display only their descendants based on hierarchical or similar relationships (e.g., leaves of a hierarchy).</li>
+</ul>
+<p>This article focuses on retrieving Substitution Variables using the REST API and integrating them into Oracle Analytics.</p>
+<hr>
+<h2>Understanding the Challenge: What Are Substitution Variables?</h2>
+<p>Substitution variables are placeholders defined within the Oracle EPM Cloud or Essbase data sources. They represent specific members that change regularly, such as versions or periods. Bringing these substitution variables into Oracle Analytics ensures consistency in reporting and analysis, allowing dynamic filtering and parameterization aligned with the source system.</p>
+<p>Unfortunately, substitution variables cannot be imported directly with the data via native connectors. The workaround is to use the Oracle EPM Cloud REST API to extract these variables and incorporate them into Oracle Analytics.</p>
+<hr>
+<h2>Overview of the Workflow</h2>
+<p>To leverage substitution variables in Oracle Analytics, the workflow involves:</p>
+<ol>
+<li>Creating a new REST API connection to Oracle EPM Cloud.</li>
+<li>Building a dataset in Oracle Analytics that retrieves substitution variables via this REST API connection.</li>
+<li>Using the substitution variables dataset to create parameters within workbooks.</li>
+<li>Binding these parameters to filters or using them independently in analyses (e.g., expression filters, calculations).</li>
+</ol>
+<hr>
+<h2>Initial Workbook Setup</h2>
+<p>Our starting point is a workbook with a dataset named <em>Vision.Vis1ASO</em>. This dataset uses a direct native connection to the Oracle EPM Planning application and cube.</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/initial-analysis.png" alt="Initial Analysis" style="max-width: 100%; height: auto;"></div>
+<p>The <em>Vision.Vis1ASO</em> dataset connects through an <strong>EPM direct connection</strong>, which allows access to five plan types or cubes. In this example, we use the <strong>Vis1ASO</strong> plan type.</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/vis1aso-dataset.png" alt="Vision.Vis1ASO dataset" style="max-width: 100%; height: auto;"></div>
+<p>The <strong>EPM direct connection</strong> is configured as shown below:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/epm-direct-connection.png" alt="EPM Direct Connection" style="max-width: 100%; height: auto;"></div>
+<p>The URL corresponds to the base URL of the EPM Cloud Service. For example, if the service URL is <code>https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com/epmcloud</code>, then the required <strong>URL</strong> is <code>https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com</code>.</p>
+<p>Oracle's EPM connector supports three authentication options:</p>
+<ol>
+<li>Always use the credentials defined in the connection.</li>
+<li>Require users to enter their own credentials each time they use the connection.</li>
+<li>Use active user credentials, where the credentials used to connect to Oracle Analytics are automatically used for EPM Cloud.</li>
+</ol>
+<hr>
+<h2>Creating a REST API Connection to Retrieve Substitution Variables</h2>
+<p>To access substitution variables, we need to create a new connection using the Oracle EPM Cloud REST API.</p>
+<p>Oracle's documentation comprehensively covers how to work with the EPM Cloud REST API; more details can be found <a href="https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/prest/planning_getting_and_setting_subst_variables_intro.html">here</a>.</p>
+<p>Start by clicking <strong>Create</strong> and selecting <strong>Connection</strong>:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/create-connection-menu.png" alt="Create Connection" style="max-width: 100%; height: auto;"></div>
+<p>In the <strong>Create Connection</strong> window, scroll down to find <strong>REST API (Preview)</strong> and select it:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/select-rest-api-connetion.png" alt="Create Connection" style="max-width: 100%; height: auto;"></div>
+<p>Name your connection (e.g., <em>EPM REST API Connection</em>), then specify the <strong>REST base URL</strong>.</p>
+<p>When working with Oracle EPM Planning as a data source, the REST API URL syntax is:</p>
+<pre><code>https://&lt;BASE-URL&gt;/HyperionPlanning/rest/{api_version}/{path}
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><strong>BASE-URL</strong> is the first part of your EPM service URL. For example, if your service URL is <code>https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com/epmcloud</code>, then <strong>BASE-URL</strong> is <code>https://xxx-xxx-xxx.eu-frankfurt-1.ocs.oraclecloud.com</code>.</li>
+<li><strong>api_version</strong> is the REST API version, currently <strong>v3</strong> for Planning.</li>
+<li><strong>path</strong> identifies the resource. For substitution variables, the path is <code>/HyperionPlanning/rest/{api_version}/applications/{application}/substitutionvariables</code>. For example, using the planning application <strong>Vision</strong>.</li>
+</ul>
+<p>Assuming an instance with the following <strong>BASE-URL</strong>:</p>
+<pre><code>https://epm-1234567890-plan.demoservices.oraclepdemos.com
+</code></pre>
+<p>The full REST Endpoint URL becomes:</p>
+<pre><code>https://epm-1234567890-plan.demoservices.oraclepdemos.com/HyperionPlanning/rest/v3/applications/Vision/substitutionvariables
+</code></pre>
+<p>Add this endpoint by clicking <strong>Add Endpoint</strong> and replacing the suggested URL with the one above.</p>
+<p>For <strong>Authentication</strong>, select <strong>Basic</strong> and enter your <strong>username</strong> and <strong>password</strong>.</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/define-rest-api-connection.png" alt="Create Connection" style="max-width: 100%; height: auto;"></div>
+<p>Click <strong>Save</strong>. If successful, a confirmation message will briefly appear.</p>
+<hr>
+<h2>Creating a Dataset to Capture Substitution Variables</h2>
+<p>Next, create a dataset that retrieves substitution variables using the REST API connection.</p>
+<p>From the list of available connections, select the one you just created. Open the <strong>Actions</strong> menu on the right and choose <strong>Create Dataset</strong>:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/create-dataset.png" alt="Create Dataset" style="max-width: 100%; height: auto;"></div>
+<p>In the <strong>New Dataset</strong> page, expand <strong>Schemas</strong> on the left panel, then open <strong>AUTOREST</strong>:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/navigate-to-schemas-autorest.png" alt="Navigate to AUTOREST" style="max-width: 100%; height: auto;"></div>
+<p>Double-click or drag the <strong>ITEM</strong> object onto the canvas.</p>
+<p>This action retrieves all substitution variables from the Oracle EPM Planning application (Vision) via the REST API.</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/import-items.png" alt="Import ITEMS" style="max-width: 100%; height: auto;"></div>
+<p>The dataset contains four columns:</p>
+<ul>
+<li><strong>POSITION</strong>: Substitution Variable ID</li>
+<li><strong>NAME</strong>: Substitution Variable name (e.g., ActVersion)</li>
+<li><strong>VALUE</strong>: Substitution Variable value (e.g., Working)</li>
+<li><strong>PLANTYPE</strong>: Plan type or cube associated with the substitution variable</li>
+</ul>
+<p>Name and save your dataset appropriately.</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/save-dataset.png" alt="Save dataset" style="max-width: 100%; height: auto;"></div>
+<p>Now, this dataset can be used like any other dataset in Oracle Analytics Cloud.</p>
+<hr>
+<h2>Integrating Substitution Variables into Analyses</h2>
+<p>Return to the initial workbook based on the Vision Planning application:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/epm-analysis-workbook.png" alt="EPM Analysis Workbook" style="max-width: 100%; height: auto;"></div>
+<p>Since the direct EPM Connector does not retrieve substitution variables, add the REST API dataset created above as an additional data source.</p>
+<p>Go to the <strong>Data</strong> tab and click <strong>Add Data ...</strong>:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/add-data.png" alt="Add Data" style="max-width: 100%; height: auto;"></div>
+<p>Search for your REST API dataset and click <strong>Add to Workbook</strong>:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/add-rest-api-dataset.png" alt="Add REST API Dataset" style="max-width: 100%; height: auto;"></div>
+<p>The <strong>Substitution Variables REST</strong> dataset will now appear in the datasets list on the left panel:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/dataset-added.png" alt="Dataset added" style="max-width: 100%; height: auto;"></div>
+<p>This dataset is independent of the Vision data and does not require any relationships. Its purpose is to populate parameters for filtering or other uses.</p>
+<p>Switch back to the <strong>Visualize</strong> tab.</p>
+<hr>
+<h2>Using Substitution Variables for Filtering</h2>
+<p>A common use case is to filter data based on substitution variable values. For example, we will populate a parameter called <strong>Year Parameter</strong> with the value of the <em>LastYr</em> substitution variable, which in this case is <em>FY22</em>.</p>
+<p>First, review all substitution variables:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/all-subs-vars.png" alt="All Substitution Variables" style="max-width: 100%; height: auto;"></div>
+<p>Confirm that <em>LastYr</em> has the value <em>FY22</em>.</p>
+<p>Navigate to the initial analysis and create a new filter on the <strong>Year Name</strong> column:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/create-filter-on-year.png" alt="Create a new filter" style="max-width: 100%; height: auto;"></div>
+<p>Instead of selecting values manually, click the <em>(x)</em> <strong>Bind Parameter</strong> icon:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/bind-parameter.png" alt="Bind parameter" style="max-width: 100%; height: auto;"></div>
+<p>From the menu, choose <strong>Create Parameter</strong>:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/bind-and-create-parameter.png" alt="Bind and create parameter" style="max-width: 100%; height: auto;"></div>
+<p>A new parameter is created with a temporary name <strong>Year Name</strong>.</p>
+<p>Right-click the parameter and select <strong>Edit Parameter</strong> to configure it.</p>
+<p>Rename it to <strong>Year Parameter</strong> and set <strong>Allow Multi Select</strong> to off. Change the <strong>Initial</strong> value setting to <strong>Logical SQL Query</strong>.</p>
+<p>Use the following Logical SQL query (you can generate this by creating a visualization and using the Developer option to extract the Logical SQL):</p>
+<pre><code>SELECT XSA('ziga.vaupot@version1.com'.'Substitution Variables REST').&quot;ITEMS&quot;.&quot;VALUE&quot;
+FROM XSA('ziga.vaupot@version1.com'.'Substitution Variables REST')
+WHERE XSA('ziga.vaupot@version1.com'.'Substitution Variables REST').&quot;ITEMS&quot;.&quot;NAME&quot; = 'LastYr'
+</code></pre>
+<p>Binding this parameter to the filter applies the filter based on the substitution variable's predefined value:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/filtering-based-on-parameter.png" alt="Filtering based on parameter value" style="max-width: 100%; height: auto;"></div>
+<p>Moreover, the parameter can be used independently. For example, disable the workbook filter and instead apply an Expression Filter using the parameter:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/expression-filter-using-parameter.png" alt="Expression Filter using Parameter" style="max-width: 100%; height: auto;"></div>
+<p>The result is the same filtered data:</p>
+<div style="text-align: center;"><img src="https://zigavaupot.github.io/blogger/retrieving-subs-vars-from-epm-into-oac-using-rest/images/filter-using-expression-filter-with-parameter.png" alt="Filter using expr.filter with parameter" style="max-width: 100%; height: auto;"></div>
+<hr>
+<h2>Conclusion</h2>
+<p>This exercise demonstrates how Oracle EPM Cloud can be integrated as a data source in Oracle Analytics. While the direct connection supports data retrieval, substitution variables require leveraging the REST API.</p>
+<p>Looking ahead, Oracle has announced that <strong>Oracle EPM Cloud</strong> and <strong>Essbase</strong> will be supported as data sources in the <strong>Semantic Modeler</strong> starting with the <strong>January 2025</strong> release. This enhancement is expected to simplify the retrieval of substitution variables directly within the Semantic Modeler, eliminating the need for separate REST API connections.</p>
+<p>Another eagerly anticipated feature is <strong>Selection Steps</strong>, which will allow users to filter and display specific sub-hierarchies within dimensions (e.g., selecting just the P&amp;L or Balance Sheet within the Account dimension). Currently, hierarchical columns display all members, and while some can be manually removed, upper levels remain visible, limiting usability. Selection Steps are planned for the <strong>March 2025</strong> release.</p>
+<p>Together, these upcoming capabilities promise to significantly enhance Oracle Analytics' integration with Oracle EPM Cloud and Essbase, improving user experience and analytical flexibility.</p>
+<p><strong>Wishing you a Merry Christmas and a Happy New Year 2025!</strong></p>
