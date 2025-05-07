@@ -1,0 +1,105 @@
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/images/oabootcamp-logo.png" alt="Oracle Analytics Bootcamp" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+<p>In Oracle Analytics, establishing connections to your data sources is fundamental. There are two essential types of connections that serve distinct purposes but are both crucial for effective data analysis and semantic modeling:</p>
+<ul>
+<li><strong>Regular Connections</strong>: These allow Oracle Analytics to connect to databases for retrieving and analyzing data through tools like Data Visualization.</li>
+<li><strong>System Connections</strong>: These are specialized connections used exclusively for creating and managing semantic models and metadata repositories within the Semantic Modeler.</li>
+</ul>
+<p>Understanding and correctly configuring both connection types ensures a smooth workflow when working with data and semantic models in Oracle Analytics.</p>
+<h1>Creating a Regular Connection</h1>
+<p>Regular Connections enable users to access and analyze data directly from the database. Although Oracle Analytics does not explicitly label this connection type as &quot;regular,&quot; this term helps differentiate it from system connections.</p>
+<p>For this example, we will use the Oracle Bootcamp database, which contains the following tables:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/tables.png" alt="Database tables" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+<p>To create a Regular Connection:</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Data</strong> section from the <strong>Navigator</strong> menu in Oracle Analytics.</p>
+</li>
+<li>
+<p>Click the second tab to view existing connections. Initially, this list will be empty:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/connections-empty.png" alt="Connections list empty" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+</li>
+<li>
+<p>Click <strong>Create</strong> in the top-right corner and select <strong>Connection</strong>:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-connection.png" alt="Create a new connection" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+</li>
+<li>
+<p>In the <strong>Create Connection</strong> dialog, choose the database type. For this example, select <strong>Oracle Autonomous Data Warehouse</strong>:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-connection-dialog-1.png" alt="Select database type" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+</li>
+<li>
+<p>Proceed to the next step to enter connection details:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-connection-dialog-2.png" alt="Enter connection details" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+</li>
+<li>
+<p>Fill in the form with the following information:</p>
+<ul>
+<li>Provide a meaningful <strong>Connection Name</strong> and <strong>Description</strong>.</li>
+<li>Set <strong>Encryption Type</strong> to <em>Mutual TLS</em>.</li>
+<li>Upload the <em>Wallet</em> file downloaded from your database console.</li>
+<li>Enter your <strong>Username</strong> and <strong>Password</strong>.</li>
+<li>Choose <em>_high</em> as the <strong>Service Name</strong>.</li>
+<li>Leave <strong>Authentication</strong> set to <em>Always use these credentials</em>.</li>
+</ul>
+</li>
+<li>
+<p>Click <strong>Save</strong> to create the connection.</p>
+</li>
+</ol>
+<p>This Regular Connection can now be used to retrieve data from the database, such as when building datasets. However, it is not suitable for creating or managing semantic models.</p>
+<h2>Creating a System Connection</h2>
+<p>System Connections are mandatory for working with semantic models in the Semantic Modeler. While the creation process is similar to that of a Regular Connection, a key difference is the explicit designation of the connection as a <strong>System Connection</strong>.</p>
+<p>To create a System Connection:</p>
+<ol>
+<li>
+<p>Repeat the steps to create a new connection as described above.</p>
+</li>
+<li>
+<p>In the final step of the <strong>Create Connection</strong> dialog, check the box labeled <strong>System Connection</strong>:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-system-connection.png" alt="Create System Connection" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+</li>
+<li>
+<p>Save the connection.</p>
+</li>
+</ol>
+<p>Once created, your connections list will display both the Regular and System Connections:</p>
+<p>
+  <div style="text-align: center;">
+    <img src="https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/connections-list.png" alt="Connections list with regular and system connections" style="max-width: 100%; height: auto;" />
+  </div>
+</p>
+<p><strong>Note:</strong> If you encounter issues connecting to the database from the Semantic Modeler, especially in earlier versions of Oracle Analytics, try using a connection name with 8 characters or fewer for better compatibility.</p>
+<h2>Summary</h2>
+<p>Both Regular and System Connections play vital roles in Oracle Analytics:</p>
+<ul>
+<li><strong>Regular Connections</strong> facilitate data retrieval and analysis through tools like Data Visualization.</li>
+<li><strong>System Connections</strong> enable the creation and maintenance of semantic models and metadata repositories within the Semantic Modeler.</li>
+</ul>
+<p>In our labs, we will primarily work with the <strong>System Connection</strong> to build and manage semantic models effectively. Ensuring these connections are properly configured will provide a seamless experience throughout your Oracle Analytics projects.</p>

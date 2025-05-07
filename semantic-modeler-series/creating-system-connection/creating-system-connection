@@ -1,4 +1,4 @@
-![Oracle Analytics Bootcamp](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/images/oabootcamp-logo.png?raw=true)
+![Oracle Analytics Bootcamp](https://zigavaupot.github.io/blogger/semantic-modeler-series/images/oabootcamp-logo.png)
 
 Working with data in databases requires Oracle Analytics administrators to create connections. There are two types of connections:
 
@@ -13,23 +13,23 @@ I'm using the term **"regular"** here, as Oracle does not use a specific label f
 
 Oracle Bootcamp uses the following tables:
 
-![Database tables](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/tables.png?raw=true)
+![Database tables](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/tables.png)
 
 To create such a connection, navigate to **Data** in the **Navigator** menu in Oracle Analytics. Under the second tab, all connections are listed. In our case, the list is empty:
 
-![Connections](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/connections-empty.png?raw=true)
+![Connections](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/connections-empty.png)
 
 To create a new connection, click **Create** in the top-right corner and select **Connection**:
 
-![Create a new connection](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/create-connection.png?raw=true)
+![Create a new connection](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-connection.png)
 
 The **Create Connection** dialog appears. Select the database type—in our example, we are using Oracle Autonomous Data Warehouse.
 
-![Create Connection Dialog 1](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/create-connection-dialog-1.png?raw=true)
+![Create Connection Dialog 1](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-connection-dialog-1.png)
 
 Once the database type is selected, the dialog proceeds to the second step: entering connection details.
 
-![Create Connection Dialog 2](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/create-connection-dialog-2.png?raw=true)
+![Create Connection Dialog 2](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-connection-dialog-2.png)
 
 Provide a meaningful connection name and description. For Autonomous Data Warehouse:
 
@@ -49,11 +49,11 @@ System Connections are required when creating or updating semantic models using 
 
 So, we need to create another connection and, in the final step, check the **System Connection** checkbox:
 
-![Create System Connection](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/create-system-connection.png?raw=true)
+![Create System Connection](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/create-system-connection.png)
 
 The connections list should now show two entries:
 
-![Connections List](https://github.com/zigavaupot/blogger/blob/main/semantic-modeler-series/creating-system-connection/images/connections-list.png?raw=true)
+![Connections List](https://zigavaupot.github.io/blogger/semantic-modeler-series/creating-system-connection/images/connections-list.png)
 
 One final note: if you're using an earlier version of Oracle Analytics, you may experience issues when connecting to a database from Semantic Modeler. In such cases, try using a shorter connection name—**8 characters or fewer** usually works best.
 
