@@ -12,7 +12,7 @@ Let’s take a look at an example.
 
 In the database, we have two tables that contain sales data for two different years: `F_REVENUE_2022` and `F_REVENUE_2023`.
 
-![Two tables for revenue](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/two-tables.png)
+![Two tables for revenue](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/two-tables.png)
 
 Both table have same structure, but can reside in different database (not in this case).
 
@@ -28,25 +28,25 @@ Once the aliases are in place, we can establish **physical joins** with all rele
 - `DIM_ORDERS`
 - `DIM_GEOGRAPHY`
 
-![Physical model](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/physical-model.png)
+![Physical model](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/physical-model.png)
 
 ### Configure Logical Layer
 
 We can now continue setting up logical layer. First, we create a new logical table F_REVENUE_ALL_YEARS, for which we create 2 logical table sources.
 
-![Create new logical table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-new-logical-table.png)
+![Create new logical table](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/create-new-logical-table.png)
 
 Provide a name for new logical table and continue:
 
-![Create logical table dialog](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-logical-table-dialog.png)
+![Create logical table dialog](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/create-logical-table-dialog.png)
 
 Once created, open new logical table in a separate tab and navigate to **Sources** tab and add both tables as logical table source:
 
-![Add logical table sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/add-physical-table.png)
+![Add logical table sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/add-physical-table.png)
 
 Search for and mark both tables in **Select Physical Table** dialog:
 
-![Select Physical Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/select-physical-table-dialog.png)
+![Select Physical Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/select-physical-table-dialog.png)
 
 Click *Select* to continue.
 
@@ -54,32 +54,32 @@ Let’s check what we have at this point:
 
 - Logical table F_REVENUE_ALL_YEARS has been created.
 
-![Status: Logical Table Crated](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/status-logical-table-created.png)
+![Status: Logical Table Crated](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/status-logical-table-created.png)
 
 Before moving any further, make sure measures in this logical table are defined, not required attributes (ie- ORDER_STATUS) are removed ...
 
 - F_REVENUE_ALL_YEARS has two logical tables sources.
 
-![Status: 2 Logical Table Sources Added](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/status-two-logical-joins-added.png)
+![Status: 2 Logical Table Sources Added](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/status-two-logical-joins-added.png)
 
 Let's drill to attribute level by opening detailed view for selected attribute, for example *Revenue*, in **F_REVENUE_ALL_YEARS**. We can observe that this attribute now has two Logical Table Sources: F_REVENUE_2022 and F_REVENUE_2023.
 
-![Revenue details](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/attribute-revenue-details.png)
+![Revenue details](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/attribute-revenue-details.png)
 
 At this point, we are not ready for deploy, but let's check how the model would behave if we deployed it now. 
 But before we deploy, there are a few more small tasks to take care of:
 
 - We need to connect the tables in the logical model. The logical table `F_REVENUE_ALL_YEARS` was created manually, so the relationships from the physical model were not transferred automatically.
 
-![Logical model](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/logical-model.png)
+![Logical model](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/logical-model.png)
 
 - Additionally, we need to define the correct levels by setting the appropriate **levels of granularity**.
 
-![Setting levels](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/setting-levels.png)
+![Setting levels](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/setting-levels.png)
 
 - Create a new presentation table in subject area.
 
-![Presentation Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/presentation-table.png)
+![Presentation Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/presentation-table.png)
 
 The workbook below displays what appears to be the same data in both tables. However, there's an important difference:
 
@@ -128,7 +128,7 @@ Dat Fragmentation is a simple step that is performed at each Logical Table Sourc
 
 Let's navigate to logical table sources. Under details for each of the source, we can find **Data Fragmentation** section. 
 
-![Data fragmentation section](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/data-fragmentation-section.png)
+![Data fragmentation section](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/data-fragmentation-section.png)
 
 If data is fragmented as it is in our case, check *Data is Fragmented* check box. This will open addtional entry options.
 
@@ -158,11 +158,11 @@ Let's examine what this actually mean in practice.
 
 Both data fragmentation filters are set for both Logical Table Sources and have **Combine with Other Fragmented Sources** checked.
 
-![Combine with Other Fragmented Sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/combine-with-other-fragmented-sources.png)
+![Combine with Other Fragmented Sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/combine-with-other-fragmented-sources.png)
 
 We can run same report as before, and now also table on the right shows data from both logical table sources.
 
-![Testing with Other Fragmented Sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/testing-combine-with-other-sources.png)
+![Testing with Other Fragmented Sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/testing-combine-with-other-sources.png)
 
 ```sql
 WITH 
@@ -272,7 +272,7 @@ order by c3, c2
 
 Let's now investigate the behaviour of the 2nd parameter, *Enable Data Driven Frament Selection*. 
 
-![Enable Data Driven Frament Selection](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/enable-data-driven-fragment-selection.png)
+![Enable Data Driven Frament Selection](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/enable-data-driven-fragment-selection.png)
 
 As we can see, *Combine with Other Fragmented Sources* and *Enable Data Driven Frament Selection* parameters are mutually exclusive, e.g. when selecting one, the other one is automatically deselected.
 
@@ -303,7 +303,7 @@ We can see that only F_REVENUE_2023 was selected as a result of filtered data on
 
 If we disable workbook filter, then the following happens:
 
-![Disable filters when running query for Data Driven Fragment Selection](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/testing-disable-filter-for-data-driven.png)
+![Disable filters when running query for Data Driven Fragment Selection](https://zigavaupot.github.io/blogger/semantic-modeler-series/data-fragmentation/images/testing-disable-filter-for-data-driven.png)
 
 Only data from dimension table is displayed. Examining generated query shows that none of *F_REVENUE_* tables were considered. This was kind of expected as logical table sourse selection is data driven and would only "pick up" logical table source when fragmentation condition is met. And in this particular case, none of conditions were met, hence no fact table at all in the query.
 
