@@ -1,0 +1,83 @@
+![Oracle Analytics Bootcamp](https://zigavaupot.github.io/blogger/semantic-modeler-series/images/oabootcamp-logo.png)
+
+### Fragmentation in Oracle Analytics
+
+**Fragmentation in Oracle Analytics** refers to the practice of dividing large datasets into smaller, logically separated segments—called *fragments*—based on defined criteria such as time, region, or product category. This technique is primarily implemented in the **semantic layer** to optimize query performance and data management. By configuring fragmentation content filters on multiple logical table sources, Oracle Analytics can intelligently route queries to only the relevant data source, reducing processing time and improving efficiency. Fragmentation is especially useful in large-scale deployments where data is physically partitioned or spread across multiple tables or databases. 
+
+Just to clarify, when speaking of fragmentation in Oracle Analytics, we’re not referring to table range partitioning, which is managed entirely at the database level and does not require any configuration in the semantic model, as partitioning is handled automatically by the database engine.
+
+Let’s take a look at an example.
+
+### Prepare Physical Layer
+
+In the database, we have two tables that contain sales data for two different years: `F_REVENUE_2022` and `F_REVENUE_2023`.
+
+![Two tables for revenue](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/two-tables.png)
+
+Both table have same structure, but can reside in different database (not in this case).
+
+We need to import the metadata of both tables into the semantic model and properly link them to the dimensional tables—just as we would if there were only a single `F_REVENUE` table.
+
+Following best practices, we also create **aliases** for these two tables to keep the model clean and maintain flexibility.
+
+Once the aliases are in place, we can establish **physical joins** with all relevant dimension tables that relate to revenue, such as, in our case:
+- `DIM_TIME_BILL_DT`
+- `DIM_TIME_PAID_DT`
+- `DIM_PRODUCTS`
+- `DIM_CUSTOMERS`
+- `DIM_ORDERS`
+- `DIM_GEOGRAPHY`
+
+![Physical model](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/physical-model.png)
+
+### Configure Logical Layer
+
+We can now continue setting up logical layer. First, we create a new logical table F_REVENUE_ALL_YEARS, for which we create 2 logical table sources.
+
+![Create new logical table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-new-logical-table.png)
+
+Provide a name for new logical table and continue:
+
+![Create logical table dialog](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/create-logical-table-dialog.png)
+
+Once created, open new logical table in a separate tab and navigate to **Sources** tab and add both tables as logical table source:
+
+![Add logical table sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/add-physical-table.png)
+
+Search for and mark both tables in **Select Physical Table** dialog:
+
+![Select Physical Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/select-physical-table-dialog.png)
+
+Click *Select* to continue.
+
+Let’s check what we have at this point:
+
+- Logical table F_REVENUE_ALL_YEARS has been created.
+
+![Status: Logical Table Crated](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/status-logical-table-created.png)
+
+Before moving any further, make sure measures in this logical table are defined, not required attributes (ie- ORDER_STATUS) are removed ...
+
+- F_REVENUE_ALL_YEARS has two logical tables sources.
+
+![Status: 2 Logical Table Sources Added](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/status-two-logical-joins-added.png)
+
+Let's drill to attribute level by opening detailed view for selected attribute, for example *Revenue*, in **F_REVENUE_ALL_YEARS**. We can observe that this attribute now has two Logical Table Sources: F_REVENUE_2022 and F_REVENUE_2023.
+
+![Revenue details](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/attribute-revenue-details.png)
+
+At this point, we are not ready for deploy, but let's check how the model would behave if we deployed it now. 
+But before we deploy, there are a few more small tasks to take care of:
+
+- We need to connect the tables in the logical model. The logical table `F_REVENUE_ALL_YEARS` was created manually, so the relationships from the physical model were not transferred automatically.
+
+![Logical model](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/logical-model.png)
+
+- Additionally, we need to define the correct levels by setting the appropriate **levels of granularity**.
+
+![Setting levels](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/setting-levels.png)
+
+- Create a new presentation table in subject area.
+
+
+![Presentation Table](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/presentation-table.png)
