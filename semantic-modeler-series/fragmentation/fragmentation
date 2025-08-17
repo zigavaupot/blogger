@@ -156,5 +156,172 @@ If a user builds a report without filtering by year, and this option is enabled,
 
 Let's examine what this actually mean in practice.
 
-- check **Combine with Other Fragmented Sources**
+Both data fragmentation filters are set for both Logical Table Sources and have **Combine with Other Fragmented Sources** checked.
+
+![Combine with Other Fragmented Sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/combine-with-other-fragmented-sources.png)
+
+We can run same report as before, and now also table on the right shows data from both logical table sources.
+
+![Testing with Other Fragmented Sources](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/testing-combine-with-other-sources.png)
+
+```sql
+WITH 
+SAWITH0 AS ((select T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3,
+     T128.REVENUE as c4
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2023 T128
+where  ( T19.DAY_DT = T128.TIME_BILL_DT and (T19.PER_NAME_YEAR in ('2022', '2023')) ) 
+union all
+select T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3,
+     T114.REVENUE as c4
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2022 T114
+where  ( T19.DAY_DT = T114.TIME_BILL_DT and (T19.PER_NAME_YEAR in ('2022', '2023')) ) )),
+SAWITH1 AS (select sum(D3.c4) as c1,
+     D3.c2 as c2,
+     D3.c3 as c3
+from 
+     SAWITH0 D3
+group by D3.c2, D3.c3)
+select 0 as c1,
+     D2.c2 as c2,
+     D2.c3 as c3,
+     D2.c1 as c4,
+     0 as c5,
+     0 as c6
+from 
+     SAWITH1 D2
+order by c3, c2
+```
+
+As we can see, *UNION ALL* has been used to combine results from both logical table sources. For example, if we filter only on year 2023:
+
+```sql
+WITH 
+SAWITH0 AS ((select T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3,
+     T114.REVENUE as c4
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2022 T114
+where  ( T19.DAY_DT = T114.TIME_BILL_DT and T19.PER_NAME_YEAR = '2023' ) 
+union all
+select T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3,
+     T128.REVENUE as c4
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2023 T128
+where  ( T19.DAY_DT = T128.TIME_BILL_DT and T19.PER_NAME_YEAR = '2023' ) )),
+SAWITH1 AS (select sum(D3.c4) as c1,
+     D3.c2 as c2,
+     D3.c3 as c3
+from 
+     SAWITH0 D3
+group by D3.c2, D3.c3)
+select 0 as c1,
+     D2.c2 as c2,
+     D2.c3 as c3,
+     D2.c1 as c4,
+     0 as c5,
+     0 as c6
+from 
+     SAWITH1 D2
+order by c3, c2
+```
+
+We can see queries has been executed on both logical table sources using filter on year. The same results would be obtained even if no filter were used (e.g., if the filter were disabled).
+
+```sql
+WITH 
+SAWITH0 AS ((select T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3,
+     T128.REVENUE as c4
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2023 T128
+where  ( T19.DAY_DT = T128.TIME_BILL_DT ) 
+union all
+select T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3,
+     T114.REVENUE as c4
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2022 T114
+where  ( T19.DAY_DT = T114.TIME_BILL_DT ) )),
+SAWITH1 AS (select sum(D3.c4) as c1,
+     D3.c2 as c2,
+     D3.c3 as c3
+from 
+     SAWITH0 D3
+group by D3.c2, D3.c3)
+select 0 as c1,
+     D2.c2 as c2,
+     D2.c3 as c3,
+     D2.c1 as c4,
+     0 as c5,
+     0 as c6
+from 
+     SAWITH1 D2
+order by c3, c2
+```
+
+Let's now investigate the behaviour of the 2nd parameter, *Enable Data Driven Frament Selection*. 
+
+![Enable Data Driven Frament Selection](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/enable-data-driven-fragment-selection.png)
+
+As we can see, *Combine with Other Fragmented Sources* and *Enable Data Driven Frament Selection* parameters are mutually exclusive, e.g. when selecting one, the other one is automatically deselected.
+
+When testing the report above, and filtering only on 2023, table is properly filtered and underlying SQL is a follows:
+
+```sql
+WITH 
+SAWITH0 AS (select sum(T128.REVENUE) as c1,
+     T19.PER_NAME_MONTH as c2,
+     T19.PER_NAME_YEAR as c3
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ ,
+     OABOOTCAMP.F_REVENUE_2023 T128
+where  ( T19.DAY_DT = T128.TIME_BILL_DT and T19.PER_NAME_YEAR = '2023' ) 
+group by T19.PER_NAME_MONTH, T19.PER_NAME_YEAR)
+select 0 as c1,
+     D1.c2 as c2,
+     D1.c3 as c3,
+     D1.c1 as c4,
+     0 as c5,
+     0 as c6
+from 
+     SAWITH0 D1
+order by c3, c2
+```
+
+We can see that only F_REVENUE_2023 was selected as a result of filtered data on 2023. This is definitely better than running a query with knowledge result of that subquery would be null. However, one must be carefull, as the following interesting thing happens when no specific filter is defined. 
+
+If we disable workbook filter, then the following happens:
+
+![Disable filters when running query for Data Driven Fragment Selection](https://zigavaupot.github.io/blogger/semantic-modeler-series/calculations/images/testing-disable-filter-for-data-driven.png)
+
+Only data from dimension table is displayed. Examining generated query shows that none of *F_REVENUE_* tables were considered. This was kind of expected as logical table sourse selection is data driven and would only "pick up" logical table source when fragmentation condition is met. And in this particular case, none of conditions were met, hence no fact table at all in the query.
+
+```sql
+WITH 
+SAWITH0 AS (select distinct T19.PER_NAME_MONTH as c1,
+     T19.PER_NAME_YEAR as c2
+from 
+     OABOOTCAMP.D_TIME T19 /* DIM_TIME_BILL_DT */ )
+select 0 as c1,
+     D1.c1 as c2,
+     D1.c2 as c3,
+     cast(NULL as  NUMBER ( 38, 0 ) ) as c4,
+     0 as c5,
+     0 as c6
+from 
+     SAWITH0 D1
+order by c3, c2
+```
+
 
