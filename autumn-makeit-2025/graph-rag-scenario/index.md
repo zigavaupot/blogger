@@ -61,7 +61,7 @@ END;
 > 
 > PL/SQL procedure successfully completed.
 
-Checking if **TinyBERT** model exists in database ...
+Checking if **TinyBERT** model exists in database  ...
 
 ```sql
 DECLARE
