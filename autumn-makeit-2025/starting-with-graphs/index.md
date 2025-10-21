@@ -40,7 +40,20 @@ You don’t need to set up a separate Graph Server to do this; the graph can
 be created and queried directly within SQL.
 
 ```oracle
->
+CREATE PROPERTY GRAPH bank_transfers_sql_graph
+  VERTEX TABLES (
+    BANK_ACCOUNTS
+      KEY ( id )
+      LABEL accounts
+      PROPERTIES ( id, name )
+    )
+    EDGE TABLES (
+      BANK_TRANSFERS
+        SOURCE KEY ( src_acct_id ) REFERENCES BANK_ACCOUNTS(id)
+          DESTINATION KEY ( dst_acct_id ) REFERENCES BANK_ACCOUNTS(id)
+        LABEL transfers
+        PROPERTIES ( amount, description, src_acct_id, dst_acct_id, txn_id )
+    );
 ```
 
 The command above creates a property graph named
@@ -102,7 +115,13 @@ Visualiztion fro VS Code Extension (run from SQL Worksheet).
 The simplest graph query is to display nodes and edges that connect these.
 
 ```oracle
->
+-- List all transfers with sender and receiver details
+
+SELECT * FROM GRAPH_TABLE (bank_transfers_sql_graph
+  MATCH
+    (src) -[t]- (dst)
+  COLUMNS (src.id AS sender_id, t.txn_id AS transaction_id, dst.id AS receiver_id)
+);
 ```
 
 As you can see, the SQL statements look almost the same as regular SQL —
@@ -147,7 +166,13 @@ SELECT * FROM GRAPH_TABLE (bank_transfers_sql_graph
 ```
 
 ```oracle
-|
+-- Find the 10 accounts that have received the most transfers
+
+SELECT acct_id, COUNT(*) AS Num_Transfers 
+FROM graph_table ( bank_sql_graph 
+    MATCH (src) - [IS transfers] -> (dst) 
+    COLUMNS ( dst.id AS acct_id )
+) GROUP BY acct_id ORDER BY Num_Transfers DESC FETCH FIRST 10 ROWS ONLY; 
 ```
 
 ```oracle
