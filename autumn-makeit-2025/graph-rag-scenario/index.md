@@ -1352,6 +1352,7 @@ END;
 ```
 
 > === LLM Response ===
+> 
 > Piki je zanimiva oseba, ki jo spremljamo skozi različne dogodke in pustolovščine. Njegova zgodba je tesno povezana z učiteljem, ki ga spremlja in mu pomaga pri različnih aktivnostih. Učitelj je Pikijev varuh in ga vzgaja kot lastnega otroka.
 > 
 > Piki je medvedek, ki živi v Ljubljani in hodi v medvedjo šolo. Ima mnogo medvedjih prijateljev in se zelo rad igra z njimi. Učitelj ga spremlja na različne izlete, kot na primer v živalski vrt, kjer se Piki zelo radzi za opice in druge živali.
