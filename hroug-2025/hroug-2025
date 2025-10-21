@@ -1,0 +1,47 @@
+
+Between 15th and 18th October 2025, I had the opportunity to speak at the HROUG 2025 conference, held on the beautiful island of Crveni otok (Red Island) near Rovinj, Croatia. The event brought together Oracle professionals and enthusiasts for several days of workshops, presentations, and community networking.
+
+During the conference, I delivered a workshop titled **ML/AI Meet Oracle Analytics** where I explored how Machine Learning and Artificial Intelligence integrate within Oracle Analytics to unlock deeper insights and smarter decision-making.
+
+I wanted the session to be practical and hands-on, showing how we can move from descriptive dashboards to predictive and even generative insights without ever leaving OAC.
+
+## Oracle Analytics and AI — A Natural Partnership  
+Over the past few years, Oracle Analytics has evolved far beyond being *just a visualization tool*. It’s now a platform that doesn’t just display data — it helps interpret it. 
+
+Some of the key features addressing this area are:
+- **AutoInsights and Explain** – help users understand their data by automatically surfacing patterns, trends, and factors influencing results.  
+- **Data Enrichment and Narrative Generation** – adding context and even generating descriptive text for datasets.  
+- **Forecasting with Prophet** – performing time-series predictions directly in OAC.  
+- **Anomaly Detection, Clustering, and Sentiment Analysis** – all accessible without writing a single line of code.  
+
+## How I See the Integration Layers  
+What I find exciting about OAC is how it connects seamlessly with Oracle’s broader AI and ML services — at every level of expertise.  
+
+1. **As a business analyst**, I can run ML-powered forecasts, clustering, and anomaly detection directly in visualizations.  
+2. **As a data scientist**, I can use **Oracle Machine Learning (OML)** to train models in-database using SQL, R, or Python.  
+3. **As a developer**, I can integrate models from **OCI Data Science**, such as Random Forests or XGBoost, directly into OAC data flows.  
+4. **As someone exploring AI services**, I can bring in **OCI Vision, Language, or Document Understanding** for richer, multimodal insights.  
+
+This flexibility makes OAC a true bridge between analytics, ML, and AI.
+
+## Demonstrations  
+During the session, I wa planning to share several live demos to illustrate these integrations in action:  
+
+- **OAC + Prophet Forecasting** – building forecasts directly inside dashboards.  
+- **OAC + OML** – training and deploying in-database models using AutoML4SQL.  
+- **OAC + OCI Data Science** – consuming Python-based models through data flows.  
+- **AI Assistant in OAC** – using natural language to explore data and get insights.  
+- **Video Analytics with OCI Vision** – detecting objects and activities in videos.  
+
+Each demo is designed to reinforce how Oracle’s analytics and AI tools are designed to work together — not as separate technologies, but as part of one intelligent ecosystem.
+
+## My Takeaway  
+For me, Oracle Analytics has become much more than a reporting tool. It’s an **AI-driven analytics platform** that allows me to combine business intelligence with machine learning and generative AI in one environment.  
+
+Whether I’m experimenting with data, training models, or explaining outcomes to business teams, (in general) I don’t have to switch tools.  
+Everything I need — from exploration to prediction — lives inside Oracle’s unified environment (OCI).
+
+## Closing Thoughts (... or instead of)
+In closing, I would like to offer my sincere apologies to the participants. I devoted a little too much attention to the out-of-the-box features section, which unfortunately prevented me from covering the entire agenda as planned. It was an important learning experience for me. In retrospect, I suspect that not feeling entirely well at the time may also have affected my focus.
+
+Presentation slides can be download from [here](https://zigavaupot.github.io/blogger/ahroug-2025/files/ml-ai-meet-oac.pdf)
