@@ -1,4 +1,4 @@
-# Graphs – the bridge between data and generative artificial intelligence.
+# Graphs: the bridge between data and generative artificial intelligence.
 
 ### Using Graphs as RAG in a GraphRAG scenario
 
