@@ -23,5 +23,4 @@ URL: [Starating with Graphs](https://zigavaupot.github.io/blogger/autumn-makeit-
 
 In the second part of the workshop, we focused on how graphs can be used to explain and analyze the content of a story. As our case study, we chose the beloved Slovenian children’s tale Piki Jakob, written by poet Kajetan Kovič. The goal was to transform this narrative into a structured, machine-understandable form. We began by dividing the text into smaller chunks and extracting relationships between the entities — such as characters, places, and objects — mentioned throughout the story. These relationships were then represented in a property graph, capturing how different elements of the tale connect and interact. Finally, we explored how to build a Retrieval-Augmented Generation (RAG) setup on top of this graph: by analyzing graph patterns to identify the most relevant or contextually rich chunks, which are then fed into a large language model (LLM) to generate grounded, coherent, and context-aware responses about the story’s content and meaning.
 
-URL: [Telling Stories]()
-
+URL: [Using Graphs as RAG in a GraphRAG scenario](https://zigavaupot.github.io/blogger/autumn-makeit-2025/starting-with-graphs/))
