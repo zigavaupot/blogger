@@ -1,1 +1,20 @@
-Autumn MakeIT 2025
+![Autumn MakeIT 2025](https://zigavaupot.github.io/blogger/autumn-makeit-2025/images/autumn-makeit-2025.png)
+
+The **Autumn MakeIT 2025 Conference** event took place on O**ctober 14th, 2025**, at the** Computer Museum in Ljubljana**. Its unofficial theme, **NO SLIDES, JUST CODE**,” truly captured the spirit of the day. The sessions were delivered by **four Slovenian Oracle ACEs** — Zoran Tica, Lucas Hirschegger, Urh Srečnik, and Žiga Vaupot. While Zoran and Lucas focused on development within **Oracle APEX**, Urh and I explored some of the exciting intersections between **Oracle database technologies and artificial intelligence**.
+
+My session was — quite literally — **my first deep dive into graphs** and **Oracle’s support for Property Graphs**. As promised, there were zero slides — my goal was to explore how property graphs can be leveraged in a **GraphRAG** (Graph-based Retrieval-Augmented Generation) scenario. That’s why my presentation carried the title:
+**Graphs – the Bridge Between Data and Generative Artificial Intelligence**.
+
+It’s no secret that I built upon all the resources I could find on this topic. My primary references were the official Oracle documentation on Oracle Graph and Property Graphs, as well as [Oracle LiveLabs](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home). There are some realy nice workshop available, such as [Gain a competitive edge with Generative AI, use AI to generate the Edge and Vertices that make Property Graph data structures](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=4174&clear=RR,180&session=2045703750469) You may even recognize a few familiar snippets in my demo scripts — I wasn’t trying to reinvent the wheel but to **connect the pieces into a practical AI-driven example**.
+
+For anyone interested, I’m sharing the following scripts I used during the demonstration — feel free to explore, adapt, and experiment further:
+
+**Graphs – the bridge between data and generative artificial intelligence: Starting with Graphs**
+
+The SQL Property Graph feature in Oracle Database allows users to represent and query complex relationships within data using a graph model directly inside SQL. Each graph consists of vertices (nodes) and edges (relationships), both of which can store key-value pairs — known as properties — to describe attributes and context. 
+
+With the PGQL (Property Graph Query Language) extension and SQL/PGQ integration, Oracle enables seamless querying, analytics, and visualization of connected data, such as social networks, hierarchies, or dependencies. This makes it easy to blend graph analytics with traditional relational queries, unlocking new insights from highly connected datasets without leaving the Oracle ecosystem.
+
+We’ll use PGQL to hunt for patterns in the graph: find k-hop paths from node A to node B, explore shortest or constrained paths (e.g., “within 3 hops”), and detect cycles/loops using path expressions and filters on vertex/edge properties. In the second part, we’ll wire this into a GraphRAG flow: translate a narrative question into pattern queries (paths, k-hop neighborhoods, cycles), retrieve the matching subgraph, and return an LLM-ready, grounded answer that cites the exact nodes and edges involved.
+
+URL: [Starating with Graphs](https://zigavaupot.github.io/blogger/autumn-makeit-2025/files/graphs-and-graph-rag.md)
