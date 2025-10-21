@@ -376,25 +376,45 @@ FETCH FIRST 20 ROWS ONLY;
 ```
 
 > DOC_ID	CHUNK_ID	CHUNK_DATA
+> 
 > 1	31	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 1	32	»Ampak, ko se nas je nabralo trideset, je prišel možakar z velikim usnjenim kovčkom in medvedja mamica nas je dala njemu. Zložil nas je v kovček in odnesel v trgovino. Tam so nam dali okrog vratu listke i n na listkih je pisalo, koliko stanemo. Potem smo sedeli v izložbi, nekateri pa na policah. Jaz sem sedel v izložbi in ko je prišel mimo tvoj očka, sem mu pomežiknil, pa je stopil v trgovino in me kupil Tako sem prišel k tebi.«
+> 
 > 1	33	»Dobro, da si mu pomežiknil,« je rekel učitelj in pobožal Pikija. Potem sta zaspala in sanjala o medvedji mamici, ki je naredila že toliko medvedkov, da bi jih lahko zložili v stolpnico. Piki piše pismo Učitelj rad piše pisma. Pošilja jih babici in dedku, tetam in stricem in včasih, kadar me ni doma, tudi meni. »Komu naj pa jaz pišem?« je nekega dne rekel Piki, ko je videl, da učitelj spet piše pismo.
+> 
 > 1	34	Učitelj se je malo zamislil, potem je skomignil z rameni:»Piši kakšnemu Žužuju.« Piki je vneto pokimal, sedel za mizo in pri priči začel pisati z velikimi tiskanimi črkami: »Dragi Žužu številka 2, napisal ti bom pismo. Jaz sem Žužu številka 1. Gotovo se me še spomniš, saj sva na polici pri medvedji mamici sedela drug ob drugem. Zdaj se imenujem Piki in stanujem pri učitelju v Ljubljani.
+> 
 > 1	35	Če ne veš, kje je Ljubljana, poglej na zemljevid malo na desno in malo navzdol od Pariza. Tukaj hodim v medvedjo šolo in imam mnogo medvedjih prijateljev. Kako je kaj z medvedi v Parizu? Piši mi. Lepo te pozdravlja Piki Jakob« Na drugi list je narisal veliko štirinadstropno hišo. Pred hišo so stali avtomobili, po nebu pa so plavali oblaki. Pismo in sliko je vtaknil v ovojnico, in ko je napisal naslov in prilepil znamko, je učitelj odnesel pošiljko na pošto.
+> 
 > 1	36	Piki je nato pisal še medvedu Tediju v Holandijo, medvedu Marmeladovu v Rusijo, medvedu Berensonu na Švedsko, medvedu Medolizisu v Grčijo in medvedu Mečkoviču v Beograd. Na odgovore mu ni bilo treba dolgo čakati, prvo pa je prišlo Žužujevo pismo. Žužu je pisal: »Dragi moj Piki, z medvedi v Parizu je vse v redu. Jedo med, hodijo v šolo in se vozijo z metrojem. Tudi jaz se rad vozim z metrojem. Če še ne veš, se tako imenuje podzemna železnica.
+> 
 > 1	37	Moj učitelj je poiskal Ljubljano na zemljevidu. Rekel je, da je blizu morja. Da ne padeš noter, če ne znaš plavati. Jaz bi zadnjič skoraj utonil v kopalnici. Ampak nisem. Lepo te pozdravlja tvoj stari Žužu.« Ko je prišlo Žužujevo pismo, poštar še ni vedel, da stanuje v našem bloku tudi Piki. Zato je tisti dan pozvonil v našem stopnišču kar pri devetih vratih. Povsod je vprašal: »Prosim, ali stanuje tukaj tovariš Piki Jakob?«
+> 
 > 1	38	Osemkrat so mu odkimali in rekli: »Ne, tukaj ni nobenega Pikija Jakoba. Poglejte drugje.« Tako je slednjič prišel v najvišje nadstropje in si oddahnil, ko je za našimi vrati vendarle odkril pravega naslovnika. Piki je bil pisma vesel, zasmilil pa se mu je tisti pismonoša, ki ga je moral tako zelo iskati.Zato je predlagal učitelju, da bi napisal na poštno skrinjico tudi njegovo ime. In tako zdaj piše tam: Tukaj oddajte pošto tudi za Pikija Jakoba, podnajemnika pri učitelju.
+> 
 > 1	39	Seveda pa moram povedati, da sta učitelj in Piki napisala podnajemnik le zato, da se bolj imenitno sliši. V resnici je Piki član naše družine in mu za stanovanje ni treba čisto nič plačati. Pri zobozdravniku Pikija je bolel zob in zato smo sklenili, da pojdemo k zobozdravniku. Resda je bolel zob tudi učitelja in tudi mene je cukalo po čeljustih, vendar je bil Piki največji revež. Vso noč se je premetaval po postelji in nič ni pomagalo, da smo mu dajali tople in mrzle obkladke.
+> 
 > 1	40	Zjutraj ga je začelo trgati po ušesih in zato smo ga obvezali z ruto. Končiča rute sta bingljala z glave kot velika uhlja, kot da Piki ne bi bil medved, ampak zajec. Potem smo se odpravili. Po poti je učitelj razlagal, kako se je treba vesti pri zobozdravniku. »Zobozdravnik je tvoj prijatelj,« je rekel Pikiju. »Seveda,« je potrdil Piki. »Če te bo malo bolelo,« je nadaljeval učitelj, »nikar tako ne tuli, da bo pobegnilo pol čakalnice.«
+> 
 > 1	41	»Se-seveda,« je zajecljal Piki. »Pri zobozdravniku vsak pravi medved stisne zobe in malo potrpi,« je končal učitelj. »Se-se-seveda,« je prikimal Piki. Ko smo vstopili v čakalnico, je bilo tam že nekaj otrok, medveda pa prav nobenega. Otroci so začudeno gledali obvezanega Pikija, dokler ni učitelj enega vprašal, ali misli, da medveda ne morejo boleti zobje.
+> 
 > 1	42	To je zaleglo in potem ni nihče več buljil v Pikija, ki je čisto tiho sedel na stolu zraven učitelja. Bolniška sestra je pobrala zdravstvene knjižice. Ko je prišla do Pikija, ga je pobožala in Piki se je hvaležno nasmehnil. Čakali smo pol ure. Potem je sestra skoz vrata zaklicala: »Piki Jakob!« Odšli smo v ordinacijo. Zdravnik je prijazno pozdravil in vprašal: »Kaj pa je s tabo, Piki?« »Zo-zo-zob me boli,« je zajecljal Piki.
+> 
 > 1	43	»Bomo že pokazali temu nesramnežu,« je rekel zdravnik. Piki je sedel na stol in odprl gobček. Zdravnik je s kovinsko paličico trkal po zobeh in spraševal: »Ali je ta? Ali je ta?« Piki je odgovarjal nekje iz trebuha: »Nhe, nhe.« Potem sta naletela na pravega, Ko je zdravnik potrkal po njem, je Piki javknil: »Auvh.«
+> 
 > 1	44	»Tukaj je torej nepridiprav,« je rekel zdravnik in potipal še s prstom, da bi videl, če se že maje. Pikiju se je zdelo, da vidi vse zvezde in v hipu je zaprl gobec. Zdaj je zdravnik zavpil »au« in izvlekel boleči prst. »Piki,« je rekel strogo, »sva se tako zmenila? Jaz ti hočem pomagati, ti me pa grizeš. Ali je to pošteno?« Piki je odkimal.
+> 
 > 1	45	Potem je junaško odprl gobec, pošteno zamižal in preden bi naštel do tri, je bil zob zunaj. Za Pikijem je bil na vrsti učitelj. Njegov zob je bil manj načet kakor Pikijev, zato ga je zobozdravnik samo plombiral. Učitelj se je malo spotil, vendar ni niti enkrat zastokal in tudi ni ugriznil zobozdravnika. Na koncu je hotel zdravnik pregledati še mene, a me v tistem hipu zobje niso niti najmanj boleli in zato sem rekel, da bom prišel raje drugič. Potem smo zadovoljni odšli.
+> 
 > 1	46	Ko smo nekaj časa molče korakali, je rekel učitelj: »Piki, zakaj si ugrizni zobozdravnika?« »Saj si mi rekel, da naj stisnem zobe,« je odgovoril Piki. Spogledali smo se in se zasmejali. Učitelj pa se je obrnil k meni in rekel: »Glej, da ga drugič ne ugrizneš še ti.« Športni dan V medvedji šoli so imeli športni dan. Najprej je bila na vrsti vožnja z žičnico. Učitelj je napeljal vrv od kljuke na vratih do kljuke na oknu.
+> 
 > 1	47	Iz matadorjevih kock je sestavil kabino, ki je drsela po vrvi na velikem kolesu čisto kakor pri pravi žičnici. Kabina je bila majhna in zato se je moral peljati vsak medved posebej, pa še tako so cepali dol kot zrele hruške. Seveda se ni nobenemu nič zgodilo. Samo Timika si je priščipnila uho in Josip Jupiter si je razparal levo hlačnico. Ampak kaj takega se zgodi na vsake poštenem športnem dnevu. Potem je učitelj naznanil, da bodo imeli spomladanski kros ali tek čez drn in strn.
+> 
 > 1	48	»Zmagovalec bo dobil zlato medaljo in veliko hruško,« je rekel. »Kot na olimpiadi,« je vzdihnila Timika. »Na olimpiadi ne delijo hrušk,« je rekel Piki in se zarežal. Timika ga je grdo pogledala in malo je manjkalo, pa bi mu pokazala jezik. Medtem je učitelj pripravil progo. Start in cilj sta bila na zeleni livadi ali po domače v kuhinji. Medvedje so se postavili v vrsto in ko je učitelj zaklical »zdaj«, so se pognali v tek.
+> 
 > 1	49	Najprej so tekli skoz brezov gaj ali po domače skoz dnevno sobo, in ker so se v gneči suvali, so podrli nekaj dreves, ki jih je učitelj postavil ob progi, med njimi košati hrast ali po domače ﬁkus, ki je pri tem izgubil dva lista. Čez pusto planjavo ali po domače hodnik so pritekli brez nezgode. Zato pa so imeli hude težave v močvirnih predelih ali po domače v kopalnici. Lovili so ravnotežje po ozkih brveh in Filip je padel v ribnik ali po domače banjo in je prenehal s tekmovanjem.
+> 
 > 1	50	Drugi so se pognali, kar so jih nesle pete, naprej proti južnemu gričevju ali po domače spalnici. Tukaj jih je čakal precej hud vzpon na stari grad ali po domače omaro in dolgo je trajalo, preden je Piki kot prvi prilezel na vrh. Ko je tekel po grebenu skozi temno goščavo ali po domače skoz razmetane učiteljeve igrače, je v goščavi nekaj zašumelo in se spustilo po drugem pobočju navzdol. Medtem je tudi Piki pretekel greben in se v skoku pognal na mehki travnik ali po domače na posteljo.
 
 ```sql
