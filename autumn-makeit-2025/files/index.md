@@ -166,7 +166,13 @@ SELECT * FROM GRAPH_TABLE (bank_transfers_sql_graph
 ```
 
 ```oracle
-|
+-- Find the 10 accounts that have received the most transfers
+
+SELECT acct_id, COUNT(*) AS Num_Transfers 
+FROM graph_table ( bank_sql_graph 
+    MATCH (src) - [IS transfers] -> (dst) 
+    COLUMNS ( dst.id AS acct_id )
+) GROUP BY acct_id ORDER BY Num_Transfers DESC FETCH FIRST 10 ROWS ONLY; 
 ```
 
 ```oracle
