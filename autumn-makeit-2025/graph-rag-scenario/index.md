@@ -10,14 +10,6 @@ Before we begin, I would also like to mention that this workshop has to pay all 
 
 More about the referenced workshop: https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=4174&clear=RR,180&session=14463983008299
 
-In this workshop, we will setup a conversational agent that will enable to ask us questions about the well know children's book about a teddy bear called Piki Jakob written by Kajetan Kovič.
-
-We will use property graph to capture relationships between persons and objects in a book and provide these relations to LLM in order to answer questions. Note that this is just a demonstraion of possible, however if you think it through, these kind of solution could improve the quality of narravive chat solutions.
-
-Before we begin, I would also like to mention that this workshop has to pay all the credits to Oracle LiveLabs workshop Gain a competitive edge with Generative AI, use AI to generate the Edge and Vertices that make Property Graph data structures which I used as a reference
-
-More about the referenced workshop: https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=4174&clear=RR,180&session=14463983008299
-
 During this workshop, one of the key tasks is to generate text outputs that will later be used for Retrieval-Augmented Generation (RAG).
 We have prepared two configuration options for this step:
 
@@ -26,21 +18,10 @@ We have prepared two configuration options for this step:
 
 By default, the code uses OCI GenAI. To switch to TinyBERT, simply comment or uncomment the relevant section of the script.
 
-During this workshop, one of the key tasks is to generate text outputs that will later be used for Retrieval-Augmented Generation (RAG).
-We have prepared two configuration options for this step:
-
-- TinyBERT model – a lightweight embedding model running directly inside the database.- OCI GenAI Llama model – a large language model hosted on Oracle Cloud Infrastructure (later, we will also use Cohere for generating embeddings).
-
-By default, the code uses OCI GenAI. To switch to TinyBERT, simply comment or uncomment the relevant section of the script.
-
 But before we begin, we need to verify few checks:
 
 1. Does file "pravljice-MojPrijateljPikiJakob.txt" exists?
 2. Is TinyBERT model available?
-
-But before we begin, we need to verify few checks:
-
-- Does file "pravljice-MojPrijateljPikiJakob.txt" exists?- Is TinyBERT model available?
 
 ```sql
 CREATE OR REPLACE DIRECTORY GRAPHDIR as 'scratch/';
@@ -165,8 +146,6 @@ END;
 
 Setting profiles for selected model ...
 
-Setting profiles for selected model ...
-
 ```sql
 DECLARE
   -- Switch: set to 'TinyBERT' or 'OCI GenAI'
@@ -217,8 +196,6 @@ END;
 > GRAPHUSER_PROFILE created and activated with model: OCI GenAI
 > 
 > PL/SQL procedure successfully completed.
-
-In the next paragraph, story is read into tables. First, we will read it into a BLOB which is then converted into CLOB which is suitable for further processing.
 
 In the next paragraph, story is read into tables. First, we will read it into a BLOB which is then converted into CLOB which is suitable for further processing.
 
@@ -319,8 +296,6 @@ END;
 
 > PL/SQL procedure successfully completed.
 > 
-> PL/SQL procedure successfully completed.
-
 The next paragpraph, code builds a semantic embedding dataset from story text stored in Oracle database table.
 It takes the story text from STORY_TABLE_CLOB, splits it into sentence-level chunks, and generates an embedding vector for each chunk — a numeric representation of meaning used for similarity search or AI applications.
 Two alternative embedding methods are provided:
@@ -331,16 +306,6 @@ Two alternative embedding methods are provided:
 Only one method should be used at a time — the other remains commented out. Both produce the same output structure in STORY_TABLE_CHUNKS: document ID, chunk ID, text content, and its corresponding embedding vector.
 
 Both methods ulitmately populata **STORY_TABLE_CHUNKS** with sentences and their embeddings, ready for vector search or RAG use cases.
-
-The next paragpraph, code builds a semantic embedding dataset from story text stored in Oracle database table.
-It takes the story text from STORY_TABLE_CLOB, splits it into sentence-level chunks, and generates an embedding vector for each chunk — a numeric representation of meaning used for similarity search or AI applications.
-Two alternative embedding methods are provided:
-
-- Local (database) embedding using Oracle’s built-in TinyBERT model, which runs directly inside the database.- Cloud-based embedding using OCI Generative AI with the Cohere Multilingual v3.0 model, which calls Oracle Cloud’s external GenAI service through stored credentials.
-
-Only one method should be used at a time — the other remains commented out. Both produce the same output structure in STORY_TABLE_CHUNKS: document ID, chunk ID, text content, and its corresponding embedding vector.
-
-Both methods ulitmately populata STORY_TABLE_CHUNKS with sentences and their embeddings, ready for vector search or RAG use cases.
 
 ```sql
 DECLARE
@@ -402,9 +367,6 @@ END;
 > PL/SQL procedure successfully completed.
 
 Let's review what have we done so far ... **STORY_TABLE_CHUNKS** includes our story split into chunks. 
-The query below simply displays the first 20 text chunks (their document ID, chunk ID, and text) from the chunks table. It isuseful for quickly previewing what kind of data has been loaded or chunked before generating embeddings or running similarity searches.
-
-Let's review what have we done so far ... STORY_TABLE_CHUNKS includes our story split into chunks.
 The query below simply displays the first 20 text chunks (their document ID, chunk ID, and text) from the chunks table. It isuseful for quickly previewing what kind of data has been loaded or chunked before generating embeddings or running similarity searches.
 
 ```sql
@@ -530,8 +492,6 @@ END;
 
 The next script clears and recreates a staging table for storing AI-extracted knowledge graph data per chunk — each record links a text chunk (CHUNK_ID) to its extracted JSON graph output (RESPONSE).
 
-The next script clears and recreates a staging table for storing AI-extracted knowledge graph data per chunk — each record links a text chunk (CHUNK_ID) to its extracted JSON graph output (RESPONSE).
-
 ```sql
 BEGIN
 ---------------------------------------------------------------------------
@@ -563,8 +523,6 @@ Here’s a concise summary of what LOAD_EXTRACT_TABLE (see the next paragraph) d
 * Calls extract_graph(chunk_data) to get a JSON array of extracted triples.
 * Inserts (chunk_id, response) into GRAPH_EXTRACTION_STAGING.
 * Limits each run to ~10 chunks (technically 11 due to x := x + 1 before EXIT WHEN x > 10).
-
-Here’s a concise summary of what LOAD_EXTRACT_TABLE (see the next paragraph) does:- Sets the active AI profile to GRAPHUSER_PROFILE for downstream LLM calls.- Finds up to 1,000 unprocessed text chunks in STORY_TABLE_CHUNKS (those whose chunk_id isn’t present in GRAPH_EXTRACTION_STAGING), ordered by chunk_id.- Iterates through those chunks and, for each one:- Calls extract_graph(chunk_data) to get a JSON array of extracted triples.- Inserts (chunk_id, response) into GRAPH_EXTRACTION_STAGING.- Limits each run to ~10 chunks (technically 11 due to x := x + 1 before EXIT WHEN x > 10).
 
 ```sql
 CREATE OR REPLACE PROCEDURE LOAD_EXTRACT_TABLE 
@@ -624,18 +582,6 @@ If the table already exists, you **may prefer to skip** this step and continue w
 
 If you decide to skip, then move forward to the paragraph **TEST EMBEDDINGS**.
 
-This code completely resets and recreates an automated database job that periodically runs the stored procedure LOAD_EXTRACT_TABLE.
-
-First, it removes all existing scheduler jobs owned by the current user to ensure a clean slate. Then, it creates a new job named runExtractStagingStoredProcedure that executes the LOAD_EXTRACT_TABLE procedure. Next, it configures the job’s schedule — setting the start time to the current moment, the end time to one hour later, and defining a repeat interval of every 2 minutes. Finally, the job is enabled, causing Oracle’s scheduler to automatically invoke LOAD_EXTRACT_TABLE every two minutes for the next hour.
-
-IMPORTANT:
-
-Run this step only if you need to recreate the GRAPH_EXTRACTION_STAGING table.
-The process takes approximately 30 minutes to complete.
-If the table already exists, you may prefer to skip this step and continue with the most recent extraction results instead.
-
-If you decide to skip, then move forward to the paragraph TEST EMBEDDINGS.
-
 ```sql
 BEGIN
   FOR j IN (SELECT job_name FROM user_scheduler_jobs) LOOP
@@ -683,9 +629,7 @@ END;
 
 > PL/SQL procedure successfully completed.
 > 
-> PL/SQL procedure successfully completed.
-> 
-> PL/SQL procedure successfully completed.
+
 
 The following set of SQL queries is used to monitor and troubleshoot Oracle Scheduler jobs.
 * The first query lists all jobs defined in the current schema (user_scheduler_jobs) and shows whether they’re enabled, their current state, and when they last and next ran.
@@ -693,9 +637,6 @@ The following set of SQL queries is used to monitor and troubleshoot Oracle Sche
 * The third query retrieves the execution history of all jobs from user_scheduler_job_run_details, including status, timestamps, run durations, and any additional information, ordered by most recent first.
 
 **Important*: Run each of these SQL statements separately — one at a time — while commenting out the other two. Graph Studio (and most Oracle tools) executes only one SQL statement per paragraph or cell, so separating them ensures each query runs correctly and displays its own results.
-
-The following set of SQL queries is used to monitor and troubleshoot Oracle Scheduler jobs.- The first query lists all jobs defined in the current schema (user_scheduler_jobs) and shows whether they’re enabled, their current state, and when they last and next ran.- The second query checks for jobs that are currently running, displaying their session ID, instance, elapsed time, and CPU usage.- The third query retrieves the execution history of all jobs from user_scheduler_job_run_details, including status, timestamps, run durations, and any additional information, ordered by most recent first.
-*Important: Run each of these SQL statements separately — one at a time — while commenting out the other two. Graph Studio (and most Oracle tools) executes only one SQL statement per paragraph or cell, so separating them ensures each query runs correctly and displays its own results.
 
 ```sql
 /* SELECT job_name,
@@ -725,10 +666,6 @@ This query counts how many text chunks in the main chunks table (**STORY_TABLE_C
 
 Query count **must come down to 0** before continuing.
 
-This query counts how many text chunks in the main chunks table (STORY_TABLE_CHUNKS) have NOT yet been processed and added to the staging table (GRAPH_EXTRACTION_STAGING).
-
-Query count must come down to 0 before continuing.
-
 ```sql
 SELECT count(*)  AS "Chunks of Text to Send"
 FROM  STORY_TABLE_CHUNKS c 
@@ -740,8 +677,6 @@ WHERE s.chunk_id IS NULL;
 > 0
 
 **TEST EMBEDDINGS**
-
-TEST EMBEDDINGS
 
 ```sql
 WITH q AS (
@@ -766,40 +701,23 @@ FETCH FIRST 20 ROWS ONLY;
 ```
 
 > DOC_ID	CHUNK_ID	CHUNK_DATA	DISTANCE
-> 1	1	Moj prijatelj Piki Jakob Kdo je Piki Piki ne stanuje v gozdu, ne v živalskem vrtu, ne v cirkusu, ne v trgovini. Piki stanuje v bloku, v četrtem nadstropju, na polici za igrače. Pikiju je ime Piki, čeprav ni pikast. Tako mu je pač ime. Ni namreč vsakdo belec, ki se Belec piše, in tudi vode ne pije vsakdo, ki se piše Vodopivec. Tako je tudi Pikiju ime Piki. Piki hodi v medvedjo šolo in ima učitelja, ki ni medved, ampak fantek.	0.36838831789804993
-> 1	66	Piki je bil zelo zadovoljen. Z učiteljem sta lovila ribe. Resda nista nobene ujela, ampak to ni važno. To še pride. Veselili smo se sonca, slane vode in sladoleda ter napisali kup razglednic. Eno, dragi bralci, smo poslali tudi vam. Ko jo boste prejeli, boste videli, da se je v desni spodnji kot razločno podpisal VAŠ PIKI. Piki v vozniški šoli Vožnja na morje je bila Pikiju zelo všeč. Seveda so ga med potjo močno zanimale tudi moje šoferske umetnije.	0.3828556104693558
-> 1	64	Pri priči ga boš odnesel k sosedovim.« Medtem ko sva midva razpravljala, je Piki polnil svoj kovček. Vanj je zložil perilo, sandale, plavalni obroč, majhno jadrnico, balinčke in novo, svetlo zeleno ščetko. Potem si je oblekel mornarsko majico, si nataknil dolge snežno bele hlače in se pokril s kapitansko kapo. »Manjkata ti samo še lesena noga in črn trak čez oko, pa bi bil pravi gusar,« je rekel učitelj. »Kaj pa pipa?« sem rekel.	0.38344690348084065
-> 1	2	Jaz sem učiteljev oče in zato dobro poznam Pikija in učitelja. Včasih se skupaj igramo človek ne jezi se. S Pikijem se dobro razumeva, z učiteljem pa imam včasih težave. Piki zmeraj pametno molči, učitelj pa mi včasih ugovarja. Nič ne pomaga, če mu rečem, da sem jaz ravnatelj. Pikiju ni nikoli dolgčas. Vsako jutro se z medvedjo kočijo, v kateri je nekoč učiteljeva starjša sestra prevažala punčke, odpelje v medvedjo šolo.	0.3975971400578723
-> 1	42	To je zaleglo in potem ni nihče več buljil v Pikija, ki je čisto tiho sedel na stolu zraven učitelja. Bolniška sestra je pobrala zdravstvene knjižice. Ko je prišla do Pikija, ga je pobožala in Piki se je hvaležno nasmehnil. Čakali smo pol ure. Potem je sestra skoz vrata zaklicala: »Piki Jakob!« Odšli smo v ordinacijo. Zdravnik je prijazno pozdravil in vprašal: »Kaj pa je s tabo, Piki?« »Zo-zo-zob me boli,« je zajecljal Piki.	0.3998816730426653
-> 1	37	Moj učitelj je poiskal Ljubljano na zemljevidu. Rekel je, da je blizu morja. Da ne padeš noter, če ne znaš plavati. Jaz bi zadnjič skoraj utonil v kopalnici. Ampak nisem. Lepo te pozdravlja tvoj stari Žužu.« Ko je prišlo Žužujevo pismo, poštar še ni vedel, da stanuje v našem bloku tudi Piki. Zato je tisti dan pozvonil v našem stopnišču kar pri devetih vratih. Povsod je vprašal: »Prosim, ali stanuje tukaj tovariš Piki Jakob?«	0.4035182254277364
-> 1	147	»Veš,« je rekel učitelj čez čas, »pravzaprav Pikiju niti ni toliko do Pariza. Pogovarjala sva se pač.« »Tudi midva se pogovarjava, ne?« »Seveda. Živalski vrt pa vseeno drži?« »Jasno. Če sem rekel, bomo šli.« In smo šli. In tako potujem, v resnici in v sanjah, na severni tečaj in pod Rožnik, smejemo se opicam v kletkah in sedimo na saneh, ki jih vlečejo psi skoz polarno pokrajino.	0.409794839903844
-> 1	4	Piki prileti elegantno kot helikopter in me poščegeta po nosu. Tako se zbudim in zaradi tega mu včasih rečem: medvedbudilka. Zvečer gre Piki spat z učiteljem. Pripovedujeta si pravljice v medvedjem jeziku, ki ga jaz ne razumem. Kadar me ima učitelj posebno rad, položi Pikija k mojemu zglavju in, ko grem ponoči v posteljo, me Piki poboža, tako kot tudi jaz pobožam njega in učitelja. Ker ne znam medvedjega jezika, si ne pripovedujeva pravljic in hitro zaspiva. Vendar je Piki zelo izobražen.	0.4108946268900162
-> 1	38	Osemkrat so mu odkimali in rekli: »Ne, tukaj ni nobenega Pikija Jakoba. Poglejte drugje.« Tako je slednjič prišel v najvišje nadstropje in si oddahnil, ko je za našimi vrati vendarle odkril pravega naslovnika. Piki je bil pisma vesel, zasmilil pa se mu je tisti pismonoša, ki ga je moral tako zelo iskati.Zato je predlagal učitelju, da bi napisal na poštno skrinjico tudi njegovo ime. In tako zdaj piše tam: Tukaj oddajte pošto tudi za Pikija Jakoba, podnajemnika pri učitelju.	0.41097468534569537
-> 1	35	Če ne veš, kje je Ljubljana, poglej na zemljevid malo na desno in malo navzdol od Pariza. Tukaj hodim v medvedjo šolo in imam mnogo medvedjih prijateljev. Kako je kaj z medvedi v Parizu? Piši mi. Lepo te pozdravlja Piki Jakob« Na drugi list je narisal veliko štirinadstropno hišo. Pred hišo so stali avtomobili, po nebu pa so plavali oblaki. Pismo in sliko je vtaknil v ovojnico, in ko je napisal naslov in prilepil znamko, je učitelj odnesel pošiljko na pošto.	0.4154715123245095
-> 1	50	Drugi so se pognali, kar so jih nesle pete, naprej proti južnemu gričevju ali po domače spalnici. Tukaj jih je čakal precej hud vzpon na stari grad ali po domače omaro in dolgo je trajalo, preden je Piki kot prvi prilezel na vrh. Ko je tekel po grebenu skozi temno goščavo ali po domače skoz razmetane učiteljeve igrače, je v goščavi nekaj zašumelo in se spustilo po drugem pobočju navzdol. Medtem je tudi Piki pretekel greben in se v skoku pognal na mehki travnik ali po domače na posteljo.	0.42128432506756586
-> 1	61	Piki ni imel nobene enke, nobene dvojke, nobene trojke, tudi nobene štirke, ampak čiste petke. Takšnega medveda bi težko našli celo v živalskem vrtu, kaj šele kje drugje. Ampak Piki je Piki, znameniti medved. Začeli smo se pripravljati za počitnice. Učitelj je sklenil, da bo vzel s seboj tudi Pikija. Lani smo ga pustili doma, pa mu je bilo dolgčas. Ampak lani je bil Piki še predšolski medvedek, takšni pa se radi zgubijo in padejo v morje. Letos je seveda drugače.	0.4235298579574539
-> 1	54	Od takrat nimamo več ﬁkusa Piki ima vročino Bil je vroč poletni dan in medvedje so bili sami doma. Učitelj, njegova mama in sestra ter jaz smo se odpeljali kopat na Soro. Piki je sedel v zaboju za igrače in se potil. Premišljeval je, kaj naj stori, da bi se ohladil. Presedel se je na polico, pa ni nič pomagalo. Tedaj je zagledal Starega Marka, ki je ležal pod klopjo. Piki je rekel: »Strašno mi je vroče.«	0.4259643689858934
-> 1	146	»Jaz sem mislil zares.« »Jaz tudi. Kaj nisi rad v pravljici?« »Ne,« je rekel učitelj. »Raje mi povej, kaj naj rečem Pikiju.« »Povej mu, da gremo v živalski vrt.« »Misliš resno?« »Čisto resno. Danes popoldne.« »Nas boš peljal?« »Seveda.« »nabral bom malo starega kruha.« »Prav.«	0.42670250057928294
-> 1	142	« sem vprašal začuden. »V Pariz,« je ponovil učitelj. »Piki bi rad obiskal Žužuja.« »Razumem,« sem rekel. »Kako bi pa šli?« »Ti bi nas peljal z avtom.« »Ali ni do Pariza preblizu?« sem rekel. »Kaj ko bi šli še kam, ko bomo ravno na poti?« »Seveda,« je takoj poprijel učitelj. »S Pikijem sva ti hotela predlagati, da bi iz Pariza odpotovali na severni tečaj.«	0.4274407493825406
-> 1	62	Letos je že pravi fant in z učiteljem sva mu kupila medvedji kovček, v katerega zdaj spravlja svojo medvedjo prtljaso. Seveda gredo na počitnice tudi drugi medvedje. Niso sicer vsi taki odličnjaki kot Piki, a popravnega izpita nima nobeden. To pa je glavno. Učitelj me je prepričal, da zaradi njih ne bo treba najeti posebnega avtobusa, ampak da bodo čisto zadovoljni s prtljažnikom na strehi našega tisočtristo. »Pa naj bo,« sem rekel, sam kaj drugega tudi ni preostalo.	0.42767793095392426
-> 1	85	Od tam sta šla v paviljon z ogledali, kjer sta se od srca nasmejala. Skoz prvo ogledalo sta se valila kot sodčka, v drugem sta shujšala kot zobotrebca, v tretjem sta imela glavi kot hruški, v četrtem pa čeljusti kot ljudožerca. Potem sta si šla ogledat železnico. Tekla je skoz predore pod mizo, mimo lepega ribnika, po katerem so plavale ladjice, ter se naposled zgubila v paviljonu s skrivnostnim napisom HIŠA STRAHOV. »Si greva ogledat strahove?« je vprašal Piki.	0.4322354876178348
-> 1	33	»Dobro, da si mu pomežiknil,« je rekel učitelj in pobožal Pikija. Potem sta zaspala in sanjala o medvedji mamici, ki je naredila že toliko medvedkov, da bi jih lahko zložili v stolpnico. Piki piše pismo Učitelj rad piše pisma. Pošilja jih babici in dedku, tetam in stricem in včasih, kadar me ni doma, tudi meni. »Komu naj pa jaz pišem?« je nekega dne rekel Piki, ko je videl, da učitelj spet piše pismo.	0.4326232162908402
-> 1	87	V temi sta Piki in Jupiter začutila, da ju je nekaj mehko pobožalo po obrazu, v naslednjem trenutku pa sta bila že na prostem. »Smrt me je povohala,« se je ponorčeval Josip Jupiter. »Mene tudi,« se je zarežal Piki. »Prav poščegetala me je pod nosom. Najraje bi jo zagrabil za rep.« »Ne vem zagotovo,« je rekel Piki, »a lahko se prepričava.« Zarežala sta se in se drugič podala v nevarni predor.	0.4327757385383718
-> 1	89	Žal je v temi slabo preračunala smer in padla naravnost v stari lavor, ki ga je učitelj spremenil v ribnik. Nastala je strašna povodenj, smrt pa je iz lavorja v podobi mokrega mačka jadrno švignila na balkon. Piki in Josip Jupiter sta se imenitno zabavala. Vsakemu, ki ju je hotel poslušati, sta pripovedovala, da sta držala smrt že za rep in je le malo manjkalo, pa bi jo stlačila v vrečo. Zatrjevala sta, da tako sijajnega novoletnega sejma še ni bilo. Manj navdušenja pa je kazal učitelj.	0.4335685063678838
+>
+>  1	1	Moj prijatelj Piki Jakob Kdo je Piki Piki ne stanuje v gozdu, ne v živalskem vrtu, ne v cirkusu, ne v trgovini. Piki stanuje v bloku, v četrtem nadstropju, na polici za igrače. Pikiju je ime Piki, čeprav ni pikast. Tako mu je pač ime. Ni namreč vsakdo belec, ki se Belec piše, in tudi vode ne pije vsakdo, ki se piše Vodopivec. Tako je tudi Pikiju ime Piki. Piki hodi v medvedjo šolo in ima učitelja, ki ni medved, ampak fantek.	0.36838831789804993
+>
+>  1	66	Piki je bil zelo zadovoljen. Z učiteljem sta lovila ribe. Resda nista nobene ujela, ampak to ni važno. To še pride. Veselili smo se sonca, slane vode in sladoleda ter napisali kup razglednic. Eno, dragi bralci, smo poslali tudi vam. Ko jo boste prejeli, boste videli, da se je v desni spodnji kot razločno podpisal VAŠ PIKI. Piki v vozniški šoli Vožnja na morje je bila Pikiju zelo všeč. Seveda so ga med potjo močno zanimale tudi moje šoferske umetnije.	0.3828556104693558
+>
+>  1	64	Pri priči ga boš odnesel k sosedovim.« Medtem ko sva midva razpravljala, je Piki polnil svoj kovček. Vanj je zložil perilo, sandale, plavalni obroč, majhno jadrnico, balinčke in novo, svetlo zeleno ščetko. Potem si je oblekel mornarsko majico, si nataknil dolge snežno bele hlače in se pokril s kapitansko kapo. »Manjkata ti samo še lesena noga in črn trak čez oko, pa bi bil pravi gusar,« je rekel učitelj. »Kaj pa pipa?« sem rekel.	0.38344690348084065
+>
+>  1	2	Jaz sem učiteljev oče in zato dobro poznam Pikija in učitelja. Včasih se skupaj igramo človek ne jezi se. S Pikijem se dobro razumeva, z učiteljem pa imam včasih težave. Piki zmeraj pametno molči, učitelj pa mi včasih ugovarja. Nič ne pomaga, če mu rečem, da sem jaz ravnatelj. Pikiju ni nikoli dolgčas. Vsako jutro se z medvedjo kočijo, v kateri je nekoč učiteljeva starjša sestra prevažala punčke, odpelje v medvedjo šolo.	0.3975971400578723
+>
+> ... 
 
 At this stage, we could continue by sending these data chunks to the LLM to generate meaningful answers.
 However, instead of relying on vector search and embeddings, we’ll add an additional step — using a **SQL Property Graph** to extract and analyze data chunks based on the relationships between entities identified within the text.
 
-At this stage, we could continue by sending these data chunks to the LLM to generate meaningful answers.
-However, instead of relying on vector search and embeddings, we’ll add an additional step — using a SQL Property Graph to extract and analyze data chunks based on the relationships between entities identified within the text.
-
 In order to proceed we will need to create a few additional database tables and objects such as SQL property graph.
 
 Procedure **LOAD_EXTRACT_TABLE** at the end generated **GRAPH_EXTRACTION_STAGING** table, which has the following content:
-
-In order to proceed we will need to create a few additional database tables and objects such as SQL property graph.
-
-Procedure LOAD_EXTRACT_TABLE at the end generated GRAPH_EXTRACTION_STAGING table, which has the following content:
 
 ```sql
 select * from GRAPH_EXTRACTION_STAGING
@@ -807,15 +725,18 @@ FETCH FIRST 5 ROWS ONLY;
 ```
 
 > CHUNK_ID	RESPONSE
+> 
 > 11	[   {"head":"mama","head_type":"oseba","relation":"ne ve","tail":"učiteljevo mnenje","tail_type":"značilnost","data_chunk":"Mama tega še ni slišala"},   {"head":"učitelj","head_type":"oseba","relation":"ostane pri","tail":"svojem mnenju","tail_type":"značilnost","data_chunk":"tako je ostal učitelj pri svojem"},   {"head":"Piki","head_type":"oseba","relation":"sedel","tail":"polica","tail_type":"prostor","data_chunk":"Piki pa je zadovoljno sedel na polici"},   {"head":"Piki","head_type":"oseba","relation":"je zdrav","tail":"zdravje","tail_type":"značilnost","data_chunk":"vse je kazalo, da zaradi francoske solate ne bo umrl"},   {"head":"medvedji šola","head_type":"prostor","relation":"vsebuje","tail":"ura","tail_type":"dogodek","data_chunk":"V medvedji šoli so se učili o živalih"},   {"head":"učitelj","head_type":"oseba","relation":"uči","tail":"medvedi","tail_type":"oseba","data_chunk":"Učitelj je kazal slike in oponašal živalske glasove"},   {"head":"učitelj","head_type":"oseba","relation":"ponavlja","tail":"medvedi","tail_type":"oseba","data_chunk":"Potem so ponavljali"},   {"head":"učitelj","head_type":"oseba","relation":"vpraša","tail":"medvedi","tail_type":"oseba","data_chunk":"»Kdo je to?« je vprašal učitelj"} ]
+> 
 > 12	[   {"head": "Filip", "head_type": "oseba", "relation": "odgovarja", "tail": "učitelj", "tail_type": "oseba", "data_chunk": "je odgovoril Filip"},   {"head": "učitelj", "head_type": "oseba", "relation": "pogovarja se", "tail": "Filip", "tail_type": "oseba", "data_chunk": "je rekel učitelj"},   {"head": "Timika", "head_type": "oseba", "relation": "odgovarja", "tail": "učitelj", "tail_type": "oseba", "data_chunk": "je odgovorila Timika"},   {"head": "učitelj", "head_type": "oseba", "relation": "pogovarja se", "tail": "Timika", "tail_type": "oseba", "data_chunk": "je rekel učitelj"},   {"head": "Piki Jakob", "head_type": "oseba", "relation": "odgovarja", "tail": "učitelj", "tail_type": "oseba", "data_chunk": "je rekel Piki"},   {"head": "učitelj", "head_type": "oseba", "relation": "pogovarja se", "tail": "Piki Jakob", "tail_type": "oseba", "data_chunk": "je rekel učitelj"},   {"head": "Piki Jakob", "head_type": "oseba", "relation": "govori o", "tail": "mačke", "tail_type": "žival", "data_chunk": "kaj veš o mačkah"},   {"head": "mačke", "head_type": "žival", "relation": "izdajajo zvok", "tail": "mijavkanje", "tail_type": "značilnost", "data_chunk": "mačke mijavkajo"},   {"head": "mačke", "head_type": "žival", "relation": "izdajajo zvok", "tail": "žvižganje", "tail_type": "značilnost", "data_chunk": "mačke žvižgajo"},   {"head": "ptički", "head_type": "žival", "relation": "izdajajo zvok", "tail": "gostolij", "tail_type": "značilnost", "data_chunk": "ptički gostolijo"},   {"head": "ptički", "head_type": "žival", "relation": "izdajajo zvok", "tail": "žvrgolij", "tail_type": "značilnost", "data_chunk": "ptički žvrgolijo"},   {"head": "ptički", "head_type": "žival", "relation": "izdajajo zvok", "tail": "žvižganje", "tail_type": "značilnost", "data_chunk": "ptički žvižgajo"},   {"head": "pes", "head_type": "žival", "relation": "izdajajo zvok", "tail": "lajanje", "tail_type": "značilnost", "data_chunk": "pes laja"} ]
+> 
 > 1	[   {"head":"Piki Jakob","head_type":"oseba","relation":"stanuje","tail":"blok","tail_type":"prostor","data_chunk":"Piki stanuje v bloku"},   {"head":"Piki Jakob","head_type":"oseba","relation":"hodi v","tail":"medvedja šola","tail_type":"prostor","data_chunk":"Piki hodi v medvedjo šolo"},   {"head":"Piki Jakob","head_type":"oseba","relation":"ima učitelja","tail":"fantek","tail_type":"oseba","data_chunk":"ima učitelja, ki ni medved, ampak fantek"} ]
+> 
 > 2	[   {"head":"Piki","head_type":"oseba","relation":"ima očeta","tail":"učiteljev oče","tail_type":"oseba","data_chunk":"Jaz sem učiteljev oče in zato dobro poznam Pikija"},   {"head":"Piki","head_type":"oseba","relation":"se razumeva","tail":"učiteljev oče","tail_type":"oseba","data_chunk":"S Pikijem se dobro razumeva"},   {"head":"učitelj","head_type":"oseba","relation":"ima očeta","tail":"učiteljev oče","tail_type":"oseba","data_chunk":"Jaz sem učiteljev oče"},   {"head":"učitelj","head_type":"oseba","relation":"ima težave","tail":"učiteljev oče","tail_type":"oseba","data_chunk":"z učiteljem pa imam včasih težave"},   {"head":"Piki","head_type":"oseba","relation":"hodi v","tail":"medvedja šola","tail_type":"prostor","data_chunk":"Vsako jutro se z medvedjo kočijo, odpelje v medvedjo šolo"},   {"head":"Piki","head_type":"oseba","relation":"vozi","tail":"medvedja kočija","tail_type":"predmet","data_chunk":"Vsako jutro se z medvedjo kočijo, odpelje v medvedjo šolo"} ]
+>
 > 3	[   {"head":"Marko","head_type":"oseba","relation":"je","tail":"medved","tail_type":"oseba","data_chunk":"Dvema ali trem je ime Marko"},   {"head":"Filip","head_type":"oseba","relation":"je","tail":"medved","tail_type":"oseba","data_chunk":"Eden je Filip"},   {"head":"Timika","head_type":"oseba","relation":"je","tail":"medved","tail_type":"oseba","data_chunk":"majhni medvedki je ime Timika"},   {"head":"Josip Jupiter","head_type":"oseba","relation":"je","tail":"medved","tail_type":"oseba","data_chunk":"Potem so tukaj še Josip Jupiter"},   {"head":"Benjamin","head_type":"oseba","relation":"je","tail":"medved","tail_type":"oseba","data_chunk":"Potem so tukaj še Josip Jupiter, Benjamin"},   {"head":"Floki","head_type":"oseba","relation":"je","tail":"pes","tail_type":"žival","data_chunk":"Floki, ki sicer ni medved, ampak pes"},   {"head":"Floki","head_type":"oseba","relation":"hodi v","tail":"medvedja šola","tail_type":"prostor","data_chunk":"hodi v medvedjo šolo"},   {"head":"Piki","head_type":"oseba","relation":"je","tail":"leteči medved","tail_type":"značilnost","data_chunk":"Piki včasih tudi leteči medved"},   {"head":"učitelj","head_type":"oseba","relation":"spiva z","tail":"Floki","tail_type":"oseba","data_chunk":"Z učiteljem spiva v isti sobi"} ]
 
 We are now going to use **GRAPH_EXTRACTION_STAGING** table to prepare data table which we will use for the property graph build.
-
-We are now going to use GRAPH_EXTRACTION_STAGING table to prepare data table which we will use for the property graph build.
 
 ```sql
 BEGIN
@@ -882,15 +803,25 @@ select * from GRAPH_RELATIONS_STG;
 ```
 
 > ID	CHUNK_ID	HEAD	HEAD_TYPE	RELATION	TAIL	TAIL_TYPE	TEXT	CHUNK_DATA
+> 
 > 40FAFD14510B6243E063AB11000AF774	31	medvedja mamica	oseba	ima lastnost	rada	značilnost	oseba: medvedja mamica -[ima lastnost]-> značilnost: rada	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 40FAFD14510C6243E063AB11000AF774	31	medvedja mamica	oseba	se pogovarja	medvedki	predmet	oseba: medvedja mamica -[se pogovarja]-> predmet: medvedki	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 40FAFD14510D6243E063AB11000AF774	31	Piki	oseba	govori	učitelj	oseba	oseba: Piki -[govori]-> oseba: učitelj	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 40FAFD14510E6243E063AB11000AF774	31	učitelj	oseba	vpraša	Piki	oseba	oseba: učitelj -[vpraša]-> oseba: Piki	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 40FAFD14510F6243E063AB11000AF774	31	Piki	oseba	govori	učitelj	oseba	oseba: Piki -[govori]-> oseba: učitelj	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+>
 > 40FAFD1451106243E063AB11000AF774	31	učitelj	oseba	odgovarja	Piki	oseba	oseba: učitelj -[odgovarja]-> oseba: Piki	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 40FAFD1451116243E063AB11000AF774	31	Piki	oseba	trdi	medvedja mamica	oseba	oseba: Piki -[trdi]-> oseba: medvedja mamica	Imela nas je rada in se je z nami pogovarjala. Jaz sem bil dolgo pri njej, nekateri medvedki pa samo po dan ali dva.« »Kako pa to?« je vprašal učitelj. »Ali so ušli?« »Sem ti jaz že kdaj ušel?« je užaljeno vprašal Piki. »Nisi,« je rekel učitelj. »Tudi medvedji mamici ni nobeden ušel,« je nadaljeval Piki.
+> 
 > 40FAFD1451126243E063AB11000AF774	32	medvedja mamica	oseba	dela	možakar	oseba	oseba: medvedja mamica -[dela]-> oseba: možakar	»Ampak, ko se nas je nabralo trideset, je prišel možakar z velikim usnjenim kovčkom in medvedja mamica nas je dala njemu. Zložil nas je v kovček in odnesel v trgovino. Tam so nam dali okrog vratu listke i n na listkih je pisalo, koliko stanemo. Potem smo sedeli v izložbi, nekateri pa na policah. Jaz sem sedel v izložbi in ko je prišel mimo tvoj očka, sem mu pomežiknil, pa je stopil v trgovino in me kupil Tako sem prišel k tebi.«
+> 
 > 40FAFD1451136243E063AB11000AF774	32	možakar	oseba	prezema	medvedki	predmet	oseba: možakar -[prezema]-> predmet: medvedki	»Ampak, ko se nas je nabralo trideset, je prišel možakar z velikim usnjenim kovčkom in medvedja mamica nas je dala njemu. Zložil nas je v kovček in odnesel v trgovino. Tam so nam dali okrog vratu listke i n na listkih je pisalo, koliko stanemo. Potem smo sedeli v izložbi, nekateri pa na policah. Jaz sem sedel v izložbi in ko je prišel mimo tvoj očka, sem mu pomežiknil, pa je stopil v trgovino in me kupil Tako sem prišel k tebi.«
+> 
 > ...
 
 SQL Property Graph that we are creating will be based on two tables: **GRAPH_ENTITIES_STORY** and **GRAPH_RELATIONS_STORY**. Both will retrieve its contents from the staging table **GRAPH_RELATIONS_STG** created in the previous step.
@@ -987,21 +918,37 @@ INNER JOIN  GRAPH_ENTITIES_STORY tail ON tail.ENTITY_NAME=s.tail and tail.ENTITY
 ```
 
 > CHUNK_ID	HEAD_ID	TAIL_ID	RELATION	TEXT
+> 
 > 31	244	430	ima lastnost	oseba: medvedja mamica -[ima lastnost]-> značilnost: rada
+> 
 > 31	244	264	se pogovarja	oseba: medvedja mamica -[se pogovarja]-> predmet: medvedki
+> 
 > 31	48	535	govori	oseba: Piki -[govori]-> oseba: učitelj
+> 
 > 31	535	48	vpraša	oseba: učitelj -[vpraša]-> oseba: Piki
+> 
 > 31	48	535	govori	oseba: Piki -[govori]-> oseba: učitelj
+> 
 > 31	535	48	odgovarja	oseba: učitelj -[odgovarja]-> oseba: Piki
+> 
 > 31	48	244	trdi	oseba: Piki -[trdi]-> oseba: medvedja mamica
+> 
 > 32	244	288	dela	oseba: medvedja mamica -[dela]-> oseba: možakar
+> 
 > 32	288	264	prezema	oseba: možakar -[prezema]-> predmet: medvedki
+> 
 > 32	264	525	prevozi	predmet: medvedki -[prevozi]-> prostor: trgovina
+> 
 > 32	525	264	dela	prostor: trgovina -[dela]-> predmet: medvedki
+> 
 > 32	264	216	ima lastnost	predmet: medvedki -[ima lastnost]-> značilnost: listek
+> 
 > 32	48	166	se nahaja	oseba: Piki -[se nahaja]-> prostor: izložba
+> 
 > 32	48	333	vzpostavi stik	oseba: Piki -[vzpostavi stik]-> oseba: očeta
+> 
 > 32	333	48	kupi	oseba: očeta -[kupi]-> oseba: Piki
+> 
 > ...
 
 ```sql
@@ -1022,21 +969,30 @@ SELECT * FROM GRAPH_RELATIONS_STORY;
 ```
 
 > ID	CHUNK_ID	HEAD_ID	TAIL_ID	RELATION	TEXT	CHUNK_DATA
+> 
 > 1	33	535	244	sanja	oseba: učitelj -[sanja]-> oseba: medvedja mamica	»Dobro, da si mu pomežiknil,« je rekel učitelj in pobožal Pikija. Potem sta zaspala in sanjala o medvedji mamici, ki je naredila že toliko medvedkov, da bi jih lahko zložili v stolpnico. Piki piše pismo Učitelj rad piše pisma. Pošilja jih babici in dedku, tetam in stricem in včasih, kadar me ni doma, tudi meni. »Komu naj pa jaz pišem?« je nekega dne rekel Piki, ko je videl, da učitelj spet piše pismo.
+> 
 > 2	35	50	23	živi	oseba: Piki Jakob -[živi]-> prostor: Ljubljana	Če ne veš, kje je Ljubljana, poglej na zemljevid malo na desno in malo navzdol od Pariza. Tukaj hodim v medvedjo šolo in imam mnogo medvedjih prijateljev. Kako je kaj z medvedi v Parizu? Piši mi. Lepo te pozdravlja Piki Jakob« Na drugi list je narisal veliko štirinadstropno hišo. Pred hišo so stali avtomobili, po nebu pa so plavali oblaki. Pismo in sliko je vtaknil v ovojnico, in ko je napisal naslov in prilepil znamko, je učitelj odnesel pošiljko na pošto.
+> 
 > 3	37	50	99	stanuje	oseba: Piki Jakob -[stanuje]-> prostor: blok	Moj učitelj je poiskal Ljubljano na zemljevidu. Rekel je, da je blizu morja. Da ne padeš noter, če ne znaš plavati. Jaz bi zadnjič skoraj utonil v kopalnici. Ampak nisem. Lepo te pozdravlja tvoj stari Žužu.« Ko je prišlo Žužujevo pismo, poštar še ni vedel, da stanuje v našem bloku tudi Piki. Zato je tisti dan pozvonil v našem stopnišču kar pri devetih vratih. Povsod je vprašal: »Prosim, ali stanuje tukaj tovariš Piki Jakob?«
+> 
 > 4	38	50	395	ima poštno skrinjico	oseba: Piki Jakob -[ima poštno skrinjico]-> predmet: poštna skrinjica	Osemkrat so mu odkimali in rekli: »Ne, tukaj ni nobenega Pikija Jakoba. Poglejte drugje.« Tako je slednjič prišel v najvišje nadstropje in si oddahnil, ko je za našimi vrati vendarle odkril pravega naslovnika. Piki je bil pisma vesel, zasmilil pa se mu je tisti pismonoša, ki ga je moral tako zelo iskati.Zato je predlagal učitelju, da bi napisal na poštno skrinjico tudi njegovo ime. In tako zdaj piše tam: Tukaj oddajte pošto tudi za Pikija Jakoba, podnajemnika pri učitelju.
+> 
 > 5	41	48	535	se strinja	oseba: Piki -[se strinja]-> oseba: učitelj	»Se-seveda,« je zajecljal Piki. »Pri zobozdravniku vsak pravi medved stisne zobe in malo potrpi,« je končal učitelj. »Se-se-seveda,« je prikimal Piki. Ko smo vstopili v čakalnico, je bilo tam že nekaj otrok, medveda pa prav nobenega. Otroci so začudeno gledali obvezanega Pikija, dokler ni učitelj enega vprašal, ali misli, da medveda ne morejo boleti zobje.
+> 
 > 6	41	535	332	vpraša	oseba: učitelj -[vpraša]-> oseba: otrok	»Se-seveda,« je zajecljal Piki. »Pri zobozdravniku vsak pravi medved stisne zobe in malo potrpi,« je končal učitelj. »Se-se-seveda,« je prikimal Piki. Ko smo vstopili v čakalnico, je bilo tam že nekaj otrok, medveda pa prav nobenega. Otroci so začudeno gledali obvezanega Pikija, dokler ni učitelj enega vprašal, ali misli, da medveda ne morejo boleti zobje.
+> 
 > 7	42	48	611	ima zdravstveno knjižico	oseba: Piki -[ima zdravstveno knjižico]-> dokument: zdravstvena knjižica	To je zaleglo in potem ni nihče več buljil v Pikija, ki je čisto tiho sedel na stolu zraven učitelja. Bolniška sestra je pobrala zdravstvene knjižice. Ko je prišla do Pikija, ga je pobožala in Piki se je hvaležno nasmehnil. Čakali smo pol ure. Potem je sestra skoz vrata zaklicala: »Piki Jakob!« Odšli smo v ordinacijo. Zdravnik je prijazno pozdravil in vprašal: »Kaj pa je s tabo, Piki?« »Zo-zo-zob me boli,« je zajecljal Piki.
+> 
 > 8	42	48	102	se sreča	oseba: Piki -[se sreča]-> oseba: bolniška sestra	To je zaleglo in potem ni nihče več buljil v Pikija, ki je čisto tiho sedel na stolu zraven učitelja. Bolniška sestra je pobrala zdravstvene knjižice. Ko je prišla do Pikija, ga je pobožala in Piki se je hvaležno nasmehnil. Čakali smo pol ure. Potem je sestra skoz vrata zaklicala: »Piki Jakob!« Odšli smo v ordinacijo. Zdravnik je prijazno pozdravil in vprašal: »Kaj pa je s tabo, Piki?« »Zo-zo-zob me boli,« je zajecljal Piki.
+> 
 > 9	42	48	632	čaka	oseba: Piki -[čaka]-> prostor: čakalnica	To je zaleglo in potem ni nihče več buljil v Pikija, ki je čisto tiho sedel na stolu zraven učitelja. Bolniška sestra je pobrala zdravstvene knjižice. Ko je prišla do Pikija, ga je pobožala in Piki se je hvaležno nasmehnil. Čakali smo pol ure. Potem je sestra skoz vrata zaklicala: »Piki Jakob!« Odšli smo v ordinacijo. Zdravnik je prijazno pozdravil in vprašal: »Kaj pa je s tabo, Piki?« »Zo-zo-zob me boli,« je zajecljal Piki.
+> 
 > 10	43	48	498	sedel	oseba: Piki -[sedel]-> predmet: stol	»Bomo že pokazali temu nesramnežu,« je rekel zdravnik. Piki je sedel na stol in odprl gobček. Zdravnik je s kovinsko paličico trkal po zobeh in spraševal: »Ali je ta? Ali je ta?« Piki je odgovarjal nekje iz trebuha: »Nhe, nhe.« Potem sta naletela na pravega, Ko je zdravnik potrkal po njem, je Piki javknil: »Auvh.«
+> 
 > ... 
 
 We have finally reached the point when we can create a new property graph **SQL_PG_RAG_STORY**. As already mentioned above, this new property graph is based on two tables **GRAPH_ENTITIES_STORY** and **GRAPH_RELATIONS_STORY** that were created above.
-
-We have finally reached the point when we can create a new property graph SQL_PG_RAG_STORY. As already mentioned above, this new property graph is based on two tables GRAPH_ENTITIES_STORY and GRAPH_RELATIONS_STORY that were created above.
 
 ```sql
 -- Drop if exists (DDL approach; DBMS_GRAPH not required)
@@ -1218,42 +1174,6 @@ BEGIN
     )
     WHERE ROWNUM <= 100
     );
-
-   ---------------------------------------------------------------------------
-  -- 2) Build a stronger, structured prompt and append JSON context
-  ---------------------------------------------------------------------------
-  /* l_prompt :=
-      TO_CLOB(promptBegin) || CHR(10) ||
-      TO_CLOB(
-        'Vloga: Si analitik grafa znanja. Uporabi samo podane "facts" kot vir podatkov.' || CHR(10) ||
-        CHR(10) ||
-        'Navodila:' || CHR(10) ||
-        '1) Pripravi podroben in koherenten povzetek za izbrano entiteto.' || CHR(10) ||
-        '2) Poudari ključne odnose: kdo–kaj–s kom–zakaj (1- in 2-hop).' || CHR(10) ||
-        '3) Združi ponavljanja, razreši navzkrižja: če se dejstva razlikujejo, navedi obe razlagi in označi kot "NEJASNO".' || CHR(10) ||
-        '4) Za pomembne trditve dodaj sklice v obliki [id:<chunk_id>] (lahko več id-jev, ločenih z vejicami).' || CHR(10) ||
-        '5) Če kaj manjka, to jasno povej; ne uporabiti zunanjega znanja.' || CHR(10) ||
-        '6) Jezik: slovenščina. Slog: jedrnat, informativen, brez pretiravanja. Pazi na slovnična pravila in pravilno izgovorjavo.' || CHR(10) ||
-        '7) Dolžina: približno 2000 besed.' || CHR(10) ||
-        CHR(10) ||
-        'Izhodni format (Markdown):' || CHR(10) ||
-        '## Povzetek' || CHR(10) ||
-        '— več odstavkov z narativnim povzetkom; dodajaj [id:...] za ključne trditve.' || CHR(10) ||
-        '## Ključne točke' || CHR(10) ||
-        '• Točka 1 [id:...]' || CHR(10) ||
-        '• Točka 2 [id:...]' || CHR(10) ||
-        '## Nejasnosti ali navzkrižja (če obstajajo)' || CHR(10) ||
-        '• Opis nejasnosti in kaj manjka' || CHR(10) ||
-        '## Predlogi za nadaljnja vprašanja (neobvezno)' || CHR(10) ||
-        '• Vprašanje 1' || CHR(10) ||
-        CHR(10) ||
-        'Upoštevaj, da "facts" predstavljajo JSON tabelo (array) objektov s polji: hop, head, head_type, relation, tail, tail_type, chunk_id, evidence.' || CHR(10) ||
-        'Najprej jih interno preberi/združi, nato pripravi izhod v zgornjem formatu.' || CHR(10) ||
-        CHR(10) ||
-        'FACTS_JSON_BEGIN' || CHR(10)
-      )
-      || PropertyGraphRag || CHR(10) ||
-      TO_CLOB('FACTS_JSON_END'); */
 
 l_prompt := TO_CLOB(promptBegin) || CHR(10) ||
   '# Tvoja vloga' || CHR(10) ||
