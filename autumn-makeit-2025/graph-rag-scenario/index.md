@@ -63,8 +63,6 @@ END;
 
 Checking if **TinyBERT** model exists in database ...
 
-Checking if TinyBERT model exists in database ...
-
 ```sql
 DECLARE
   v_model_exists NUMBER := 0;
