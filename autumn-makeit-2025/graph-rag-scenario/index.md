@@ -31,8 +31,6 @@ CREATE OR REPLACE DIRECTORY GRAPHDIR as 'scratch/';
 
 Checking if **pravljice-MojPrijateljPikiJakob.txt** exists in **GRAPHDIR** directory.
 
-Checking if pravljice-MojPrijateljPikiJakob.txt exists in GRAPHDIR directory.
-
 ```sql
 -- Checking if "pravljice-MojPrijateljPikiJakob.txt" exists in GRAPHDIR directory
 

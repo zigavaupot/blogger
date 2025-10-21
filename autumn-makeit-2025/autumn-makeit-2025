@@ -1,11 +1,11 @@
 ![Autumn MakeIT 2025](https://zigavaupot.github.io/blogger/autumn-makeit-2025/images/autumn-makeit-2025.png)
 
-The **Autumn MakeIT 2025 Conference** event took place on O**ctober 14th, 2025**, at the** Computer Museum in Ljubljana**. Its unofficial theme, **NO SLIDES, JUST CODE**,” truly captured the spirit of the day. The sessions were delivered by **four Slovenian Oracle ACEs** — Zoran Tica, Lucas Hirschegger, Urh Srečnik, and Žiga Vaupot. While Zoran and Lucas focused on development within **Oracle APEX**, Urh and I explored some of the exciting intersections between **Oracle database technologies and artificial intelligence**.
+The **Autumn MakeIT 2025 Conference** event took place on **October 14th, 2025**, at the **Computer Museum in Ljubljana**. Its unofficial theme, **NO SLIDES, JUST CODE**,” truly captured the spirit of the day. The sessions were delivered by **four Slovenian Oracle ACEs** — Zoran Tica, Lucas Hirschegger, Urh Srečnik, and Žiga Vaupot. While Zoran and Lucas focused on development within **Oracle APEX**, Urh and I explored some of the exciting intersections between **Oracle database technologies and artificial intelligence**.
 
 My session was — quite literally — **my first deep dive into graphs** and **Oracle’s support for Property Graphs**. As promised, there were zero slides — my goal was to explore how property graphs can be leveraged in a **GraphRAG** (Graph-based Retrieval-Augmented Generation) scenario. That’s why my presentation carried the title:
 **Graphs – the Bridge Between Data and Generative Artificial Intelligence**.
 
-It’s no secret that I built upon all the resources I could find on this topic. My primary references were the official Oracle documentation on Oracle Graph and Property Graphs, as well as [Oracle LiveLabs](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home). There are some realy nice workshop available, such as [Gain a competitive edge with Generative AI, use AI to generate the Edge and Vertices that make Property Graph data structures](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=4174&clear=RR,180&session=2045703750469) You may even recognize a few familiar snippets in my demo scripts — I wasn’t trying to reinvent the wheel but to **connect the pieces into a practical AI-driven example**.
+It’s no secret that I built upon all the resources I could find on this topic. My primary references were the official [Oracle documentation on Oracle Graph and Property Graph](https://docs.oracle.com/en/database/oracle/property-graph/25.3/spgdg/index.html), as well as [Oracle LiveLabs](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home). There are some realy nice workshop available, such as [Gain a competitive edge with Generative AI, use AI to generate the Edge and Vertices that make Property Graph data structures](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/view-workshop?wid=4174&clear=RR,180&session=2045703750469) You may even recognize a few familiar snippets in my demo scripts — I wasn’t trying to reinvent the wheel but to **connect the pieces into a practical AI-driven example**.
 
 For anyone interested, I’m sharing the following scripts I used during the demonstration — feel free to explore, adapt, and experiment further:
 
@@ -19,8 +19,8 @@ We’ll use PGQL to hunt for patterns in the graph: find k-hop paths from node A
 
 URL: [Starating with Graphs](https://zigavaupot.github.io/blogger/autumn-makeit-2025/starting-with-graphs/)
 
-### Playing with Stories
+### Playing with Graphs and LLMs to Get Answers from a Fairy Tale
 
 In the second part of the workshop, we focused on how graphs can be used to explain and analyze the content of a story. As our case study, we chose the beloved Slovenian children’s tale Piki Jakob, written by poet Kajetan Kovič. The goal was to transform this narrative into a structured, machine-understandable form. We began by dividing the text into smaller chunks and extracting relationships between the entities — such as characters, places, and objects — mentioned throughout the story. These relationships were then represented in a property graph, capturing how different elements of the tale connect and interact. Finally, we explored how to build a Retrieval-Augmented Generation (RAG) setup on top of this graph: by analyzing graph patterns to identify the most relevant or contextually rich chunks, which are then fed into a large language model (LLM) to generate grounded, coherent, and context-aware responses about the story’s content and meaning.
 
-URL: [Using Graphs as RAG in a GraphRAG scenario](https://zigavaupot.github.io/blogger/autumn-makeit-2025/starting-with-graphs/))
+URL: [Using Graphs as RAG in a GraphRAG scenario](https://zigavaupot.github.io/blogger/autumn-makeit-2025/graph-rag-scenario/)
