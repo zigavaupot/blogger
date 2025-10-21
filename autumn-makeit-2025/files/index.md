@@ -40,7 +40,20 @@ You don’t need to set up a separate Graph Server to do this; the graph can
 be created and queried directly within SQL.
 
 ```oracle
->
+CREATE PROPERTY GRAPH bank_transfers_sql_graph
+  VERTEX TABLES (
+    BANK_ACCOUNTS
+      KEY ( id )
+      LABEL accounts
+      PROPERTIES ( id, name )
+    )
+    EDGE TABLES (
+      BANK_TRANSFERS
+        SOURCE KEY ( src_acct_id ) REFERENCES BANK_ACCOUNTS(id)
+          DESTINATION KEY ( dst_acct_id ) REFERENCES BANK_ACCOUNTS(id)
+        LABEL transfers
+        PROPERTIES ( amount, description, src_acct_id, dst_acct_id, txn_id )
+    );
 ```
 
 The command above creates a property graph named
