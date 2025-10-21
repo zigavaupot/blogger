@@ -1,7 +1,4 @@
----
-layout: default
-title: Graphs and Graph RAGs
----
+
 
 # Graphs and GraphRAGs
 
