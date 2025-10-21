@@ -1,6 +1,6 @@
 ---
 layout: none
-title: Graphs and GraphRAGs
+title: Graphs and Graph RAGs
 ---
 
 # Graphs and GraphRAGs
