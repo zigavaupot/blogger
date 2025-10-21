@@ -115,7 +115,13 @@ Visualiztion fro VS Code Extension (run from SQL Worksheet).
 The simplest graph query is to display nodes and edges that connect these.
 
 ```oracle
->
+-- List all transfers with sender and receiver details
+
+SELECT * FROM GRAPH_TABLE (bank_transfers_sql_graph
+  MATCH
+    (src) -[t]- (dst)
+  COLUMNS (src.id AS sender_id, t.txn_id AS transaction_id, dst.id AS receiver_id)
+);
 ```
 
 As you can see, the SQL statements look almost the same as regular SQL —
