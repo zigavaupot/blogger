@@ -3,7 +3,9 @@ layout: default
 title: Graphs and GraphRAGs
 ---
 
-# WORKSHOP: Graphs – the bridge between data and generative artificial
+# Graphs and GraphRAGs
+
+## WORKSHOP: Graphs – the bridge between data and generative artificial
 
 ### Starting with Graphs
 
