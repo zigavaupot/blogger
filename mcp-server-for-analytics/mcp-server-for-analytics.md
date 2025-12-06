@@ -1,3 +1,5 @@
+![OAC and MCP](https://zigavaupot.github.io/blogger/mcp-server-for-analytics/images/oac-mcp.png)
+
 ## Unlocking Oracle Analytics Cloud with AI: MCP for Oracle Analytics
 
 ### The Challange: Bridging gaps between AI and Enterprise Analytics
