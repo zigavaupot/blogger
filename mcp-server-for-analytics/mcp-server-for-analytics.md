@@ -1,4 +1,4 @@
-# Unlocking Oracle Analytics Cloud with AI: MCP for Oracle Analytics
+## Unlocking Oracle Analytics Cloud with AI: MCP for Oracle Analytics
 
 ### The Challange: Bridging gaps between AI and Enterprise Analytics
 
@@ -55,7 +55,7 @@ Routine tasks like metadata validation, documentation, or simple QA checks can b
 
 In short: MCP doesn’t replace Oracle’s own AI features like Insights or the AI Assistant. Instead, it extends the ecosystem, letting your broader AI tools plug into Oracle Analytics in a clean, standardized, and enterprise-friendly way.
 
-# Oracle Analytics Cloud MCP Server
+## Oracle Analytics Cloud MCP Server
 
 ### What the MCP Server Does
 
@@ -111,7 +111,7 @@ All of this happens without bypassing governance, without exporting data, and wi
 
 The MCP Server essentially extends Oracle Analytics Cloud into the broader AI ecosystem, enabling a future where analytics becomes conversational, intelligent, and seamlessly integrated into everyday decision-making.
 
-# How to set it up?
+## How to set it up?
 
 Here is an example how to setup **Oracle Analytics Cloud MCP Server** with **Claude**. There is a really nice [Oracle Analytics Cloud MCP Server introduction](https://lnkd.in/ex-dFk8Q) published by Mike Durran, Oracle. I strongly suggest simply to follow his instructions.
 
@@ -139,5 +139,5 @@ The things to consider:
 }
 ```
 
-Then save and restart Claude. Once saved and restarted, you will be asked to provide connection credentials to connect to Oracle Analytics Cloud ... and start using **Oracle Analytics Cloud MCP Server**.
+Then save and restart Claude. Once saved and restarted, you will be asked to provide connection credentials to connect to Oracle Analytics Cloud ... and simply start asking and discussing with **Oracle Analytics** like you've never before. More on this check out my next blog post.
 
