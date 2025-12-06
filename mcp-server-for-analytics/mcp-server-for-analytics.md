@@ -119,11 +119,11 @@ The things to consider:
 
 1. Retrieve and download MCP server and connection definintions from your profile in Oracle Analytics
 
-![Profile in OAC](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics/imgages/mcp-connect-profile.png)
+![Profile in OAC](https://zigavaupot.github.io/blogger/mcp-server-for-analytics/images/mcp-connect-profile.png)
 
 2. Update Developer Settings in Claude client.
 
-![Update Developer Settings in Claude](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics/imgages/config-local-mcp-server.png)
+![Update Developer Settings in Claude](https://zigavaupot.github.io/blogger/mcp-server-for-analytics/images/config-local-mcp-server.png)
 
 ```json
 {
