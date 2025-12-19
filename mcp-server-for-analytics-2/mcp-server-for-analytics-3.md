@@ -10,4 +10,22 @@ Click here to open: [Customer profitability analysis](https://https://zigavaupot
 
 But now, lets ask MCP Server to *display last year of sales revenue by months on the chart*:
 
+![2013 Monthly Sales Revenue](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/customer-profitability-analysis.png)
 
+Ok, great. Now ask it to calculate and draw trend line on this same chart by *Add trend line to this chart*
+
+MCP Server now thinks a bit, makes a plan and produces result, which is most likely correct. However, there is no evidence that Oracle Analytics' `TRENLINE` function was actually used - most likely it was not. 
+
+That is why I am adding specific instruction *add trend line to this chart, use Oracle Analytics to calculate*. 
+
+MCP Server now knows to use `TRENDLINE` function:
+
+![Calculating Trendline](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/calculating-trendline.png)
+
+and chart is also produced:
+
+![Linear Trendline](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/linear-trendline.png)
+
+
+... NEXT STEPS: change LINEAR to POLINOMIAL model
+... TRY CLUSTERS 
