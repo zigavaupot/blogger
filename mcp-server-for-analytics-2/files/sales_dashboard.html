@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Revenue Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            color: #8892b0;
+            font-size: 1.1rem;
+        }
+        
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-label {
+            color: #8892b0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .kpi-card:nth-child(1) .kpi-value { color: #00d4ff; }
+        .kpi-card:nth-child(2) .kpi-value { color: #7b2cbf; }
+        .kpi-card:nth-child(3) .kpi-value { color: #00ff88; }
+        .kpi-card:nth-child(4) .kpi-value { color: #ff6b6b; }
+        .kpi-card:nth-child(5) .kpi-value { color: #ffd93d; }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-card h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #00d4ff, #7b2cbf);
+            border-radius: 2px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .full-width .chart-container {
+            height: 350px;
+        }
+        
+        .insight-badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>📊 Sales Revenue Dashboard</h1>
+        <p>Comprehensive analysis of $5.09M in total revenue</p>
+    </div>
+    
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-value">$5.09M</div>
+            <div class="kpi-label">Total Revenue</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">54,941</div>
+            <div class="kpi-label">Units Sold</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">5,248</div>
+            <div class="kpi-label">Total Orders</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">$970</div>
+            <div class="kpi-label">Avg Order Value</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value">$127.5K</div>
+            <div class="kpi-label">Total Discounts</div>
+        </div>
+    </div>
+    
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Revenue by Brand <span class="insight-badge">FunPod leads</span></h3>
+            <div class="chart-container">
+                <canvas id="brandChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Revenue by Region <span class="insight-badge">Balanced split</span></h3>
+            <div class="chart-container">
+                <canvas id="regionChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Revenue by Channel <span class="insight-badge">Store dominates</span></h3>
+            <div class="chart-container">
+                <canvas id="channelChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Revenue by Customer Segment <span class="insight-badge">Active Singles top</span></h3>
+            <div class="chart-container">
+                <canvas id="segmentChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card full-width">
+            <h3>Revenue by Product Type <span class="insight-badge">Camera leads at $1.02M</span></h3>
+            <div class="chart-container">
+                <canvas id="productChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card full-width">
+            <h3>Top 10 Customers <span class="insight-badge">High-value accounts</span></h3>
+            <div class="chart-container">
+                <canvas id="customerChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#8892b0';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+        
+        const gradientColors = [
+            '#00d4ff', '#7b2cbf', '#00ff88', '#ff6b6b', '#ffd93d',
+            '#ff9f43', '#54a0ff', '#5f27cd', '#01a3a4', '#ee5a24'
+        ];
+        
+        // Brand Chart - Doughnut
+        new Chart(document.getElementById('brandChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['FunPod', 'BizTech', 'HomeView'],
+                datasets: [{
+                    data: [2047227, 2032293, 1013841],
+                    backgroundColor: ['#00d4ff', '#7b2cbf', '#00ff88'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { padding: 20, usePointStyle: true }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.label}: $${(ctx.raw/1000000).toFixed(2)}M (${((ctx.raw/5093361)*100).toFixed(1)}%)`
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Region Chart - Doughnut
+        new Chart(document.getElementById('regionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['EMEA', 'Americas', 'APAC'],
+                datasets: [{
+                    data: [2031918, 2020962, 1040480],
+                    backgroundColor: ['#ff6b6b', '#ffd93d', '#54a0ff'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { padding: 20, usePointStyle: true }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.label}: $${(ctx.raw/1000000).toFixed(2)}M (${((ctx.raw/5093361)*100).toFixed(1)}%)`
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Channel Chart - Horizontal Bar
+        new Chart(document.getElementById('channelChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Store', 'Online', 'Reseller', 'Catalog'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [2867342, 1025136, 728994, 471890],
+                    backgroundColor: ['#00d4ff', '#7b2cbf', '#00ff88', '#ff6b6b'],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${(ctx.raw/1000000).toFixed(2)}M`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            callback: (val) => '$' + (val/1000000).toFixed(1) + 'M'
+                        }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // Segment Chart - Horizontal Bar
+        new Chart(document.getElementById('segmentChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Active Singles', 'Baby Boomers', 'Rural based', 'Students', 'Urban based', 'Others', 'Seniors'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [1447862, 857779, 767315, 751100, 681543, 421959, 165803],
+                    backgroundColor: gradientColors,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            callback: (val) => '$' + (val/1000000).toFixed(1) + 'M'
+                        }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // Product Type Chart - Bar
+        new Chart(document.getElementById('productChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Camera', 'Portable', 'Phones', 'Audio', 'Plasma', 'LCD', 'Smart Phones', 'Fixed', 'Accessories', 'Maintenance'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [1023235, 806644, 780632, 740477, 500511, 388826, 363872, 217348, 147312, 91772],
+                    backgroundColor: (ctx) => {
+                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+                        gradient.addColorStop(0, '#00d4ff');
+                        gradient.addColorStop(1, '#7b2cbf');
+                        return gradient;
+                    },
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: {
+                            callback: (val) => '$' + (val/1000) + 'K'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Top Customers Chart - Horizontal Bar
+        new Chart(document.getElementById('customerChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Christopher Brown', 'Adam Dohrmann', 'Brennan Dwyer', 'Rahmat Zae', 'Alexis Robinson', 'Antonio Milrod', 'Amanina Nurzafira', 'Brandon Banks', 'Bradley Prather', 'Richard Gonzalez'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [12793, 11643, 11121, 10648, 10076, 9639, 9431, 9391, 9327, 9175],
+                    backgroundColor: (ctx) => {
+                        const colors = ['#00d4ff', '#1ab4e0', '#3494c1', '#4e74a2', '#685483', '#823464', '#9c1445', '#b60026', '#cf0007', '#e80000'];
+                        return colors[ctx.dataIndex];
+                    },
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${ctx.raw.toLocaleString()}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            callback: (val) => '$' + (val/1000).toFixed(0) + 'K'
+                        }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
