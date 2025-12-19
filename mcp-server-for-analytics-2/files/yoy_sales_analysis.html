@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-Year Sales Revenue Analysis (2012-2013)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ccd6f6;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #64ffda, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            color: #8892b0;
+            font-size: 1.1rem;
+        }
+        
+        .year-comparison {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+        
+        .year-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .year-card.y2012 {
+            border-left: 4px solid #64ffda;
+        }
+        
+        .year-card.y2013 {
+            border-left: 4px solid #7b2cbf;
+        }
+        
+        .year-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .year-card.y2012 h2 { color: #64ffda; }
+        .year-card.y2013 h2 { color: #7b2cbf; }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .vs-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .vs-badge span {
+            font-size: 0.8rem;
+            color: #8892b0;
+        }
+        
+        .change-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .change-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .change-card .label {
+            font-size: 0.8rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .change-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .change-card .value.positive { color: #64ffda; }
+        .change-card .value.negative { color: #ff6b6b; }
+        .change-card .value.neutral { color: #ffd93d; }
+        
+        .change-card .sub {
+            font-size: 0.75rem;
+            color: #8892b0;
+            margin-top: 4px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin: 30px 0 20px;
+            padding-left: 12px;
+            border-left: 4px solid #64ffda;
+            color: #ccd6f6;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #ccd6f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-card h3::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: linear-gradient(180deg, #64ffda, #7b2cbf);
+            border-radius: 2px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 320px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .full-width .chart-container {
+            height: 380px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: auto;
+        }
+        
+        .badge.up { background: rgba(100, 255, 218, 0.2); color: #64ffda; }
+        .badge.down { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .badge.info { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        
+        .insight-box {
+            background: linear-gradient(135deg, rgba(100, 255, 218, 0.1), rgba(123, 44, 191, 0.1));
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .insight-box h4 {
+            color: #64ffda;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        
+        .insight-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .insight-box li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #ccd6f6;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .insight-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #64ffda;
+        }
+        
+        .legend-custom {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #8892b0;
+        }
+        
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 1024px) {
+            .year-comparison {
+                grid-template-columns: 1fr;
+            }
+            .vs-badge {
+                margin: 0 auto;
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>📈 2-Year Sales Revenue Analysis</h1>
+        <p>Comprehensive comparison of 2012 vs 2013 performance (Last 2 years of available data)</p>
+    </div>
+    
+    <div class="year-comparison">
+        <div class="year-card y2012">
+            <h2>2012</h2>
+            <div class="metric-row">
+                <span class="metric-label">Revenue</span>
+                <span class="metric-value">$1,562,590</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Units Sold</span>
+                <span class="metric-value">17,258</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Orders</span>
+                <span class="metric-value">1,622</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Avg Order Value</span>
+                <span class="metric-value">$963</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Total Costs</span>
+                <span class="metric-value">$1,536,320</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Discounts Given</span>
+                <span class="metric-value">$39,621</span>
+            </div>
+        </div>
+        
+        <div class="vs-badge">
+            <span>VS</span>
+        </div>
+        
+        <div class="year-card y2013">
+            <h2>2013</h2>
+            <div class="metric-row">
+                <span class="metric-label">Revenue</span>
+                <span class="metric-value">$1,509,623</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Units Sold</span>
+                <span class="metric-value">17,576</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Orders</span>
+                <span class="metric-value">1,304</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Avg Order Value</span>
+                <span class="metric-value">$1,158</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Total Costs</span>
+                <span class="metric-value">$1,575,027</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Discounts Given</span>
+                <span class="metric-value">$36,710</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="change-indicators">
+        <div class="change-card">
+            <div class="label">Revenue Change</div>
+            <div class="value negative">-3.4%</div>
+            <div class="sub">-$52,968 YoY</div>
+        </div>
+        <div class="change-card">
+            <div class="label">Units Change</div>
+            <div class="value positive">+1.8%</div>
+            <div class="sub">+318 units YoY</div>
+        </div>
+        <div class="change-card">
+            <div class="label">Orders Change</div>
+            <div class="value negative">-19.6%</div>
+            <div class="sub">-318 orders YoY</div>
+        </div>
+        <div class="change-card">
+            <div class="label">Avg Order Value</div>
+            <div class="value positive">+20.3%</div>
+            <div class="sub">+$195 per order</div>
+        </div>
+        <div class="change-card">
+            <div class="label">Cost Change</div>
+            <div class="value negative">+2.5%</div>
+            <div class="sub">+$38,707 YoY</div>
+        </div>
+        <div class="change-card">
+            <div class="label">Discounts Change</div>
+            <div class="value positive">-7.3%</div>
+            <div class="sub">-$2,911 savings</div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Monthly Revenue Trends</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card full-width">
+            <h3>Monthly Revenue Comparison <span class="badge info">2012 vs 2013</span></h3>
+            <div class="chart-container">
+                <canvas id="monthlyChart"></canvas>
+            </div>
+            <div class="legend-custom">
+                <div class="legend-item"><div class="legend-color" style="background:#64ffda"></div> 2012</div>
+                <div class="legend-item"><div class="legend-color" style="background:#7b2cbf"></div> 2013</div>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Quarterly Performance</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Quarterly Revenue <span class="badge info">Seasonality</span></h3>
+            <div class="chart-container">
+                <canvas id="quarterlyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Q-over-Q Growth Rate <span class="badge down">2013 Q1 weak</span></h3>
+            <div class="chart-container">
+                <canvas id="qoqChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Performance by Dimension</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Brand Performance YoY <span class="badge down">HomeView -41%</span></h3>
+            <div class="chart-container">
+                <canvas id="brandChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Region Performance YoY <span class="badge up">APAC +14%</span></h3>
+            <div class="chart-container">
+                <canvas id="regionChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Channel Performance YoY <span class="badge up">Online +26%</span></h3>
+            <div class="chart-container">
+                <canvas id="channelChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Customer Segment YoY <span class="badge info">Segment shifts</span></h3>
+            <div class="chart-container">
+                <canvas id="segmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Product Category Shifts</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card full-width">
+            <h3>Product Type Revenue Change (2012 → 2013) <span class="badge info">Winners & Losers</span></h3>
+            <div class="chart-container">
+                <canvas id="productChangeChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Top Products Comparison</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Top 10 Products - 2012 <span class="badge info">$1.28M total</span></h3>
+            <div class="chart-container">
+                <canvas id="top2012Chart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Top 10 Products - 2013 <span class="badge info">$1.22M total</span></h3>
+            <div class="chart-container">
+                <canvas id="top2013Chart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="insight-box">
+        <h4>🔍 Key Insights & Recommendations</h4>
+        <ul>
+            <li><strong>Revenue declined 3.4%</strong> despite selling more units (+1.8%), indicating price/mix erosion</li>
+            <li><strong>Fewer but larger orders:</strong> Order count dropped 20% but AOV increased 20% — consolidation in customer base</li>
+            <li><strong>HomeView brand crisis:</strong> Revenue dropped 41% ($421K → $249K) — investigate product issues or competition</li>
+            <li><strong>Online channel growth:</strong> +26% growth shows digital transformation success — invest more in e-commerce</li>
+            <li><strong>APAC is the growth engine:</strong> Only region with positive growth (+14%) — consider market expansion</li>
+            <li><strong>Product mix shift:</strong> Portable devices surged to #1 in 2013; Plasma/LCD TVs collapsed — adapt inventory strategy</li>
+            <li><strong>CompCell RX3 breakthrough:</strong> Grew from $149K to $240K (+61%) — flagship product opportunity</li>
+            <li><strong>Q1 weakness in 2013:</strong> Revenue dropped 16% vs 2012 Q1 — investigate seasonal factors</li>
+            <li><strong>Cost pressure:</strong> Costs grew 2.5% while revenue fell 3.4% — margin compression requires action</li>
+        </ul>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#8892b0';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+        
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        // Monthly data
+        const monthly2012 = [124049.59, 121284.15, 105679.87, 130559.4, 108773.88, 125973.85, 155891.75, 138875.09, 128984.45, 128750.76, 162341.21, 131426.38];
+        const monthly2013 = [113217.2, 97179.34, 85306.21, 88913.74, 103426.44, 149786.76, 153811.89, 163862.81, 125284.42, 157283.88, 138320.17, 133229.74];
+        
+        // Monthly Revenue Chart
+        new Chart(document.getElementById('monthlyChart'), {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: '2012',
+                        data: monthly2012,
+                        borderColor: '#64ffda',
+                        backgroundColor: 'rgba(100, 255, 218, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#64ffda'
+                    },
+                    {
+                        label: '2013',
+                        data: monthly2013,
+                        borderColor: '#7b2cbf',
+                        backgroundColor: 'rgba(123, 44, 191, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#7b2cbf'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // Quarterly Chart
+        const quarterlyData = {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            data2012: [351013.61, 365307.13, 423751.29, 422518.35],
+            data2013: [295702.75, 342126.94, 442959.12, 428833.79]
+        };
+        
+        new Chart(document.getElementById('quarterlyChart'), {
+            type: 'bar',
+            data: {
+                labels: quarterlyData.labels,
+                datasets: [
+                    {
+                        label: '2012',
+                        data: quarterlyData.data2012,
+                        backgroundColor: '#64ffda',
+                        borderRadius: 6
+                    },
+                    {
+                        label: '2013',
+                        data: quarterlyData.data2013,
+                        backgroundColor: '#7b2cbf',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // QoQ Growth Chart
+        const qoqGrowth = quarterlyData.labels.map((q, i) => 
+            ((quarterlyData.data2013[i] - quarterlyData.data2012[i]) / quarterlyData.data2012[i] * 100)
+        );
+        
+        new Chart(document.getElementById('qoqChart'), {
+            type: 'bar',
+            data: {
+                labels: quarterlyData.labels,
+                datasets: [{
+                    label: 'YoY Growth %',
+                    data: qoqGrowth,
+                    backgroundColor: qoqGrowth.map(v => v >= 0 ? '#64ffda' : '#ff6b6b'),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `Growth: ${ctx.raw.toFixed(1)}%`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => v + '%' }
+                    }
+                }
+            }
+        });
+        
+        // Brand Chart
+        const brandData = {
+            labels: ['FunPod', 'BizTech', 'HomeView'],
+            data2012: [579986.71, 561555.97, 421047.7],
+            data2013: [663073.44, 597080.87, 249468.29]
+        };
+        
+        new Chart(document.getElementById('brandChart'), {
+            type: 'bar',
+            data: {
+                labels: brandData.labels,
+                datasets: [
+                    { label: '2012', data: brandData.data2012, backgroundColor: '#64ffda', borderRadius: 6 },
+                    { label: '2013', data: brandData.data2013, backgroundColor: '#7b2cbf', borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // Region Chart
+        const regionData = {
+            labels: ['AMERICAS', 'EMEA', 'APAC'],
+            data2012: [629868.67, 623123.44, 309598.27],
+            data2013: [577140.07, 578738.25, 353744.28]
+        };
+        
+        new Chart(document.getElementById('regionChart'), {
+            type: 'bar',
+            data: {
+                labels: regionData.labels,
+                datasets: [
+                    { label: '2012', data: regionData.data2012, backgroundColor: '#64ffda', borderRadius: 6 },
+                    { label: '2013', data: regionData.data2013, backgroundColor: '#7b2cbf', borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // Channel Chart
+        const channelData = {
+            labels: ['Store', 'Online', 'Reseller', 'Catalog'],
+            data2012: [899337.66, 301217.15, 229202.59, 132832.98],
+            data2013: [757300.22, 378041.0, 226083.05, 148198.33]
+        };
+        
+        new Chart(document.getElementById('channelChart'), {
+            type: 'bar',
+            data: {
+                labels: channelData.labels,
+                datasets: [
+                    { label: '2012', data: channelData.data2012, backgroundColor: '#64ffda', borderRadius: 6 },
+                    { label: '2013', data: channelData.data2013, backgroundColor: '#7b2cbf', borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // Segment Chart
+        const segmentData = {
+            labels: ['Active Singles', 'Baby Boomers', 'Rural based', 'Students', 'Urban based', 'Others', 'Seniors'],
+            data2012: [517680.2, 280543.27, 220087.11, 192887.78, 169406.07, 123717.26, 58268.69],
+            data2013: [486640.97, 215056.64, 231240.79, 205352.49, 179964.05, 143528.04, 47839.62]
+        };
+        
+        new Chart(document.getElementById('segmentChart'), {
+            type: 'bar',
+            data: {
+                labels: segmentData.labels,
+                datasets: [
+                    { label: '2012', data: segmentData.data2012, backgroundColor: '#64ffda', borderRadius: 4 },
+                    { label: '2013', data: segmentData.data2013, backgroundColor: '#7b2cbf', borderRadius: 4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // Product Type Change Chart
+        const productTypes = ['Portable', 'Phones', 'Accessories', 'Maintenance', 'Install', 'Fixed', 'Camera', 'Smart Phones', 'Audio', 'LCD', 'Plasma'];
+        const prod2012 = [213831.84, 194012.41, 33191.9, 23513.19, 7078.71, 69666.14, 296488.73, 113825.56, 220526.1, 184778.96, 205676.84];
+        const prod2013 = [293182.06, 278633.66, 54692.21, 49137.93, 18388.82, 81854.95, 288036.43, 86234.7, 177520.3, 91298.44, 90643.1];
+        const prodChange = productTypes.map((_, i) => ((prod2013[i] - prod2012[i]) / prod2012[i] * 100));
+        
+        // Sort by change
+        const sortedIndices = prodChange.map((v, i) => i).sort((a, b) => prodChange[b] - prodChange[a]);
+        
+        new Chart(document.getElementById('productChangeChart'), {
+            type: 'bar',
+            data: {
+                labels: sortedIndices.map(i => productTypes[i]),
+                datasets: [{
+                    label: 'YoY Change %',
+                    data: sortedIndices.map(i => prodChange[i]),
+                    backgroundColor: sortedIndices.map(i => prodChange[i] >= 0 ? '#64ffda' : '#ff6b6b'),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `Change: ${ctx.raw.toFixed(1)}%`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: (v) => v + '%' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // Top Products 2012
+        const top2012 = [
+            { name: 'PocketFun ES', value: 185124.38 },
+            { name: 'MicroPod 60Gb', value: 181339.41 },
+            { name: 'MPEG4 Camcorder', value: 172750.47 },
+            { name: 'CompCell RX3', value: 149083.69 },
+            { name: '7MP Digital Camera', value: 123738.26 },
+            { name: 'LCD HD Television', value: 108049.19 },
+            { name: 'Tungsten E Plasma', value: 107007.51 },
+            { name: 'Plasma HD Television', value: 98669.33 },
+            { name: 'LCD 36X Standard', value: 76729.77 },
+            { name: 'Touch-Screen T5', value: 71685.11 }
+        ];
+        
+        new Chart(document.getElementById('top2012Chart'), {
+            type: 'bar',
+            data: {
+                labels: top2012.map(p => p.name),
+                datasets: [{
+                    data: top2012.map(p => p.value),
+                    backgroundColor: '#64ffda',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // Top Products 2013
+        const top2013 = [
+            { name: 'CompCell RX3', value: 239609.91 },
+            { name: 'PocketFun ES', value: 238653.69 },
+            { name: 'MPEG4 Camcorder', value: 164306.09 },
+            { name: 'MicroPod 60Gb', value: 139789.55 },
+            { name: '7MP Digital Camera', value: 123730.34 },
+            { name: 'Touch-Screen T5', value: 65704.99 },
+            { name: 'Plasma HD Television', value: 60991.93 },
+            { name: 'LCD 36X Standard', value: 56247.44 },
+            { name: 'MaxiFun 2000', value: 54528.37 },
+            { name: 'Maintenance', value: 49137.93 }
+        ];
+        
+        new Chart(document.getElementById('top2013Chart'), {
+            type: 'bar',
+            data: {
+                labels: top2013.map(p => p.name),
+                datasets: [{
+                    data: top2013.map(p => p.value),
+                    backgroundColor: '#7b2cbf',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: (v) => '$' + (v/1000) + 'K' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

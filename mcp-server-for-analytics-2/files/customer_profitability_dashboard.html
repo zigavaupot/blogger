@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profitability Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            color: #8892b0;
+            font-size: 1.1rem;
+        }
+        
+        .alert-banner {
+            background: linear-gradient(90deg, rgba(255,107,107,0.2), rgba(255,107,107,0.1));
+            border: 1px solid #ff6b6b;
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .alert-banner .icon {
+            font-size: 1.5rem;
+        }
+        
+        .alert-banner .text {
+            flex: 1;
+        }
+        
+        .alert-banner .text strong {
+            color: #ff6b6b;
+        }
+        
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .kpi-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .kpi-label {
+            color: #8892b0;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .kpi-card.profit .kpi-value { color: #00ff88; }
+        .kpi-card.loss .kpi-value { color: #ff6b6b; }
+        .kpi-card.neutral .kpi-value { color: #00d4ff; }
+        .kpi-card.warning .kpi-value { color: #ffd93d; }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin: 30px 0 20px;
+            padding-left: 12px;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-card h3::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: linear-gradient(180deg, #00d4ff, #7b2cbf);
+            border-radius: 2px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 320px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .full-width .chart-container {
+            height: 400px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: auto;
+        }
+        
+        .badge.profit { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+        .badge.loss { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .badge.info { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .data-table th {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        
+        .data-table td {
+            font-size: 0.9rem;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .profit-positive { color: #00ff88; }
+        .profit-negative { color: #ff6b6b; }
+        .profit-warning { color: #ffd93d; }
+        
+        .table-container {
+            max-height: 450px;
+            overflow-y: auto;
+        }
+        
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .table-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        .insight-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 20px;
+        }
+        
+        .insight-card h4 {
+            color: #00d4ff;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .insight-card p {
+            color: #ccd6f6;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>💰 Customer Profitability Analysis</h1>
+        <p>Deep dive into customer-level profit margins and segment performance</p>
+    </div>
+    
+    <div class="alert-banner">
+        <span class="icon">⚠️</span>
+        <div class="text">
+            <strong>Profitability Alert:</strong> Total costs ($5.10M) nearly equal revenue ($5.09M), resulting in an overall margin of just <strong>-0.16%</strong>. Most customer segments are operating at or below breakeven.
+        </div>
+    </div>
+    
+    <div class="kpi-container">
+        <div class="kpi-card neutral">
+            <div class="kpi-value">$5.09M</div>
+            <div class="kpi-label">Total Revenue</div>
+        </div>
+        <div class="kpi-card loss">
+            <div class="kpi-value">$5.10M</div>
+            <div class="kpi-label">Total Costs</div>
+        </div>
+        <div class="kpi-card loss">
+            <div class="kpi-value">-$8.2K</div>
+            <div class="kpi-label">Net Profit</div>
+        </div>
+        <div class="kpi-card loss">
+            <div class="kpi-value">-0.16%</div>
+            <div class="kpi-label">Profit Margin</div>
+        </div>
+        <div class="kpi-card warning">
+            <div class="kpi-value">4,067</div>
+            <div class="kpi-label">Total Customers</div>
+        </div>
+        <div class="kpi-card warning">
+            <div class="kpi-value">-$2.02</div>
+            <div class="kpi-label">Avg Profit/Customer</div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Profitability by Customer Segment</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Segment Profit Margin % <span class="badge loss">Mixed results</span></h3>
+            <div class="chart-container">
+                <canvas id="segmentMarginChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Revenue vs Cost by Segment <span class="badge info">Compare</span></h3>
+            <div class="chart-container">
+                <canvas id="segmentCompareChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="charts-grid">
+        <div class="chart-card full-width">
+            <h3>Segment Profitability Breakdown <span class="badge info">Revenue, Cost & Profit</span></h3>
+            <div class="chart-container">
+                <canvas id="segmentBreakdownChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Profitability by Customer Type</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Customer Type Profit Margin <span class="badge profit">TYPE 1 leads</span></h3>
+            <div class="chart-container">
+                <canvas id="typeMarginChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h3>Revenue per Customer by Type <span class="badge info">Efficiency</span></h3>
+            <div class="chart-container">
+                <canvas id="typeEfficiencyChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Segment Performance by Channel</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card full-width">
+            <h3>Segment x Channel Profitability <span class="badge info">Where segments buy</span></h3>
+            <div class="chart-container">
+                <canvas id="segmentChannelChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Top 25 Customers by Profitability</h2>
+    
+    <div class="chart-card">
+        <div class="table-container">
+            <table class="data-table" id="customerTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Customer</th>
+                        <th>Revenue</th>
+                        <th>Total Cost</th>
+                        <th>Profit</th>
+                        <th>Margin %</th>
+                        <th>Orders</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="insight-card">
+            <h4>📊 Key Insight</h4>
+            <p>Many top-revenue customers are actually unprofitable due to high variable costs. Focus on customers like <strong>Carolina Monteiro</strong> (78.6% margin) and <strong>Juan Alvarez</strong> (74.6% margin) as models for profitable customer acquisition. Consider renegotiating terms with high-revenue but negative-margin accounts like <strong>Rahmat Zae</strong> (-376% margin) and <strong>Brandon Banks</strong> (-93% margin).</p>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Segment x Region Profitability Matrix</h2>
+    
+    <div class="charts-grid">
+        <div class="chart-card full-width">
+            <h3>Regional Profit Margin by Segment <span class="badge info">Geographic insights</span></h3>
+            <div class="chart-container">
+                <canvas id="regionSegmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#8892b0';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+        
+        // Customer data with profitability calculations
+        const customerData = [
+            { name: "Christopher Brown", revenue: 12793.07, costFixed: 2485.05, costVar: 8921.28, discount: 384.45, orders: 5 },
+            { name: "Adam Dohrmann", revenue: 11642.86, costFixed: 2725.44, costVar: 8786.81, discount: 75.9, orders: 6 },
+            { name: "Brennan Dwyer", revenue: 11121.24, costFixed: 1316.59, costVar: 6370.03, discount: 323.57, orders: 5 },
+            { name: "Rahmat Zae", revenue: 10648.35, costFixed: 836.55, costVar: 49796.47, discount: 409.65, orders: 4 },
+            { name: "Alexis Robinson", revenue: 10075.87, costFixed: 936.27, costVar: 4332.79, discount: 340.15, orders: 4 },
+            { name: "Antonio Milrod", revenue: 9638.94, costFixed: 9243.19, costVar: 2459.43, discount: 136.51, orders: 3 },
+            { name: "Amanina Nurzafira", revenue: 9430.92, costFixed: 1671.9, costVar: 6225.38, discount: 294.58, orders: 7 },
+            { name: "Brandon Banks", revenue: 9391.2, costFixed: 12460.2, costVar: 5692.69, discount: 487.36, orders: 3 },
+            { name: "Bradley Prather", revenue: 9326.65, costFixed: 6452.48, costVar: 5917.73, discount: 72.85, orders: 3 },
+            { name: "Richard Gonzalez", revenue: 9175.15, costFixed: 672.64, costVar: 17258.0, discount: 0.0, orders: 3 },
+            { name: "Dainius Kazlauskas", revenue: 8873.85, costFixed: 1196.43, costVar: 6892.8, discount: 285.12, orders: 3 },
+            { name: "Carolina Monteiro", revenue: 8834.7, costFixed: 1149.25, costVar: 1670.81, discount: 190.96, orders: 2 },
+            { name: "Diego Loover", revenue: 8596.12, costFixed: 1580.29, costVar: 6882.87, discount: 95.7, orders: 4 },
+            { name: "Dylan Jewett", revenue: 8460.36, costFixed: 1970.1, costVar: 2541.28, discount: 97.17, orders: 6 },
+            { name: "Jim Hanson", revenue: 8397.66, costFixed: 759.64, costVar: 1828.13, discount: 236.5, orders: 1 },
+            { name: "Alexis Toyoda", revenue: 8269.83, costFixed: 1275.37, costVar: 5690.52, discount: 279.89, orders: 4 },
+            { name: "Spenser Uram", revenue: 7829.58, costFixed: 678.69, costVar: 2731.94, discount: 22.8, orders: 2 },
+            { name: "Filipi Hopkins", revenue: 7621.5, costFixed: 877.54, costVar: 2260.48, discount: 83.44, orders: 3 },
+            { name: "Harvey Gibbons", revenue: 7602.99, costFixed: 3912.57, costVar: 4749.04, discount: 261.49, orders: 3 },
+            { name: "Maynard Tanney", revenue: 7438.09, costFixed: 541.78, costVar: 4779.72, discount: 308.66, orders: 3 },
+            { name: "Dwayne Francis", revenue: 7408.59, costFixed: 6530.57, costVar: 2623.77, discount: 116.43, orders: 5 },
+            { name: "Billy Mitchell", revenue: 7353.15, costFixed: 1338.75, costVar: 1734.87, discount: 59.75, orders: 4 },
+            { name: "Catharine Mather", revenue: 7335.54, costFixed: 781.5, costVar: 3023.66, discount: 335.17, orders: 3 },
+            { name: "Andre Luis", revenue: 7328.32, costFixed: 544.41, costVar: 2730.53, discount: 29.47, orders: 3 },
+            { name: "Juan Alvarez", revenue: 6668.93, costFixed: 603.26, costVar: 1088.42, discount: 162.79, orders: 1 }
+        ].map(c => ({
+            ...c,
+            totalCost: c.costFixed + c.costVar,
+            profit: c.revenue - (c.costFixed + c.costVar),
+            margin: ((c.revenue - (c.costFixed + c.costVar)) / c.revenue * 100)
+        })).sort((a, b) => b.profit - a.profit);
+        
+        // Populate customer table
+        const tableBody = document.querySelector('#customerTable tbody');
+        customerData.forEach((c, i) => {
+            const marginClass = c.margin > 10 ? 'profit-positive' : c.margin > 0 ? 'profit-warning' : 'profit-negative';
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${c.name}</td>
+                    <td>$${c.revenue.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>$${c.totalCost.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="${marginClass}">$${c.profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td class="${marginClass}">${c.margin.toFixed(1)}%</td>
+                    <td>${c.orders}</td>
+                </tr>
+            `;
+        });
+        
+        // Segment data
+        const segmentData = [
+            { name: "Active Singles", revenue: 1447861.78, costFixed: 415972.35, costVar: 1058764.42, customers: 1033 },
+            { name: "Baby Boomers", revenue: 857779.37, costFixed: 240151.98, costVar: 566083.77, customers: 731 },
+            { name: "Rural based", revenue: 767314.99, costFixed: 193804.59, costVar: 545631.8, customers: 642 },
+            { name: "Students", revenue: 751100.11, costFixed: 205588.05, costVar: 537930.05, customers: 604 },
+            { name: "Urban based", revenue: 681543.43, costFixed: 173725.47, costVar: 534203.53, customers: 578 },
+            { name: "Others", revenue: 421958.98, costFixed: 105744.82, costVar: 368052.94, customers: 335 },
+            { name: "Seniors", revenue: 165802.51, costFixed: 33611.62, costVar: 122338.24, customers: 144 }
+        ].map(s => ({
+            ...s,
+            totalCost: s.costFixed + s.costVar,
+            profit: s.revenue - (s.costFixed + s.costVar),
+            margin: ((s.revenue - (s.costFixed + s.costVar)) / s.revenue * 100),
+            revenuePerCustomer: s.revenue / s.customers
+        }));
+        
+        // Segment Margin Chart
+        new Chart(document.getElementById('segmentMarginChart'), {
+            type: 'bar',
+            data: {
+                labels: segmentData.map(s => s.name),
+                datasets: [{
+                    label: 'Profit Margin %',
+                    data: segmentData.map(s => s.margin),
+                    backgroundColor: segmentData.map(s => s.margin > 0 ? '#00ff88' : '#ff6b6b'),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `Margin: ${ctx.raw.toFixed(2)}%`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { callback: (v) => v + '%' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+        
+        // Segment Compare Chart
+        new Chart(document.getElementById('segmentCompareChart'), {
+            type: 'bar',
+            data: {
+                labels: segmentData.map(s => s.name),
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: segmentData.map(s => s.revenue),
+                        backgroundColor: '#00d4ff',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Total Cost',
+                        data: segmentData.map(s => s.totalCost),
+                        backgroundColor: '#ff6b6b',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: $${(ctx.raw/1000).toFixed(0)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000000).toFixed(1) + 'M' }
+                    }
+                }
+            }
+        });
+        
+        // Segment Breakdown Chart
+        new Chart(document.getElementById('segmentBreakdownChart'), {
+            type: 'bar',
+            data: {
+                labels: segmentData.map(s => s.name),
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: segmentData.map(s => s.revenue),
+                        backgroundColor: '#00d4ff',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Fixed Cost',
+                        data: segmentData.map(s => -s.costFixed),
+                        backgroundColor: '#ffd93d',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Variable Cost',
+                        data: segmentData.map(s => -s.costVar),
+                        backgroundColor: '#ff6b6b',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Net Profit',
+                        data: segmentData.map(s => s.profit),
+                        backgroundColor: segmentData.map(s => s.profit > 0 ? '#00ff88' : '#ff9f43'),
+                        borderRadius: 4,
+                        type: 'line',
+                        borderColor: '#00ff88',
+                        borderWidth: 2,
+                        pointBackgroundColor: segmentData.map(s => s.profit > 0 ? '#00ff88' : '#ff6b6b'),
+                        pointRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => {
+                                const val = ctx.raw;
+                                return `${ctx.dataset.label}: $${(Math.abs(val)/1000).toFixed(0)}K`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: false, grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000).toFixed(0) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // Customer Type data
+        const typeData = [
+            { name: "TYPE 1", revenue: 1262678.42, costFixed: 347262.32, costVar: 885519.98, customers: 935 },
+            { name: "TYPE 2", revenue: 1481729.02, costFixed: 399978.38, costVar: 1078285.03, customers: 1153 },
+            { name: "TYPE 3", revenue: 1018512.17, costFixed: 288647.55, costVar: 721807.1, customers: 898 },
+            { name: "TYPE 4", revenue: 862194.67, costFixed: 214872.14, costVar: 697908.0, customers: 733 },
+            { name: "TYPE 5", revenue: 468246.89, costFixed: 117838.49, costVar: 349484.64, customers: 348 }
+        ].map(t => ({
+            ...t,
+            totalCost: t.costFixed + t.costVar,
+            profit: t.revenue - (t.costFixed + t.costVar),
+            margin: ((t.revenue - (t.costFixed + t.costVar)) / t.revenue * 100),
+            revenuePerCustomer: t.revenue / t.customers
+        }));
+        
+        // Type Margin Chart
+        new Chart(document.getElementById('typeMarginChart'), {
+            type: 'doughnut',
+            data: {
+                labels: typeData.map(t => `${t.name} (${t.margin.toFixed(1)}%)`),
+                datasets: [{
+                    data: typeData.map(t => t.revenue),
+                    backgroundColor: ['#00ff88', '#00d4ff', '#7b2cbf', '#ffd93d', '#ff6b6b'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '55%',
+                plugins: {
+                    legend: { position: 'right', labels: { padding: 15 } },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => {
+                                const t = typeData[ctx.dataIndex];
+                                return [`Revenue: $${(t.revenue/1000).toFixed(0)}K`, `Profit: $${(t.profit/1000).toFixed(0)}K`, `Margin: ${t.margin.toFixed(1)}%`];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Type Efficiency Chart
+        new Chart(document.getElementById('typeEfficiencyChart'), {
+            type: 'bar',
+            data: {
+                labels: typeData.map(t => t.name),
+                datasets: [{
+                    label: 'Revenue per Customer',
+                    data: typeData.map(t => t.revenuePerCustomer),
+                    backgroundColor: (ctx) => {
+                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+                        gradient.addColorStop(0, '#00d4ff');
+                        gradient.addColorStop(1, '#7b2cbf');
+                        return gradient;
+                    },
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `$${ctx.raw.toFixed(2)} per customer`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + v }
+                    }
+                }
+            }
+        });
+        
+        // Segment x Channel data
+        const segChannelData = {
+            labels: ['Active Singles', 'Baby Boomers', 'Rural based', 'Students', 'Urban based', 'Others', 'Seniors'],
+            store: [762753.41-790716.02, 519296.56-520536.02, 439338.08-441243.04, 435090.04-450643.02, 380392.1-360689.41, 234706.74-250115.19, 95765.18-98708.38],
+            online: [331582.48-327960.61, 169677.17-144543.46, 145708.05-126919.13, 145199.64-123127.66, 120377.58-117786.03, 87297.81-82482.99, 25292.87-23228.61],
+            reseller: [217037.45-224729.45, 94729.85-86770.42, 109956.77-106315.49, 107829.43-108324.8, 120374.3-161615.06, 56434.09-71810.03, 22631.9-16929.53],
+            catalog: [136488.44-131330.69, 74075.79-54385.85, 72312.09-64958.73, 62981.0-61422.62, 60399.45-67838.5, 43520.34-69389.55, 22112.56-17083.34]
+        };
+        
+        new Chart(document.getElementById('segmentChannelChart'), {
+            type: 'bar',
+            data: {
+                labels: segChannelData.labels,
+                datasets: [
+                    { label: 'Store', data: segChannelData.store, backgroundColor: '#00d4ff', borderRadius: 4 },
+                    { label: 'Online', data: segChannelData.online, backgroundColor: '#00ff88', borderRadius: 4 },
+                    { label: 'Reseller', data: segChannelData.reseller, backgroundColor: '#ffd93d', borderRadius: 4 },
+                    { label: 'Catalog', data: segChannelData.catalog, backgroundColor: '#7b2cbf', borderRadius: 4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label} Profit: $${(ctx.raw/1000).toFixed(1)}K`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => '$' + (v/1000).toFixed(0) + 'K' }
+                    }
+                }
+            }
+        });
+        
+        // Region x Segment data
+        const regionSegmentData = [
+            { segment: "Active Singles", americas: (527358.27-519212.85)/527358.27*100, emea: (521610.29-527440.05)/521610.29*100, apac: (398893.22-428083.87)/398893.22*100 },
+            { segment: "Baby Boomers", americas: (395703.41-355685.98)/395703.41*100, emea: (245294.02-222837.28)/245294.02*100, apac: (216781.94-227712.49)/216781.94*100 },
+            { segment: "Rural based", americas: (307495.83-281865.14)/307495.83*100, emea: (343362.86-342050.88)/343362.86*100, apac: (116456.3-115520.37)/116456.3*100 },
+            { segment: "Students", americas: (343140.48-353448.08)/343140.48*100, emea: (310570.14-293619.93)/310570.14*100, apac: (97389.49-96450.09)/97389.49*100 },
+            { segment: "Urban based", americas: (265619.85-246805.47)/265619.85*100, emea: (325962.82-366117.73)/325962.82*100, apac: (89960.76-95005.8)/89960.76*100 },
+            { segment: "Others", americas: (170830.73-201195.11)/170830.73*100, emea: (164367.76-193198.59)/164367.76*100, apac: (86760.49-79404.06)/86760.49*100 },
+            { segment: "Seniors", americas: (10813.89-25812.27)/10813.89*100, emea: (120750.38-99570.96)/120750.38*100, apac: (34238.24-30566.63)/34238.24*100 }
+        ];
+        
+        new Chart(document.getElementById('regionSegmentChart'), {
+            type: 'bar',
+            data: {
+                labels: regionSegmentData.map(r => r.segment),
+                datasets: [
+                    { label: 'Americas', data: regionSegmentData.map(r => r.americas), backgroundColor: '#00d4ff', borderRadius: 4 },
+                    { label: 'EMEA', data: regionSegmentData.map(r => r.emea), backgroundColor: '#ff6b6b', borderRadius: 4 },
+                    { label: 'APAC', data: regionSegmentData.map(r => r.apac), backgroundColor: '#ffd93d', borderRadius: 4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.dataset.label}: ${ctx.raw.toFixed(1)}% margin`
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { callback: (v) => v + '%' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
