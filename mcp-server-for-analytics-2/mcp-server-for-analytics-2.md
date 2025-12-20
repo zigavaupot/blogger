@@ -1,3 +1,11 @@
+**A new paradigm** is reshaping business analytics. Instead of the traditional *build a dashboard, then interpret it* approach, organizations are moving toward interactive narrative analytics; a model where users begin with natural-language questions, the system retrieves governed and trusted facts through retrieval-augmented generation (RAG), and large language models (LLMs) synthesize explanations that users can probe, refine, and challenge. The experience evolves from static charts and filters into a continuous analytical dialogue: what happened, why it happened, what may happen next, and what actions to take—all anchored in a shared semantic layer and consistent metric definitions.
+
+In this shift, LLMs redefine the **user interface**, RAG redefines **trust**, and MCP servers redefine **integration**. RAG constrains generative models to validated enterprise sources—datasets, KPIs, subject areas, and documentation—ensuring transparency and traceability of insights. MCP (Model Context Protocol) then provides a standardized, secure way for AI agents to invoke analytics tools and services. Together, these technologies transform analytics from something users passively consume into something AI agents can actively operate, enabling richer, more exploratory, and story-driven insights that dynamically generate explanations, visuals, anomaly summaries, and follow-up questions on demand—without the need to constantly redesign dashboards.
+
+**Oracle Analytics Cloud** (OAC) is actively aligning with this shift by introducing an **OAC MCP server**, which acts as a standardized bridge between MCP-compatible AI clients and OAC’s governed analytics assets. Through natural-language interactions, AI clients can securely query and explore enterprise analytics content or invoke OAC tools and APIs. Crucially, this is done while preserving enterprise-grade controls such as OAuth-based authentication and full adherence to user-level permissions, ensuring that every response remains consistent with OAC’s security and governance model.
+
+In practical terms, this allows OAC to become part of the narrative analytics workflow beyond the boundaries of its native UI. By registering the OAC MCP server with AI clients—such as conversational assistants or developer tooling—organizations enable AI agents to retrieve governed metrics, summarize workbook insights, and answer contextual questions like *what does this KPI represent and why did it change?*. All of this happens while staying anchored to OAC’s semantic layer, metric definitions, and access rights, effectively extending trusted analytics into conversational and agent-driven experiences.
+
 Let's start our analysis with simple request `use sales data` which is entered chat box in Claude.
 
 ![Use Sales Data](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/use-sales-data.png)
@@ -209,3 +217,21 @@ Click here to open: [Sales Revenue Dasbhoard](https://https://zigavaupot.github.
 And we can follow suggestion provided *Would you like me to drill deeper into any of these areas—profitability by product, regional trends, or customer behavior?*
 
 ![Drill Deeper](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/drill-deeper.png)
+
+Based on this, **Thought Process** prepares and executes a new plan:
+
+![Thought Process for Customer profitability](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/thought-process-customer-profitability.png)
+
+And here is detailed *Customer Profitability Analysis* dashboard:
+
+![Customer profitability analysis](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/customer-profitability-analysis.png)
+
+Click here to open: [Customer profitability analysis](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/files/sales_dashboard.html)
+
+How cool is that? The tool now generates reports for us and provides explanations, reasoning, and there is no coding required. Just data. Pure data. 
+
+Key to success is, data is well organized in our data warehouse, and there is a comprehensive data model across those data, so we don't get any halucinations and similar anomalies that are usually present in similar scenarios. **Oracle Analytics Semantic Model is the key ingridient.**
+
+
+
+

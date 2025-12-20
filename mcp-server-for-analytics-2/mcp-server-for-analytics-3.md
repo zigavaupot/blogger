@@ -27,5 +27,14 @@ and chart is also produced:
 ![Linear Trendline](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/linear-trendline.png)
 
 
-... NEXT STEPS: change LINEAR to POLINOMIAL model
+Then let's just change the trendline model by asking *apply polynomial model instead of linear*. And MCP server executes:
+
+![Thought process for polynomial trend](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/thought-process-for-polynomial-trend.png)
+
+And final result:
+
+![Polynomial Trendline](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-2/images/polynomial-trendline.png)
+
+
+
 ... TRY CLUSTERS 

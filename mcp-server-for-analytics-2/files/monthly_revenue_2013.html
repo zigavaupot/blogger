@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2013 Monthly Sales Revenue</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            min-height: 100vh;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            color: #64ffda;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #8892b0;
+            font-size: 1rem;
+        }
+        
+        .chart-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 450px;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #64ffda;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        
+        .highlight {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .highlight-item {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 10px;
+            padding: 12px 20px;
+            text-align: center;
+        }
+        
+        .highlight-item.low {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+        
+        .highlight-item .month {
+            font-size: 0.85rem;
+            color: #ccd6f6;
+            font-weight: 600;
+        }
+        
+        .highlight-item .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        
+        .highlight-item .value.high { color: #64ffda; }
+        .highlight-item .value.low { color: #ff6b6b; }
+        
+        .highlight-item .label {
+            font-size: 0.7rem;
+            color: #8892b0;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📈 2013 Monthly Sales Revenue</h1>
+        <p>Last year of available sales data</p>
+    </div>
+    
+    <div class="chart-wrapper">
+        <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-value">$1.51M</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$125.8K</div>
+                <div class="stat-label">Monthly Average</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">17,576</div>
+                <div class="stat-label">Units Sold</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">1,304</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <div class="highlight-item">
+                <div class="label">Best Month</div>
+                <div class="month">August</div>
+                <div class="value high">$163,863</div>
+            </div>
+            <div class="highlight-item low">
+                <div class="label">Lowest Month</div>
+                <div class="month">March</div>
+                <div class="value low">$85,306</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const revenue2013 = [113217.20, 97179.34, 85306.21, 88913.74, 103426.44, 149786.76, 153811.89, 163862.81, 125284.42, 157283.88, 138320.17, 133229.74];
+        
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        
+        // Create gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(100, 255, 218, 0.4)');
+        gradient.addColorStop(1, 'rgba(100, 255, 218, 0.0)');
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Revenue',
+                    data: revenue2013,
+                    borderColor: '#64ffda',
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#64ffda',
+                    pointBorderColor: '#0a192f',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: '#64ffda',
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(10, 25, 47, 0.95)',
+                        titleColor: '#64ffda',
+                        bodyColor: '#ccd6f6',
+                        borderColor: 'rgba(100, 255, 218, 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            title: (items) => `${items[0].label} 2013`,
+                            label: (ctx) => `Revenue: $${ctx.raw.toLocaleString('en-US', {minimumFractionDigits: 2})}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { 
+                            display: false 
+                        },
+                        ticks: {
+                            color: '#8892b0',
+                            font: { size: 12, weight: '500' }
+                        }
+                    },
+                    y: {
+                        grid: { 
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#8892b0',
+                            font: { size: 11 },
+                            callback: (value) => '$' + (value / 1000).toFixed(0) + 'K',
+                            stepSize: 25000
+                        },
+                        min: 50000,
+                        max: 175000
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

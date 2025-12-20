@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2013 Monthly Sales Revenue with OAC Trend</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            min-height: 100vh;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            color: #64ffda;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #8892b0;
+            font-size: 1rem;
+        }
+        
+        .oac-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            border-radius: 20px;
+            padding: 6px 14px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: #ff6b6b;
+        }
+        
+        .oac-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .chart-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 450px;
+        }
+        
+        .legend-custom {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccd6f6;
+            font-size: 0.9rem;
+        }
+        
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            border-radius: 2px;
+        }
+        
+        .legend-line.revenue {
+            background: #64ffda;
+        }
+        
+        .legend-line.trend {
+            background: repeating-linear-gradient(
+                90deg,
+                #ff6b6b,
+                #ff6b6b 8px,
+                transparent 8px,
+                transparent 12px
+            );
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #64ffda;
+        }
+        
+        .stat-value.trend-up {
+            color: #64ffda;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        
+        .trend-insight {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .trend-insight .title {
+            color: #64ffda;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        
+        .trend-insight .desc {
+            color: #ccd6f6;
+            font-size: 0.85rem;
+        }
+        
+        .data-source {
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: rgba(123, 44, 191, 0.1);
+            border: 1px solid rgba(123, 44, 191, 0.3);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: #8892b0;
+        }
+        
+        .data-source code {
+            color: #7b2cbf;
+            background: rgba(123, 44, 191, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .highlight {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .highlight-item {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 10px;
+            padding: 12px 20px;
+            text-align: center;
+        }
+        
+        .highlight-item.low {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+        
+        .highlight-item .month {
+            font-size: 0.85rem;
+            color: #ccd6f6;
+            font-weight: 600;
+        }
+        
+        .highlight-item .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        
+        .highlight-item .value.high { color: #64ffda; }
+        .highlight-item .value.low { color: #ff6b6b; }
+        
+        .highlight-item .label {
+            font-size: 0.7rem;
+            color: #8892b0;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📈 2013 Monthly Sales Revenue</h1>
+        <p>Last year of available sales data with trend analysis</p>
+        <div class="oac-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM7 7h2v10H7V7zm4 4h2v6h-2v-6zm4-2h2v8h-2V9z"/></svg>
+            Trend calculated by Oracle Analytics Cloud
+        </div>
+    </div>
+    
+    <div class="chart-wrapper">
+        <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        
+        <div class="legend-custom">
+            <div class="legend-item">
+                <div class="legend-line revenue"></div>
+                <span>Monthly Revenue</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line trend"></div>
+                <span>OAC Linear Trend</span>
+            </div>
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-value">$1.51M</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">$125.8K</div>
+                <div class="stat-label">Monthly Average</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value trend-up">+$5.1K</div>
+                <div class="stat-label">Monthly Trend</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value trend-up">+57.5%</div>
+                <div class="stat-label">Trend Growth</div>
+            </div>
+        </div>
+        
+        <div class="trend-insight">
+            <div class="title">📊 OAC Trend Analysis</div>
+            <div class="desc">Oracle Analytics calculated a <strong>linear trend of +$5,110/month</strong>, projecting from $97.7K (Jan) to $153.9K (Dec). This represents a <strong>57.5% increase</strong> in the trend line over the year, indicating strong underlying growth momentum despite monthly fluctuations.</div>
+        </div>
+        
+        <div class="highlight">
+            <div class="highlight-item">
+                <div class="label">Best Month</div>
+                <div class="month">August</div>
+                <div class="value high">$163,863</div>
+            </div>
+            <div class="highlight-item low">
+                <div class="label">Lowest Month</div>
+                <div class="month">March</div>
+                <div class="value low">$85,306</div>
+            </div>
+        </div>
+        
+        <div class="data-source">
+            <strong>Data Source:</strong> Trend line computed using OAC function: <code>TRENDLINE(Revenue, (Month) BY (), 'LINEAR', 'VALUE')</code>
+        </div>
+    </div>
+
+    <script>
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        
+        // Actual revenue data from OAC
+        const revenue2013 = [113217.20, 97179.34, 85306.21, 88913.74, 103426.44, 149786.76, 153811.89, 163862.81, 125284.42, 157283.88, 138320.17, 133229.74];
+        
+        // Trend line calculated by Oracle Analytics Cloud TRENDLINE function
+        const oacTrendLine = [97697.33, 102807.25, 107917.17, 113027.09, 118137.01, 123246.92, 128356.84, 133466.76, 138576.68, 143686.60, 148796.52, 153906.44];
+        
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        
+        // Create gradient for revenue area
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(100, 255, 218, 0.4)');
+        gradient.addColorStop(1, 'rgba(100, 255, 218, 0.0)');
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: revenue2013,
+                        borderColor: '#64ffda',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#64ffda',
+                        pointBorderColor: '#0a192f',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: '#64ffda',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2,
+                        order: 1
+                    },
+                    {
+                        label: 'OAC Trend',
+                        data: oacTrendLine,
+                        borderColor: '#ff6b6b',
+                        borderWidth: 3,
+                        borderDash: [10, 5],
+                        fill: false,
+                        tension: 0,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#ff6b6b',
+                        pointBorderColor: '#0a192f',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6,
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(10, 25, 47, 0.95)',
+                        titleColor: '#64ffda',
+                        bodyColor: '#ccd6f6',
+                        borderColor: 'rgba(100, 255, 218, 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            title: (items) => `${items[0].label} 2013`,
+                            label: (ctx) => {
+                                const value = ctx.raw.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+                                if (ctx.dataset.label === 'Revenue') {
+                                    return `Actual: $${value}`;
+                                } else {
+                                    return `OAC Trend: $${value}`;
+                                }
+                            },
+                            afterBody: (items) => {
+                                const actual = items[0].raw;
+                                const trend = items[1].raw;
+                                const diff = actual - trend;
+                                const pct = ((diff / trend) * 100).toFixed(1);
+                                const sign = diff >= 0 ? '+' : '';
+                                return `\nVariance: ${sign}$${diff.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})} (${sign}${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { 
+                            display: false 
+                        },
+                        ticks: {
+                            color: '#8892b0',
+                            font: { size: 12, weight: '500' }
+                        }
+                    },
+                    y: {
+                        grid: { 
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#8892b0',
+                            font: { size: 11 },
+                            callback: (value) => '$' + (value / 1000).toFixed(0) + 'K',
+                            stepSize: 25000
+                        },
+                        min: 50000,
+                        max: 175000
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
