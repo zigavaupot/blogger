@@ -32,7 +32,282 @@ Response is as follows:
 
 {% raw %}
 ```json
-{"tables":[{"fullQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\"","columns":[{"columnType":"attribute","nullable":"1","displayName":"Order Key","dataType":"NUMERIC","precision":"0","name":"Order Key","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Order Key\""},{"columnType":"attribute","nullable":"1","displayName":"Order Status","dataType":"VARCHAR","precision":"17","name":"Order Status","length":"17","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Order Status\""},{"columnType":"measure","nullable":"1","displayName":"Units","dataType":"NUMERIC","precision":"0","name":"Units","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Units\""},{"columnType":"measure","nullable":"1","displayName":"Discnt Value","dataType":"NUMERIC","precision":"0","name":"Discnt Value","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Discnt Value\""},{"columnType":"measure","nullable":"1","displayName":"Cost Fixed","dataType":"NUMERIC","precision":"0","name":"Cost Fixed","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cost Fixed\""},{"columnType":"measure","nullable":"1","displayName":"Cost Variable","dataType":"NUMERIC","precision":"0","name":"Cost Variable","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cost Variable\""},{"columnType":"measure","nullable":"1","displayName":"Revenue","dataType":"NUMERIC","precision":"0","name":"Revenue","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Revenue\""},{"columnType":"attribute","nullable":"1","displayName":"Time Bill Dt","dataType":"TIMESTAMP","precision":"23","name":"Time Bill Dt","length":"23","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Time Bill Dt\""},{"columnType":"attribute","nullable":"1","displayName":"Time Paid Dt","dataType":"TIMESTAMP","precision":"23","name":"Time Paid Dt","length":"23","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Time Paid Dt\""},{"columnType":"attribute","nullable":"1","displayName":"Prod Item Key","dataType":"NUMERIC","precision":"0","name":"Prod Item Key","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Item Key\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Number","dataType":"NUMERIC","precision":"0","name":"Cust Number","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Number\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Name","dataType":"VARCHAR","precision":"30","name":"Cust Name","length":"30","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Name\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Birth Dt","dataType":"TIMESTAMP","precision":"23","name":"Cust Birth Dt","length":"23","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Birth Dt\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Crdt Rate","dataType":"NUMERIC","precision":"0","name":"Cust Crdt Rate","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Crdt Rate\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Gender","dataType":"VARCHAR","precision":"2","name":"Cust Gender","length":"2","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Gender\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Segment","dataType":"VARCHAR","precision":"21","name":"Cust Segment","length":"21","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Segment\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Marital Status","dataType":"VARCHAR","precision":"12","name":"Cust Marital Status","length":"12","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Marital Status\""},{"columnType":"attribute","nullable":"1","displayName":"Cust Type","dataType":"VARCHAR","precision":"9","name":"Cust Type","length":"9","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Type\""},{"columnType":"attribute","nullable":"1","displayName":"Addr Key","dataType":"NUMERIC","precision":"0","name":"Addr Key","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Addr Key\""},{"columnType":"attribute","nullable":"1","displayName":"Address1","dataType":"NUMERIC","precision":"0","name":"Address1","length":"0","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Address1\""},{"columnType":"attribute","nullable":"1","displayName":"Address2","dataType":"VARCHAR","precision":"45","name":"Address2","length":"45","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Address2\""},{"columnType":"attribute","nullable":"1","displayName":"Postal Code","dataType":"VARCHAR","precision":"12","name":"Postal Code","length":"12","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Postal Code\""},{"columnType":"attribute","nullable":"1","displayName":"City","dataType":"VARCHAR","precision":"32","name":"City","length":"32","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"City\""},{"columnType":"attribute","nullable":"1","displayName":"State Prov","dataType":"VARCHAR","precision":"21","name":"State Prov","length":"21","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"State Prov\""},{"columnType":"attribute","nullable":"1","displayName":"Region","dataType":"VARCHAR","precision":"12","name":"Region","length":"12","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Region\""},{"columnType":"attribute","nullable":"1","displayName":"Country Code","dataType":"VARCHAR","precision":"5","name":"Country Code","length":"5","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Country Code\""},{"columnType":"attribute","nullable":"1","displayName":"Country Name","dataType":"VARCHAR","precision":"59","name":"Country Name","length":"59","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Country Name\""},{"columnType":"attribute","nullable":"1","displayName":"Area","dataType":"VARCHAR","precision":"20","name":"Area","length":"20","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Area\""},{"columnType":"attribute","nullable":"1","displayName":"Channel Name","dataType":"VARCHAR","precision":"12","name":"Channel Name","length":"12","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Channel Name\""},{"columnType":"attribute","nullable":"1","displayName":"Prod Brand","dataType":"VARCHAR","precision":"12","name":"Prod Brand","length":"12","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Brand\""},{"columnType":"attribute","nullable":"1","displayName":"Prod Lob","dataType":"VARCHAR","precision":"20","name":"Prod Lob","length":"20","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Lob\""},{"columnType":"attribute","nullable":"1","displayName":"Prod Type","dataType":"VARCHAR","precision":"18","name":"Prod Type","length":"18","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Type\""},{"columnType":"attribute","nullable":"1","displayName":"Product","dataType":"VARCHAR","precision":"39","name":"Product","length":"39","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Product\""},{"columnType":"attribute","nullable":"1","displayName":"Prod Item Dsc","dataType":"VARCHAR","precision":"84","name":"Prod Item Dsc","length":"84","description":"","scale":"0","aggregation":null,"fullyQualifiedName":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Item Dsc\""}],"tableName":"SAMPLE_SALES_DATA"}],"subjectArea":"XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA')"}
+{
+  "subjectArea": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA')",
+  "tables": [
+    {
+      "tableName": "SAMPLE_SALES_DATA",
+      "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\"",
+      "columns": {
+        "attributes": [
+          {
+            "name": "Order Key",
+            "displayName": "Order Key",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Order Key\""
+          },
+          {
+            "name": "Order Status",
+            "displayName": "Order Status",
+            "dataType": "VARCHAR",
+            "length": 17,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Order Status\""
+          },
+          {
+            "name": "Time Bill Dt",
+            "displayName": "Time Bill Dt",
+            "dataType": "TIMESTAMP",
+            "precision": 23,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Time Bill Dt\""
+          },
+          {
+            "name": "Time Paid Dt",
+            "displayName": "Time Paid Dt",
+            "dataType": "TIMESTAMP",
+            "precision": 23,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Time Paid Dt\""
+          },
+          {
+            "name": "Prod Item Key",
+            "displayName": "Prod Item Key",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Item Key\""
+          },
+          {
+            "name": "Cust Number",
+            "displayName": "Cust Number",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Number\""
+          },
+          {
+            "name": "Cust Name",
+            "displayName": "Cust Name",
+            "dataType": "VARCHAR",
+            "length": 30,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Name\""
+          },
+          {
+            "name": "Cust Birth Dt",
+            "displayName": "Cust Birth Dt",
+            "dataType": "TIMESTAMP",
+            "precision": 23,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Birth Dt\""
+          },
+          {
+            "name": "Cust Crdt Rate",
+            "displayName": "Cust Crdt Rate",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Crdt Rate\""
+          },
+          {
+            "name": "Cust Gender",
+            "displayName": "Cust Gender",
+            "dataType": "VARCHAR",
+            "length": 2,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Gender\""
+          },
+          {
+            "name": "Cust Segment",
+            "displayName": "Cust Segment",
+            "dataType": "VARCHAR",
+            "length": 21,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Segment\""
+          },
+          {
+            "name": "Cust Marital Status",
+            "displayName": "Cust Marital Status",
+            "dataType": "VARCHAR",
+            "length": 12,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Marital Status\""
+          },
+          {
+            "name": "Cust Type",
+            "displayName": "Cust Type",
+            "dataType": "VARCHAR",
+            "length": 9,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cust Type\""
+          },
+          {
+            "name": "Addr Key",
+            "displayName": "Addr Key",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Addr Key\""
+          },
+          {
+            "name": "Address1",
+            "displayName": "Address1",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Address1\""
+          },
+          {
+            "name": "Address2",
+            "displayName": "Address2",
+            "dataType": "VARCHAR",
+            "length": 45,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Address2\""
+          },
+          {
+            "name": "Postal Code",
+            "displayName": "Postal Code",
+            "dataType": "VARCHAR",
+            "length": 12,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Postal Code\""
+          },
+          {
+            "name": "City",
+            "displayName": "City",
+            "dataType": "VARCHAR",
+            "length": 32,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"City\""
+          },
+          {
+            "name": "State Prov",
+            "displayName": "State Prov",
+            "dataType": "VARCHAR",
+            "length": 21,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"State Prov\""
+          },
+          {
+            "name": "Region",
+            "displayName": "Region",
+            "dataType": "VARCHAR",
+            "length": 12,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Region\""
+          },
+          {
+            "name": "Country Code",
+            "displayName": "Country Code",
+            "dataType": "VARCHAR",
+            "length": 5,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Country Code\""
+          },
+          {
+            "name": "Country Name",
+            "displayName": "Country Name",
+            "dataType": "VARCHAR",
+            "length": 59,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Country Name\""
+          },
+          {
+            "name": "Area",
+            "displayName": "Area",
+            "dataType": "VARCHAR",
+            "length": 20,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Area\""
+          },
+          {
+            "name": "Channel Name",
+            "displayName": "Channel Name",
+            "dataType": "VARCHAR",
+            "length": 12,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Channel Name\""
+          },
+          {
+            "name": "Prod Brand",
+            "displayName": "Prod Brand",
+            "dataType": "VARCHAR",
+            "length": 12,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Brand\""
+          },
+          {
+            "name": "Prod Lob",
+            "displayName": "Prod Lob",
+            "dataType": "VARCHAR",
+            "length": 20,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Lob\""
+          },
+          {
+            "name": "Prod Type",
+            "displayName": "Prod Type",
+            "dataType": "VARCHAR",
+            "length": 18,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Type\""
+          },
+          {
+            "name": "Product",
+            "displayName": "Product",
+            "dataType": "VARCHAR",
+            "length": 39,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Product\""
+          },
+          {
+            "name": "Prod Item Dsc",
+            "displayName": "Prod Item Dsc",
+            "dataType": "VARCHAR",
+            "length": 84,
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Prod Item Dsc\""
+          }
+        ],
+        "measures": [
+          {
+            "name": "Units",
+            "displayName": "Units",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Units\""
+          },
+          {
+            "name": "Discnt Value",
+            "displayName": "Discnt Value",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Discnt Value\""
+          },
+          {
+            "name": "Cost Fixed",
+            "displayName": "Cost Fixed",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cost Fixed\""
+          },
+          {
+            "name": "Cost Variable",
+            "displayName": "Cost Variable",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Cost Variable\""
+          },
+          {
+            "name": "Revenue",
+            "displayName": "Revenue",
+            "dataType": "NUMERIC",
+            "nullable": true,
+            "fullyQualifiedName": "XSA('ziga.vaupot@smartq.si'.'SAMPLE_SALES_DATA').\"SAMPLE_SALES_DATA\".\"Revenue\""
+          }
+        ]
+      }
+    }
+  ]
+}
 ```
 {% endraw %}
 
@@ -106,9 +381,53 @@ FETCH FIRST 20 ROWS ONLY`
 
 and Oracle Analytics would respond with this **Response**:
 
-{% raw %}
+{% endraw %}
 ```json
-{"metadata":{"requestId":"5db5d3d4-7a98-4c89-a5a1-c9da0ff44f57","batchSize":1000,"startTime":1766162116326},"batches":[{"complete":true,"cursorId":"1ffcb9df-acc0-4020-9f18-51f3aa6eabf1","batchNumber":1,"data":[{"llm_0":"FunPod","llm_1":2047226.99},{"llm_0":"BizTech","llm_1":2032292.78},{"llm_0":"HomeView","llm_1":1013841.4}],"hasMore":false,"totalRecordsStreamed":3,"isComplete":true,"recordsInBatch":3,"timestamp":1766162116329}],"status":{"result":"success","error":false,"message":"Streaming completed successfully"},"summary":{"completed":true,"totalBatches":1,"totalRecords":3,"endTime":1766162116331,"durationMs":5}}
+{
+  "metadata": {
+    "requestId": "5db5d3d4-7a98-4c89-a5a1-c9da0ff44f57",
+    "batchSize": 1000,
+    "startTime": 1766162116326
+  },
+  "batches": [
+    {
+      "complete": true,
+      "cursorId": "1ffcb9df-acc0-4020-9f18-51f3aa6eabf1",
+      "batchNumber": 1,
+      "data": [
+        {
+          "llm_0": "FunPod",
+          "llm_1": 2047226.99
+        },
+        {
+          "llm_0": "BizTech",
+          "llm_1": 2032292.78
+        },
+        {
+          "llm_0": "HomeView",
+          "llm_1": 1013841.4
+        }
+      ],
+      "hasMore": false,
+      "totalRecordsStreamed": 3,
+      "isComplete": true,
+      "recordsInBatch": 3,
+      "timestamp": 1766162116329
+    }
+  ],
+  "status": {
+    "result": "success",
+    "error": false,
+    "message": "Streaming completed successfully"
+  },
+  "summary": {
+    "completed": true,
+    "totalBatches": 1,
+    "totalRecords": 3,
+    "endTime": 1766162116331,
+    "durationMs": 5
+  }
+}
 ```
 {% endraw %}
 
