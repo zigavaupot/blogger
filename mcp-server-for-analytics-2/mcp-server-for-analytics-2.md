@@ -381,7 +381,7 @@ FETCH FIRST 20 ROWS ONLY`
 
 and Oracle Analytics would respond with this **Response**:
 
-{% endraw %}
+{% raw %}
 ```json
 {
   "metadata": {
