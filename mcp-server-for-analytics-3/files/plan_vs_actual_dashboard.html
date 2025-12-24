@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OA Bootcamp - Plan vs Actual Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-cyan: #56d4dd;
+            --border-color: #30363d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+            background-image: 
+                radial-gradient(ellipse at 20% 0%, rgba(88, 166, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(163, 113, 247, 0.08) 0%, transparent 50%);
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .period-badge {
+            display: inline-block;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            color: var(--accent-cyan);
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+        
+        .kpi-card.revenue::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+        .kpi-card.profit::before { background: linear-gradient(90deg, var(--accent-green), #7ee787); }
+        .kpi-card.variance::before { background: linear-gradient(90deg, var(--accent-purple), #d2a8ff); }
+        .kpi-card.margin::before { background: linear-gradient(90deg, var(--accent-orange), #ffa657); }
+        
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .kpi-subtext {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .variance-positive { color: var(--accent-green); }
+        .variance-negative { color: var(--accent-red); }
+        
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .chart-title .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 1rem 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .data-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table tr:hover {
+            background: rgba(88, 166, 255, 0.05);
+        }
+        
+        .data-table .number {
+            text-align: right;
+            font-family: 'DM Sans', monospace;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        
+        .region-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .region-americas { background: rgba(88, 166, 255, 0.15); color: var(--accent-blue); }
+        .region-emea { background: rgba(163, 113, 247, 0.15); color: var(--accent-purple); }
+        .region-apac { background: rgba(86, 212, 221, 0.15); color: var(--accent-cyan); }
+        
+        .insight-box {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(163, 113, 247, 0.1));
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .insight-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .sparkline {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 30px;
+        }
+        
+        .sparkline-bar {
+            flex: 1;
+            background: var(--accent-blue);
+            border-radius: 2px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .sparkline-bar:hover {
+            opacity: 1;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .kpi-card, .chart-container {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .kpi-card:nth-child(1) { animation-delay: 0.1s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.2s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.3s; }
+        .kpi-card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>Plan vs Actual Performance</h1>
+        <p class="subtitle">OA Bootcamp Subject Area Analytics</p>
+        <span class="period-badge">📅 July - December 2025 (Last 6 Months)</span>
+    </div>
+    
+    <div class="kpi-grid">
+        <div class="kpi-card revenue">
+            <div class="kpi-label">Total Revenue (H2 2025)</div>
+            <div class="kpi-value">$51.77M</div>
+            <div class="kpi-subtext">vs Plan: $51.64M</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100.25%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));"></div>
+            </div>
+        </div>
+        
+        <div class="kpi-card variance">
+            <div class="kpi-label">Revenue Variance</div>
+            <div class="kpi-value variance-positive">+$126K</div>
+            <div class="kpi-subtext">+0.25% above plan</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 60%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 50%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 75%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 40%; background: var(--accent-red);"></div>
+                <div class="sparkline-bar" style="height: 35%; background: var(--accent-red);"></div>
+                <div class="sparkline-bar" style="height: 35%; background: var(--accent-red);"></div>
+            </div>
+        </div>
+        
+        <div class="kpi-card profit">
+            <div class="kpi-label">Total Profit (H2 2025)</div>
+            <div class="kpi-value">$4.93M</div>
+            <div class="kpi-subtext">vs Plan: $3.83M</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, var(--accent-green), #7ee787);"></div>
+            </div>
+        </div>
+        
+        <div class="kpi-card margin">
+            <div class="kpi-label">Profit Variance</div>
+            <div class="kpi-value variance-positive">+$1.11M</div>
+            <div class="kpi-subtext">+28.8% above plan 🎯</div>
+            <div class="sparkline">
+                <div class="sparkline-bar" style="height: 80%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 85%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 90%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 95%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 85%; background: var(--accent-green);"></div>
+                <div class="sparkline-bar" style="height: 75%; background: var(--accent-green);"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <div class="chart-title">
+            <span class="icon" style="background: var(--accent-blue);">📈</span>
+            Monthly Revenue: Actual vs Plan
+        </div>
+        <canvas id="revenueChart" height="100"></canvas>
+    </div>
+    
+    <div class="two-column">
+        <div class="chart-container">
+            <div class="chart-title">
+                <span class="icon" style="background: var(--accent-green);">💰</span>
+                Profit Performance by Month
+            </div>
+            <canvas id="profitChart" height="150"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">
+                <span class="icon" style="background: var(--accent-purple);">🌍</span>
+                Regional Performance (H2 2025)
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th class="number">Revenue</th>
+                        <th class="number">Plan</th>
+                        <th class="number">Variance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="region-badge region-americas">AMERICAS</span></td>
+                        <td class="number">$21.00M</td>
+                        <td class="number">$20.71M</td>
+                        <td class="number variance-positive">+1.4%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="region-badge region-emea">EMEA</span></td>
+                        <td class="number">$19.80M</td>
+                        <td class="number">$20.02M</td>
+                        <td class="number variance-negative">-1.1%</td>
+                    </tr>
+                    <tr>
+                        <td><span class="region-badge region-apac">APAC</span></td>
+                        <td class="number">$10.97M</td>
+                        <td class="number">$10.92M</td>
+                        <td class="number variance-positive">+0.4%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="insight-box">
+                <div class="insight-title">💡 Regional Insight</div>
+                <div class="insight-text">
+                    Americas leads with $21M revenue (+1.4% vs plan). EMEA slightly underperformed (-1.1%), while APAC is on track. All regions show strong profit performance exceeding plan targets.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <div class="chart-title">
+            <span class="icon" style="background: var(--accent-orange);">📊</span>
+            Monthly Variance Analysis (Revenue & Profit)
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th class="number">Revenue Actual</th>
+                    <th class="number">Revenue Plan</th>
+                    <th class="number">Rev Variance</th>
+                    <th class="number">Profit Actual</th>
+                    <th class="number">Profit Plan</th>
+                    <th class="number">Profit Variance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Jul 2025</td>
+                    <td class="number">$8.58M</td>
+                    <td class="number">$8.54M</td>
+                    <td class="number variance-positive">+0.5%</td>
+                    <td class="number">$716K</td>
+                    <td class="number">$630K</td>
+                    <td class="number variance-positive">+13.7%</td>
+                </tr>
+                <tr>
+                    <td>Aug 2025</td>
+                    <td class="number">$8.55M</td>
+                    <td class="number">$8.51M</td>
+                    <td class="number variance-positive">+0.5%</td>
+                    <td class="number">$737K</td>
+                    <td class="number">$627K</td>
+                    <td class="number variance-positive">+17.6%</td>
+                </tr>
+                <tr>
+                    <td>Sep 2025</td>
+                    <td class="number">$8.52M</td>
+                    <td class="number">$8.43M</td>
+                    <td class="number variance-positive">+1.0%</td>
+                    <td class="number">$859K</td>
+                    <td class="number">$626K</td>
+                    <td class="number variance-positive">+37.3%</td>
+                </tr>
+                <tr>
+                    <td>Oct 2025</td>
+                    <td class="number">$8.08M</td>
+                    <td class="number">$8.11M</td>
+                    <td class="number variance-negative">-0.4%</td>
+                    <td class="number">$1.07M</td>
+                    <td class="number">$599K</td>
+                    <td class="number variance-positive">+77.9%</td>
+                </tr>
+                <tr>
+                    <td>Nov 2025</td>
+                    <td class="number">$8.81M</td>
+                    <td class="number">$8.82M</td>
+                    <td class="number variance-negative">-0.1%</td>
+                    <td class="number">$783K</td>
+                    <td class="number">$654K</td>
+                    <td class="number variance-positive">+19.7%</td>
+                </tr>
+                <tr>
+                    <td>Dec 2025</td>
+                    <td class="number">$9.23M</td>
+                    <td class="number">$9.24M</td>
+                    <td class="number variance-negative">-0.01%</td>
+                    <td class="number">$770K</td>
+                    <td class="number">$690K</td>
+                    <td class="number variance-positive">+11.6%</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="insight-box" style="margin-top: 1.5rem;">
+            <div class="insight-title">🎯 Key Findings</div>
+            <div class="insight-text">
+                <strong>Revenue:</strong> Overall performance is essentially on plan (+0.25%). Q3 showed stronger results (Jul-Sep: +0.5% to +1.0%), while Q4 saw slight underperformance (-0.4% to flat).<br><br>
+                <strong>Profit:</strong> Exceptional performance across all months, exceeding plan by +11.6% to +77.9%. October was the standout month with $1.07M profit (78% above plan). This suggests improved cost management or margin optimization throughout H2.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jul 2025', 'Aug 2025', 'Sep 2025', 'Oct 2025', 'Nov 2025', 'Dec 2025'],
+                datasets: [
+                    {
+                        label: 'Actual Revenue',
+                        data: [8582524, 8551516, 8517513, 8075355, 8805336, 9234021],
+                        borderColor: '#58a6ff',
+                        backgroundColor: 'rgba(88, 166, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3
+                    },
+                    {
+                        label: 'Plan Revenue',
+                        data: [8537500, 8511000, 8430400, 8111500, 8815550, 9235200],
+                        borderColor: '#8b949e',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e6edf3', font: { family: 'DM Sans' } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1c2128',
+                        titleColor: '#e6edf3',
+                        bodyColor: '#8b949e',
+                        borderColor: '#30363d',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + (context.raw / 1000000).toFixed(2) + 'M';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: '#30363d' },
+                        ticks: { color: '#8b949e', font: { family: 'DM Sans' } }
+                    },
+                    y: { 
+                        grid: { color: '#30363d' },
+                        ticks: { 
+                            color: '#8b949e',
+                            font: { family: 'DM Sans' },
+                            callback: function(value) { return '$' + (value / 1000000).toFixed(1) + 'M'; }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Profit Chart
+        const profitCtx = document.getElementById('profitChart').getContext('2d');
+        new Chart(profitCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Actual Profit',
+                        data: [716081, 737285, 859175, 1065620, 782612, 769925],
+                        backgroundColor: '#3fb950',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Plan Profit',
+                        data: [629780, 627024, 625841, 598945, 653584, 689985],
+                        backgroundColor: '#484f58',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: { color: '#e6edf3', font: { family: 'DM Sans' } }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1c2128',
+                        titleColor: '#e6edf3',
+                        bodyColor: '#8b949e',
+                        borderColor: '#30363d',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + (context.raw / 1000).toFixed(0) + 'K';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { display: false },
+                        ticks: { color: '#8b949e', font: { family: 'DM Sans' } }
+                    },
+                    y: { 
+                        grid: { color: '#30363d' },
+                        ticks: { 
+                            color: '#8b949e',
+                            font: { family: 'DM Sans' },
+                            callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'K'; }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

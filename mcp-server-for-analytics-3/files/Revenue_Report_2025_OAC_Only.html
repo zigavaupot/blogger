@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Performance Report - FY 2025 (OAC Functions)</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #fafbfc;
+            --bg-white: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --accent-purple: #8b5cf6;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        .report-container { max-width: 1400px; margin: 0 auto; }
+        
+        .report-header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        
+        .report-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .report-header .subtitle { opacity: 0.85; font-size: 1rem; }
+        
+        .oac-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .oac-functions-panel {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+            border: 1px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .oac-functions-panel h3 {
+            font-size: 1rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .function-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .function-card .metric { font-weight: 600; color: #1e40af; font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .function-card .oac-func { 
+            font-family: 'IBM Plex Mono', monospace; 
+            font-size: 0.8rem; 
+            color: #166534;
+            background: #f0fdf4;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .function-card .replaces { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .summary-card.revenue::before { background: var(--accent-blue); }
+        .summary-card.prior::before { background: var(--accent-purple); }
+        .summary-card.growth::before { background: var(--accent-green); }
+        .summary-card.plan::before { background: var(--accent-amber); }
+        
+        .summary-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .summary-value { font-size: 1.75rem; font-weight: 700; }
+        .summary-detail { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; }
+        
+        .positive { color: var(--accent-green); }
+        .negative { color: var(--accent-red); }
+        
+        .main-table-container {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            background: #f8fafc;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table-title { font-size: 1.1rem; font-weight: 600; }
+        
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .report-table thead { background: #f1f5f9; }
+        
+        .report-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .report-table th.number { text-align: right; }
+        .report-table th small { 
+            display: block; 
+            font-weight: normal; 
+            opacity: 0.8; 
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--accent-blue);
+            margin-top: 2px;
+        }
+        
+        .report-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .report-table td.text { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; }
+        .report-table td.number { text-align: right; }
+        
+        .report-table tbody tr:hover { background: #f8fafc; }
+        
+        .report-table tbody tr.total-row {
+            background: linear-gradient(90deg, #f0f9ff, #faf5ff);
+            font-weight: 600;
+        }
+        
+        .report-table tbody tr.total-row td {
+            border-top: 2px solid var(--border-color);
+            padding: 1.25rem 1rem;
+        }
+        
+        .variance-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .variance-badge.positive { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .variance-badge.negative { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+        
+        .growth-index { display: inline-flex; align-items: center; gap: 0.25rem; }
+        .growth-index .arrow { font-size: 0.7rem; }
+        
+        .ytd-bar {
+            width: 60px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+        
+        .ytd-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <header class="report-header">
+            <h1>📊 Revenue Performance Report</h1>
+            <p class="subtitle">OA Bootcamp Subject Area — Fiscal Year 2025</p>
+            <span class="oac-badge">🔧 100% OAC Logical SQL Functions</span>
+        </header>
+        
+        <div class="oac-functions-panel">
+            <h3>⚡ OAC Functions Used (No External Calculations)</h3>
+            <div class="function-grid">
+                <div class="function-card">
+                    <div class="metric">Revenue Year Ago</div>
+                    <div class="oac-func">FILTER(Revenue USING Year = 2024)</div>
+                    <div class="replaces">Replaces: AGO(Revenue, Month, 12)</div>
+                </div>
+                <div class="function-card">
+                    <div class="metric">YTD Revenue</div>
+                    <div class="oac-func">RSUM(Revenue BY Year)</div>
+                    <div class="replaces">Replaces: TODATE(Revenue, Year)</div>
+                </div>
+                <div class="function-card">
+                    <div class="metric">YoY Growth %</div>
+                    <div class="oac-func">(FILTER(CY) - FILTER(PY)) / FILTER(PY) * 100</div>
+                    <div class="replaces">Calculated inline using FILTER results</div>
+                </div>
+                <div class="function-card">
+                    <div class="metric">% YTD</div>
+                    <div class="oac-func">RSUM(Rev BY Year) / SUM(Rev BY Year) * 100</div>
+                    <div class="replaces">Running sum divided by year total</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-grid">
+            <div class="summary-card revenue">
+                <div class="summary-label">FY 2025 Revenue</div>
+                <div class="summary-value">$93.42M</div>
+                <div class="summary-detail">FILTER(Rev USING Year=2025)</div>
+            </div>
+            <div class="summary-card prior">
+                <div class="summary-label">FY 2024 Revenue</div>
+                <div class="summary-value">$79.58M</div>
+                <div class="summary-detail">FILTER(Rev USING Year=2024)</div>
+            </div>
+            <div class="summary-card growth">
+                <div class="summary-label">YoY Growth</div>
+                <div class="summary-value positive">+17.4%</div>
+                <div class="summary-detail">+$13.84M increase</div>
+            </div>
+            <div class="summary-card plan">
+                <div class="summary-label">vs Plan</div>
+                <div class="summary-value positive">+0.2%</div>
+                <div class="summary-detail">$93.42M vs $93.23M plan</div>
+            </div>
+        </div>
+        
+        <div class="main-table-container">
+            <div class="table-header">
+                <div class="table-title">Monthly Revenue Analysis — All Metrics from OAC</div>
+            </div>
+            
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th class="number">Revenue 2025<small>FILTER(USING Year=2025)</small></th>
+                        <th class="number">Revenue 2024<small>FILTER(USING Year=2024)</small></th>
+                        <th class="number">YoY Growth<small>Calculated</small></th>
+                        <th class="number">Plan 2025<small>FILTER(Plan)</small></th>
+                        <th class="number">vs Plan<small>Calculated</small></th>
+                        <th class="number">YTD Revenue<small>RSUM(BY Year)</small></th>
+                        <th class="number">% YTD<small>RSUM/SUM BY</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text">January</td>
+                        <td class="number">$6,130,899</td>
+                        <td class="number">$5,962,660</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +2.8%</span></td>
+                        <td class="number">$6,229,300</td>
+                        <td class="number"><span class="variance-badge negative">-1.6%</span></td>
+                        <td class="number">$6,130,899</td>
+                        <td class="number">6.6%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 6.6%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">February</td>
+                        <td class="number">$6,085,033</td>
+                        <td class="number">$6,119,584</td>
+                        <td class="number"><span class="growth-index negative"><span class="arrow">▼</span> -0.6%</span></td>
+                        <td class="number">$6,074,600</td>
+                        <td class="number"><span class="variance-badge positive">+0.2%</span></td>
+                        <td class="number">$12,215,932</td>
+                        <td class="number">13.1%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 13.1%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">March</td>
+                        <td class="number">$6,248,180</td>
+                        <td class="number">$5,748,190</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +8.7%</span></td>
+                        <td class="number">$6,108,750</td>
+                        <td class="number"><span class="variance-badge positive">+2.3%</span></td>
+                        <td class="number">$18,464,112</td>
+                        <td class="number">19.8%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 19.8%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">April</td>
+                        <td class="number">$7,232,720</td>
+                        <td class="number">$7,297,034</td>
+                        <td class="number"><span class="growth-index negative"><span class="arrow">▼</span> -0.9%</span></td>
+                        <td class="number">$7,288,200</td>
+                        <td class="number"><span class="variance-badge negative">-0.8%</span></td>
+                        <td class="number">$25,696,831</td>
+                        <td class="number">27.5%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 27.5%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">May</td>
+                        <td class="number">$7,694,168</td>
+                        <td class="number">$6,805,300</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +13.1%</span></td>
+                        <td class="number">$7,591,200</td>
+                        <td class="number"><span class="variance-badge positive">+1.4%</span></td>
+                        <td class="number">$33,390,999</td>
+                        <td class="number">35.7%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 35.7%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">June</td>
+                        <td class="number">$8,262,734</td>
+                        <td class="number">$6,534,379</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +26.5%</span></td>
+                        <td class="number">$8,292,350</td>
+                        <td class="number"><span class="variance-badge negative">-0.4%</span></td>
+                        <td class="number">$41,653,733</td>
+                        <td class="number">44.6%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 44.6%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">July</td>
+                        <td class="number">$8,582,525</td>
+                        <td class="number">$7,220,047</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +18.9%</span></td>
+                        <td class="number">$8,537,500</td>
+                        <td class="number"><span class="variance-badge positive">+0.5%</span></td>
+                        <td class="number">$50,236,257</td>
+                        <td class="number">53.8%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 53.8%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">August</td>
+                        <td class="number">$8,551,516</td>
+                        <td class="number">$6,724,916</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +27.2%</span></td>
+                        <td class="number">$8,511,000</td>
+                        <td class="number"><span class="variance-badge positive">+0.5%</span></td>
+                        <td class="number">$58,787,774</td>
+                        <td class="number">62.9%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 62.9%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">September</td>
+                        <td class="number">$8,517,514</td>
+                        <td class="number">$6,562,868</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +29.8%</span></td>
+                        <td class="number">$8,430,400</td>
+                        <td class="number"><span class="variance-badge positive">+1.0%</span></td>
+                        <td class="number">$67,305,288</td>
+                        <td class="number">72.0%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 72%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">October</td>
+                        <td class="number">$8,075,355</td>
+                        <td class="number">$6,001,231</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +34.6%</span></td>
+                        <td class="number">$8,111,500</td>
+                        <td class="number"><span class="variance-badge negative">-0.4%</span></td>
+                        <td class="number">$75,380,643</td>
+                        <td class="number">80.7%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 80.7%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">November</td>
+                        <td class="number">$8,805,336</td>
+                        <td class="number">$7,117,303</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +23.7%</span></td>
+                        <td class="number">$8,815,550</td>
+                        <td class="number"><span class="variance-badge negative">-0.1%</span></td>
+                        <td class="number">$84,185,979</td>
+                        <td class="number">90.1%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 90.1%;"></div></div></td>
+                    </tr>
+                    <tr>
+                        <td class="text">December</td>
+                        <td class="number">$9,234,021</td>
+                        <td class="number">$7,486,489</td>
+                        <td class="number"><span class="growth-index positive"><span class="arrow">▲</span> +23.3%</span></td>
+                        <td class="number">$9,235,200</td>
+                        <td class="number"><span class="variance-badge negative">-0.01%</span></td>
+                        <td class="number">$93,420,000</td>
+                        <td class="number">100%<div class="ytd-bar"><div class="ytd-bar-fill" style="width: 100%;"></div></div></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td class="text">FY 2025 TOTAL</td>
+                        <td class="number">$93,420,000</td>
+                        <td class="number">$79,580,000</td>
+                        <td class="number"><span class="growth-index positive" style="font-size: 0.9rem;"><span class="arrow">▲</span> +17.4%</span></td>
+                        <td class="number">$93,225,550</td>
+                        <td class="number"><span class="variance-badge positive">+0.2%</span></td>
+                        <td class="number">—</td>
+                        <td class="number">—</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
