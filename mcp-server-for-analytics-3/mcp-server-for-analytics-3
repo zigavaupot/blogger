@@ -173,7 +173,9 @@ With this, Claude has concluded that it finally understands the data model and t
 
 We can see an interesting result as it only queried **D Billing Date** table witch doesn't give any context related to our request to analyze *last 6 months*. Result retrieved because of that is:
 
-> Good, I can see the data goes up to 2040. Let me now get the last 6 months of data and compare actual vs plan for Revenue and Profit. I'll analyze the most recent 6 months (July-December 2040).
+```console
+Good, I can see the data goes up to 2040. Let me now get the last 6 months of data and compare actual vs plan for Revenue and Profit. I'll analyze the most recent 6 months (July-December 2040).
+```
 
 This is obviously wrong, and Claude will realize this within next few steps as the next query through `oracle_analytics-exdcute_logical_sql` tool wants to retrieve data from that period. Obviously without any success.
 
@@ -282,6 +284,9 @@ The response for this last query is:
 ```
 
 After this step, Claude retrieves also data for two more dimensions: **D Products** and **D Geography**, and also queries for revenue and plan details by products and geographies.
+
+[Plan vs Performance](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/
+plan-vs-performance.png)
 
 Once all data was retrieved, dashboard [Plan vs Actual Performance](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/plan_vs_actual_dashboard.html) was created.
 
@@ -496,19 +501,108 @@ Then it triggers another query to get the annual totals for context:
 ```
 With this, it retrieved all required data and continued to produce a report:
 
-[Next steps](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/next-steps-after-data-retrieval.png.png)
+[Next steps](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/next-steps-after-data-retrieval.png)
 
 From the next steps, we can clearly see, that again, Claude retrieved all neccesary data and after that it used other (python) tools to generate HTML report. It actually create an excel file with same data as well.
 
+[Revenue Performance - 1](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/revenue-performance-1.png)
+
 Check them here:
-* [Plan vs Actual Performance - HTML](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/revenue_report_2025.html)
-* [Plan vs Actual Performance - XLSX](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/Revenue_Report_2025.xlsx)
+* [Plan vs Actual Performance - HTML](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/revenue_report_2025-1.html)
+* [Plan vs Actual Performance - XLSX](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/Revenue_Report_2025-1.xlsx)
 
-Even though report looks correct and very user friendly, it was calculated outside of OAC. Which could have led to potentially wrong calculations. At least, there is no control over these calculations. 
+Even though report looks correct and very user friendly, it was calculated outside of OAC. Which could have led to potentially wrong calculations, or at least, there is no control over these calculations by the OAC. 
 
-Therefore, let's try if we could change this behaviour. We will address this a bit later. Before that let me chekc something else. In our subject area we have two pre-calculated columns: Revenue Year Ago and Revenue YTD. In the query above, both have been retrieved by simply reading them. But what if these two columns weren't pre-calcualted? Would OAC MCP Server be able to find a solution?
+Therefore, let's try if we could change this behaviour. 
 
-Let's examine it.
+But, before that let me check something else. In our subject area we have two pre-calculated columns: **Revenue Year Ago** and **Revenue YTD**. In the query above, both have been retrieved by simply reading them by referencing them **\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue Year Ago\"**
+and **\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue YTD\"**. But what if these two columns weren't pre-calcualted? Would OAC MCP Server be able to find a solution? Let's examine it:
 
+[No pre-calculated columns in a query](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/no-precalculated-columns-request.png)
+
+And this was its first thought:
+
+```console
+The user wants me to recreate the same report but without relying on the pre-calculated "Revenue Year Ago" and "Revenue YTD" metrics from the semantic model. I'll need to calculate these myself using:
+
+Revenue Year Ago: Use the AGO() function to get prior year revenue
+Revenue YTD: Use the TODATE() function to calculate year-to-date revenue
+
+Let me query the data using these Logical SQL functions instead.
+```
+
+Great, it found way around to use OAC Time Series functions. Here is the query:
+
+[No pre-calculated columns in a query](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/running-ago-and-todate.png)
+
+But, it seems, level has not been specified correctly! To be honest, this is often an issue also when creating time series calculations OAC, so I can't blame it not finding it correctly. 
+
+**ADD AN IMAGE OF CORRECT QUERY HERE!!!**
+
+Anyway, based on error receieved related to using correct time levels with AGO() and TODATE() functions, alternative path was found. But using an outside python-code based calculation for YoY and YTD metrics. And HTML and Excel reports were generated successully.
+
+[Revenue Performance - 2](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/revenue-performance-2.png)
+
+* [Plan vs Actual Performance - HTML](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/revenue_report_2025-2.html)
+* [Plan vs Actual Performance - XLSX](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/Revenue_Report_2025-2.xlsx)
+
+So, after a very promissing start, we ended up with key calculations being run in a python program, Cluade has generated.
+
+So, I decided for very direct and clear instruction:
+
+[Request to run everything within OAC](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/request-to-run-everything-in-oac.png)
+
+Now, Claude decided to retry to run query with AGO() and TODATE() functions. Still no breakthrough. However, now it had to look for alternative. So it figured out that RSUM() would work for year-to-date and successfully verified FILTER() function to calculate year-on-year.
+
+[Using FILTER on columns to calculate YoY](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/using-filter-for-yoy.png)
+
+Further, it ran some other tests to verify if FILTER runs at aggregated level (i.e. Month) and it did. It also checked out if RIGHT() function works (to extract month number from the month (it is formatted as *YYYY/MM**). 
+
+And finally, the query was produced and executed using `oracle_analytics-execute_logical` tool:
+
+```console
+{
+  `query`: `SELECT 
+    RIGHT(\"OA Boocamp Subject Area\".\"D Billing Date\".\"Month\", 2) AS llm_0,
+    FILTER(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025) AS llm_1,
+    FILTER(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2024) AS llm_2,
+    ((FILTER(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025) - 
+      FILTER(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2024)) /
+      FILTER(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2024)) * 100 AS llm_3,
+    FILTER(\"OA Boocamp Subject Area\".\"F Plan\".\"Revenue (Plan)\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025) AS llm_4,
+    ((FILTER(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025) - 
+      FILTER(\"OA Boocamp Subject Area\".\"F Plan\".\"Revenue (Plan)\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025)) /
+      FILTER(\"OA Boocamp Subject Area\".\"F Plan\".\"Revenue (Plan)\" USING \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025)) * 100 AS llm_5
+FROM \"OA Boocamp Subject Area\"
+WHERE \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" IN (2024, 2025)
+ORDER BY llm_0
+FETCH FIRST 15 ROWS ONLY`,
+  `maxRows`: 15
+}
+```
+
+The query above produced most of required data, except YTD metrics, for which a separate query was produced:
+
+```console
+{
+  `query`: `SELECT 
+    \"OA Boocamp Subject Area\".\"D Billing Date\".\"Month\" AS llm_0,
+    RSUM(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" BY \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\") AS llm_1,
+    (RSUM(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" BY \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\") /
+    SUM(\"OA Boocamp Subject Area\".\"Revenue Metrics\".\"Revenue\" BY \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\")) * 100 AS llm_2
+FROM \"OA Boocamp Subject Area\"
+WHERE \"OA Boocamp Subject Area\".\"D Billing Date\".\"Year\" = 2025
+ORDER BY llm_0
+FETCH FIRST 15 ROWS ONLY`,
+  `maxRows`: 15
+}
+```
+
+[Revenue Performance - OAC Only](https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/images/revenue-performance-oac-only.png)
+
+With all of these data, an excel file and a HTML files were generated:
+
+* [Plan vs Actual Performance - HTML](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/Revenue_Report_2025_OAC_Only.html)
+* [Plan vs Actual Performance - XLSX](https://https://zigavaupot.github.io/blogger/mcp-server-for-analytics-3/files/Revenue_Report_2025_OAC_Only.xlsx)
 
 
