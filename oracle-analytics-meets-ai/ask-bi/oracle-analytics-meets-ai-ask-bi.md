@@ -1,7 +1,5 @@
 ![Ask BI - Oracle Analytics meets AI](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/images/ask-bi-search-bar.png)
 
-## Oracle Analytics Meets AI: Talk to Your Data with Ask BI
-
 For a long time, searching in an analytics platform meant finding an object: a workbook, a dashboard, a dataset, perhaps a visualization someone had already created. That remains useful, but it is not always where an analytical question starts.
 
 Often the question comes first: *What was revenue by brand in 2023?* Then comes the next question: *Drill into BizTech and show sales by line of business.* And then another: *Focus on Communication and compare sales and profit by region.*
@@ -24,9 +22,9 @@ This makes the interaction closer to a conversation with the data than a sequenc
 
 ### Good answers start with prepared data
 
-Natural-language access does not remove the need for data preparation; it makes that preparation more important. Ask BI works with indexed data, so the first step is to decide which datasets should be available for this experience.
+Natural-language access does not remove the need for data preparation; it makes that preparation even more important. Ask BI works with indexed data, so the first step is to decide which datasets should be available for this experience.
 
-In the dataset settings, define where an indexed dataset can be used and the language that should be supported. You can also control the indexing frequency and schedule. This is a practical governance point: not every dataset needs to be exposed in every conversational context, and the index should be refreshed at a cadence that matches how often the data changes.
+In the dataset settings, define where an indexed dataset can be used and the language that should be supported (unfortunately for us Slovenians, Slovenian language is not one of them). You can also control the indexing frequency and schedule. This is a practical governance point: not every dataset needs to be exposed in every conversational context, and the index should be refreshed at a cadence that matches how often the data changes.
 
 ![Ask BI dataset settings](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/images/ask-bi-dataset-settings.png)
 
@@ -53,7 +51,7 @@ The result can include more than a single chart. Ask BI can assemble a report wi
 
 ![Ask BI report with multiple visualizations](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/images/ask-bi-add-profit-dashboard.png)
 
-That combination matters. Conversational does not mean giving up familiar analytical controls. Filters remain available, and the result can be opened in a workbook when it deserves further exploration, refinement, or sharing.
+That combination matters. Conversational does not mean giving up familiar analytical controls. Filters remain available, and the result can be opened in a **new workbook** when it deserves further exploration, refinement, or sharing.
 
 ![Continue the conversation, adjust filters, or open in a workbook](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/images/ask-bi-active-report-open-workbook.png)
 
