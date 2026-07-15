@@ -1,3 +1,5 @@
+![Oracle Analytics Bootcamp](https://zigavaupot.github.io/blogger/paf-deadlock-fix/images/ai-db-paf.png)
+
 I recently deployed **Oracle AI Database Private Agent Factory (OPAF) v26.4.0** on OCI as part of my internal demo and prototyping environment. The goal was straightforward: stand up a Knowledge Agent that could ingest documents and answer questions using OCI GenAI. What I got instead was a frustrating series of database deadlocks that took most of a day to fully resolve. Here's the full story — including every dead end — so you don't have to repeat it.
 
 ## The Setup
