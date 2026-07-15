@@ -2,7 +2,7 @@
 
 ## Oracle Analytics Meets AI: From Workbook Assistant to AI Agents
 
-Ask BI brings a conversational experience to search. The next step is to bring that experience closer to the analytical work itself - inside a workbook, and eventually as a reusable, purpose-built assistant.
+In my previous blog post, I was discussing the use of Ask BI in Oracle Analytics. Ask BI brings a conversational experience to search. The next step is to bring that experience closer to the analytical work itself - inside a workbook, and eventually as a reusable, purpose-built assistant.
 
 Oracle Analytics offers both an **AI Assistant** and **AI Agents**. They share the same basic goal: help users ask questions of governed data in natural language. The difference is in where they live and how much context they can carry.
 
@@ -10,15 +10,26 @@ The AI Assistant is embedded in a workbook. An AI Agent is a standalone object t
 
 ### The AI Assistant: conversational analysis in a workbook
 
-The AI Assistant is accessed from the Auto Insights icon in a workbook. It gives users a chat interface to ask questions and explore the workbook’s data. It can work with a dataset, including a subject area, so the conversation stays tied to the analytical context already in use.
+The AI Assistant is embedded directly in a workbook, which makes it feel like an extension of the normal analysis experience rather than a separate tool. It gives users a chat interface for asking questions and talking to the data that is already available in the workbook. The underlying data can be any dataset, including a Subject Area, so the conversation stays tied to the analytical context already in use.
+
+Before using it, there is one configuration point worth mentioning. At the moment, the Assistant uses the internal Oracle Analytics GenAI service. The expectation is that other LLM options will become available over time, but in the current experience this is not something the workbook author selects while building the analysis.
+
+To start working with the Assistant, open a workbook and click the **Auto Insights** icon. From there, select **Assistant**. This opens the chat experience where you can ask a question in natural language and receive an analytical response based on the workbook data.
 
 ![AI Assistant embedded in a workbook](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/images/ai-assistant-in-workbook.png)
 
-In **Visualize (Edit) mode**, the Assistant can generate a visualization from a request. The useful part is that the output does not have to stay in the chat: any visualization produced by the Assistant can be inserted onto a workbook canvas. From there, it becomes part of the normal workbook design process.
+In **Visualize (Edit) mode**, the process is quite practical:
+
+1. Ask the Assistant a question about the workbook data.
+2. Review the visualization it generates.
+3. Insert the generated visualization onto any canvas in the workbook.
+4. Continue refining it with the normal workbook authoring tools.
+
+The useful part is that the output does not have to stay in the chat. Any visualization produced by the Assistant can be inserted onto a workbook canvas. From that point onward, it becomes part of the normal workbook design process.
 
 ![Insert an AI Assistant visualization into the workbook canvas](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/images/ai-assistant-insert-visualization.png)
 
-The generated visualization can then be adjusted with the usual authoring tools. Change the visualization type, switch an axis, or add and remove attributes. This is an important design principle: AI accelerates the first draft, while the analyst retains control over the final analytical product.
+The generated visualization can then be adjusted with simple authoring tools. You can change the visualization type, switch the axis assignment, and add or remove attributes. This is an important design principle: AI accelerates the first draft, while the analyst retains control over the final analytical product.
 
 ![Refining an AI-generated visualization](https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/images/ai-assistant-edit-visualization.png)
 
