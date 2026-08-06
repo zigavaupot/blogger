@@ -2,6 +2,7 @@
 
 I recently deployed **Oracle AI Database Private Agent Factory (OPAF) v26.4.0** on OCI as part of my internal demo and prototyping environment. The goal was straightforward: stand up a Knowledge Agent that could ingest documents and answer questions using OCI GenAI. What I got instead was a frustrating series of database deadlocks that took most of a day to fully resolve. Here's the full story — including every dead end — so you don't have to repeat it.
 
+
 ## The Setup
 
 OPAF runs as a Podman container on an OCI compute VM (`VM.Standard`) in the Frankfurt region. My initial database choice was an **Autonomous Database 26ai Free tier** instance — seemed reasonable for a demo environment. The configuration looks like this:
