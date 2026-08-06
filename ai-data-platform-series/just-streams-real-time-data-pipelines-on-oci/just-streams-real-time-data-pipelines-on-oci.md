@@ -4,7 +4,7 @@
 
 We deliberately kept the slide deck short and let a live demo carry most of the session. This post is the written recap of that story, and also the opening post in a series where I'll break the solution down layer by layer.*
 
-## Why "Just Streams"
+## Why "Just Streams"?
 
 At SmartQ, we like to say we master data — every kind of data. It's not just a slogan: in practice it means using the same platform for bulk loads, incremental refreshes, and real-time/streaming sources, then carrying all of it through one data platform into analytics, machine learning, and AI.
 
