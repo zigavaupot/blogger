@@ -54,5 +54,3 @@ This post is deliberately high level — it's the framing for the whole story. I
 3. **The silver layer** — cleaning, type-casting, the "latest prediction per key" logic, the `MERGE` upsert pattern, and logging to OCI Logging.
 4. **The gold layer and Oracle Analytics** — preparing data for analytics and connecting it to Oracle Analytics Cloud.
 5. **The Oracle Analytics MCP Server** — how we query live streams conversationally, and what's needed on the MCP server side to make that work.
-
-If there's a particular topic you'd like prioritized, let me know — I can reorder the series accordingly.
