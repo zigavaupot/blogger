@@ -2,7 +2,6 @@
   Official Blogger post CSS for zigavaupot.blogspot.com.
   Scope all generated article HTML with: <article class="zv-blog-post">...</article>
 */
-
 @import url("https://fonts.googleapis.com/css2?family=Lora:wght@400&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,600&display=swap");
 
 .zv-blog-post {
