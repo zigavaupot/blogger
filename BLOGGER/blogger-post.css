@@ -159,6 +159,26 @@
   font-weight: 700;
 }
 
+.zv-blog-post .zv-series-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 34px 0 24px;
+}
+
+.zv-blog-post .zv-series-card img {
+  border-radius: 8px;
+  margin: 0 0 14px;
+  width: 100%;
+}
+
+.zv-blog-post .zv-series-card p {
+  font-family: Lora, Georgia, serif;
+  font-size: 22px;
+  line-height: 1.25;
+  margin: 0;
+}
+
 @media screen and (max-width: 600px) {
   .zv-blog-post {
     font-size: 15px;
@@ -176,5 +196,13 @@
   .zv-blog-post ul,
   .zv-blog-post ol {
     margin-left: 22px;
+  }
+
+  .zv-blog-post .zv-series-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zv-blog-post .zv-series-card p {
+    font-size: 20px;
   }
 }

@@ -165,6 +165,26 @@ Paste the complete block below into Blogger's HTML editor.
   font-weight: 700;
 }
 
+.zv-blog-post .zv-series-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 34px 0 24px;
+}
+
+.zv-blog-post .zv-series-card img {
+  border-radius: 8px;
+  margin: 0 0 14px;
+  width: 100%;
+}
+
+.zv-blog-post .zv-series-card p {
+  font-family: Lora, Georgia, serif;
+  font-size: 22px;
+  line-height: 1.25;
+  margin: 0;
+}
+
 @media screen and (max-width: 600px) {
   .zv-blog-post {
     font-size: 15px;
@@ -183,6 +203,14 @@ Paste the complete block below into Blogger's HTML editor.
   .zv-blog-post ol {
     margin-left: 22px;
   }
+
+  .zv-blog-post .zv-series-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .zv-blog-post .zv-series-card p {
+    font-size: 20px;
+  }
 }
 
 </style>
@@ -191,10 +219,19 @@ Paste the complete block below into Blogger's HTML editor.
 <p><img alt="Oracle Analytics Meets AI Series" src="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/images/oa-meets-ai-series.png" /></p>
 <p>This is a summary blog post with references to posts published under the <strong>Oracle Analytics Meets AI</strong> theme.</p>
 <p>In this series, I am looking at how AI capabilities are becoming part of the Oracle Analytics experience: from asking questions in natural language, to using AI directly inside workbooks, and then extending the experience with more focused AI Agents.</p>
-<p><a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/oracle-analytics-meets-ai-ask-bi.html"><img alt="Oracle Analytics Meets AI: Talk to Your Data with Ask BI" src="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/images/oa-meets-ai-talk-to-your-data-with-ask-bi-purple.png" /></a></p>
-<p><a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/oracle-analytics-meets-ai-ask-bi.html">Oracle Analytics Meets AI: Talk to Your Data with Ask BI</a></p>
-<p>Ask BI brings a conversational experience to the Oracle Analytics search bar. It allows users to ask natural-language questions, refine the analysis step by step, and turn answers into workbook-ready insights.</p>
-<p><a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/oracle-analytics-meets-ai-ai-agents.html"><img alt="Oracle Analytics Meets AI: From Workbook Assistant to AI Agents" src="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/images/oa-meets-ai-working-with-ai-agents-green.png" /></a></p>
-<p><a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/oracle-analytics-meets-ai-ai-agents.html">Oracle Analytics Meets AI: From Workbook Assistant to AI Agents</a></p>
-<p>This post continues the story inside Oracle Analytics workbooks, where the AI Assistant helps users create and refine visualizations. It also introduces AI Agents as standalone, context-aware assistants that can combine data, instructions, and knowledge documents.</p>
+<div class="zv-series-grid">
+  <div class="zv-series-card">
+    <a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/oracle-analytics-meets-ai-ask-bi.html">
+      <img src="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/images/oa-meets-ai-talk-to-your-data-with-ask-bi-purple.png" alt="Oracle Analytics Meets AI: Talk to Your Data with Ask BI">
+    </a>
+    <p><a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ask-bi/oracle-analytics-meets-ai-ask-bi.html">1. Talk to Your Data with Ask BI</a></p>
+  </div>
+
+  <div class="zv-series-card">
+    <a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/oracle-analytics-meets-ai-ai-agents.html">
+      <img src="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/images/oa-meets-ai-working-with-ai-agents-green.png" alt="Oracle Analytics Meets AI: From Workbook Assistant to AI Agents">
+    </a>
+    <p><a href="https://zigavaupot.github.io/blogger/oracle-analytics-meets-ai/ai-agents/oracle-analytics-meets-ai-ai-agents.html">2. From Workbook Assistant to AI Agents</a></p>
+  </div>
+</div>
 </article>
