@@ -229,7 +229,7 @@ Stylesheet: BLOGGER/blogger-post.css
     <li><a href="https://zigavaupot.blogspot.com/2026/07/oracle-analytics-meet-ai-series.html">Oracle Analytics Meet AI series</a>, which expands on that theme focusing more on tools from within OAC itself.</li>
   </ul>
   <p>This time, I want to close the loop on a question I left open: what happens when the AI assistant <em>is not</em> a desktop client like Claude Desktop, but a <strong>private, self-hosted agent platform</strong> running entirely inside your own environment?</p>
-  <p>That's exactly the space <strong>Oracle AI Database Private Agent Factory (OPAF)</strong> occupies — Oracle's private agent platform, deployed and backed by your own database, whether that's air-gapped on-premises or running in a cloud tenancy you control. Either way, the agent, the data, and the identity boundary stay yours. This post covers how to connect OPAF's chat interface to Oracle Analytics Cloud using the same MCP Server introduced last time.</p>
+  <p>That's exactly the space <strong>Oracle AI Database Private Agent Factory (OPAF)</strong> occupies — Oracle's private agent platform, deployed and backed by your own database, whether that's on-premises or running in a cloud tenancy you control. OPAF itself can also be deployed in air-gapped environments, although this particular OAC integration requires outbound connectivity to Oracle Analytics Cloud — the agent, the data, and the identity boundary otherwise stay yours. This post covers how to connect OPAF's chat interface to Oracle Analytics Cloud using the same MCP Server introduced last time.</p>
 
   <h3>Why OPAF + OAC via MCP?</h3>
   <p>OPAF already gives you a private, governed chat agent with its own LLM connections, its own identity domain, and its own data behind it. What it doesn't give you out of the box is a way to reason over <strong>existing OAC subject areas</strong> — the models, hierarchies, and metrics your BI team has already built and governed.</p>
@@ -244,9 +244,9 @@ Stylesheet: BLOGGER/blogger-post.css
   <p><img src="https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/opaf-oac-mcp-architecture.png" alt="Architecture diagram"></p>
   <p>The integration sits on top of two separately governed boundaries, connected by a single MCP tool call:</p>
   <ul>
-    <li><strong>Your environment</strong> (dashed boundary) hosts OPAF itself — the chat interface and the agent's tool management — whether that's air-gapped on-premises or a cloud tenancy you control. Nothing about this integration changes where OPAF runs or how it's secured.</li>
-    <li><strong>Oracle Analytics Cloud</strong> (solid boundary) stays exactly as your BI team built it. The OAC MCP Server sits at its edge and exposes governed subject areas to external callers without exposing the underlying data model.</li>
-    <li>The <strong>MCP tool call</strong> in the middle is the only thing crossing that boundary. When OPAF's agent decides a question needs analytics data, it calls the MCP server, which translates the request into governed Logical SQL and returns results — no data copied, no schema duplicated on the OPAF side.</li>
+    <li><strong>Your environment</strong> (dashed boundary) hosts OPAF itself — the chat interface and the agent's tool management — whether that's on-premises or a cloud tenancy you control. Nothing about this integration changes where OPAF runs or how it's secured, though this specific OAC integration does need outbound connectivity from that environment to OAC (see Prerequisites).</li>
+    <li><strong>Oracle Analytics Cloud</strong> (solid boundary) stays exactly as your BI team built it. The OAC MCP Server sits at its edge and exposes controlled access to governed analytics content and semantic-model metadata, without requiring OPAF to connect directly to the underlying physical data sources or reproduce the OAC model.</li>
+    <li>The <strong>MCP tool call</strong> in the middle is the only thing crossing that boundary. When OPAF's agent decides a question needs analytics data, it uses the MCP tools to discover the relevant OAC model, inspect its metadata, construct the appropriate Logical SQL, and execute it against OAC — no data copied, no schema duplicated on the OPAF side.</li>
   </ul>
   <p>At a high level:</p>
   <ul>
@@ -259,7 +259,7 @@ Stylesheet: BLOGGER/blogger-post.css
     <li>A running OPAF deployment with Model/Tool Management available (this post assumes OPAF 26.7)</li>
     <li>An Oracle Analytics Cloud instance with subject areas already modeled and governed</li>
     <li>A network path from OPAF's host environment to your OAC instance — reachable directly, via proxy, or through whatever egress your environment requires</li>
-    <li>MCP server and connection definitions downloaded from your OAC profile (see previous post)</li>
+    <li>Your OAC MCP Server's endpoint URL and the identity domain fronting it — you won't need the downloadable <code>oac-mcp-connect</code> utility or its local client configuration from your OAC profile; that's a local stdio bridge intended for desktop clients such as Claude Desktop or Codex that don't directly manage MCP HTTP sessions. OPAF connects directly to the OAC MCP HTTP endpoint, server-to-server</li>
   </ul>
 
   <h3>Setting it up: Create the integrated application</h3>
@@ -275,14 +275,14 @@ Stylesheet: BLOGGER/blogger-post.css
     <li><strong>Refresh token</strong> — so OPAF doesn't need to re-prompt for consent on every call</li>
   </ul>
   <p><strong>Client credentials</strong> is optional here — only enable it if you also want a separate machine-to-machine path independent of the interactive flow.</p>
-  <p>Under <strong>Redirect URL</strong>, add the callback URL OPAF generated when you selected OAuth + Authorization code in the “Add MCP server” form (see below). If you're not certain which exact path variant OPAF's frontend uses, it's worth adding it in a couple of plausible forms — a mismatched redirect URL is the most common cause of a failed OAuth handshake.</p>
+  <p>Under <strong>Redirect URL</strong>, add the callback URL OPAF generated when you selected OAuth + Authorization code in the “Add MCP server” form (see below). Register the exact URL OPAF shows you — protocol, hostname, port, and path all need to match precisely, and pre-registering several speculative variants just broadens the OAuth configuration unnecessarily rather than actually helping.</p>
   <p>Set <strong>Client type</strong> to <strong>Confidential</strong> — not Trusted, since you're not using self-signed client assertions.</p>
 
   <h3>Setting it up: Scope the client to your OAC instance</h3>
   <p>Still in <strong>OAuth configuration</strong>, expand <strong>Client configuration → Token issuance policy</strong>.</p>
   <p>Toggle <strong>Add resources</strong> on, then under <strong>Authorized resources</strong> choose <strong>Specific</strong> rather than <strong>All</strong> — this restricts the client to only the Oracle Analytics Cloud instance you explicitly grant it, instead of every resource registered in the domain.</p>
   <p>Under <strong>Resources</strong>, search for and select your OAC instance, then add its scope. This is the step that actually ties the OAuth client to <em>your</em> OAC environment — everything up to now has just been generic OAuth plumbing.</p>
-  <p>If you don't want end users to see an OAuth consent screen the first time OPAF calls OAC, you can also enable <strong>Bypass consent</strong> here. For a controlled internal deployment this is usually fine; if your OPAF instance serves a broader or less trusted user base, you may prefer to leave consent enabled so each user explicitly approves the connection once.</p>
+  <p>If you don't want the person performing the MCP source authorization to see an OAuth consent screen, you can enable <strong>Bypass consent</strong> here. For a controlled internal deployment this is often reasonable. Note that this applies to the one-time authorization of the MCP source itself — it does not cause every OPAF chat user to individually authorize OAC; that stored authorization is exactly what the Known Limitation section below covers.</p>
 
   <h3>Setting it up: Collect the client credentials</h3>
   <p>Once submitted, copy the <strong>Client ID</strong> from the application's Details tab, and generate/copy the <strong>Client secret</strong>. These two values go directly into the <strong>OAuth client ID</strong> and <strong>OAuth client secret</strong> fields on OPAF's “Add MCP server” form.</p>
@@ -297,13 +297,13 @@ Stylesheet: BLOGGER/blogger-post.css
   <p><strong>OAuth client details</strong></p>
   <ul>
     <li><strong>OAuth client ID</strong> and <strong>OAuth client secret</strong> — paste the values you copied from the integrated application's Details tab</li>
-    <li><strong>Authorization URL</strong> and <strong>Token URL</strong> — your identity domain's <code>/oauth/authorize</code> and <code>/oauth/token</code> endpoints</li>
+    <li><strong>Authorization URL</strong> and <strong>Token URL</strong> — your identity domain's <code>/oauth2/v1/authorize</code> and <code>/oauth2/v1/token</code> endpoints</li>
     <li><strong>Refresh URL</strong> — optional; leave blank unless your identity domain exposes a separate refresh endpoint</li>
     <li><strong>Scopes</strong> — the OAC resource scope you added when scoping the client to your OAC instance</li>
   </ul>
   <p><strong>Test and save</strong></p>
   <p>Click <strong>Test connection</strong> before <strong>Add MCP server</strong>. This runs the actual OAuth handshake — including the redirect through your identity domain — rather than just validating that the form fields are filled in. If it fails, the most common cause is a redirect URL that doesn't exactly match what's registered on the integrated application.</p>
-  <p><img src="https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/add-mcp-server.png" alt="Adding the MCP server in OPAF, with a successful test connection"></p>
+  <p><img src="https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/edit-mcp-server.png" alt="Adding the MCP server in OPAF, with a successful test connection"></p>
   <p><strong>Complete the authorization</strong></p>
   <p>Saving the MCP server doesn't finish the OAuth handshake on its own — OPAF prompts for one more step: <strong>Authorize MCP Server access</strong>. This is the actual “Request authorization using the OAuth configuration already saved in this MCP source” step, and it's where the identity discussed in the Gotchas and Known Limitation sections below gets fixed in place — whoever clicks <strong>Request Authorisation</strong> here is the identity every future chat session will use to call OAC.</p>
   <p><img src="https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/authorize-mcp-server-access.png" alt="Authorize MCP Server access dialog"></p>
@@ -317,8 +317,8 @@ Stylesheet: BLOGGER/blogger-post.css
   <p><strong>MCP server node</strong></p>
   <ul>
     <li><strong>MCP server</strong> — select the OAC MCP server you registered in the previous step</li>
-    <li><strong>Timeout (seconds)</strong> — how long to wait on a tool call before giving up; 45 seconds is a reasonable starting point for Logical SQL queries that may take a moment to execute</li>
-    <li><strong>Allowed tools</strong> — defaults to all tools the MCP server exposes, but it's worth narrowing this to just the ones the agent actually needs (e.g. discover, describe, and execute) rather than leaving every available tool on the table</li>
+    <li><strong>Timeout (seconds)</strong> — the default is 45 seconds. Increase it only when the target MCP tool is expected to run longer, such as an especially heavy Logical SQL query</li>
+    <li><strong>Allowed tools</strong> — defaults to all tools the MCP server exposes, but it's worth narrowing this to just the ones the agent actually needs (e.g. search, describe, and execute) rather than leaving every available tool on the table</li>
     <li>Its <strong>Tools</strong> output connects into the <strong>Agent</strong> node's <strong>Tools</strong> input</li>
   </ul>
   <p><strong>Agent node</strong></p>
@@ -337,7 +337,7 @@ Stylesheet: BLOGGER/blogger-post.css
   <p>Takes the converted <strong>Message</strong> and sends it back to the user in the OPAF chat interface — closing the loop from question to grounded, OAC-backed answer.</p>
 
   <h3>Test it!</h3>
-  <p>The OAC MCP Server exposes more tools than any single agent typically needs — things like content summarization, dashboard/report discovery beyond raw catalog search, and other OAC-specific helpers. For an analytics-answering agent, three are enough to cover the whole discover-describe-query cycle:</p>
+  <p>The OAC MCP Server exposes more tools than any single agent typically needs — things like content summarization, dashboard/report discovery beyond raw catalog search, and other OAC-specific helpers. Three tools are enough for the catalog-driven discover-describe-query cycle; for natural-language datasource discovery, <code>find_matching_datasources</code> is another useful option worth knowing about:</p>
   <p><img src="https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/available-mcp-server-tools.png" alt="Agent Builder MCP Server step"></p>
   <p><strong><code>oracle_analytics-search_catalog</code></strong> — searches the OAC catalog to discover available datasets, subject areas, and other analytics content the agent can query</p>
   <p><img src="https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/chat-dialog-1.png" alt="Chat dialog: Discover"></p>
@@ -356,7 +356,7 @@ Stylesheet: BLOGGER/blogger-post.css
     <li><strong>The redirect URL is a bit of a chicken-and-egg problem.</strong> OPAF displays the callback URL after you select OAuth in the “Add MCP server” form — but that exact URL needs to be registered on the identity domain's confidential application before the authorization flow will succeed. Expect to move between the two screens once during setup. And “exact” really does mean exact: protocol, hostname, port, and path all need to match. Register the URL OPAF actually shows you, rather than pre-registering several guesses — the extra entries just broaden the OAuth configuration unnecessarily.</li>
     <li><strong>The OAC identity isn't necessarily the person chatting with the agent.</strong> With the OAuth Authorization Code flow, OAC MCP tools run with the permissions of <em>whoever performs the authorization step</em> when the MCP source is set up — OPAF stores that resulting token against the MCP source itself. In practice, that means every chat session using this agent queries OAC as that one authorized identity, not as whoever happens to be logged into OPAF at the time. If your OAC security model relies on per-user permissions or row-level data security, this matters — see the section below on what true per-user propagation would actually require.</li>
     <li><strong>Scope the OAuth client — don't leave it open.</strong> Setting Authorized resources to <em>Specific</em> and explicitly adding the intended OAC resource follows least-privilege. <em>All</em> allows the client to request access to any resource within the identity domain, which is far broader than this integration needs.</li>
-    <li><strong>Narrow the Allowed tools list — and treat it as a security boundary, not just a UX nicety.</strong> The OAC MCP Server exposes considerably more than a basic query loop: catalog search, datasource discovery, semantic-model metadata inspection, Logical SQL execution, and catalog-management/export operations are all on the table. For a read-only “talk to your data” agent, deliberately restrict Allowed tools to the discovery-and-query subset (search, describe, execute) and leave the rest unselected — that's what actually keeps the agent from touching things it was never meant to.</li>
+    <li><strong>Narrow the Allowed tools list — it's an additional least-privilege boundary at the agent layer, not a replacement for OAC's own permissions.</strong> The OAC MCP Server exposes considerably more than a basic query loop: catalog search, datasource discovery, semantic-model metadata inspection, Logical SQL execution, and catalog-management/export operations — some of them write-capable — are all on the table. For a read-only “talk to your data” agent, deliberately restrict Allowed tools to the discovery-and-query subset (search, describe, execute) and leave the rest unselected. This provides an additional capability boundary at the agent layer, while OAC permissions remain the ultimate authorization boundary underneath it.</li>
     <li><strong>Be explicit in the agent's instructions about not guessing.</strong> Tell the agent to discover and describe the relevant OAC data source before constructing Logical SQL, execute the query through MCP, and base numerical answers only on returned results — and to say so plainly if it can't retrieve the data, rather than filling the gap with a plausible-sounding number.</li>
   </ul>
   <p>A couple of additional things worth knowing:</p>
@@ -368,7 +368,7 @@ Stylesheet: BLOGGER/blogger-post.css
 
   <h3>Known Limitation: One Shared OAC Identity, Not Per-User</h3>
   <p>It's worth being upfront about a limitation rather than glossing over it: even though OPAF and OAC can sit behind the same SSO identity domain, that doesn't mean OAC sees <em>who's actually chatting</em> in OPAF.</p>
-  <p>OPAF SSO and MCP source authorization are two separate events. SSO authenticates a person into the OPAF chat interface. MCP authorization is a one-time step performed when the MCP source is configured — whoever completes that authorization grants their OAC token, and OPAF stores it against the MCP source itself, not against individual chat sessions. Every subsequent query, from every OPAF user, runs against OAC as that one authorized identity.</p>
+  <p>OPAF SSO and MCP source authorization are two separate events. SSO authenticates a person into the OPAF chat interface. MCP authorization is a one-time step performed when the MCP source is configured — whoever completes that authorization causes OPAF to obtain and store an OAC access token representing that user's authorization, against the MCP source itself, not against individual chat sessions. Every subsequent query, from every OPAF user, runs against OAC as that one authorized identity.</p>
   <p>For a proof-of-concept, or an internal tool where everyone using the agent is meant to see the same governed subject areas, that's a reasonable trade-off — it's simple, and it works. But if your OAC security model relies on row-level security or per-user catalog permissions, treat this integration as <strong>one shared analytical identity</strong>, not as each user's own OAC access.</p>
   <p>Closing that gap would require a delegation / token-exchange layer: OPAF would need to hand the authenticated chat user's identity to something capable of exchanging it for an OAC-scoped access token on each call, so OAC could enforce that specific user's roles and row-level security rather than the stored source identity's. That's a well-understood “on-behalf-of” pattern in enterprise identity architecture generally, but as of OPAF 26.7, OPAF doesn't document exposing the authenticated user's identity to an MCP tool invocation — so there's currently no hook for a proxy or intermediary to build that exchange on top of.</p>
   <p>I checked whether any of OPAF's other three authentication modes get around this, and none do — they all reduce to the same shape, one configured identity shared by every chat user:</p>
@@ -378,8 +378,27 @@ Stylesheet: BLOGGER/blogger-post.css
     <li><strong>Client credentials</strong> — an OAuth flow authenticating the <em>application itself</em>, with no human user involved at any point, not even at setup</li>
     <li><strong>Auth Request</strong> — despite the name, this isn't per-request user authorization. It's a service-account credential pair (token endpoint URL, username, password) that Agent Factory exchanges for a bearer token behind the scenes — same static-identity pattern, just a different exchange mechanism than OAuth</li>
   </ul>
-  <p>Every mode OPAF currently offers for an MCP server results in one identity, configured once, reused for every chat user. None of them carry the individual OPAF chat user's identity through to the downstream MCP server.</p>
+  <p>None of OPAF's currently documented MCP authentication modes provides automatic per-chat-user identity propagation. Depending on the mode, the MCP source either has no application-layer identity at all (Direct / no auth), uses one configured credential or token (Bearer token, Client credentials, Auth Request), or uses one OAuth authorization stored against the source (Authorization code, as used throughout this post). None of them carry the individual OPAF chat user's identity through to the downstream MCP server.</p>
   <p>This feels like a natural direction for OPAF's MCP support to grow into, given how much of the groundwork — a shared identity domain, SSO on both sides — is already in place. Until then, choose deliberately who performs the MCP source authorization, since that person's OAC permissions effectively become the permissions the whole integration runs with.</p>
+
+  <h3>References</h3>
+  <p>Oracle documentation consulted while writing and fact-checking this post:</p>
+  <p><strong>OPAF / Agent Factory</strong></p>
+  <ul>
+    <li><a href="https://docs.oracle.com/en/database/oracle/agent-factory/26.7/paias/add-mcp-server.html">Add MCP Server</a> — authentication modes, MCP configuration model, OAuth setup</li>
+    <li><a href="https://docs.oracle.com/en/database/oracle/agent-factory/26.7/paias/mcp-server-resource.html">Third-Party MCP Servers</a> — integration checklist and example public MCP servers</li>
+  </ul>
+  <p><strong>Oracle Analytics Cloud MCP Server (Preview)</strong></p>
+  <ul>
+    <li><a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsdv/overview-developing-oracle-analytics-cloud-mcp-server-preview.html">Overview of Developing with Oracle Analytics Cloud MCP Server</a></li>
+    <li><a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsdv/tools-available-oracle-analytics-cloud-mcp-server-preview.html">About the Tools Available With Oracle Analytics Cloud MCP Server</a></li>
+    <li><a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsdv/available-oracle-analytics-cloud-mcp-tools-preview.html">Available Oracle Analytics Cloud MCP Tools</a> — full tool list, including catalog-management tools not covered in this post</li>
+    <li><a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsdv/visible-mcp-tool-metadata-preview.html">Visible MCP Tool Metadata</a></li>
+    <li><a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsdv/use-oracle_analytics-execute_logical_sql-mcp-server-tool-preview.html">Use the oracle_analytics-execute_logical_sql MCP Server Tool</a></li>
+    <li><a href="https://docs.oracle.com/en/cloud/paas/analytics-cloud/acsdv/quick-reference-preview.html">Quick Reference</a> — recommended tool sequences, including <code>search_catalog → describe_data → execute_logical_sql</code> and <code>find_matching_datasources → describe_data → execute_logical_sql</code></li>
+    <li><a href="https://blogs.oracle.com/analytics/oracle-analytics-cloud-mcp-server-bridging-enterprise-analytics-and-ai">Oracle Analytics Cloud MCP Server: Bridging Enterprise Analytics and AI</a> — Oracle's own product blog introducing the MCP server</li>
+  </ul>
+  <p>Note: at the time of writing, the OAC MCP Server is documented as <strong>Preview</strong> — tool names, behavior, and available modes may change. Worth re-checking these pages against whatever OPAF and OAC versions you're actually running before relying on specifics.</p>
 
   <hr>
   <p><em>Related: <a href="https://zigavaupot.blogspot.com/2025/12/unlocking-oracle-analytics-cloud-with-ai.html">Unlocking Oracle Analytics Cloud with AI: MCP for Oracle Analytics</a> · <a href="https://zigavaupot.blogspot.com/2026/07/oracle-analytics-meet-ai-series.html">Oracle Analytics Meet AI series</a></em></p>
