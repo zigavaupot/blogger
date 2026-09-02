@@ -1,4 +1,4 @@
-![OPAF and OAC via MCP](./images/opaf-oac.png)
+![OPAF and OAC via MCP](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/opaf-oac.png)
 
 ## Connecting OPAF Chat to Oracle Analytics Cloud via MCP
 
@@ -25,7 +25,7 @@ Rather than duplicating that modeling effort inside OPAF, the MCP Server lets OP
 
 ## Architecture Overview
 
-![Architecture diagram](./images/opaf-oac-mcp-architecture.png)
+![Architecture diagram](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/opaf-oac-mcp-architecture.png)
 
 The integration sits on top of two separately governed boundaries, connected by a single MCP tool call:
 
@@ -82,6 +82,8 @@ Treat the client secret like any other credential — don't commit it to source 
 
 Back in OPAF, open **Model/Tool Management → Add MCP server**. This form does double duty — you'll touch it once early on to generate the redirect callback URL for the identity domain setup above, and once more at the end to finish the connection.
 
+![Adding the MCP server in OPAF](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/opaf-add-mcp-server.png)
+
 **Server details**
 
 - **Server name** — a short identifier, e.g. `oac-mcp-connect`
@@ -102,12 +104,12 @@ Select **OAuth**, then under **OAuth grant type** select **Authorization code**.
 
 Click **Test connection** before **Add MCP server**. This runs the actual OAuth handshake — including the redirect through your identity domain — rather than just validating that the form fields are filled in. If it fails, the most common cause is a redirect URL that doesn't exactly match what's registered on the integrated application.
 
-![Adding the MCP server in OPAF](./images/opaf-add-mcp-server.png)
-
 
 ### Wire it up in Agent Builder
 
 With the MCP server registered, Agent Builder is where it actually becomes part of a working agent. The canvas is a simple five-node flow: **MCP server → Agent → Type Convert → Chat output**, fed by a **Chat input** node.
+
+![Agent Builder flow connecting OAC via MCP](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/opaf-agent-builder-flow.png)
 
 **MCP server node**
 
@@ -134,11 +136,29 @@ The agent's raw output needs to be coerced into the right shape before it can be
 
 Takes the converted **Message** and sends it back to the user in the OPAF chat interface — closing the loop from question to grounded, OAC-backed answer.
 
-![Agent Builder flow connecting OAC via MCP](./images/opaf-agent-builder-flow.png)
+### Test it!
 
-## Test it!
+The OAC MCP Server exposes more tools than any single agent typically needs — things like content summarization, dashboard/report discovery beyond raw catalog search, and other OAC-specific helpers. For an analytics-answering agent, three are enough to cover the whole discover-describe-query cycle:
 
-Here are some examples ...
+![Agent Builder MCP Server step](./images/available-mcp-server-tools.png)
+
+#### `oracle_analytics-search_catalog`
+
+**`oracle_analytics-search_catalog`** — searches the OAC catalog to discover available datasets, subject areas, and other analytics content the agent can query
+
+![Chat dialog: Discover](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/chat-dialog-1.png)
+
+#### `oracle_analytics-describe_data`
+
+**`oracle_analytics-describe_data`** — retrieves column-level metadata for a given dataset or subject area — dimensions, measures, hierarchies, and joins
+
+![Chat dialog: Describe](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/chat-dialog-2.png)
+
+#### `oracle_analytics-execute_logical_sql`
+
+**`oracle_analytics-execute_logical_sql`** — runs a governed SQL query against OAC and returns the result set
+
+![Chat dialog: Execute SQL](https://zigavaupot.github.io/blogger/opaf-oac-mcp-server/images/chat-dialog-3.png)
 
 
 ### Closing Thoughts
