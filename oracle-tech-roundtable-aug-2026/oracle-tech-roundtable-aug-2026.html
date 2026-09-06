@@ -1,0 +1,198 @@
+<article class="zv-blog-post">
+
+  <img
+    src="https://zigavaupot.github.io/blogger/oracle-tech-roundtable-aug-2026/images/oracle-tech-roundtable-aug-2026.png"
+    alt="Oracle Analytics &amp; AI presentation at Oracle Technology Roundtable — Oracle Analytics Server, MCP and Oracle Private Agent Factory">
+
+  <div class="post-intro">
+    <p>
+      On 26 August 2026 in Ljubljana, I took part in the <strong>Oracle Technology Roundtable</strong>,
+      where I presented together with my SmartQ colleagues <strong>Mojca Gros</strong> and
+      <strong>Grega Dvoršak</strong>.
+    </p>
+
+    <p>
+      For the event, we prepared a joint presentation titled <strong>“Oracle Analytics &amp; AI”</strong>,
+      with the subtitle <strong>“Oracle Private Agent Factory in Oracle Analytics Server.”</strong>
+      The session brought together three closely related topics: the latest Oracle Analytics Server
+      platform, the use of Model Context Protocol with OAS, and Oracle AI Database Private Agent Factory.
+    </p>
+  </div>
+
+  <!--more-->
+
+  <p>
+    <strong>
+      <a href="https://zigavaupot.github.io/blogger/oracle-tech-roundtable-aug-2026/slides/SmartQ%20OPAF%2BOAS.pdf">
+        Download the presentation (PDF)
+      </a>
+    </strong>
+  </p>
+
+  <h2>Oracle Analytics &amp; AI</h2>
+
+  <p>
+    Our presentation was divided into three main parts.
+  </p>
+
+  <h3>1. Oracle Analytics Server (OAS)</h3>
+
+  <p>
+    The first part focused on <strong>Oracle Analytics Server</strong>, the on-premises counterpart
+    of Oracle Analytics Cloud. We looked at Oracle Analytics Server 2026 and discussed the role of
+    business intelligence and data warehousing as more than just an IT project: BI provides the
+    visible analytical layer, while the data warehouse provides the trusted data foundation needed
+    for consistent KPIs, faster analysis and better-informed decisions.
+  </p>
+
+  <p>
+    This part also included a demonstration of <strong>Oracle Analytics Server 2026</strong>.
+  </p>
+
+  <h3>2. Model Context Protocol (MCP) in OAS</h3>
+
+  <p>
+    The second part moved from traditional analytics toward AI-assisted analytics and introduced
+    the <strong>Model Context Protocol (MCP)</strong>.
+  </p>
+
+  <p>
+    We explained how MCP provides a standard way for AI agents and large language models to connect
+    to external tools, data and services. In our OAS example, we showed an
+    <strong>MCP Server Bridge for Oracle Analytics Server</strong>, allowing AI clients such as
+    Claude, Codex or other LLM-based applications to discover analytical content, inspect metadata
+    and execute Logical SQL against OAS.
+  </p>
+
+  <p>
+    Because this capability was not available natively in OAS, we demonstrated an MCP bridge that
+    connected an AI client with Oracle Analytics Server through its services and semantic layer.
+    The session included a live demonstration of querying OAS data conversationally through the
+    MCP server.
+  </p>
+
+  <h3>3. Oracle AI Database Private Agent Factory (OPAF)</h3>
+
+  <p>
+    My part of the presentation focused on <strong>Oracle AI Database Private Agent Factory (OPAF)</strong>
+    and on how Oracle was bringing AI-agent development closer to enterprise data and applications.
+  </p>
+
+  <p>
+    I started by introducing OPAF as a <strong>no-code platform for developing, testing, managing
+    and running AI agents</strong>. We also looked at its deployment model: because of its
+    container-based architecture, OPAF could be deployed in the cloud, for example in OCI, or
+    locally inside an organization's own environment, including isolated or air-gapped environments.
+    OPAF was provided as an extension around Oracle Database and required Oracle Database 26ai for
+    capabilities such as Vector Search.
+  </p>
+
+  <h2>A Closer Look at OPAF</h2>
+
+  <p>
+    After the introduction, I walked through the main building blocks of the OPAF architecture.
+  </p>
+
+  <p>
+    At the center was the <strong>Agent Factory container</strong>, which provided the no-code user
+    interface, pre-built agents, SQLcl MCP support, Open Agent Specification, SELECT AI, the Visual
+    Agent Builder and the agent runtime. The platform could work with different storage and data
+    services and connect to either local AI services or cloud-based Generative AI services for LLM
+    and embedding capabilities. Oracle Database 26ai provided the Agent Factory schema and vector
+    store underneath the solution.
+  </p>
+
+  <p>
+    I also showed the two main ways in which OPAF could be obtained and deployed: through
+    <strong>Oracle Marketplace</strong> for deployment in OCI, or through
+    <strong>Oracle Software Delivery Cloud</strong> for a local installation.
+  </p>
+
+  <h3>Knowledge Agent</h3>
+
+  <p>
+    The first practical use case was the <strong>Knowledge Agent</strong>.
+  </p>
+
+  <p>
+    I showed how a Knowledge Agent could combine an LLM with enterprise information to provide
+    contextual answers based on approved knowledge sources. The underlying process followed the
+    familiar RAG pattern: documents were loaded and transformed, embeddings were generated and
+    stored in a vector database, and similarity search was used to retrieve relevant information
+    before the LLM generated its response.
+  </p>
+
+  <p>
+    The important point was that the agent did not have to rely only on the general knowledge of
+    the LLM. It could retrieve information from enterprise knowledge bases, documents and other
+    sources, producing responses that were grounded in the organization's own content and
+    traceable back to those sources.
+  </p>
+
+  <h3>Data Analysis Agent</h3>
+
+  <p>
+    The second example was the pre-built <strong>Data Analysis Agent</strong>.
+  </p>
+
+  <p>
+    This agent was designed to interact directly with databases, understand schema structures and
+    use LLM capabilities to generate semantic insights. We looked at how it could analyze the
+    available tables and views, enrich a user's question, generate SQL, execute it against an
+    Oracle Database and automatically explore the resulting data.
+  </p>
+
+  <p>
+    The example also demonstrated capabilities such as variation analysis, LLM-supported
+    explanations and automatic generation of visualizations. It illustrated a different kind of
+    AI interaction: instead of retrieving knowledge from documents, the agent could reason over
+    structured enterprise data and help users explore it conversationally.
+  </p>
+
+  <h3>Building Custom Agents with Agent Builder</h3>
+
+  <p>
+    Finally, I moved from the pre-built agents to <strong>Agent Builder</strong>, OPAF's visual
+    environment for creating custom agents and workflows.
+  </p>
+
+  <p>
+    I showed how workflows could combine different components, including LLMs, agents, MCP servers,
+    REST APIs, conversational memory, chat and text inputs, file uploads, CSV files, SQL queries
+    and different output nodes. OPAF also supported multiple LLM options, including local and
+    cloud-based providers.
+  </p>
+
+  <p>
+    The visual approach made it possible to go beyond a single chatbot and orchestrate more
+    complex, multi-step AI processes by connecting specialized agents and tools into a workflow.
+    The platform was also extensible, with the possibility of creating additional custom nodes for
+    Agent Builder.
+  </p>
+
+  <p>
+    I concluded my part of the session with a <strong>live OPAF demonstration</strong>, showing
+    the platform and a more complex agent workflow built visually in Agent Builder.
+  </p>
+
+  <h2>From Analytics to AI Agents</h2>
+
+  <p>
+    Taken together, the three parts of our presentation showed a progression from established
+    enterprise analytics toward agent-based interaction with enterprise information.
+  </p>
+
+  <p>
+    We started with <strong>Oracle Analytics Server</strong> as the governed analytics platform,
+    extended it through <strong>MCP</strong> so that AI clients could discover and query analytical
+    data, and then moved to <strong>OPAF</strong>, where AI agents could work with knowledge,
+    databases, tools and custom workflows in a controlled enterprise environment.
+  </p>
+
+  <p>
+    It was a practical look at how Oracle Analytics, open integration standards such as MCP, and
+    Oracle's emerging agent platform could come together to create a new way of interacting with
+    enterprise data.
+  </p>
+
+</article>
