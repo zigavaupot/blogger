@@ -18,7 +18,7 @@
   --zv-paper-hi: #f7f3ea;
   --zv-ink: #1b1f27;
   --zv-ink-900: #12161c;
-  --zv-bronze: #b4703c;
+  --zv-bronze: #b4703c;zv-blog-post .zv-series-card
   --zv-bronze-dim: #9a5f32;
   --zv-gold: #c79a45;
   --zv-mist: #6f7583;
@@ -86,7 +86,7 @@
 .zv-blog-post .zv-series-grid { display: grid; gap: 28px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 34px 0 24px; }
 .zv-blog-post .zv-series-card { border-bottom: none; }
 .zv-blog-post .zv-series-card img { aspect-ratio: 16 / 9; border-radius: 3px; margin: 0 0 14px; object-fit: cover; width: 100%; }
-.zv-blog-post .zv-series-card p { color: var(--zv-ink); font-family: "Fraunces", Georgia, serif; font-size: 22px; line-height: 1.25; margin: 0; }
+.zv-blog-post .zv-series-card p { margin: 8px 0 0; padding-bottom: 8px; border-bottom: 1px solid var(--zv-bronze-dim);  font-family: 'Inter', sans-serif; font-size: 0.9rem; line-height: 1.45; font-weight: 500; }
 
 @media screen and (max-width: 900px) {
   .zv-blog-post .zv-series-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

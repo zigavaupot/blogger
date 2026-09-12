@@ -39,7 +39,9 @@
 <b:include data='blog' name='all-head-content'/>
 
 <link href='https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap' rel='stylesheet'/>
-<link href='https://raw.githubusercontent.com/zigavaupot/blogger/main/BLOGGER/blogger-post-new.css' rel='stylesheet'/>
+<!--<link href='https://raw.githubusercontent.com/zigavaupot/blogger/main/BLOGGER/blogger-post-new.css' rel='stylesheet'/>-->
+<link href='https://zigavaupot.github.io/blogger/BLOGGER/blogger-post-new.css'
+            rel='stylesheet'/>
 
 <!--
   Required by Blogger: every theme needs a b:skin block. Layout and visual
@@ -776,6 +778,26 @@
     .post-single-pager .older .dir{ text-align:left; }
     .site-footer-inner{ padding:22px 18px 40px; flex-direction:column; gap:8px; }
   }
+
+  /* Series card numbering: keep 01/02/03 on one line and align titles */
+  .series-progress .part{
+    display:grid;
+    grid-template-columns:2.25rem minmax(0, 1fr);
+    column-gap:.55rem;
+    align-items:start;
+  }
+  .series-progress .part .num{
+    display:block;
+    width:2.25rem;
+    white-space:nowrap;
+    word-break:normal;
+    overflow-wrap:normal;
+    text-align:left;
+  }
+  .series-progress .part a{
+    min-width:0;
+  }
+
 </style>
 </head>
 
@@ -996,7 +1018,7 @@
                     for every series must carry the Blogger label "Series";
                     /search/label/Series is the complete Series index.
                     Each card links its title and More link to the overview
-                    post and previews up to the first three parts.
+                    post and previews the latest three parts.
                   -->
                   <section id='series'>
                     <div class='section-head'>
@@ -2240,6 +2262,65 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     } else {
       updateLatestPostsAfterHero();
+    }
+  }
+
+  // Homepage Latest Series: keep the curated three overview cards, but
+  // populate each card with the latest three entries from its own overview post.
+  // The overview post remains the single source of truth for series membership/order.
+  if (document.body.classList.contains('zv-homepage') && window.fetch) {
+    var homeSeriesCards = document.querySelectorAll('#series .series-card');
+
+    function seriesPadNumber(value) {
+      return value < 10 ? '0' + value : String(value);
+    }
+
+    function updateSeriesCard(card) {
+      var overviewLink = card.querySelector('h3 a');
+      var progress = card.querySelector('.series-progress');
+      if (!overviewLink || !progress) return;
+
+      var overviewUrl = overviewLink.href;
+
+      fetch(overviewUrl, { credentials: 'same-origin' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('Series overview HTTP ' + response.status);
+          return response.text();
+        })
+        .then(function (htmlText) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(htmlText, 'text/html');
+          var overviewItems = doc.querySelectorAll('.zv-blog-post .zv-series-grid .zv-series-card');
+          if (!overviewItems.length) return;
+
+          var start = Math.max(0, overviewItems.length - 3);
+          var html = '';
+
+          for (var i = start; i < overviewItems.length; i++) {
+            var item = overviewItems[i];
+            var href = item.getAttribute('href') || '';
+            var titleNode = item.querySelector('p');
+            var title = titleNode ? titleNode.textContent.trim() : item.textContent.trim();
+            if (!href || !title) continue;
+
+            var absoluteHref = new URL(href, overviewUrl).href;
+            html += '<div class="part">' +
+              '<span class="num mono">' + seriesPadNumber(i + 1) + '</span>' +
+              '<a href="' + absoluteHref.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '">' +
+                title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+              '</a>' +
+            '</div>';
+          }
+
+          if (html) progress.innerHTML = html;
+        })
+        .catch(function () {
+          // Keep the hard-coded fallback already present in the theme.
+        });
+    }
+
+    for (var sc = 0; sc < homeSeriesCards.length; sc++) {
+      updateSeriesCard(homeSeriesCards[sc]);
     }
   }
 
