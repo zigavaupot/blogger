@@ -83,20 +83,58 @@
 .zv-blog-post th, .zv-blog-post td { border: 1px solid var(--zv-line); padding: 8px 10px; text-align: left; vertical-align: top; }
 .zv-blog-post th { background: var(--zv-paper-hi); font-weight: 600; font-family: "Inter", sans-serif; }
 
-.zv-blog-post .zv-series-grid { display: grid; gap: 28px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 34px 0 24px; }
-.zv-blog-post .zv-series-card { border-bottom: none; }
-.zv-blog-post .zv-series-card img { aspect-ratio: 16 / 9; border-radius: 3px; margin: 0 0 14px; object-fit: cover; width: 100%; }
-.zv-blog-post .zv-series-card p { margin: 8px 0 0; padding-bottom: 8px; border-bottom: 1px solid var(--zv-bronze-dim);  font-family: 'Inter', sans-serif; font-size: 0.9rem; line-height: 1.45; font-weight: 500; }
+/* Series overview grid — same visual style as Posts grid */
+.zv-blog-post .zv-series-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 34px 0 24px;
+}
+
+.zv-blog-post .zv-series-card {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--zv-line);
+  border-radius: 3px;
+  background: var(--zv-paper-hi);
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.zv-blog-post .zv-series-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.zv-blog-post .zv-series-card p {
+  margin: 0;
+  padding: 18px 16px;
+  color: var(--zv-ink);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.zv-blog-post .zv-series-card:hover p,
+.zv-blog-post .zv-series-card:focus p {
+  color: var(--zv-bronze-dim);
+}
 
 @media screen and (max-width: 900px) {
-  .zv-blog-post .zv-series-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .zv-blog-post .zv-series-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media screen and (max-width: 600px) {
-  .zv-blog-post { font-size: 15px; line-height: 1.65; }
-  .zv-blog-post h2 { font-size: 24px; }
-  .zv-blog-post h3 { font-size: 20px; }
-  .zv-blog-post ul, .zv-blog-post ol { margin-left: 22px; }
-  .zv-blog-post .zv-series-grid { grid-template-columns: 1fr; }
-  .zv-blog-post .zv-series-card p { font-size: 20px; }
+  .zv-blog-post .zv-series-grid {
+    grid-template-columns: 1fr;
+  }
 }
