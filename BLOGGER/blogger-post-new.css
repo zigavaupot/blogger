@@ -83,10 +83,14 @@
 .zv-blog-post th, .zv-blog-post td { border: 1px solid var(--zv-line); padding: 8px 10px; text-align: left; vertical-align: top; }
 .zv-blog-post th { background: var(--zv-paper-hi); font-weight: 600; font-family: "Inter", sans-serif; }
 
-.zv-blog-post .zv-series-grid { display: grid; gap: 28px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 34px 0 24px; }
+.zv-blog-post .zv-series-grid { display: grid; gap: 28px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 34px 0 24px; }
 .zv-blog-post .zv-series-card { border-bottom: none; }
 .zv-blog-post .zv-series-card img { aspect-ratio: 16 / 9; border-radius: 3px; margin: 0 0 14px; object-fit: cover; width: 100%; }
 .zv-blog-post .zv-series-card p { color: var(--zv-ink); font-family: "Fraunces", Georgia, serif; font-size: 22px; line-height: 1.25; margin: 0; }
+
+@media screen and (max-width: 900px) {
+  .zv-blog-post .zv-series-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 @media screen and (max-width: 600px) {
   .zv-blog-post { font-size: 15px; line-height: 1.65; }
