@@ -1,0 +1,56 @@
+# Why BI and DWH Aren't Just an IT Project — They're a Business Investment
+
+![Why BI and DWH aren't just an IT project — from fragmented data to trustworthy information and faster decisions](images/bi-dwh-business-investment-intro.png)
+
+Most BI conversations start with a dashboard and end with a budget line. That's backwards. The tool you click on is only the last step in a chain — underneath it sits a data warehouse doing the unglamorous work of cleaning, reconciling, and remembering your data so the numbers on screen can actually be trusted. Treat BI as a software purchase and you'll get pretty charts nobody fully believes. Treat it as a business investment — dashboard and foundation together — and you get something people make decisions with.
+
+Over the last few years, working on BI and data warehouse projects with organizations of very different sizes, I've heard the same handful of assumptions come up again and again. They're not wrong because people are careless — they're wrong because BI *looks* like a simple tool problem from the outside, and it isn't. Here's what I mean, and what actually delivers the value.
+
+## "We'll just plug in a BI tool and be done"
+
+This is usually the first myth, and the most expensive one. A BI tool is genuinely fast to install and connect. What isn't fast is everything it depends on: agreeing on what a KPI actually means across departments, cleaning up the data feeding it, and giving users time to test, learn, and trust what they're looking at. Projects that get underestimated almost always get underestimated on *time*, not on tooling — usually because of pressure for a quick win, a shrinking scope, or a rush to go live with something superficial.
+
+None of this means BI is only for large enterprises with big budgets. It means the right way in is incremental: agree on one business area, deliver it properly, and expand step by step rather than promising the whole picture on day one.
+
+**[PLACEHOLDER: image — simple before/after of a messy spreadsheet-driven report vs. a clean BI dashboard]**
+
+## "We don't really need a data warehouse"
+
+This is the second myth, and it's the one your organization pays for quietly, over years, in the form of reports nobody fully trusts. Connecting a BI tool straight to transactional systems feels like the shortcut — until you notice the data isn't clean, queries are slow because the source system wasn't built for analytics, and there's no real control over who sees what. Building datasets on the fly inside the BI tool itself just moves the same problem one layer up: every analyst ends up doing their own joins and their own aggregations, and two "correct" reports quietly disagree with each other.
+
+A data warehouse is what turns raw, scattered data into something an organization can actually stand behind: a single version of the truth, with history kept, context added, and performance built for analysis rather than for transactions. It's the part of the project nobody sees on the screen — which is exactly why it's the part most often cut, and most often missed later.
+
+**[STORY SUGGESTION: This is a strong spot for a short client story — something like "a client came to us wanting a dashboard, and the first two weeks weren't about the dashboard at all — they were about reconciling three different definitions of 'active customer' across their systems." A concrete before/after (e.g., report turnaround time, or the moment two departments stopped arguing over whose numbers were right) would land well here. Doesn't need to be attributed by name if that's a concern — "a client in [industry]" works fine.]**
+
+**[PLACEHOLDER: image — simple architecture sketch: source systems → data warehouse → BI tool]**
+
+## "Once it's live, the project is done"
+
+The third myth treats go-live as the finish line. In practice, the first reports users see are the start of the real work — they're what surfaces gaps, tests assumptions against how the business actually operates, and gets business users genuinely involved rather than just consulted once at the start. BI isn't the production of reports; it's building a shared understanding of the data and the processes behind it. Different questions need different approaches, and some of the more interesting analyses will never be a standard, out-of-the-box feature — they need real business logic built around them.
+
+## "BI means we need IT less"
+
+The fourth myth gets the relationship backwards. BI doesn't reduce the need for IT — it changes what IT is needed *for*. IT still owns data quality, security, integrations, and a reliable platform underneath everything; business users still own the process knowledge that makes the data mean something. Neither side can deliver a trustworthy BI environment alone. The projects that go well are the ones where that collaboration is designed in from the start, not patched together after the first complaint about slow or wrong numbers.
+
+## "Our data isn't good enough for BI"
+
+The last myth is the one that stops projects before they start. Perfectly clean data essentially doesn't exist anywhere. BI is one of the best tools an organization has for *improving* data — for understanding it, connecting it across systems, cleaning it, and raising its quality over time. Data quality tends to improve in step with the BI system, not before it. Imperfect data can still create real value on day one — and no matter how sophisticated the system gets, the decisions stay yours.
+
+## What this looks like end to end
+
+**[PLACEHOLDER: image — reinsert the 4-step infographic here as a recap: BI tool → data warehouse → project delivery → business value]**
+
+Put together, the pattern behind a BI investment that actually pays off looks like this:
+
+- **The BI tool** gives visibility and speed — unified KPIs, interactive dashboards, less manual spreadsheet work, decisions based on current data.
+- **The data warehouse** gives quality and trust — data combined from different systems, cleaned and reconciled, kept for history, delivering one version of the truth.
+- **Delivery** is gradual and controlled — sources, KPIs, and business rules mapped out; quality, security, and access addressed properly; built and rolled out in phases rather than all at once.
+- **The payoff compounds** — fewer errors, less repetitive manual work, faster reporting, better oversight, and a foundation that scales as new questions and new analyses come up.
+
+## The key takeaway
+
+BI is the visible part of the solution. The data warehouse is the foundation that makes the information behind it fast, comparable, and trustworthy. Fund both, sequence the work sensibly, and treat the first go-live as a milestone rather than a finish line — and BI stops being an IT line item and starts being what it should have been from the start: a business investment.
+
+---
+
+**[PLACEHOLDER: closing image — optional team/project photo or a simple "before vs. after" summary graphic]**
