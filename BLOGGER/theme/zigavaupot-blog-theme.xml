@@ -40,8 +40,7 @@
 
 <link href='https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap' rel='stylesheet'/>
 <!--<link href='https://raw.githubusercontent.com/zigavaupot/blogger/main/BLOGGER/blogger-post-new.css' rel='stylesheet'/>-->
-<link href='https://zigavaupot.github.io/blogger/BLOGGER/blogger-post-new.css'
-            rel='stylesheet'/>
+<link href='https://zigavaupot.github.io/blogger/BLOGGER/blogger-post-new.css' rel='stylesheet'/>
 
 <!--
   Required by Blogger: every theme needs a b:skin block. Layout and visual
@@ -167,7 +166,8 @@
   .hero-meta .read-link{ color:var(--bronze-dim); border-bottom:1px solid var(--bronze-dim); padding-bottom:1px; }
   .hero-image{
     width:420px;
-    height:300px;
+    height:auto;
+    aspect-ratio:16/9;
     border:1px solid var(--line);
     border-radius:3px;
     overflow:hidden;
@@ -266,7 +266,7 @@
   /* ---------- post stream ---------- */
   .post-row{ display:grid; grid-template-columns:168px 92px 1fr; gap:22px; padding:22px 0; border-bottom:1px solid var(--line); }
   .post-row:first-of-type{ padding-top:4px; }
-  .post-thumb{ width:100%; aspect-ratio:4/3; border-radius:3px; position:relative; overflow:hidden; border:1px solid var(--line); }
+  .post-thumb{ width:100%; aspect-ratio:16/9; border-radius:3px; position:relative; overflow:hidden; border:1px solid var(--line); }
   .post-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
   .post-date{ font-family:&#39;JetBrains Mono&#39;, monospace; font-size:0.78rem; color:var(--mist); padding-top:2px; }
   .post-body h3{ font-size:1.28rem; line-height:1.35; margin-bottom:8px; }
@@ -379,7 +379,7 @@
   .latest-posts-list.is-grid-view .post-thumb{
     display:block !important;
     width:100%;
-    aspect-ratio:4 / 3;
+    aspect-ratio:16 / 9;
     overflow:hidden;
     border-bottom:1px solid var(--line);
   }
@@ -437,6 +437,7 @@
   /* ---------- single post article ---------- */
   .post-single-head{ padding:8px 0 24px; border-bottom:1px solid var(--line); margin-bottom:28px; }
   .post-single-kicker{ font-size:0.8rem; color:var(--mist); margin-bottom:14px; }
+  .post-single-author{ color:inherit; white-space:nowrap; }
   .post-single-title{ font-size:2.2rem; line-height:1.2; max-width:none; width:100%; margin-bottom:16px; }
   .post-single-tags{ display:flex; gap:10px; flex-wrap:wrap; }
   .post-single-image{ border:1px solid var(--line); border-radius:3px; overflow:hidden; margin-bottom:32px; aspect-ratio:16/9; }
@@ -728,7 +729,7 @@
     .hero-inner{ grid-template-columns:minmax(0,1fr) 340px; gap:32px; padding:38px 32px; }
     .hero-text h1{ font-size:1.85rem; max-width:20ch; }
     .hero-excerpt{ font-size:0.92rem; }
-    .hero-image{ width:340px; height:243px; }
+    .hero-image{ width:340px; height:auto; aspect-ratio:16/9; }
   }
   @media (max-width: 900px){
     .layout{ grid-template-columns:1fr; gap:10px; }
@@ -755,7 +756,7 @@
       width:100%;
       max-width:480px;
       height:auto;
-      aspect-ratio:7/5;
+      aspect-ratio:16/9;
     }
     .post-row{ grid-template-columns:130px 80px 1fr; gap:18px; }
   }
@@ -920,7 +921,7 @@
             <b:widget-setting name='showShareButtons'>true</b:widget-setting>
             <b:widget-setting name='showCommentLink'>false</b:widget-setting>
             <b:widget-setting name='style.urlcolor'>#ffffff</b:widget-setting>
-            <b:widget-setting name='showAuthor'>false</b:widget-setting>
+            <b:widget-setting name='showAuthor'>true</b:widget-setting>
             <b:widget-setting name='style.linkcolor'>#ffffff</b:widget-setting>
             <b:widget-setting name='style.unittype'>TextAndImage</b:widget-setting>
             <b:widget-setting name='style.bgcolor'>#ffffff</b:widget-setting>
@@ -947,7 +948,7 @@
                   <article class='post-single'>
 
                     <header class='post-single-head'>
-                      <div class='post-single-kicker mono'><data:post.date/></div>
+                      <div class='post-single-kicker mono'><data:post.date/><span class='post-single-author'> · <data:post.author.name/></span></div>
                       <h1 class='post-single-title'><data:post.title/></h1>
                       <b:if cond='data:post.labels'>
                         <div class='post-single-tags'>
@@ -1111,7 +1112,7 @@
                     <article class='post-row' expr:data-post-url='data:post.url'>
                       <div class='post-thumb'>
                         <b:if cond='data:post.featuredImage'>
-                          <img expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 400, &quot;4:3&quot;)'/>
+                          <img expr:alt='data:post.title' expr:src='resizeImage(data:post.featuredImage, 400, &quot;16:9&quot;)'/>
                         <b:else/>
                           <div class='thumb-fill thumb-bronze'/>
                         </b:if>
@@ -1616,6 +1617,39 @@
     <aside class='side'>
 
       <b:section class='sidebar' id='sidebar' name='Sidebar' preferred='yes'>
+        <b:widget id='Image1' locked='false' title='' type='Image' version='2' visible='true'>
+          <b:widget-settings>
+            <b:widget-setting name='displayUrl'>https://blogger.googleusercontent.com/img/a/AVvXsEhL_4hGG8ZtPicUokomFDVjFkhpwjZqgfS1DSCdfAN5tegYCQ89MsYgec0uWKsdDtJPT3sgm2kmmHXIOHx5rXCgYtJz6MMIxRd6DtdhnmLZ0tF1OlKsGH_lUtszCUAyjykgUb3LU-QXH6s10TMJWNzWJAkMj_tECrEHYnnbUBfjcA81tM5WQ03fUzLh4A=s200</b:widget-setting>
+            <b:widget-setting name='displayHeight'>80</b:widget-setting>
+            <b:widget-setting name='sectionWidth'>320</b:widget-setting>
+            <b:widget-setting name='shrinkToFit'>true</b:widget-setting>
+            <b:widget-setting name='displayWidth'>200</b:widget-setting>
+            <b:widget-setting name='link'><![CDATA[https://apexapps.oracle.com/pls/apex/r/ace_program/oracle-aces/ace?ace_id=1140&clear=2&session=12988173314912]]></b:widget-setting>
+            <b:widget-setting name='caption'/>
+          </b:widget-settings>
+          <b:includable id='main'>
+            <div class='side-block badge-block'>
+              <b:tag cond='data:link' expr:href='data:link' name='a'>
+                <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'>
+                  <b:attr cond='data:sourceSet' expr:value='data:sourceSet' name='srcset'/>
+                </img>
+              </b:tag>
+            </div>
+          </b:includable>
+          <b:includable id='content'>
+  <div class='widget-content'>
+    <b:tag cond='data:link' expr:href='data:link' name='a'>
+      <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'>
+        <b:attr cond='data:sourceSet' expr:value='data:sourceSet' name='srcset'/>
+      </img>
+    </b:tag>
+    <br/>
+    <b:if cond='data:caption'>
+      <span class='caption'><data:caption/></span>
+    </b:if>
+  </div>
+</b:includable>
+        </b:widget>
         <b:widget id='BlogArchive1' locked='false' title='Blog Archive' type='BlogArchive' version='2' visible='true'>
           <b:widget-settings>
             <b:widget-setting name='showStyle'>HIERARCHY</b:widget-setting>
@@ -1684,39 +1718,6 @@
       </li>
     </b:loop>
   </ul>
-</b:includable>
-        </b:widget>
-        <b:widget id='Image1' locked='false' title='' type='Image' version='2' visible='true'>
-          <b:widget-settings>
-            <b:widget-setting name='displayUrl'>https://blogger.googleusercontent.com/img/a/AVvXsEhL_4hGG8ZtPicUokomFDVjFkhpwjZqgfS1DSCdfAN5tegYCQ89MsYgec0uWKsdDtJPT3sgm2kmmHXIOHx5rXCgYtJz6MMIxRd6DtdhnmLZ0tF1OlKsGH_lUtszCUAyjykgUb3LU-QXH6s10TMJWNzWJAkMj_tECrEHYnnbUBfjcA81tM5WQ03fUzLh4A=s200</b:widget-setting>
-            <b:widget-setting name='displayHeight'>80</b:widget-setting>
-            <b:widget-setting name='sectionWidth'>320</b:widget-setting>
-            <b:widget-setting name='shrinkToFit'>true</b:widget-setting>
-            <b:widget-setting name='displayWidth'>200</b:widget-setting>
-            <b:widget-setting name='link'><![CDATA[https://apexapps.oracle.com/pls/apex/r/ace_program/oracle-aces/ace?ace_id=1140&clear=2&session=12988173314912]]></b:widget-setting>
-            <b:widget-setting name='caption'/>
-          </b:widget-settings>
-          <b:includable id='main'>
-            <div class='side-block badge-block'>
-              <b:tag cond='data:link' expr:href='data:link' name='a'>
-                <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'>
-                  <b:attr cond='data:sourceSet' expr:value='data:sourceSet' name='srcset'/>
-                </img>
-              </b:tag>
-            </div>
-          </b:includable>
-          <b:includable id='content'>
-  <div class='widget-content'>
-    <b:tag cond='data:link' expr:href='data:link' name='a'>
-      <img expr:alt='data:title' expr:height='data:height' expr:id='data:widget.instanceId + &quot;_img&quot;' expr:src='data:sourceUrl' expr:width='data:width'>
-        <b:attr cond='data:sourceSet' expr:value='data:sourceSet' name='srcset'/>
-      </img>
-    </b:tag>
-    <br/>
-    <b:if cond='data:caption'>
-      <span class='caption'><data:caption/></span>
-    </b:if>
-  </div>
 </b:includable>
         </b:widget>
         <b:widget id='Label1' locked='false' title='Labels' type='Label' version='2' visible='true'>
@@ -2344,12 +2345,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function eventEntryImage(entry) {
-      if (entry.media$thumbnail && entry.media$thumbnail.url) {
-        return entry.media$thumbnail.url
-          .replace(/\/s72-c\//, '/s600/')
-          .replace(/=s72-c$/, '=s600');
-      }
-
+      // Prefer the image URL in the post itself. Blogger feed thumbnails can
+      // already be a cropped derivative, which cannot be restored by resizing.
       var html = '';
       if (entry.content && entry.content.$t) html = entry.content.$t;
       else if (entry.summary && entry.summary.$t) html = entry.summary.$t;
@@ -2359,6 +2356,14 @@ document.addEventListener('DOMContentLoaded', function () {
         holder.innerHTML = html;
         var img = holder.querySelector('img');
         if (img) return img.getAttribute('src') || '';
+      }
+
+      // Fall back to a larger, uncropped feed thumbnail for older posts whose
+      // body does not contain an image.
+      if (entry.media$thumbnail && entry.media$thumbnail.url) {
+        return entry.media$thumbnail.url
+          .replace(/\/s72-c\//, '/s900/')
+          .replace(/=s72-c$/, '=s900');
       }
       return '';
     }
