@@ -1,0 +1,183 @@
+<article class="zv-blog-post">
+
+<img alt="" src="FEATURED-IMAGE-URL">
+
+<div class="post-intro">
+<p>In Part 3 I built the in-database sales analyst with <code>DBMS_CLOUD_AI_AGENT</code> in PL/SQL, and in Part 4 OPAF ran it with the In-Database Team node. The Select AI nodes can do more than run existing objects: in <strong>Create new</strong> mode they create them.</p>
+<p>In this part I build the whole tool → task → agent → team stack visually on the OPAF canvas, starting from nothing but the Select AI profile <code>OABOOTCAMP_AI</code> and the table comments. The result, flow C3, answers the test questions from Part 4 exactly like the PL/SQL-built team.</p>
+</div>
+
+<!--more-->
+
+<h2>Canvas</h2>
+<p>Flow name: <code>SELECT AI - no PL/SQL</code>. All objects get a <code>C3_</code> prefix so they don't collide with the PL/SQL-created objects from Part 3.</p>
+<p>Every node is in <strong>+ Create new</strong> mode, and there are two kinds of wires:</p>
+<ul>
+<li><strong>Definition chain</strong> (dark ports) — how the team is assembled: <code>In-Database Tool</code> → Task <strong>Choose AI Tools</strong> · Task <strong>Task</strong> → Agent <strong>Task</strong> · Agent <strong>Agent</strong> → Team <strong>Agents</strong></li>
+<li><strong>Message flow</strong> (blue ports) — what happens at runtime: <code>Chat input</code> <strong>Message</strong> → Team <strong>Prompt</strong> · Team <strong>Result</strong> → <code>Chat output</code> <strong>Message</strong></li>
+</ul>
+<pre><code>In-Database Tool ──► In-Database Task ──► In-Database Agent ──► In-Database Team ──► Chat output
+                                                                        ▲
+                                                           Chat input ──┘
+</code></pre>
+<img alt="Flow C3 canvas: In-Database Tool, Task, Agent and Team nodes in Create new mode" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/20-opaf-flow-c3-canvas.png">
+<p>In Create new mode the Task node gets a <strong>Choose AI Tools</strong> input and the Team node an <strong>Agents</strong> input — that is how the definition chain is wired.</p>
+<h2>Node settings</h2>
+<p><strong>In-Database Tool</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tool Type</td>
+<td>SQL</td>
+</tr>
+<tr>
+<td>Tool Name</td>
+<td><code>C3_SALES_SQL</code></td>
+</tr>
+<tr>
+<td>Choose database</td>
+<td><code>adw001</code></td>
+</tr>
+<tr>
+<td>Choose SQL profile</td>
+<td><code>OABOOTCAMP_AI</code></td>
+</tr>
+<tr>
+<td>Description</td>
+<td>NL2SQL over the OABOOTCAMP sales star schema (F_REVENUE with time, customer, geography and product dimensions).</td>
+</tr>
+</tbody>
+</table>
+<p>Instruction:</p>
+<pre><code>Use this tool for any question about sales, revenue, profit, discounts, units, orders, customers, products, geography or time periods. It translates the question into SQL over the sales database and returns the result.
+</code></pre>
+<p><strong>In-Database Task</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Choose AI Tools</td>
+<td>wired from the Tool node</td>
+</tr>
+<tr>
+<td>Task Name</td>
+<td><code>C3_SALES_ANALYSIS_TASK</code></td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Answers sales questions with data from the sales database.</td>
+</tr>
+</tbody>
+</table>
+<p>The instruction is the task instruction from Part 3, with two changes: it names the <code>C3_SALES_SQL</code> tool, and it does not ask for the <code>runsql</code> action. <code>{query}</code> is replaced with the user's question at runtime.</p>
+<p><strong>In-Database Agent</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task</td>
+<td>wired from the Task node</td>
+</tr>
+<tr>
+<td>Agent Name</td>
+<td><code>C3_SALES_ANALYST_AGENT</code></td>
+</tr>
+<tr>
+<td>Choose database</td>
+<td><code>adw001</code></td>
+</tr>
+<tr>
+<td>Choose profile</td>
+<td><code>OABOOTCAMP_AI</code></td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Sales analyst over the OABOOTCAMP sales data.</td>
+</tr>
+</tbody>
+</table>
+<p>The Agent Role is the role from Part 3 plus one sentence that tells the agent how to refuse off-topic questions:</p>
+<pre><code>You are a sales analyst for a consumer electronics company. You answer business questions using data from the sales database only, never from general knowledge. If a question is not about sales data, reply that you can only answer questions about the sales database. Revenue is gross unless the user asks for net revenue (revenue minus discount). Profit is revenue minus fixed and variable cost. Include all order statuses unless the user explicitly asks about a specific status. Sales data covers January 2024 to September 2026.
+</code></pre>
+<p><strong>In-Database Team</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agents</td>
+<td>wired from the Agent node</td>
+</tr>
+<tr>
+<td>Team name</td>
+<td><code>C3_SALES_TEAM</code></td>
+</tr>
+<tr>
+<td>Process</td>
+<td>Sequential</td>
+</tr>
+<tr>
+<td>Prompt</td>
+<td>wired from Chat input</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Sales analyst team built visually in OPAF: one agent, one task, one SQL tool.</td>
+</tr>
+</tbody>
+</table>
+<p>The forms have no human-tool setting. The agent never paused for clarification in my tests, so the defaults work for this non-interactive use.</p>
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answer</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Highest profit in 2025</td>
+<td>Store, $3,498,467.01 (Online $2,099,559.05; Catalog $1,360,396.31)</td>
+<td>~17 s</td>
+</tr>
+<tr>
+<td>2025 vs 2024 comparison</td>
+<td>Store +$1,275,247.94; Online +$660,737.84; Catalog +$660,923.73 — matches ground truth</td>
+<td>~18 s</td>
+</tr>
+<tr>
+<td>Capital of France</td>
+<td>"I can only answer questions about the sales database."</td>
+<td>~11 s</td>
+</tr>
+</tbody>
+</table>
+<img alt="Flow C3 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/21-opaf-flow-c3-chat.png">
+<p>These are the same answers as the PL/SQL-built team in C2. The objects are identical whether I create them with <code>DBMS_CLOUD_AI_AGENT</code> or on the OPAF canvas — the only prerequisite is a good Select AI profile over commented tables.</p>
+<p>So far OPAF has reached the database over a database connection. In Part 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.</p>
+<hr>
+<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+
+</article>

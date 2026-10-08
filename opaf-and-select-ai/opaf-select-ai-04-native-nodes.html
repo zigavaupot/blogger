@@ -1,0 +1,118 @@
+<article class="zv-blog-post">
+
+<img alt="" src="FEATURED-IMAGE-URL">
+
+<div class="post-intro">
+<p>With the Select AI profile from Part 2 and the agent team from Part 3 in the database, the simplest way to put them in front of users is OPAF's own Select AI nodes. They talk to the database over a database connection — no MCP server, no wrapper functions and no LLM in OPAF.</p>
+<p>In this part I build two minimal OPAF Custom Flows: C1 runs plain Select AI with the Select AI node, and C2 runs the in-database team with the In-Database Team node. Both get the same three test questions, which I reuse for every flow in the rest of the series.</p>
+</div>
+
+<!--more-->
+
+<h2>The Select AI node group</h2>
+<p>Besides MCP, OPAF Custom Flows have a <strong>Select AI</strong> node group: In-Database Agent, Select AI, In-Database Task, In-Database Team and In-Database Tool.</p>
+<!-- TODO: OPAF Select AI node palette screenshot (13-opaf-select-ai-nodes.png) is missing — decide later -->
+<img alt="" src="IMAGE-TBD">
+<h2>Database connection</h2>
+<p>The nodes need a database connection registered in OPAF. My ADW requires mTLS, so I registered it with the wallet:</p>
+<ol>
+<li>ADW details page → <strong>Database connection → Download wallet</strong> → Instance wallet, with a wallet password.</li>
+<li>In OPAF, add a database connection <code>adw001</code> with the wallet, user <code>OABOOTCAMP</code> and its password.</li>
+</ol>
+<img alt="OPAF database connection adw001 with wallet" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/22-opaf-db-connection.png">
+<p>Connecting as <code>OABOOTCAMP</code> matters: the nodes list the Select AI profiles and agent objects owned by the connected user.</p>
+<h2>Test questions</h2>
+<p>I test every flow in the series with the same three questions:</p>
+<ol>
+<li><em>Which sales channel had the highest profit in 2025?</em> — a simple lookup.</li>
+<li><em>Compare profit in 2025 vs 2024 by sales channel and tell me which channel improved the most</em> — a multi-step comparison.</li>
+<li><em>What is the capital of France?</em> — an off-topic question the assistant must refuse.</li>
+</ol>
+<p>The correct answers to the first two are the ground truth from Part 3: Store has the highest 2025 profit ($3,498,467.01) and the largest improvement (+$1,275,247.94).</p>
+<h2>Flow C1: Select AI node</h2>
+<pre><code>Chat input ──► Select AI ──► Chat output
+</code></pre>
+<ul>
+<li><strong>Choose database:</strong> <code>adw001</code></li>
+<li><strong>Choose profile:</strong> <code>OABOOTCAMP_AI</code></li>
+<li><strong>Select AI action:</strong> <strong>Narrate</strong> — runs the generated SQL and returns a natural-language answer</li>
+</ul>
+<p>The other actions are Run SQL (result data), Show SQL, Explain SQL, Show prompt and Chat. Chat sends the prompt straight to the LLM without touching the database, so it is not suitable here.</p>
+<img alt="Select AI node with the list of Select AI actions" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/14-opaf-flow-c1-canvas.png">
+<p>There is no LLM in OPAF in this flow — all the intelligence is the Select AI profile in the database.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answer</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Highest profit in 2025</td>
+<td>Store, "about 3.5 million dollars"</td>
+<td>~9 s</td>
+</tr>
+<tr>
+<td>2025 vs 2024 comparison</td>
+<td>Store, ~3.5 M vs ~2.2 M, increase ~1.28 M — correct winner, but only Store is reported</td>
+<td>~6 s</td>
+</tr>
+<tr>
+<td>Capital of France</td>
+<td>Refused: no valid SELECT could be generated with the enforced object list (message ends with <code>ORA-00900: invalid SQL statement</code>)</td>
+<td>~4 s</td>
+</tr>
+</tbody>
+</table>
+<img alt="Flow C1 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/15-opaf-flow-c1-chat.png">
+<p>C1 is the fastest flow in the series, and correct, but:</p>
+<ul>
+<li><strong>Narrate</strong> rounds numbers and keeps the answer short.</li>
+<li>One question = one SQL statement. For the comparison it still found the winner but did not report all channels; there is no planning step to break the question down.</li>
+<li>The off-topic guardrail comes for free from <code>enforce_object_list</code> in the profile, though the raw message, including the ORA error, is not demo-friendly.</li>
+</ul>
+<h2>Flow C2: In-Database Team node</h2>
+<pre><code>Chat input ──► In-Database Team ──► Chat output
+</code></pre>
+<ul>
+<li><strong>Team:</strong> Choose existing</li>
+<li><strong>Choose database:</strong> <code>adw001</code></li>
+<li><strong>Choose team:</strong> <code>OABOOTCAMP_SALES_TEAM</code></li>
+</ul>
+<p>The node runs the team from Part 3 directly. It handles the conversation itself; there is no conversation setting.</p>
+<img alt="Flow C2 canvas with the In-Database Team node" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/16-opaf-flow-c2-canvas.png">
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answer</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Highest profit in 2025</td>
+<td>Store, $3,498,467.01 (Online $2,099,559.05; Catalog $1,360,396.31)</td>
+<td>~9 s</td>
+</tr>
+<tr>
+<td>2025 vs 2024 comparison</td>
+<td>Full year × channel table; Store +$1,275,247.94, Catalog +$660,923.72, Online +$660,737.84 — matches ground truth</td>
+<td>~19 s</td>
+</tr>
+<tr>
+<td>Capital of France</td>
+<td>"I'm sorry, but I can only provide answers based on the sales data in the database. ..."</td>
+<td>~5 s</td>
+</tr>
+</tbody>
+</table>
+<img alt="Flow C2 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/17-opaf-flow-c2-chat.png">
+<p>Here the refusal comes from the in-database agent itself — its role ("using data from the sales database only, never from general knowledge") is enough.</p>
+<p>The two nodes show the difference between Select AI and Select AI Agent in one picture: C1 answers in one SQL statement, C2 plans the comparison and reports every channel with exact numbers. The In-Database Team node also offers <strong>Create new</strong>, which builds the team from In-Database Agent, Task and Tool nodes on the canvas instead of PL/SQL — the topic of Part 5.</p>
+<hr>
+<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+
+</article>

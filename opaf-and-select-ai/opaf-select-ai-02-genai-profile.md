@@ -38,7 +38,7 @@ resource.id = 'ocid1.autonomousdatabase.oc1.eu-frankfurt-1.<adw-ocid>'
 ALL {resource.type = 'autonomousdatabase', resource.compartment.id = '<compartment-ocid-of-the-ADW>'}
 ```
 
-![Dynamic group matching rules](images/02-dynamic-group.png)
+![Dynamic group matching rules](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/02-dynamic-group.png)
 
 Then **Identity & Security → Policies**, root compartment, **Create Policy**, with the description `Allows ADW (OABOOTCAMP) to call OCI Generative AI via resource principal for Select AI` and these statements in the manual editor:
 
@@ -49,7 +49,7 @@ allow any-user to use generative-ai-family in tenancy where request.principal.ty
 
 The second statement matches any Autonomous Database resource principal regardless of the dynamic group.
 
-![Policy statements](images/03-policy.png)
+![Policy statements](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/03-policy.png)
 
 IAM changes take a few minutes to propagate. If Select AI returns `ORA-20404` "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound — an IAM problem, not a missing model.
 

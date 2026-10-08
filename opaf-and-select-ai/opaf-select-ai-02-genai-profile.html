@@ -29,13 +29,13 @@
 </code></pre>
 <pre><code>ALL {resource.type = 'autonomousdatabase', resource.compartment.id = '&lt;compartment-ocid-of-the-ADW&gt;'}
 </code></pre>
-<img alt="Dynamic group matching rules" src="images/02-dynamic-group.png">
+<img alt="Dynamic group matching rules" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/02-dynamic-group.png">
 <p>Then <strong>Identity &amp; Security → Policies</strong>, root compartment, <strong>Create Policy</strong>, with the description <code>Allows ADW (OABOOTCAMP) to call OCI Generative AI via resource principal for Select AI</code> and these statements in the manual editor:</p>
 <pre><code>allow dynamic-group 'Default'/'dg-adw-selectai' to use generative-ai-family in tenancy
 allow any-user to use generative-ai-family in tenancy where request.principal.type = 'autonomousdatabase'
 </code></pre>
 <p>The second statement matches any Autonomous Database resource principal regardless of the dynamic group.</p>
-<img alt="Policy statements" src="images/03-policy.png">
+<img alt="Policy statements" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/03-policy.png">
 <p>IAM changes take a few minutes to propagate. If Select AI returns <code>ORA-20404</code> "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound — an IAM problem, not a missing model.</p>
 <h2>Resource principal, grants and network access</h2>
 <p>Signed in to Database Actions as ADMIN:</p>

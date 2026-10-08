@@ -38,7 +38,7 @@ My environment:
 2. [Part 2: Connecting Autonomous Database to OCI Generative AI](PART2-URL) — dynamic group, policy, resource principal, the Select AI profile and smoke tests.
 3. [Part 3: Building a Select AI Agent team in PL/SQL](PART3-URL) — tool, agent, task and team, checked against ground truth.
 4. [Part 4: Select AI and the in-database team as native OPAF nodes](PART4-URL) — flows C1 and C2.
-5. [Part 5: The same team built on the OPAF canvas, no PL/SQL](PART5-URL) — flow C3.
+5. [Part 5: No-code Select AI Agent](PART5-URL) — flow C3.
 6. [Part 6: The Autonomous Database built-in MCP server](PART6-URL) — enabling it with a tag, testing with curl, wrapping the team as a tool.
 7. [Part 7: OPAF over MCP — database orchestrates vs OPAF orchestrates](PART7-URL) — flows B and A.
 8. [Part 8: Native routing with Select AI Bridge](PART8-URL) — flow D.
