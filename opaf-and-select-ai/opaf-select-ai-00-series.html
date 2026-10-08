@@ -1,0 +1,185 @@
+<article class="zv-blog-post">
+
+<img alt="" src="FEATURED-IMAGE-URL">
+
+<div class="post-intro">
+<p>This is the overview of my Select AI Agent meets OPAF series. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (<code>OABOOTCAMP</code>) and build it six ways in OPAF — plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.</p>
+</div>
+
+<!--more-->
+
+<h2>What the series covers</h2>
+<ul>
+<li><strong>Preparing the data:</strong> validating joins, collecting exact literals, business rules and table and column comments as the semantic layer.</li>
+<li><strong>Connecting to the LLM:</strong> IAM, resource principal and the Select AI profile on OCI Generative AI.</li>
+<li><strong>Select AI Agent:</strong> tool, agent, task and team in PL/SQL, verified against hand-written SQL.</li>
+<li><strong>Native OPAF nodes:</strong> the Select AI and In-Database Team nodes, and the same team built on the canvas with no PL/SQL.</li>
+<li><strong>MCP:</strong> the Autonomous Database built-in MCP server and two OPAF flows on top of it.</li>
+<li><strong>Routing:</strong> one OPAF agent choosing between fast NL2SQL and the in-database team with Select AI Bridge.</li>
+</ul>
+<h2>Architecture: one database, six front ends</h2>
+<p>In all six flows, natural language is turned into SQL inside the database by Select AI. OPAF is always the front end. What changes from flow to flow is how OPAF reaches the database and who plans the analysis.</p>
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>OPAF building blocks</th>
+<th>How OPAF reaches the database</th>
+<th>Who plans the analysis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Select AI node</td>
+<td>Database connection (wallet)</td>
+<td>Nobody — one question, one SQL statement</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>In-Database Team node, existing team</td>
+<td>Database connection (wallet)</td>
+<td>Select AI Agent in ADB</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>In-Database Tool, Task, Agent and Team nodes, created on the canvas</td>
+<td>Database connection (wallet)</td>
+<td>Select AI Agent in ADB</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Agent node + MCP server node (<code>SALES_NL2SQL</code>)</td>
+<td>ADB built-in MCP server</td>
+<td>OPAF agent</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Agent node + MCP server node (<code>ASK_SALES_ANALYST</code>)</td>
+<td>ADB built-in MCP server</td>
+<td>Select AI Agent in ADB</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Agent node + two Select AI Bridges (Run SQL, Team)</td>
+<td>Database connection (wallet)</td>
+<td>OPAF agent routes; the in-database team plans analytical questions</td>
+</tr>
+</tbody>
+</table>
+<p>My environment:</p>
+<ul>
+<li>Autonomous AI Database (ADW) 26ai, version <code>23.26.4.1.0</code>, public endpoint ("Allow secure access from everywhere") with mTLS required for SQL*Net connections</li>
+<li>OCI Generative AI in Germany Central (Frankfurt), model <code>openai.gpt-oss-120b</code> — used both by the Select AI profile in the database and by the Agent nodes in OPAF</li>
+<li>OPAF 26.7 on OCI, in a private subnet</li>
+</ul>
+<h2>Posts in the series</h2>
+<ol>
+<li><a href="PART1-URL">Part 1: Making a star schema Select AI-ready</a> — join validation, exact literals, business rules and comments as the semantic layer.</li>
+<li><a href="PART2-URL">Part 2: Connecting Autonomous Database to OCI Generative AI</a> — dynamic group, policy, resource principal, the Select AI profile and smoke tests.</li>
+<li><a href="PART3-URL">Part 3: Building a Select AI Agent team in PL/SQL</a> — tool, agent, task and team, checked against ground truth.</li>
+<li><a href="PART4-URL">Part 4: Select AI and the in-database team as native OPAF nodes</a> — flows C1 and C2.</li>
+<li><a href="PART5-URL">Part 5: The same team built on the OPAF canvas, no PL/SQL</a> — flow C3.</li>
+<li><a href="PART6-URL">Part 6: The Autonomous Database built-in MCP server</a> — enabling it with a tag, testing with curl, wrapping the team as a tool.</li>
+<li><a href="PART7-URL">Part 7: OPAF over MCP — database orchestrates vs OPAF orchestrates</a> — flows B and A.</li>
+<li><a href="PART8-URL">Part 8: Native routing with Select AI Bridge</a> — flow D.</li>
+</ol>
+<h2>All six flows compared</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C1</th>
+<th>C2</th>
+<th>C3</th>
+<th>A</th>
+<th>B</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection</td>
+<td>DB connection</td>
+<td>DB connection</td>
+<td>DB connection</td>
+<td>MCP</td>
+<td>MCP</td>
+<td>DB connection</td>
+</tr>
+<tr>
+<td>LLM in OPAF</td>
+<td>none</td>
+<td>none</td>
+<td>none</td>
+<td>plans and calls tools</td>
+<td>routes only</td>
+<td>routes between bridges</td>
+</tr>
+<tr>
+<td>Planning</td>
+<td>none (one SQL)</td>
+<td>Select AI Agent in ADB</td>
+<td>Select AI Agent in ADB</td>
+<td>OPAF agent</td>
+<td>Select AI Agent in ADB</td>
+<td>team for analytical questions</td>
+</tr>
+<tr>
+<td>Multi-step comparison</td>
+<td>partial (winner only)</td>
+<td>full</td>
+<td>full</td>
+<td>full</td>
+<td>full</td>
+<td>full</td>
+</tr>
+<tr>
+<td>Exact numbers</td>
+<td>rounded (Narrate)</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes (team answer rounded to whole dollars)</td>
+</tr>
+<tr>
+<td>Can show SQL</td>
+<td>yes (Show SQL action)</td>
+<td>no</td>
+<td>no</td>
+<td>yes (<code>showsql</code>)</td>
+<td>no</td>
+<td>no (declines explicitly)</td>
+</tr>
+<tr>
+<td>Off-topic guardrail</td>
+<td><code>enforce_object_list</code> (raw ORA message)</td>
+<td>agent role in ADB</td>
+<td>agent role in ADB</td>
+<td>explicit scope rule in OPAF</td>
+<td>OPAF scope rule</td>
+<td>OPAF scope rule</td>
+</tr>
+<tr>
+<td>Typical time</td>
+<td>4–9 s</td>
+<td>9–19 s</td>
+<td>11–18 s</td>
+<td>12–20 s</td>
+<td>23–25 s</td>
+<td>7–19 s</td>
+</tr>
+</tbody>
+</table>
+<p>All flows that answer return the same numbers: the business definitions live in the database, so every path — native node, MCP or routing — gets the same semantics.</p>
+<h2>Key takeaways</h2>
+<ul>
+<li>Most of the effort is in the data: a schema with no constraints and no comments gives Select AI nothing to work with.</li>
+<li>Rules in comments and role text are guidance, not enforcement. Stating them positively, <code>temperature</code> 0 and one grouped query made the agent repeatable; I check agent answers against hand-written SQL before every demo.</li>
+<li>The native Select AI nodes are the fastest way to run a database agent from OPAF; MCP opens the same agent to any MCP client.</li>
+<li>In OPAF agent instructions, the scope rule goes first.</li>
+<li>An OPAF agent that cannot get SQL from a tool may invent a plausible query, so I give it an explicit rule to decline instead.</li>
+</ul>
+
+</article>

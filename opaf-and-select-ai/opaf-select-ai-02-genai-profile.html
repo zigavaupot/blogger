@@ -1,0 +1,138 @@
+<article class="zv-blog-post">
+
+<img alt="" src="FEATURED-IMAGE-URL">
+
+<div class="post-intro">
+<p>With the schema prepared in Part 1, the next step is giving Select AI an LLM to work with. In my setup the database calls OCI Generative AI with its own resource principal, so no API keys are stored anywhere in the database.</p>
+<p>In this part I check that the database version and the model support what I need, set up the IAM dynamic group and policy, enable the resource principal and network access, create the Select AI profile that every later flow in the series uses, and run a few smoke tests to confirm that the comments from Part 1 actually shape the generated SQL.</p>
+</div>
+
+<!--more-->
+
+<h2>Checking the environment</h2>
+<p><code>v$instance</code> is not readable by a regular ADB user, so I check the version with <code>product_component_version</code>:</p>
+<pre><code class="language-sql">SELECT product, version_full FROM product_component_version;
+</code></pre>
+<p>The result is <code>Oracle AI Database 26ai Enterprise Edition 23.26.4.1.0</code>. <code>DBMS_CLOUD_AI_AGENT</code> requires 23.26 or later on 26ai, so Select AI Agent is available.</p>
+<p>In the OCI GenAI Playground (Chat) in Germany Central (Frankfurt) I confirmed that <code>openai.gpt-oss-120b</code> is available on-demand. Fallback models in the same region are <code>meta.llama-3.3-70b-instruct</code>, <code>cohere.command-a-03-2025</code> and <code>google.gemini-2.5-*</code>.</p>
+<!-- TODO: OCI GenAI Playground screenshot (01-genai-playground-models.png) is missing — decide later -->
+<img alt="" src="IMAGE-TBD">
+<h2>IAM: dynamic group and policy</h2>
+<p>The database needs IAM permission to call OCI Generative AI.</p>
+<ol>
+<li>Copy the ADW OCID: <strong>Oracle Database → Autonomous Database → (my ADW) → OCID → Copy</strong>.</li>
+<li><strong>Identity &amp; Security → Domains → Default → Dynamic groups → Create dynamic group</strong>.</li>
+<li>Name: <code>dg-adw-selectai</code>. Description: <code>ADW OABOOTCAMP - Select AI access to OCI GenAI</code>.</li>
+<li>Choose "Match any rules defined below" and type the rules directly into the rule fields — the rule builder does not offer Autonomous Database:</li>
+</ol>
+<pre><code>resource.id = 'ocid1.autonomousdatabase.oc1.eu-frankfurt-1.&lt;adw-ocid&gt;'
+</code></pre>
+<pre><code>ALL {resource.type = 'autonomousdatabase', resource.compartment.id = '&lt;compartment-ocid-of-the-ADW&gt;'}
+</code></pre>
+<img alt="Dynamic group matching rules" src="images/02-dynamic-group.png">
+<p>Then <strong>Identity &amp; Security → Policies</strong>, root compartment, <strong>Create Policy</strong>, with the description <code>Allows ADW (OABOOTCAMP) to call OCI Generative AI via resource principal for Select AI</code> and these statements in the manual editor:</p>
+<pre><code>allow dynamic-group 'Default'/'dg-adw-selectai' to use generative-ai-family in tenancy
+allow any-user to use generative-ai-family in tenancy where request.principal.type = 'autonomousdatabase'
+</code></pre>
+<p>The second statement matches any Autonomous Database resource principal regardless of the dynamic group.</p>
+<img alt="Policy statements" src="images/03-policy.png">
+<p>IAM changes take a few minutes to propagate. If Select AI returns <code>ORA-20404</code> "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound — an IAM problem, not a missing model.</p>
+<h2>Resource principal, grants and network access</h2>
+<p>Signed in to Database Actions as ADMIN:</p>
+<pre><code class="language-sql">EXEC DBMS_CLOUD_ADMIN.ENABLE_RESOURCE_PRINCIPAL();
+EXEC DBMS_CLOUD_ADMIN.ENABLE_RESOURCE_PRINCIPAL(username =&gt; 'OABOOTCAMP');
+
+GRANT EXECUTE ON DBMS_CLOUD_AI       TO OABOOTCAMP;
+GRANT EXECUTE ON DBMS_CLOUD_AI_AGENT TO OABOOTCAMP;
+GRANT EXECUTE ON DBMS_CLOUD          TO OABOOTCAMP;
+
+BEGIN
+  DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+    host =&gt; 'inference.generativeai.eu-frankfurt-1.oci.oraclecloud.com',
+    ace  =&gt; xs$ace_type(privilege_list =&gt; xs$name_list('http'),
+                        principal_name =&gt; 'OABOOTCAMP',
+                        principal_type =&gt; xs_acl.ptype_db));
+END;
+/
+</code></pre>
+<p>For the demo I use the <code>OABOOTCAMP</code> user directly; it later also becomes the MCP identity. In Database Actions it is easy to run a block in the wrong session, so in my scripts every block is labelled <code>[ADMIN]</code> or <code>[OABOOTCAMP]</code>.</p>
+<h2>The Select AI profile</h2>
+<p>As <code>OABOOTCAMP</code>:</p>
+<pre><code class="language-sql">BEGIN
+  DBMS_CLOUD_AI.CREATE_PROFILE(
+    profile_name =&gt; 'OABOOTCAMP_AI',
+    attributes   =&gt; '{
+      &quot;provider&quot;: &quot;oci&quot;,
+      &quot;credential_name&quot;: &quot;OCI$RESOURCE_PRINCIPAL&quot;,
+      &quot;region&quot;: &quot;eu-frankfurt-1&quot;,
+      &quot;model&quot;: &quot;openai.gpt-oss-120b&quot;,
+      &quot;oci_apiformat&quot;: &quot;GENERIC&quot;,
+      &quot;temperature&quot;: &quot;0&quot;,
+      &quot;comments&quot;: &quot;true&quot;,
+      &quot;enforce_object_list&quot;: &quot;true&quot;,
+      &quot;object_list&quot;: [
+        {&quot;owner&quot;: &quot;OABOOTCAMP&quot;, &quot;name&quot;: &quot;F_REVENUE&quot;},
+        {&quot;owner&quot;: &quot;OABOOTCAMP&quot;, &quot;name&quot;: &quot;D_TIME&quot;},
+        {&quot;owner&quot;: &quot;OABOOTCAMP&quot;, &quot;name&quot;: &quot;D_CUSTOMERS&quot;},
+        {&quot;owner&quot;: &quot;OABOOTCAMP&quot;, &quot;name&quot;: &quot;D_GEOGRAPHY&quot;},
+        {&quot;owner&quot;: &quot;OABOOTCAMP&quot;, &quot;name&quot;: &quot;D_PRODUCTS&quot;}
+      ]
+    }');
+END;
+/
+</code></pre>
+<ul>
+<li><code>oci_apiformat: GENERIC</code> is required for non-Cohere models on OCI.</li>
+<li><code>comments: true</code> makes Select AI read the comments from Part 1.</li>
+<li><code>enforce_object_list</code> restricts generated SQL to the five tables.</li>
+<li><code>temperature: 0</code> makes SQL generation as deterministic as possible, which matters for repeatable answers.</li>
+</ul>
+<h2>Smoke tests</h2>
+<p>How I run Select AI depends on the client. In a Data Studio notebook the <code>SELECT AI</code> syntax works directly after setting the profile:</p>
+<pre><code class="language-sql">EXEC DBMS_CLOUD_AI.SET_PROFILE('OABOOTCAMP_AI');
+
+SELECT AI showsql total revenue in 2025;
+</code></pre>
+<p>In SQL Worksheet <code>SELECT AI</code> does not work, so I call <code>DBMS_CLOUD_AI.GENERATE</code>, which works in any client:</p>
+<pre><code class="language-sql">SELECT DBMS_CLOUD_AI.GENERATE(
+         prompt       =&gt; 'total revenue in 2025',
+         profile_name =&gt; 'OABOOTCAMP_AI',
+         action       =&gt; 'showsql') AS generated_sql
+FROM dual;
+</code></pre>
+<p>Generated SQL:</p>
+<pre><code class="language-sql">SELECT SUM(fr.&quot;REVENUE&quot;) AS total_revenue
+FROM &quot;OABOOTCAMP&quot;.&quot;F_REVENUE&quot; fr
+JOIN &quot;OABOOTCAMP&quot;.&quot;D_TIME&quot; dt
+  ON fr.&quot;TIME_BILL_DT&quot; = dt.&quot;DAY_DT&quot;
+WHERE dt.&quot;CAL_YEAR&quot; = 2025
+</code></pre>
+<p>The join on <code>DAY_DT</code>, the year filter on <code>CAL_YEAR</code> and the absence of an <code>ORDER_STATUS</code> filter all come from the comments.</p>
+<p>Further checks with <code>showsql</code> and <code>runsql</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>Verified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>profit by product line of business and channel in 2025</td>
+<td>join to <code>D_PRODUCTS</code>; profit = <code>REVENUE - COST_FIXED - COST_VARIABLE</code></td>
+</tr>
+<tr>
+<td>how much revenue was paid in August 2026</td>
+<td>join switches to <code>TIME_PAID_DT</code> (role-playing date)</td>
+</tr>
+<tr>
+<td>top 5 countries by net revenue in 2025</td>
+<td>end-to-end run; net = <code>REVENUE - DISCNT_VALUE</code>; <code>runsql</code> returns JSON</td>
+</tr>
+</tbody>
+</table>
+<p>A single <code>SELECT AI</code> call answers one question with one SQL statement. In Part 3 I build a Select AI Agent team on top of this profile, which can plan a question, call the SQL tool several times and combine the results.</p>
+<hr>
+<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+
+</article>

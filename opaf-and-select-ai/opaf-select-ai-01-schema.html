@@ -1,0 +1,141 @@
+<article class="zv-blog-post">
+
+<img alt="" src="FEATURED-IMAGE-URL">
+
+<div class="post-intro">
+<p>Select AI turns a question into SQL, but it only knows what the data dictionary tells it. My OA Bootcamp schema (<code>OABOOTCAMP</code>) is a classic sales star schema with no declared keys and no comments, so out of the box Select AI has nothing to go on except column names.</p>
+<p>In this first part of the series I prepare the schema: I validate the join keys, collect the literal values the LLM must use, define the business rules, and write table and column comments that act as the semantic layer. Every flow later in the series — native OPAF nodes, MCP or routing — reads these comments, which is why they all return the same numbers.</p>
+</div>
+
+<!--more-->
+
+<h2>The schema</h2>
+<p>I limited the demo to five tables:</p>
+<ul>
+<li><code>F_REVENUE</code> (fact, 279,449 rows)</li>
+<li><code>D_TIME</code> (25,933 rows)</li>
+<li><code>D_CUSTOMERS</code> (10,000 rows)</li>
+<li><code>D_GEOGRAPHY</code> (9,999 rows)</li>
+<li><code>D_PRODUCTS</code> (521 rows)</li>
+</ul>
+<p>The schema has no declared PK/FK constraints and no comments, so before writing any comments I validated the join keys.</p>
+<h2>Validating the joins</h2>
+<pre><code class="language-sql">-- Fact date range and time portion check
+SELECT COUNT(*) total,
+       COUNT(CASE WHEN TRUNC(time_bill_dt) &lt;&gt; time_bill_dt THEN 1 END) bill_has_time,
+       MIN(time_bill_dt) min_bill, MAX(time_bill_dt) max_bill,
+       MIN(time_paid_dt) min_paid, MAX(time_paid_dt) max_paid
+FROM   f_revenue;
+
+-- Which D_TIME column matches the fact dates
+SELECT 'DAY_DT' col, COUNT(*) unmatched FROM f_revenue f
+ WHERE NOT EXISTS (SELECT 1 FROM d_time t WHERE t.day_dt  = f.time_bill_dt)
+UNION ALL
+SELECT 'DATE_ID', COUNT(*) FROM f_revenue f
+ WHERE NOT EXISTS (SELECT 1 FROM d_time t WHERE t.date_id = f.time_bill_dt);
+
+-- Duplicate keys in dimensions
+SELECT 'D_PRODUCTS' dim, COUNT(*) - COUNT(DISTINCT prod_item_key) dup_keys FROM d_products  UNION ALL
+SELECT 'D_GEOGRAPHY',    COUNT(*) - COUNT(DISTINCT addr_key)            FROM d_geography UNION ALL
+SELECT 'D_CUSTOMERS',    COUNT(*) - COUNT(DISTINCT cust_number)         FROM d_customers UNION ALL
+SELECT 'D_TIME',         COUNT(*) - COUNT(DISTINCT day_dt)              FROM d_time;
+
+-- Orphan fact rows
+SELECT 'PROD' k, COUNT(*) orphans FROM f_revenue f WHERE NOT EXISTS (SELECT 1 FROM d_products  d WHERE d.prod_item_key = f.prod_item_key) UNION ALL
+SELECT 'ADDR',   COUNT(*)         FROM f_revenue f WHERE NOT EXISTS (SELECT 1 FROM d_geography d WHERE d.addr_key      = f.addr_key)      UNION ALL
+SELECT 'CUST',   COUNT(*)         FROM f_revenue f WHERE NOT EXISTS (SELECT 1 FROM d_customers d WHERE d.cust_number   = f.cust_number);
+</code></pre>
+<p>What I found:</p>
+<ul>
+<li>Fact dates have no time portion, and both <code>DAY_DT</code> and <code>DATE_ID</code> match 100%. I use <code>DAY_DT</code> as the join column.</li>
+<li>No duplicate dimension keys, no orphan fact rows.</li>
+<li>Bill dates run from 2024-01-01 to 2026-09-30.</li>
+<li><code>D_TIME</code> covers about 71 years, far more than the fact data, so the comments state the actual data range.</li>
+</ul>
+<p>The resulting joins:</p>
+<table>
+<thead>
+<tr>
+<th>Fact column</th>
+<th>Dimension column</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>F_REVENUE.PROD_ITEM_KEY</code></td>
+<td><code>D_PRODUCTS.PROD_ITEM_KEY</code></td>
+</tr>
+<tr>
+<td><code>F_REVENUE.ADDR_KEY</code></td>
+<td><code>D_GEOGRAPHY.ADDR_KEY</code></td>
+</tr>
+<tr>
+<td><code>F_REVENUE.CUST_NUMBER</code></td>
+<td><code>D_CUSTOMERS.CUST_NUMBER</code></td>
+</tr>
+<tr>
+<td><code>F_REVENUE.TIME_BILL_DT</code></td>
+<td><code>D_TIME.DAY_DT</code> (default sales date)</td>
+</tr>
+<tr>
+<td><code>F_REVENUE.TIME_PAID_DT</code></td>
+<td><code>D_TIME.DAY_DT</code> (payment questions only)</td>
+</tr>
+</tbody>
+</table>
+<h2>Collecting exact literals</h2>
+<p>For low-cardinality columns I listed the distinct values:</p>
+<pre><code class="language-sql">SELECT 'ORDER_STATUS' col, LISTAGG(DISTINCT order_status, ' | ') vals FROM f_revenue   UNION ALL
+SELECT 'CHANNEL_NAME',     LISTAGG(DISTINCT channel_name, ' | ')      FROM f_revenue   UNION ALL
+SELECT 'CUST_SEGMENT',     LISTAGG(DISTINCT cust_segment, ' | ')      FROM d_customers UNION ALL
+SELECT 'PROD_LOB',         LISTAGG(DISTINCT prod_lob, ' | ')          FROM d_products  UNION ALL
+SELECT 'REGION',           LISTAGG(DISTINCT region, ' | ')            FROM d_geography;
+-- (plus CUST_TYPE, CUST_GENDER, CUST_MARITAL_STATUS, PROD_TYPE, PROD_BRAND, AREA)
+</code></pre>
+<p>These values go straight into the column comments, so the LLM uses exact literals such as <code>'6-Cancelled'</code> instead of guessing <code>'Cancelled'</code>.</p>
+<h2>Business rules</h2>
+<ul>
+<li><code>REVENUE</code> is gross.</li>
+<li>Net revenue = <code>REVENUE - DISCNT_VALUE</code>.</li>
+<li>Profit = <code>REVENUE - COST_FIXED - COST_VARIABLE</code> (discount not subtracted).</li>
+<li>Profit margin = profit / <code>REVENUE</code>.</li>
+<li>"Revenue" or "sales" without "net" means gross <code>REVENUE</code>.</li>
+<li>All order statuses are included by default. <code>ORDER_STATUS</code> is filtered only when a question explicitly mentions a status (cancelled, on hold, booked, paid ...).</li>
+</ul>
+<p>A rule in a comment is guidance, not enforcement. I state each rule positively ("include all statuses") instead of leaving room for the LLM's own assumptions, and I verify the rules with tests.</p>
+<h2>Comments as the semantic layer</h2>
+<p>The rules and joins live in the <code>F_REVENUE</code> table comment:</p>
+<pre><code class="language-sql">COMMENT ON TABLE f_revenue IS
+'Sales fact table, one row per order line. Covers billing dates 2024-01-01 to 2026-09-30.
+Joins: PROD_ITEM_KEY = D_PRODUCTS.PROD_ITEM_KEY; CUST_NUMBER = D_CUSTOMERS.CUST_NUMBER;
+ADDR_KEY = D_GEOGRAPHY.ADDR_KEY; TIME_BILL_DT = D_TIME.DAY_DT.
+For time-based questions join D_TIME on TIME_BILL_DT unless the question is explicitly about payment.
+Business rules: REVENUE is gross. Net revenue = REVENUE - DISCNT_VALUE.
+Profit = REVENUE - COST_FIXED - COST_VARIABLE (discount is not subtracted).
+Profit margin = profit / REVENUE.
+When a question says &quot;revenue&quot; or &quot;sales&quot; without &quot;net&quot;, use REVENUE (gross).
+Include ALL order statuses by default (do not filter on ORDER_STATUS). Filter on ORDER_STATUS only when the question explicitly mentions a status such as cancelled, on hold, booked or paid.';
+</code></pre>
+<p>Column comments carry meaning, synonyms, join hints and allowed values. A representative excerpt:</p>
+<pre><code class="language-sql">COMMENT ON COLUMN f_revenue.time_bill_dt  IS 'Billing date of the order line. Default date for all sales/revenue time analysis. Join to D_TIME.DAY_DT.';
+COMMENT ON COLUMN f_revenue.time_paid_dt  IS 'Date the customer paid. Use only for payment-related questions (paid, collected, payment delay). Join to D_TIME.DAY_DT when needed.';
+COMMENT ON COLUMN f_revenue.order_key     IS 'Order identifier. One order can have multiple lines; use COUNT(DISTINCT ORDER_KEY) for number of orders.';
+COMMENT ON COLUMN f_revenue.revenue       IS 'Gross sales revenue amount (sales, turnover), before discount. Net revenue = REVENUE - DISCNT_VALUE.';
+COMMENT ON COLUMN f_revenue.order_status  IS 'Order lifecycle status. Values: 1-Booked, 2-Fulfilled, 3-Shipped, 4-Billed, 5-Paid, 6-Cancelled, 9-On Hold. Use exact values including the number prefix.';
+COMMENT ON COLUMN f_revenue.channel_name  IS 'Sales channel. Values: Catalog, Online, Store.';
+
+COMMENT ON COLUMN d_products.prod_lob      IS 'Line of business, top product level. Values: Communication, Digital, Electronics, Games.';
+COMMENT ON COLUMN d_customers.cust_birth_dt       IS 'Date of birth. Derive age as TRUNC(MONTHS_BETWEEN(SYSDATE, CUST_BIRTH_DT)/12).';
+
+COMMENT ON TABLE d_time IS
+'Calendar dimension, one row per day. Join DAY_DT to F_REVENUE.TIME_BILL_DT (sales date) or F_REVENUE.TIME_PAID_DT (payment date).
+For year/quarter/month filters and grouping prefer CAL_YEAR, CAL_QTR, CAL_MONTH. Sales data exists only for 2024-01-01 to 2026-09-30.';
+
+COMMENT ON COLUMN d_time.date_id        IS 'Duplicate of DAY_DT. Do not use for joins; use DAY_DT.';
+</code></pre>
+<p>The remaining comments for <code>D_PRODUCTS</code>, <code>D_CUSTOMERS</code>, <code>D_GEOGRAPHY</code> and <code>D_TIME</code> follow the same pattern: a table comment with the hierarchy and join key, and column comments with meaning and allowed values. Julian numbers, period start/end keys and first/last-day flags in <code>D_TIME</code> are intentionally left uncommented, so the LLM is not tempted to use them.</p>
+<p>Select AI reads the comments only when the profile has <code>"comments": "true"</code>. Creating that profile, and giving the database access to OCI Generative AI, is the topic of Part 2.</p>
+<hr>
+<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+
+</article>

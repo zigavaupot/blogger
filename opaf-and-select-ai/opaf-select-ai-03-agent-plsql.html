@@ -1,0 +1,245 @@
+<article class="zv-blog-post">
+
+<img alt="" src="FEATURED-IMAGE-URL">
+
+<div class="post-intro">
+<p>A single <code>SELECT AI</code> call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results — all inside the database.</p>
+<p>In this part I build an in-database sales analyst with <code>DBMS_CLOUD_AI_AGENT</code> on top of the Select AI profile from Part 2: one SQL tool, one agent, one task and one team. I run it, check its numbers against hand-written SQL, and show what made its answers repeatable. This team is the one OPAF calls in the rest of the series.</p>
+</div>
+
+<!--more-->
+
+<h2>The building blocks</h2>
+<p>I think of Select AI Agent as a small analytics department:</p>
+<ul>
+<li><strong>Profile</strong> — which LLM the department uses and which data it may see (Part 2).</li>
+<li><strong>Tool</strong> — a skill, here NL2SQL over the sales tables through the profile.</li>
+<li><strong>Agent</strong> — the analyst: a role and an LLM profile.</li>
+<li><strong>Task</strong> — the assignment brief: what to accomplish, with a <code>{query}</code> placeholder for the user's question, and which tools are allowed.</li>
+<li><strong>Team</strong> — the department that pairs agents with tasks and is what I actually run.</li>
+<li><strong>Conversation</strong> — the case file that keeps context for one run.</li>
+</ul>
+<p>Each piece carries different knowledge, so it helps to decide up front where each rule lives:</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where it lives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joins, metric definitions, allowed values, default order status rule</td>
+<td>Table and column comments (Part 1)</td>
+</tr>
+<tr>
+<td>LLM, allowed tables, temperature</td>
+<td>Select AI profile (Part 2)</td>
+</tr>
+<tr>
+<td>When to use NL2SQL</td>
+<td>Tool instruction</td>
+</tr>
+<tr>
+<td>Persona, data-only scope, business rules restated</td>
+<td>Agent role</td>
+</tr>
+<tr>
+<td>How to answer: one grouped query, only returned numbers, format</td>
+<td>Task instruction</td>
+</tr>
+<tr>
+<td>Which agent does which task, process</td>
+<td>Team</td>
+</tr>
+</tbody>
+</table>
+<p>All blocks below run as <code>OABOOTCAMP</code>. I use <code>q'[...]'</code> quoting so single quotes inside instructions need no escaping.</p>
+<h2>Tool</h2>
+<p>A built-in tool of type <code>SQL</code>, bound to the <code>OABOOTCAMP_AI</code> profile:</p>
+<pre><code class="language-sql">BEGIN
+  DBMS_CLOUD_AI_AGENT.CREATE_TOOL(
+    tool_name  =&gt; 'OABOOTCAMP_SALES_SQL',
+    attributes =&gt; q'[{
+      &quot;tool_type&quot;: &quot;SQL&quot;,
+      &quot;tool_params&quot;: {&quot;profile_name&quot;: &quot;OABOOTCAMP_AI&quot;},
+      &quot;instruction&quot;: &quot;Use this tool for any question about sales, revenue, profit, discounts, units, orders, customers, products, geography or time periods. Use runsql to answer questions with data, showsql when the user asks to see the query, and explainsql when the user asks how the query works.&quot;
+    }]',
+    description =&gt; 'NL2SQL over OABOOTCAMP sales star schema'
+  );
+END;
+/
+</code></pre>
+<h2>Agent</h2>
+<pre><code class="language-sql">BEGIN
+  DBMS_CLOUD_AI_AGENT.CREATE_AGENT(
+    agent_name =&gt; 'SALES_ANALYST_AGENT',
+    attributes =&gt; q'[{
+      &quot;profile_name&quot;: &quot;OABOOTCAMP_AI&quot;,
+      &quot;role&quot;: &quot;You are a sales analyst for a consumer electronics company. You answer business questions using data from the sales database only, never from general knowledge. Revenue is gross unless the user asks for net revenue (revenue minus discount). Profit is revenue minus fixed and variable cost. Include all order statuses unless the user explicitly asks about a specific status. Sales data covers January 2024 to September 2026.&quot;,
+      &quot;enable_human_tool&quot;: &quot;false&quot;
+    }]',
+    description =&gt; 'Sales analyst over OABOOTCAMP data'
+  );
+END;
+/
+</code></pre>
+<p><code>enable_human_tool</code> is false because OPAF will call the agent non-interactively; the agent must make reasonable assumptions instead of pausing for clarification.</p>
+<h2>Task</h2>
+<pre><code class="language-sql">BEGIN
+  DBMS_CLOUD_AI_AGENT.CREATE_TASK(
+    task_name  =&gt; 'SALES_ANALYSIS_TASK',
+    attributes =&gt; q'[{
+      &quot;instruction&quot;: &quot;Answer the following business question: {query}. Use the OABOOTCAMP_SALES_SQL tool with the runsql action to retrieve data. Prefer a single query that returns all needed numbers at once (for example grouped by year and channel) instead of several separate queries. Report only numbers exactly as returned by the tool; never estimate or invent values. You may compute simple differences between returned numbers. Return a concise answer with the key numbers formatted with thousand separators, followed by one or two sentences of interpretation. State any assumption about time period or metric definition.&quot;,
+      &quot;tools&quot;: [&quot;OABOOTCAMP_SALES_SQL&quot;],
+      &quot;enable_human_tool&quot;: &quot;false&quot;
+    }]',
+    description =&gt; 'Answer sales questions with data'
+  );
+END;
+/
+</code></pre>
+<p>Two instructions keep answers repeatable: one grouped query instead of several separate ones, and reporting only numbers returned by the tool.</p>
+<h2>Team</h2>
+<pre><code class="language-sql">BEGIN
+  DBMS_CLOUD_AI_AGENT.CREATE_TEAM(
+    team_name  =&gt; 'OABOOTCAMP_SALES_TEAM',
+    attributes =&gt; q'[{
+      &quot;agents&quot;: [{&quot;name&quot;: &quot;SALES_ANALYST_AGENT&quot;, &quot;task&quot;: &quot;SALES_ANALYSIS_TASK&quot;}],
+      &quot;process&quot;: &quot;sequential&quot;
+    }]',
+    description =&gt; 'In-database sales analyst team'
+  );
+END;
+/
+</code></pre>
+<p>All four objects should show <code>ENABLED</code>:</p>
+<pre><code class="language-sql">SELECT 'TOOL'  AS type, tool_name  AS name, status FROM user_ai_agent_tools
+UNION ALL
+SELECT 'AGENT', agent_name, status FROM user_ai_agents
+UNION ALL
+SELECT 'TASK',  task_name,  status FROM user_ai_agent_tasks
+UNION ALL
+SELECT 'TEAM',  agent_team_name, status FROM user_ai_agent_teams;
+</code></pre>
+<h2>Running the team</h2>
+<p><code>RUN_TEAM</code> needs a real conversation ID from <code>DBMS_CLOUD_AI.CREATE_CONVERSATION</code>. To check that answers are repeatable, I run the same question three times, each in a fresh conversation:</p>
+<pre><code class="language-sql">SET SERVEROUTPUT ON
+DECLARE
+  l_conv   VARCHAR2(100);
+  l_answer CLOB;
+BEGIN
+  FOR i IN 1 .. 3 LOOP
+    l_conv := DBMS_CLOUD_AI.CREATE_CONVERSATION();
+
+    l_answer := DBMS_CLOUD_AI_AGENT.RUN_TEAM(
+      team_name   =&gt; 'OABOOTCAMP_SALES_TEAM',
+      user_prompt =&gt; 'Compare profit in 2025 vs 2024 by sales channel and tell me which channel improved the most',
+      params      =&gt; '{&quot;conversation_id&quot;: &quot;' || l_conv || '&quot;}'
+    );
+
+    DBMS_OUTPUT.PUT_LINE('===== RUN ' || i || ' =====');
+    DBMS_OUTPUT.PUT_LINE(DBMS_LOB.SUBSTR(l_answer, 4000, 1));
+  END LOOP;
+END;
+/
+</code></pre>
+<p>All three runs returned the same numbers. One of them:</p>
+<blockquote>
+<ul>
+<li><strong>Online:</strong> 2024 = $1,438,821.21, 2025 = $2,099,559.05, Increase = $660,738</li>
+<li><strong>Store:</strong> 2024 = $2,223,219.07, 2025 = $3,498,467.01, Increase = $1,275,248</li>
+<li><strong>Catalog:</strong> 2024 = $699,472.58, 2025 = $1,360,396.31, Increase = $660,924</li>
+</ul>
+<p>All channels saw higher profit in 2025, but the <strong>Store channel improved the most</strong>, with an increase of about <strong>$1.28 million</strong>. (Profit is calculated as revenue − fixed cost − variable cost, including all order statuses.)</p>
+</blockquote>
+<p>The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner — the kind of question a single <code>SELECT AI</code> call struggles with.</p>
+<h2>Checking against ground truth</h2>
+<p>Before I trust an agent in a demo, I compare its answer with hand-written SQL that involves no LLM:</p>
+<pre><code class="language-sql">SELECT f.channel_name,
+       t.cal_year,
+       ROUND(SUM(f.revenue))                                  AS revenue,
+       ROUND(SUM(f.cost_fixed))                               AS cost_fixed,
+       ROUND(SUM(f.cost_variable))                            AS cost_variable,
+       ROUND(SUM(f.revenue - f.cost_fixed - f.cost_variable)) AS profit
+FROM   f_revenue f
+JOIN   d_time t ON f.time_bill_dt = t.day_dt
+WHERE  t.cal_year IN (2024, 2025)
+GROUP  BY f.channel_name, t.cal_year
+ORDER  BY f.channel_name, t.cal_year;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Year</th>
+<th>Revenue</th>
+<th>Fixed cost</th>
+<th>Variable cost</th>
+<th>Profit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Catalog</td>
+<td>2024</td>
+<td>14,690,302</td>
+<td>3,146,801</td>
+<td>10,844,028</td>
+<td>699,473</td>
+</tr>
+<tr>
+<td>Catalog</td>
+<td>2025</td>
+<td>16,223,837</td>
+<td>3,284,646</td>
+<td>11,578,796</td>
+<td>1,360,396</td>
+</tr>
+<tr>
+<td>Online</td>
+<td>2024</td>
+<td>25,447,573</td>
+<td>5,311,055</td>
+<td>18,697,697</td>
+<td>1,438,821</td>
+</tr>
+<tr>
+<td>Online</td>
+<td>2025</td>
+<td>28,325,626</td>
+<td>5,752,537</td>
+<td>20,473,530</td>
+<td>2,099,559</td>
+</tr>
+<tr>
+<td>Store</td>
+<td>2024</td>
+<td>39,442,126</td>
+<td>8,300,655</td>
+<td>28,918,252</td>
+<td>2,223,219</td>
+</tr>
+<tr>
+<td>Store</td>
+<td>2025</td>
+<td>48,870,537</td>
+<td>9,861,679</td>
+<td>35,510,391</td>
+<td>3,498,467</td>
+</tr>
+</tbody>
+</table>
+<p>The agent's answers match exactly. These numbers are the ground truth for every flow in the rest of the series.</p>
+<h2>What made it repeatable</h2>
+<p>A business rule that lives only in comments and role text may be applied in one run and skipped in the next. Three things made the team return the same answer every time:</p>
+<ul>
+<li>rules stated explicitly and positively ("include all order statuses"),</li>
+<li><code>temperature</code> 0 in the profile,</li>
+<li>a task instruction asking for one grouped query and only numbers returned by the tool.</li>
+</ul>
+<p>The team works in the database. In Part 4 I put it, and plain Select AI, in front of users with OPAF's native Select AI nodes.</p>
+<hr>
+<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+
+</article>
