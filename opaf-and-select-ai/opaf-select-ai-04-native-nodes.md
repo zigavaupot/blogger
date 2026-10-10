@@ -8,10 +8,14 @@ In this chapter I build two minimal OPAF Custom Flows: C1 runs plain Select AI w
 
 ## The Select AI node group
 
-OPAF Custom Flows have a **Select AI** node group: In-Database Agent, Select AI, In-Database Task, In-Database Team and In-Database Tool.
+OPAF Custom Flows have a **Select AI** node group, plus one related node in the **Tools** group. Searching the component list for "SELECT" shows all of them:
 
-<!-- TODO: OPAF Select AI node palette screenshot (13-opaf-select-ai-nodes.png) is missing — decide later -->
-![](IMAGE-TBD)
+![OPAF component list with the Select AI node group and the Select AI Bridge tool](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-nodes.png)
+
+- **Select AI** — runs a Select AI profile with one action: Run SQL, Show SQL, Explain SQL, Narrate, Chat or Show prompt. Used in flow C1 below.
+- **In-Database Team** — runs a Select AI Agent team. It can choose an existing team (flow C2 below) or create a new one from the nodes that follow.
+- **In-Database Agent**, **In-Database Task** and **In-Database Tool** — choose or create the agent, task and tool objects of a team. In Create new mode they are wired into an In-Database Team node, so the whole team is built on the canvas (Chapter 5).
+- **Select AI Bridge** (Tools group) — wraps a Select AI profile and action, or an in-database team, as a tool for an OPAF Agent node, so an OPAF agent can decide when to call it (Chapter 8).
 
 ## Database connection
 
