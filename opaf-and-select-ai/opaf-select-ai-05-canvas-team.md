@@ -1,14 +1,14 @@
-# Select AI Agent meets OPAF, Part 5: No-code Select AI Agent
+# Select AI Agent meets OPAF, Chapter 5: No-code Select AI Agent
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-In Part 3 I built the in-database sales analyst with `DBMS_CLOUD_AI_AGENT` in PL/SQL, and in Part 4 OPAF ran it with the In-Database Team node. The Select AI nodes can do more than run existing objects: in **Create new** mode they create them.
+In Chapter 3 I built the in-database sales analyst with `DBMS_CLOUD_AI_AGENT` in PL/SQL, and in Chapter 4 OPAF ran it with the In-Database Team node. The Select AI nodes can do more than run existing objects: in **Create new** mode they create them.
 
-In this part I build the whole tool → task → agent → team stack visually on the OPAF canvas, starting from nothing but the Select AI profile `OABOOTCAMP_AI` and the table comments. The result, flow C3, answers the test questions from Part 4 exactly like the PL/SQL-built team.
+In this chapter I build the whole tool → task → agent → team stack visually on the OPAF canvas, starting from nothing but the Select AI profile `OABOOTCAMP_AI` and the table comments. The result, flow C3, answers the test questions from Chapter 4 exactly like the PL/SQL-built team.
 
 ## Canvas
 
-Flow name: `SELECT AI - no PL/SQL`. All objects get a `C3_` prefix so they don't collide with the PL/SQL-created objects from Part 3.
+Flow name: `SELECT AI - no PL/SQL`. All objects get a `C3_` prefix so they don't collide with the PL/SQL-created objects from Chapter 3.
 
 Every node is in **+ Create new** mode, and there are two kinds of wires:
 
@@ -51,7 +51,7 @@ Use this tool for any question about sales, revenue, profit, discounts, units, o
 | Task Name | `C3_SALES_ANALYSIS_TASK` |
 | Description | Answers sales questions with data from the sales database. |
 
-The instruction is the task instruction from Part 3, with two changes: it names the `C3_SALES_SQL` tool, and it does not ask for the `runsql` action. `{query}` is replaced with the user's question at runtime.
+The instruction is the task instruction from Chapter 3, with two changes: it names the `C3_SALES_SQL` tool, and it does not ask for the `runsql` action. `{query}` is replaced with the user's question at runtime.
 
 **In-Database Agent**
 
@@ -63,7 +63,7 @@ The instruction is the task instruction from Part 3, with two changes: it names 
 | Choose profile | `OABOOTCAMP_AI` |
 | Description | Sales analyst over the OABOOTCAMP sales data. |
 
-The Agent Role is the role from Part 3 plus one sentence that tells the agent how to refuse off-topic questions:
+The Agent Role is the role from Chapter 3 plus one sentence that tells the agent how to refuse off-topic questions:
 
 ```
 You are a sales analyst for a consumer electronics company. You answer business questions using data from the sales database only, never from general knowledge. If a question is not about sales data, reply that you can only answer questions about the sales database. Revenue is gross unless the user asks for net revenue (revenue minus discount). Profit is revenue minus fixed and variable cost. Include all order statuses unless the user explicitly asks about a specific status. Sales data covers January 2024 to September 2026.
@@ -93,8 +93,8 @@ The forms have no human-tool setting. The agent never paused for clarification i
 
 These are the same answers as the PL/SQL-built team in C2. The objects are identical whether I create them with `DBMS_CLOUD_AI_AGENT` or on the OPAF canvas — the only prerequisite is a good Select AI profile over commented tables.
 
-So far OPAF has reached the database over a database connection. In Part 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.
+So far OPAF has reached the database over a database connection. In Chapter 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.
 
 ---
 
-This post is part of my [Select AI Agent meets OPAF series](SERIES-URL).
+Back to the [introduction and list of chapters](https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html).

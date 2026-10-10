@@ -1,10 +1,10 @@
-# Select AI Agent meets OPAF, Part 4: Select AI and the in-database team as native OPAF nodes
+# Select AI Agent meets OPAF, Chapter 4: Select AI and the in-database team as native OPAF nodes
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-With the Select AI profile from Part 2 and the agent team from Part 3 in the database, the simplest way to put them in front of users is OPAF's own Select AI nodes. They talk to the database over a database connection — no MCP server, no wrapper functions and no LLM in OPAF.
+With the Select AI profile from Chapter 2 and the agent team from Chapter 3 in the database, the simplest way to put them in front of users is OPAF's own Select AI nodes. They talk to the database over a database connection — no MCP server, no wrapper functions and no LLM in OPAF.
 
-In this part I build two minimal OPAF Custom Flows: C1 runs plain Select AI with the Select AI node, and C2 runs the in-database team with the In-Database Team node. Both get the same three test questions, which I reuse for every flow in the rest of the series.
+In this chapter I build two minimal OPAF Custom Flows: C1 runs plain Select AI with the Select AI node, and C2 runs the in-database team with the In-Database Team node. Both get the same three test questions, which I reuse for every flow in the following chapters.
 
 ## The Select AI node group
 
@@ -26,13 +26,13 @@ Connecting as `OABOOTCAMP` matters: the nodes list the Select AI profiles and ag
 
 ## Test questions
 
-I test every flow in the series with the same three questions:
+I test every flow with the same three questions:
 
 1. *Which sales channel had the highest profit in 2025?* — a simple lookup.
 2. *Compare profit in 2025 vs 2024 by sales channel and tell me which channel improved the most* — a multi-step comparison.
 3. *What is the capital of France?* — an off-topic question the assistant must refuse.
 
-The correct answers to the first two are the ground truth from Part 3: Store has the highest 2025 profit ($3,498,467.01) and the largest improvement (+$1,275,247.94).
+The correct answers to the first two are the ground truth from Chapter 3: Store has the highest 2025 profit ($3,498,467.01) and the largest improvement (+$1,275,247.94).
 
 ## Flow C1: Select AI node
 
@@ -58,7 +58,7 @@ There is no LLM in OPAF in this flow — all the intelligence is the Select AI p
 
 ![Flow C1 chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/15-opaf-flow-c1-chat.png)
 
-C1 is the fastest flow in the series, and correct, but:
+C1 is the fastest of the six flows, and correct, but:
 
 - **Narrate** rounds numbers and keeps the answer short.
 - One question = one SQL statement. For the comparison it still found the winner but did not report all channels; there is no planning step to break the question down.
@@ -74,7 +74,7 @@ Chat input ──► In-Database Team ──► Chat output
 - **Choose database:** `adw001`
 - **Choose team:** `OABOOTCAMP_SALES_TEAM`
 
-The node runs the team from Part 3 directly. It handles the conversation itself; there is no conversation setting.
+The node runs the team from Chapter 3 directly. It handles the conversation itself; there is no conversation setting.
 
 ![Flow C2 canvas with the In-Database Team node](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/16-opaf-flow-c2-canvas.png)
 
@@ -88,8 +88,8 @@ The node runs the team from Part 3 directly. It handles the conversation itself;
 
 Here the refusal comes from the in-database agent itself — its role ("using data from the sales database only, never from general knowledge") is enough.
 
-The two nodes show the difference between Select AI and Select AI Agent in one picture: C1 answers in one SQL statement, C2 plans the comparison and reports every channel with exact numbers. The In-Database Team node also offers **Create new**, which builds the team from In-Database Agent, Task and Tool nodes on the canvas instead of PL/SQL — the topic of Part 5.
+The two nodes show the difference between Select AI and Select AI Agent in one picture: C1 answers in one SQL statement, C2 plans the comparison and reports every channel with exact numbers. The In-Database Team node also offers **Create new**, which builds the team from In-Database Agent, Task and Tool nodes on the canvas instead of PL/SQL — the topic of Chapter 5.
 
 ---
 
-This post is part of my [Select AI Agent meets OPAF series](SERIES-URL).
+Back to the [introduction and list of chapters](https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html).

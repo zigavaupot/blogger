@@ -1,12 +1,12 @@
-# Select AI Agent meets OPAF Series
+# Using Select AI Agents in Oracle Private Agent Factory
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-This is the overview of my Select AI Agent meets OPAF series. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (`OABOOTCAMP`) and build it six ways in OPAF — plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.
+This is the introduction to my blog in eight chapters on using Select AI Agents in Oracle Private Agent Factory. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (`OABOOTCAMP`) and build it six ways in OPAF — plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.
 
 When I started, I only wanted to try out how Select AI Agent works with OPAF. It turned into quite an exploratory journey: each experiment opened another way to connect the two, and I ended up with six scenarios. I doubt these are all — there are most likely alternatives I haven't explored yet.
 
-## What the series covers
+## What the chapters cover
 
 - **Preparing the data:** validating joins, collecting exact literals, business rules and table and column comments as the semantic layer.
 - **Connecting to the LLM:** IAM, resource principal and the Select AI profile on OCI Generative AI.
@@ -38,16 +38,16 @@ My environment:
 - OCI Generative AI in Germany Central (Frankfurt), model `openai.gpt-oss-120b` — used both by the Select AI profile in the database and by the Agent nodes in OPAF
 - OPAF 26.7 on OCI, in a private subnet
 
-## Posts in the series
+## Chapters
 
-1. [Part 1: Making a star schema Select AI-ready](PART1-URL) — join validation, exact literals, business rules and comments as the semantic layer.
-2. [Part 2: Connecting Autonomous Database to OCI Generative AI](PART2-URL) — dynamic group, policy, resource principal, the Select AI profile and smoke tests.
-3. [Part 3: Building a Select AI Agent team in PL/SQL](PART3-URL) — tool, agent, task and team, checked against ground truth.
-4. [Part 4: Select AI and the in-database team as native OPAF nodes](PART4-URL) — flows C1 and C2.
-5. [Part 5: No-code Select AI Agent](PART5-URL) — flow C3.
-6. [Part 6: The Autonomous Database built-in MCP server](PART6-URL) — enabling it with a tag, testing with curl, wrapping the team as a tool.
-7. [Part 7: OPAF over MCP — database orchestrates vs OPAF orchestrates](PART7-URL) — flows B and A.
-8. [Part 8: Native routing with Select AI Bridge](PART8-URL) — flow D.
+1. [Chapter 1: Making a star schema Select AI-ready](https://zigavaupot.blogspot.com/2026/10/chapter-1-preparing-schema-for-select-ai.html) — join validation, exact literals, business rules and comments as the semantic layer.
+2. [Chapter 2: Connecting Autonomous Database to OCI Generative AI](https://zigavaupot.blogspot.com/2026/10/chapter-2-connecting-adb-to-oci.html) — dynamic group, policy, resource principal, the Select AI profile and smoke tests.
+3. [Chapter 3: Building a Select AI Agent team in PL/SQL](CHAPTER3-URL) — tool, agent, task and team, checked against ground truth.
+4. [Chapter 4: Select AI and the in-database team as native OPAF nodes](CHAPTER4-URL) — flows C1 and C2.
+5. [Chapter 5: No-code Select AI Agent](CHAPTER5-URL) — flow C3.
+6. [Chapter 6: The Autonomous Database built-in MCP server](CHAPTER6-URL) — enabling it with a tag, testing with curl, wrapping the team as a tool.
+7. [Chapter 7: OPAF over MCP — database orchestrates vs OPAF orchestrates](CHAPTER7-URL) — flows B and A.
+8. [Chapter 8: Native routing with Select AI Bridge](CHAPTER8-URL) — flow D.
 
 ## All six flows compared
 

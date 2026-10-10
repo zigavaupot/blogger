@@ -1,10 +1,10 @@
 <article class="zv-blog-post">
 
-<img alt="Select AI Agent meets OPAF blog series" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png">
+<img alt="Select AI Agent meets OPAF" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png">
 
 <div class="post-intro">
-<p>In Part 6 I enabled the Autonomous Database built-in MCP server and exposed the in-database agent team as a tool. Now OPAF becomes the MCP client.</p>
-<p>In this part I register the ADB MCP server in OPAF and build two Custom Flows on it, each allowed exactly one tool, so it is always clear which architecture produced the answer. In Flow B the database orchestrates: OPAF hands the whole question to the Select AI Agent team. In Flow A OPAF orchestrates: its own agent plans the analysis and calls NL2SQL in the database. Both get the test questions from Part 4.</p>
+<p>In Chapter 6 I enabled the Autonomous Database built-in MCP server and exposed the in-database agent team as a tool. Now OPAF becomes the MCP client.</p>
+<p>In this chapter I register the ADB MCP server in OPAF and build two Custom Flows on it, each allowed exactly one tool, so it is always clear which architecture produced the answer. In Flow B the database orchestrates: OPAF hands the whole question to the Select AI Agent team. In Flow A OPAF orchestrates: its own agent plans the analysis and calls NL2SQL in the database. Both get the test questions from Chapter 4.</p>
 </div>
 
 <!--more-->
@@ -19,7 +19,7 @@
 <li>Username: <code>OABOOTCAMP</code></li>
 <li>Password: the OABOOTCAMP database password</li>
 </ul>
-<p>With <strong>Auth Request</strong>, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. <strong>Bearer Token</strong> mode also works with a token from Part 6, but it expires after an hour — fine for a quick test only. <strong>OAuth</strong> needs a client ID and secret, which the ADB database-credential login does not provide.</p>
+<p>With <strong>Auth Request</strong>, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. <strong>Bearer Token</strong> mode also works with a token from Chapter 6, but it expires after an hour — fine for a quick test only. <strong>OAuth</strong> needs a client ID and secret, which the ADB database-credential login does not provide.</p>
 <p><strong>Test connection</strong> returns "MCP connection successful", which also confirms that OPAF in its private subnet reaches the public ADB MCP endpoint.</p>
 <img alt="OPAF Add MCP server with Auth Request" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/07-opaf-add-mcp-server.png">
 <p>In a Custom Flow, the MCP server node with server <code>adw_oabootcamp</code> lists the Select AI Agent tools under <strong>Allowed tools</strong>:</p>
@@ -94,7 +94,7 @@ If the question is not about sales data, say that you can only answer questions 
 <img alt="Flow B chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/10-opaf-flow-b-chat.png">
 <p>Here the refusal comes from OPAF's agent, which never delegates the off-topic question.</p>
 <h2>An NL2SQL tool OPAF accepts</h2>
-<p>For Flow A, OPAF's agent needs NL2SQL as a tool. OPAF validates each MCP tool's input schema strictly: every argument description must be a string. The built-in <code>SQL</code> tool (<code>OABOOTCAMP_SALES_SQL</code>) generates its schema itself with <code>"description": null</code> for <code>ACTION</code> and <code>QUERY</code> (see the <code>tools/list</code> output in Part 6), so OPAF rejects it. Custom tools get their schema from <code>tool_inputs</code>, so I wrap NL2SQL in a small function, as <code>OABOOTCAMP</code>:</p>
+<p>For Flow A, OPAF's agent needs NL2SQL as a tool. OPAF validates each MCP tool's input schema strictly: every argument description must be a string. The built-in <code>SQL</code> tool (<code>OABOOTCAMP_SALES_SQL</code>) generates its schema itself with <code>"description": null</code> for <code>ACTION</code> and <code>QUERY</code> (see the <code>tools/list</code> output in Chapter 6), so OPAF rejects it. Custom tools get their schema from <code>tool_inputs</code>, so I wrap NL2SQL in a small function, as <code>OABOOTCAMP</code>:</p>
 <pre><code class="language-sql">CREATE OR REPLACE FUNCTION sales_nl2sql(action IN VARCHAR2, query IN CLOB) RETURN CLOB AS
   l_action VARCHAR2(20) := LOWER(TRIM(action));
 BEGIN
@@ -224,8 +224,8 @@ Answer concisely with the key numbers formatted with thousand separators, follow
 </tr>
 </tbody>
 </table>
-<p>Both flows return identical numbers for the same question, because the semantic layer lives in the database. In Part 8 I combine the two ideas without MCP: one OPAF agent that routes simple questions to fast NL2SQL and analytical ones to the in-database team, using Select AI Bridge.</p>
+<p>Both flows return identical numbers for the same question, because the semantic layer lives in the database. In Chapter 8 I combine the two ideas without MCP: one OPAF agent that routes simple questions to fast NL2SQL and analytical ones to the in-database team, using Select AI Bridge.</p>
 <hr>
-<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+<p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction and list of chapters</a>.</p>
 
 </article>

@@ -1,10 +1,10 @@
-# Select AI Agent meets OPAF, Part 1: Making a star schema Select AI-ready
+# Select AI Agent meets OPAF, Chapter 1: Making a star schema Select AI-ready
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 Select AI turns a question into SQL, but it only knows what the data dictionary tells it. My OA Bootcamp schema (`OABOOTCAMP`) is a classic sales star schema with no declared keys and no comments, so out of the box Select AI has nothing to go on except column names.
 
-In this first part of the series I prepare the schema: I validate the join keys, collect the literal values the LLM must use, define the business rules, and write table and column comments that act as the semantic layer. Every flow later in the series — native OPAF nodes, MCP or routing — reads these comments, which is why they all return the same numbers.
+In this first chapter I prepare the schema: I validate the join keys, collect the literal values the LLM must use, define the business rules, and write table and column comments that act as the semantic layer. Every flow in the later chapters — native OPAF nodes, MCP or routing — reads these comments, which is why they all return the same numbers.
 
 ## The schema
 
@@ -129,8 +129,8 @@ COMMENT ON COLUMN d_time.date_id        IS 'Duplicate of DAY_DT. Do not use for 
 
 The remaining comments for `D_PRODUCTS`, `D_CUSTOMERS`, `D_GEOGRAPHY` and `D_TIME` follow the same pattern: a table comment with the hierarchy and join key, and column comments with meaning and allowed values. Julian numbers, period start/end keys and first/last-day flags in `D_TIME` are intentionally left uncommented, so the LLM is not tempted to use them.
 
-Select AI reads the comments only when the profile has `"comments": "true"`. Creating that profile, and giving the database access to OCI Generative AI, is the topic of Part 2.
+Select AI reads the comments only when the profile has `"comments": "true"`. Creating that profile, and giving the database access to OCI Generative AI, is the topic of Chapter 2.
 
 ---
 
-This post is part of my [Select AI Agent meets OPAF series](SERIES-URL).
+Back to the [introduction and list of chapters](https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html).

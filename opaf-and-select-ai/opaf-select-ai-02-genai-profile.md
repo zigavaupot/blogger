@@ -1,10 +1,10 @@
-# Select AI Agent meets OPAF, Part 2: Connecting Autonomous Database to OCI Generative AI
+# Select AI Agent meets OPAF, Chapter 2: Connecting Autonomous Database to OCI Generative AI
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-With the schema prepared in Part 1, the next step is giving Select AI an LLM to work with. In my setup the database calls OCI Generative AI with its own resource principal, so no API keys are stored anywhere in the database.
+With the schema prepared in Chapter 1, the next step is giving Select AI an LLM to work with. In my setup the database calls OCI Generative AI with its own resource principal, so no API keys are stored anywhere in the database.
 
-In this part I check that the database version and the model support what I need, set up the IAM dynamic group and policy, enable the resource principal and network access, create the Select AI profile that every later flow in the series uses, and run a few smoke tests to confirm that the comments from Part 1 actually shape the generated SQL.
+In this chapter I check that the database version and the model support what I need, set up the IAM dynamic group and policy, enable the resource principal and network access, create the Select AI profile that every later flow uses, and run a few smoke tests to confirm that the comments from Chapter 1 actually shape the generated SQL.
 
 ## Checking the environment
 
@@ -107,7 +107,7 @@ END;
 ```
 
 - `oci_apiformat: GENERIC` is required for non-Cohere models on OCI.
-- `comments: true` makes Select AI read the comments from Part 1.
+- `comments: true` makes Select AI read the comments from Chapter 1.
 - `enforce_object_list` restricts generated SQL to the five tables.
 - `temperature: 0` makes SQL generation as deterministic as possible, which matters for repeatable answers.
 
@@ -151,8 +151,8 @@ Further checks with `showsql` and `runsql`:
 | how much revenue was paid in August 2026 | join switches to `TIME_PAID_DT` (role-playing date) |
 | top 5 countries by net revenue in 2025 | end-to-end run; net = `REVENUE - DISCNT_VALUE`; `runsql` returns JSON |
 
-A single `SELECT AI` call answers one question with one SQL statement. In Part 3 I build a Select AI Agent team on top of this profile, which can plan a question, call the SQL tool several times and combine the results.
+A single `SELECT AI` call answers one question with one SQL statement. In Chapter 3 I build a Select AI Agent team on top of this profile, which can plan a question, call the SQL tool several times and combine the results.
 
 ---
 
-This post is part of my [Select AI Agent meets OPAF series](SERIES-URL).
+Back to the [introduction and list of chapters](https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html).

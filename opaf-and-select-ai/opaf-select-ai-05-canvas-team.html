@@ -1,16 +1,16 @@
 <article class="zv-blog-post">
 
-<img alt="Select AI Agent meets OPAF blog series" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png">
+<img alt="Select AI Agent meets OPAF" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png">
 
 <div class="post-intro">
-<p>In Part 3 I built the in-database sales analyst with <code>DBMS_CLOUD_AI_AGENT</code> in PL/SQL, and in Part 4 OPAF ran it with the In-Database Team node. The Select AI nodes can do more than run existing objects: in <strong>Create new</strong> mode they create them.</p>
-<p>In this part I build the whole tool → task → agent → team stack visually on the OPAF canvas, starting from nothing but the Select AI profile <code>OABOOTCAMP_AI</code> and the table comments. The result, flow C3, answers the test questions from Part 4 exactly like the PL/SQL-built team.</p>
+<p>In Chapter 3 I built the in-database sales analyst with <code>DBMS_CLOUD_AI_AGENT</code> in PL/SQL, and in Chapter 4 OPAF ran it with the In-Database Team node. The Select AI nodes can do more than run existing objects: in <strong>Create new</strong> mode they create them.</p>
+<p>In this chapter I build the whole tool → task → agent → team stack visually on the OPAF canvas, starting from nothing but the Select AI profile <code>OABOOTCAMP_AI</code> and the table comments. The result, flow C3, answers the test questions from Chapter 4 exactly like the PL/SQL-built team.</p>
 </div>
 
 <!--more-->
 
 <h2>Canvas</h2>
-<p>Flow name: <code>SELECT AI - no PL/SQL</code>. All objects get a <code>C3_</code> prefix so they don't collide with the PL/SQL-created objects from Part 3.</p>
+<p>Flow name: <code>SELECT AI - no PL/SQL</code>. All objects get a <code>C3_</code> prefix so they don't collide with the PL/SQL-created objects from Chapter 3.</p>
 <p>Every node is in <strong>+ Create new</strong> mode, and there are two kinds of wires:</p>
 <ul>
 <li><strong>Definition chain</strong> (dark ports) — how the team is assembled: <code>In-Database Tool</code> → Task <strong>Choose AI Tools</strong> · Task <strong>Task</strong> → Agent <strong>Task</strong> · Agent <strong>Agent</strong> → Team <strong>Agents</strong></li>
@@ -80,7 +80,7 @@
 </tr>
 </tbody>
 </table>
-<p>The instruction is the task instruction from Part 3, with two changes: it names the <code>C3_SALES_SQL</code> tool, and it does not ask for the <code>runsql</code> action. <code>{query}</code> is replaced with the user's question at runtime.</p>
+<p>The instruction is the task instruction from Chapter 3, with two changes: it names the <code>C3_SALES_SQL</code> tool, and it does not ask for the <code>runsql</code> action. <code>{query}</code> is replaced with the user's question at runtime.</p>
 <p><strong>In-Database Agent</strong></p>
 <table>
 <thead>
@@ -112,7 +112,7 @@
 </tr>
 </tbody>
 </table>
-<p>The Agent Role is the role from Part 3 plus one sentence that tells the agent how to refuse off-topic questions:</p>
+<p>The Agent Role is the role from Chapter 3 plus one sentence that tells the agent how to refuse off-topic questions:</p>
 <pre><code>You are a sales analyst for a consumer electronics company. You answer business questions using data from the sales database only, never from general knowledge. If a question is not about sales data, reply that you can only answer questions about the sales database. Revenue is gross unless the user asks for net revenue (revenue minus discount). Profit is revenue minus fixed and variable cost. Include all order statuses unless the user explicitly asks about a specific status. Sales data covers January 2024 to September 2026.
 </code></pre>
 <p><strong>In-Database Team</strong></p>
@@ -176,8 +176,8 @@
 </table>
 <img alt="Flow C3 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/21-opaf-flow-c3-chat.png">
 <p>These are the same answers as the PL/SQL-built team in C2. The objects are identical whether I create them with <code>DBMS_CLOUD_AI_AGENT</code> or on the OPAF canvas — the only prerequisite is a good Select AI profile over commented tables.</p>
-<p>So far OPAF has reached the database over a database connection. In Part 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.</p>
+<p>So far OPAF has reached the database over a database connection. In Chapter 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.</p>
 <hr>
-<p>This post is part of my <a href="SERIES-URL">Select AI Agent meets OPAF series</a>.</p>
+<p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction and list of chapters</a>.</p>
 
 </article>

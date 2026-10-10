@@ -1,16 +1,16 @@
-# Select AI Agent meets OPAF, Part 3: Building a Select AI Agent team in PL/SQL
+# Select AI Agent meets OPAF, Chapter 3: Building a Select AI Agent team in PL/SQL
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 A single `SELECT AI` call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results — all inside the database.
 
-In this part I build an in-database sales analyst with `DBMS_CLOUD_AI_AGENT` on top of the Select AI profile from Part 2: one SQL tool, one agent, one task and one team. I run it, check its numbers against hand-written SQL, and show what made its answers repeatable. This team is the one OPAF calls in the rest of the series.
+In this chapter I build an in-database sales analyst with `DBMS_CLOUD_AI_AGENT` on top of the Select AI profile from Chapter 2: one SQL tool, one agent, one task and one team. I run it, check its numbers against hand-written SQL, and show what made its answers repeatable. This team is the one OPAF calls in the following chapters.
 
 ## The building blocks
 
 I think of Select AI Agent as a small analytics department:
 
-- **Profile** — which LLM the department uses and which data it may see (Part 2).
+- **Profile** — which LLM the department uses and which data it may see (Chapter 2).
 - **Tool** — a skill, here NL2SQL over the sales tables through the profile.
 - **Agent** — the analyst: a role and an LLM profile.
 - **Task** — the assignment brief: what to accomplish, with a `{query}` placeholder for the user's question, and which tools are allowed.
@@ -21,8 +21,8 @@ Each piece carries different knowledge, so it helps to decide up front where eac
 
 | What | Where it lives |
 |---|---|
-| Joins, metric definitions, allowed values, default order status rule | Table and column comments (Part 1) |
-| LLM, allowed tables, temperature | Select AI profile (Part 2) |
+| Joins, metric definitions, allowed values, default order status rule | Table and column comments (Chapter 1) |
+| LLM, allowed tables, temperature | Select AI profile (Chapter 2) |
 | When to use NL2SQL | Tool instruction |
 | Persona, data-only scope, business rules restated | Agent role |
 | How to answer: one grouped query, only returned numbers, format | Task instruction |
@@ -178,7 +178,7 @@ ORDER  BY f.channel_name, t.cal_year;
 | Store | 2024 | 39,442,126 | 8,300,655 | 28,918,252 | 2,223,219 |
 | Store | 2025 | 48,870,537 | 9,861,679 | 35,510,391 | 3,498,467 |
 
-The agent's answers match exactly. These numbers are the ground truth for every flow in the rest of the series.
+The agent's answers match exactly. These numbers are the ground truth for every flow in the following chapters.
 
 ## What made it repeatable
 
@@ -188,8 +188,8 @@ A business rule that lives only in comments and role text may be applied in one 
 - `temperature` 0 in the profile,
 - a task instruction asking for one grouped query and only numbers returned by the tool.
 
-The team works in the database. In Part 4 I put it, and plain Select AI, in front of users with OPAF's native Select AI nodes.
+The team works in the database. In Chapter 4 I put it, and plain Select AI, in front of users with OPAF's native Select AI nodes.
 
 ---
 
-This post is part of my [Select AI Agent meets OPAF series](SERIES-URL).
+Back to the [introduction and list of chapters](https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html).

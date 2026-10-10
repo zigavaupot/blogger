@@ -1,10 +1,10 @@
-# Select AI Agent meets OPAF, Part 7: OPAF Agents over MCP
+# Select AI Agent meets OPAF, Chapter 7: OPAF Agents over MCP
 
-![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
+![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-In Part 6 I enabled the Autonomous Database built-in MCP server and exposed the in-database agent team as a tool. Now OPAF becomes the MCP client.
+In Chapter 6 I enabled the Autonomous Database built-in MCP server and exposed the in-database agent team as a tool. Now OPAF becomes the MCP client.
 
-In this part I register the ADB MCP server in OPAF and build two Custom Flows on it, each allowed exactly one tool, so it is always clear which architecture produced the answer. In Flow B the database orchestrates: OPAF hands the whole question to the Select AI Agent team. In Flow A OPAF orchestrates: its own agent plans the analysis and calls NL2SQL in the database. Both get the test questions from Part 4.
+In this chapter I register the ADB MCP server in OPAF and build two Custom Flows on it, each allowed exactly one tool, so it is always clear which architecture produced the answer. In Flow B the database orchestrates: OPAF hands the whole question to the Select AI Agent team. In Flow A OPAF orchestrates: its own agent plans the analysis and calls NL2SQL in the database. Both get the test questions from Chapter 4.
 
 ## Registering the MCP server in OPAF
 
@@ -17,7 +17,7 @@ In OPAF: **Add MCP server**
   - Username: `OABOOTCAMP`
   - Password: the OABOOTCAMP database password
 
-With **Auth Request**, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. **Bearer Token** mode also works with a token from Part 6, but it expires after an hour — fine for a quick test only. **OAuth** needs a client ID and secret, which the ADB database-credential login does not provide.
+With **Auth Request**, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. **Bearer Token** mode also works with a token from Chapter 6, but it expires after an hour — fine for a quick test only. **OAuth** needs a client ID and secret, which the ADB database-credential login does not provide.
 
 **Test connection** returns "MCP connection successful", which also confirms that OPAF in its private subnet reaches the public ADB MCP endpoint.
 
@@ -73,7 +73,7 @@ Here the refusal comes from OPAF's agent, which never delegates the off-topic qu
 
 ## An NL2SQL tool OPAF accepts
 
-For Flow A, OPAF's agent needs NL2SQL as a tool. OPAF validates each MCP tool's input schema strictly: every argument description must be a string. The built-in `SQL` tool (`OABOOTCAMP_SALES_SQL`) generates its schema itself with `"description": null` for `ACTION` and `QUERY` (see the `tools/list` output in Part 6), so OPAF rejects it. Custom tools get their schema from `tool_inputs`, so I wrap NL2SQL in a small function, as `OABOOTCAMP`:
+For Flow A, OPAF's agent needs NL2SQL as a tool. OPAF validates each MCP tool's input schema strictly: every argument description must be a string. The built-in `SQL` tool (`OABOOTCAMP_SALES_SQL`) generates its schema itself with `"description": null` for `ACTION` and `QUERY` (see the `tools/list` output in Chapter 6), so OPAF rejects it. Custom tools get their schema from `tool_inputs`, so I wrap NL2SQL in a small function, as `OABOOTCAMP`:
 
 ```sql
 CREATE OR REPLACE FUNCTION sales_nl2sql(action IN VARCHAR2, query IN CLOB) RETURN CLOB AS
@@ -163,8 +163,8 @@ The scope rule sits at the top: placed at the end, it was ignored and the LLM an
 | Can show generated SQL | No (finished answer only) | Yes (`showsql`) |
 | Typical answer time | ~23–25 s | ~12–20 s |
 
-Both flows return identical numbers for the same question, because the semantic layer lives in the database. In Part 8 I combine the two ideas without MCP: one OPAF agent that routes simple questions to fast NL2SQL and analytical ones to the in-database team, using Select AI Bridge.
+Both flows return identical numbers for the same question, because the semantic layer lives in the database. In Chapter 8 I combine the two ideas without MCP: one OPAF agent that routes simple questions to fast NL2SQL and analytical ones to the in-database team, using Select AI Bridge.
 
 ---
 
-This post is part of my [Select AI Agent meets OPAF series](SERIES-URL).
+Back to the [introduction and list of chapters](https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html).

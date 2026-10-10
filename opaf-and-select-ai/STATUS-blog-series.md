@@ -10,7 +10,7 @@
 
 ## Open
 1. Featured images: DONE — all 9 posts use images/select-ai-opaf-blog-series.png.
-2. Links: `SERIES-URL` (Parts 1–8), `PART1-URL`…`PART8-URL` (Part 0) — replace after publishing.
+2. Links: `INTRO-URL` (Chapters 1–8), `CHAPTER2-URL`…`CHAPTER8-URL` (introduction); CHAPTER1 done — replace after publishing.
 3. Missing screenshots (`IMAGE-TBD` + TODO comment): GenAI Playground (Part 2), Select AI node palette (Part 4).
 4. Screenshots that contradict text (used as-is so far): 11 Flow A canvas shows OABOOTCAMP_SALES_SQL; 18 Flow D canvas has third Show SQL bridge (Part 8 text mentions it — remove phrase if retaken); 14 C1 dropdown on Chat, not Narrate.
 5. Decide whether "All six flows compared" and "Key takeaways" stay in Part 0.
@@ -19,6 +19,9 @@
 8. CSS: line 21 stray fragment FIXED; zv-table-compact rules added — push BLOGGER/blogger-post-new.css to GitHub.
 
 ## Suggested labels
-- Part 0: Series, Hero, OPAF, Select AI, MCP, Autonomous Database
+- Introduction (Part 0): Posts, Hero, OPAF, Select AI, MCP, Autonomous Database
 - Parts 1–5, 8: Posts, OPAF, Select AI, Autonomous Database
 - Parts 6–7: Posts, OPAF, Select AI, MCP, Autonomous Database
+
+## 2026-10-10
+- No longer a Blogger "Series": all "series" wording removed; "Part" renamed to "Chapter" in all MD/HTML. Part 0 is now "Introduction to Select AI Agent meets OPAF".
