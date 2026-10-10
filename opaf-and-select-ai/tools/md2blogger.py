@@ -4,6 +4,12 @@ def convert(md):
     html = re.sub(r'<h1>.*?</h1>\s*', '', html, count=1, flags=re.S)
     html = re.sub(r'\s+style="[^"]*"', '', html)
     html = re.sub(r'<p>\s*(<img [^>]*>)\s*</p>', r'\1', html)
+    # external reference links open in a new tab (requested for the 'Useful links' section)
+    k = html.find('<h2>Useful links and documentation</h2>')
+    if k >= 0:
+        head, tail = html[:k], html[k:]
+        tail = re.sub(r'<a href="(https?://[^"]+)">', r'<a href="\1" target="_blank" rel="noopener">', tail)
+        html = head + tail
     m = re.match(r'\s*(<img [^>]*>)\s*(.*?)(?=<h2>)(.*)', html, re.S)
     feat, intro, body = m.group(1), m.group(2).strip(), m.group(3).strip()
     out = ('<article class="zv-blog-post">\n\n' + feat + '\n\n<div class="post-intro">\n' + intro +

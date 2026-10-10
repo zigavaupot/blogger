@@ -77,3 +77,34 @@ All flows that answer return the same numbers: the business definitions live in 
 - The native Select AI nodes are the fastest way to run a database agent from OPAF; MCP opens the same agent to any MCP client.
 - In OPAF agent instructions, the scope rule goes first.
 - An OPAF agent that cannot get SQL from a tool may invent a plausible query, so I give it an explicit rule to decline instead.
+
+## Useful links and documentation
+
+Oracle documentation:
+
+- [Select AI: getting started](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/select-ai-get-started.html)
+- [Manage AI profiles](https://docs.oracle.com/iaas/autonomous-database-serverless/doc/select-ai-manage-profiles.html)
+- [DBMS_CLOUD_AI package](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/dbms-cloud-ai-package.html)
+- [Select AI Agent](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/select-ai-agent.html)
+- [How do I use Select AI Agent](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/how-do-i-use-select-ai-agent.html)
+- [DBMS_CLOUD_AI_AGENT views](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/dbms-cloud-ai-agent-views.html)
+- [Use the Autonomous AI Database MCP Server](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/use-mcp-server.html)
+- [Prerequisites for the MCP Server](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/prerequisites.html)
+- [Use resource principal to access OCI resources](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/resource-principal.html)
+- [OpenAI gpt-oss models in OCI Generative AI](https://docs.oracle.com/iaas/Content/generative-ai/openai-models.htm)
+- [Oracle AI Database Private Agent Factory documentation](https://docs.oracle.com/en/database/oracle/agent-factory)
+
+Oracle blogs and product pages:
+
+- [Announcing the Oracle Autonomous AI Database MCP Server](https://blogs.oracle.com/machinelearning/announcing-the-oracle-autonomous-ai-database-mcp-server)
+- [Build your agentic solution using Oracle ADB Select AI Agent](https://blogs.oracle.com/machinelearning/build-your-agentic-solution-using-oracle-adb-select-ai-agent)
+- [Announcing Oracle Select AI pre-built AI agents](https://blogs.oracle.com/machinelearning/announcing-oracle-select-ai-pre-built-ai-agents)
+- [Accessing OCI resources from your Autonomous Database using resource principal](https://blogs.oracle.com/autonomous-ai-database/accessing-oracle-cloud-infrastructure-resources-from-your-autonomous-database-using-resource-principal)
+- [Oracle AI Database Private Agent Factory: Enterprise FAQ](https://blogs.oracle.com/database/oracle-ai-database-private-agent-factory-enterprise-faq)
+- [Oracle AI Database Private Agent Factory product page](https://www.oracle.com/database/agent-factory/)
+- [Oracle AI Database Private Agent Factory: MCP, Orchestration, and Multi-Agent Workflows in Practice](https://blogs.oracle.com/ai-and-datascience/oracle-private-agent-factory-mcp-multi-agent)
+- [LiveLabs workshop: The Private Agent Factory: Turn Data into Action](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4336)
+
+Model Context Protocol:
+
+- [Model Context Protocol](https://modelcontextprotocol.io)
