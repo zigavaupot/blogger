@@ -40,7 +40,7 @@ ALL {resource.type = 'autonomousdatabase', resource.compartment.id = '<compartme
 
 ![Dynamic group matching rules](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/02-dynamic-group.png)
 
-Then **Identity & Security → Policies**, root compartment, **Create Policy**, with the description `Allows ADW (OABOOTCAMP) to call OCI Generative AI via resource principal for Select AI` and these statements in the manual editor:
+Then navigate to **Identity & Security → Policies**, choose the root compartment and **Create Policy**, with the description `Allows ADW (OABOOTCAMP) to call OCI Generative AI via resource principal for Select AI` and these statements in the manual editor:
 
 ```
 allow dynamic-group 'Default'/'dg-adw-selectai' to use generative-ai-family in tenancy
@@ -55,7 +55,17 @@ IAM changes take a few minutes to propagate. If Select AI returns `ORA-20404` "O
 
 ## Resource principal, grants and network access
 
-Signed in to Database Actions as ADMIN:
+The IAM policy allows Autonomous Databases to call OCI Generative AI, but the database user still has to be able to use that permission. This step prepares `OABOOTCAMP` for it, in three parts:
+
+- **Resource principal:** `ENABLE_RESOURCE_PRINCIPAL` creates the `OCI$RESOURCE_PRINCIPAL` credential and makes it available to `OABOOTCAMP`. With it, the user authenticates to OCI as the database itself — no API key or password is stored in the database.
+- **Grants:** `EXECUTE` on `DBMS_CLOUD_AI` (Select AI), `DBMS_CLOUD_AI_AGENT` (Select AI Agent, used from Chapter 3 on) and `DBMS_CLOUD`.
+- **Network ACL:** allows `OABOOTCAMP` to make HTTP calls to the OCI Generative AI inference endpoint in Frankfurt.
+
+When this is done, `OABOOTCAMP` can reach OCI Generative AI on its own, which is what the Select AI profile in the next step needs.
+
+> **Watch which user runs what.** From here on, scripts run as two different users: the grants below as `ADMIN`, the Select AI profile and everything in the following chapters as `OABOOTCAMP`. In Database Actions it is easy to run a block in the wrong session, so in my scripts every block is labelled `[ADMIN]` or `[OABOOTCAMP]`.
+
+Signed in to Database Actions as **ADMIN** `[ADMIN]`:
 
 ```sql
 EXEC DBMS_CLOUD_ADMIN.ENABLE_RESOURCE_PRINCIPAL();
@@ -75,11 +85,15 @@ END;
 /
 ```
 
-For the demo I use the `OABOOTCAMP` user directly; it later also becomes the MCP identity. In Database Actions it is easy to run a block in the wrong session, so in my scripts every block is labelled `[ADMIN]` or `[OABOOTCAMP]`.
+For the demo I use the `OABOOTCAMP` user directly; it later also becomes the MCP identity.
 
 ## The Select AI profile
 
-As `OABOOTCAMP`:
+A Select AI profile ties everything together: which AI provider and model to call, which credential to use, and which database objects Select AI may describe to the LLM. Every Select AI call names a profile — `SELECT AI` after `SET_PROFILE`, or `DBMS_CLOUD_AI.GENERATE` with `profile_name` — and so does every Select AI Agent tool and agent in the following chapters.
+
+To generate SQL, Select AI sends the LLM the question together with the metadata of the objects in `object_list` — table and column names, and with `comments` enabled also the comments from Chapter 1 — not the table data. The result of this step is `OABOOTCAMP_AI`, the single place where the model and the data scope are defined. Switching to another model later means changing the profile, not the flows built on top of it.
+
+As **OABOOTCAMP** `[OABOOTCAMP]`:
 
 ```sql
 BEGIN
