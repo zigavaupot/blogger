@@ -19,7 +19,7 @@
 <li>Username: <code>OABOOTCAMP</code></li>
 <li>Password: the OABOOTCAMP database password</li>
 </ul>
-<p>With <strong>Auth Request</strong>, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. <strong>Bearer Token</strong> mode also works with a token from Chapter 6, but it expires after an hour — fine for a quick test only. <strong>OAuth</strong> needs a client ID and secret, which the ADB database-credential login does not provide.</p>
+<p>With <strong>Auth Request</strong>, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. <strong>Bearer Token</strong> mode also works with a token from Chapter 6, but it expires after an hour, which is fine for a quick test only. <strong>OAuth</strong> needs a client ID and secret, which the ADB database-credential login does not provide.</p>
 <p><strong>Test connection</strong> returns "MCP connection successful", which also confirms that OPAF in its private subnet reaches the public ADB MCP endpoint.</p>
 <img alt="OPAF Add MCP server with Auth Request" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/07-opaf-add-mcp-server.png">
 <p>In a Custom Flow, the MCP server node with server <code>adw_oabootcamp</code> lists the Select AI Agent tools under <strong>Allowed tools</strong>:</p>
@@ -36,12 +36,12 @@
 </thead>
 <tbody>
 <tr>
-<td>B – "Database orchestrates"</td>
+<td>B: "Database orchestrates"</td>
 <td><code>ASK_SALES_ANALYST</code></td>
 <td>Select AI Agent inside ADB</td>
 </tr>
 <tr>
-<td>A – "OPAF orchestrates"</td>
+<td>A: "OPAF orchestrates"</td>
 <td><code>SALES_NL2SQL</code></td>
 <td>OPAF agent, calling NL2SQL in ADB</td>
 </tr>
@@ -84,7 +84,7 @@ If the question is not about sales data, say that you can only answer questions 
 </tr>
 <tr>
 <td>2025 vs 2024 comparison</td>
-<td>Store +1,275,248; Online +660,738; Catalog +660,924 — matches ground truth</td>
+<td>Store +1,275,248; Online +660,738; Catalog +660,924; matches ground truth</td>
 <td>~23 s</td>
 </tr>
 <tr>
@@ -128,7 +128,7 @@ BEGIN
 END;
 /
 </code></pre>
-<p>Any unexpected <code>action</code> value falls back to <code>runsql</code>, so the tool can only ever read data. The built-in <code>OABOOTCAMP_SALES_SQL</code> stays — the in-database agent team uses it internally.</p>
+<p>Any unexpected <code>action</code> value falls back to <code>runsql</code>, so the tool can only ever read data. The built-in <code>OABOOTCAMP_SALES_SQL</code> stays, because the in-database agent team uses it internally.</p>
 <p>Local test:</p>
 <pre><code class="language-sql">SET SERVEROUTPUT ON
 DECLARE
@@ -152,7 +152,7 @@ Plan the analysis yourself: for comparisons, trends or rankings, prefer one quer
 Report only numbers exactly as returned by the tool; you may compute simple differences between returned numbers. Never estimate or invent values.
 Answer concisely with the key numbers formatted with thousand separators, followed by one or two sentences of interpretation.
 </code></pre>
-<p>The scope rule sits at the top: placed at the end, it was ignored and the LLM answered off-topic questions from general knowledge. Business rules (gross revenue, profit definition, all order statuses) are not repeated — they live in the database comments, which the NL2SQL tool applies for every client.</p>
+<p>The scope rule sits at the top: placed at the end, it was ignored and the LLM answered off-topic questions from general knowledge. Business rules (gross revenue, profit definition, all order statuses) are not repeated: they live in the database comments, which the NL2SQL tool applies for every client.</p>
 <img alt="Flow A canvas" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/11-opaf-flow-a-canvas.png">
 <div class="zv-table-compact">
 <table>
@@ -171,7 +171,7 @@ Answer concisely with the key numbers formatted with thousand separators, follow
 </tr>
 <tr>
 <td>2025 vs 2024 comparison</td>
-<td>Store +1,275,247.94; Catalog +660,923.73; Online +660,737.84 — matches ground truth</td>
+<td>Store +1,275,247.94; Catalog +660,923.73; Online +660,737.84; matches ground truth</td>
 <td>~20 s</td>
 </tr>
 <tr>
@@ -194,8 +194,8 @@ Answer concisely with the key numbers formatted with thousand separators, follow
 <thead>
 <tr>
 <th></th>
-<th>Flow B – Database orchestrates</th>
-<th>Flow A – OPAF orchestrates</th>
+<th>Flow B: Database orchestrates</th>
+<th>Flow A: OPAF orchestrates</th>
 </tr>
 </thead>
 <tbody>

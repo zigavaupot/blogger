@@ -2,7 +2,7 @@
 
 ![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-A single `SELECT AI` call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results — all inside the database.
+A single `SELECT AI` call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results, all inside the database.
 
 In this chapter I build an in-database sales analyst with `DBMS_CLOUD_AI_AGENT` on top of the Select AI profile from Chapter 2: one SQL tool, one agent, one task and one team. I run it, check its numbers against hand-written SQL, and show what made its answers repeatable. This team is the one OPAF calls in the following chapters.
 
@@ -10,11 +10,11 @@ In this chapter I build an in-database sales analyst with `DBMS_CLOUD_AI_AGENT` 
 
 Select AI Agent is a set of database objects created with `DBMS_CLOUD_AI_AGENT`. I think of them as a small analytics department:
 
-- **Tool** — a skill the department has. A tool is something an agent can *call*: a built-in type such as SQL (NL2SQL through a Select AI profile), RAG or web search, or my own PL/SQL function. Its instruction tells the agent when the tool is useful. Here it is one SQL tool over the sales tables.
-- **Agent** — the analyst. An agent has a role (who it is, what it may and may not do) and its own Select AI profile, which defines the LLM it reasons with. The agent decides *how* to solve a request: which tool to call, with what input, and when it has enough to answer.
-- **Task** — the assignment brief. A task says *what* has to be done: its instruction contains a `{query}` placeholder for the user's question and the expected shape of the answer, and it lists the tools the agent may use for it.
-- **Team** — the department. A team pairs agents with tasks and defines the process (here sequential). The team is the object I actually run.
-- **Conversation** — the case file. It keeps the context of a run, so follow-up questions in the same conversation can build on earlier ones.
+- **Tool**: a skill the department has. A tool is something an agent can *call*: a built-in type such as SQL (NL2SQL through a Select AI profile), RAG or web search, or my own PL/SQL function. Its instruction tells the agent when the tool is useful. Here it is one SQL tool over the sales tables.
+- **Agent**: the analyst. An agent has a role (who it is, what it may and may not do) and its own Select AI profile, which defines the LLM it reasons with. The agent decides *how* to solve a request: which tool to call, with what input, and when it has enough to answer.
+- **Task**: the assignment brief. A task says *what* has to be done: its instruction contains a `{query}` placeholder for the user's question and the expected shape of the answer, and it lists the tools the agent may use for it.
+- **Team**: the department. A team pairs agents with tasks and defines the process (here sequential). The team is the object I actually run.
+- **Conversation**: the case file. It keeps the context of a run, so follow-up questions in the same conversation can build on earlier ones.
 
 The SQL tool brings its own Select AI profile, which is not necessarily the agent's: the agent's profile is for reasoning, the tool's profile for generating SQL over the objects in its `object_list`. In my setup both are `OABOOTCAMP_AI`.
 
@@ -23,7 +23,7 @@ The SQL tool brings its own Select AI profile, which is not necessarily the agen
 When I run the team with a question:
 
 1. `RUN_TEAM` starts the team in a conversation and hands the question to the first agent–task pair.
-2. The task instruction is filled in — `{query}` becomes the user's question — and given to the agent together with its role.
+2. The task instruction is filled in (`{query}` becomes the user's question) and given to the agent together with its role.
 3. The agent plans, then calls an allowed tool. The SQL tool turns its input into SQL with Select AI, runs it and returns the result.
 4. The agent looks at the result and either calls a tool again or decides it has enough.
 5. The agent writes the final answer in the form the task asks for, and the team returns it.
@@ -172,7 +172,7 @@ All three runs returned the same numbers. One of them:
 >
 > All channels saw higher profit in 2025, but the **Store channel improved the most**, with an increase of about **$1.28 million**. (Profit is calculated as revenue − fixed cost − variable cost, including all order statuses.)
 
-The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner — the kind of question a single `SELECT AI` call struggles with.
+The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner. This is the kind of question a single `SELECT AI` call struggles with.
 
 ## Checking against ground truth
 

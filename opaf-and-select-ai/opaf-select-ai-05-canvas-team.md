@@ -12,8 +12,8 @@ Flow name: `SELECT AI - no PL/SQL`. All objects get a `C3_` prefix so they don't
 
 Every node is in **+ Create new** mode, and there are two kinds of wires:
 
-- **Definition chain** (dark ports) — how the team is assembled: `In-Database Tool` → Task **Choose AI Tools** · Task **Task** → Agent **Task** · Agent **Agent** → Team **Agents**
-- **Message flow** (blue ports) — what happens at runtime: `Chat input` **Message** → Team **Prompt** · Team **Result** → `Chat output` **Message**
+- **Definition chain** (dark ports) shows how the team is assembled: `In-Database Tool` → Task **Choose AI Tools** · Task **Task** → Agent **Task** · Agent **Agent** → Team **Agents**
+- **Message flow** (blue ports) shows what happens at runtime: `Chat input` **Message** → Team **Prompt** · Team **Result** → `Chat output` **Message**
 
 ```
 In-Database Tool ──► In-Database Task ──► In-Database Agent ──► In-Database Team ──► Chat output
@@ -23,7 +23,7 @@ In-Database Tool ──► In-Database Task ──► In-Database Agent ──�
 
 ![Flow C3 canvas: In-Database Tool, Task, Agent and Team nodes in Create new mode](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/20-opaf-flow-c3-canvas.png)
 
-In Create new mode the Task node gets a **Choose AI Tools** input and the Team node an **Agents** input — that is how the definition chain is wired.
+In Create new mode the Task node gets a **Choose AI Tools** input and the Team node an **Agents** input. That is how the definition chain is wired.
 
 ## Node settings
 
@@ -104,14 +104,31 @@ The forms have no human-tool setting. The agent never paused for clarification i
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 (Online $2,099,559.05; Catalog $1,360,396.31) | ~17 s |
-| 2025 vs 2024 comparison | Store +$1,275,247.94; Online +$660,737.84; Catalog +$660,923.73 — matches ground truth | ~18 s |
+| 2025 vs 2024 comparison | Store +$1,275,247.94; Online +$660,737.84; Catalog +$660,923.73; matches ground truth | ~18 s |
 | Capital of France | "I can only answer questions about the sales database." | ~11 s |
 
 </div>
 
 ![Flow C3 chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/21-opaf-flow-c3-chat.png)
 
-These are the same answers as the PL/SQL-built team in C2. The objects are identical whether I create them with `DBMS_CLOUD_AI_AGENT` or on the OPAF canvas — the only prerequisite is a good Select AI profile over commented tables.
+## Checking the database
+
+The canvas does not keep its own copy of the team: in Create new mode OPAF creates real Select AI Agent objects in the database, as the user of the database connection. As `OABOOTCAMP`:
+
+```sql
+SELECT agent_team_name, status FROM user_ai_agent_teams;
+```
+
+```
+AGENT_TEAM_NAME       STATUS  
+--------------------- ------- 
+OABOOTCAMP_SALES_TEAM ENABLED 
+C3_SALES_TEAM         ENABLED
+```
+
+Both teams are there: `OABOOTCAMP_SALES_TEAM`, created in PL/SQL in Chapter 3, and `C3_SALES_TEAM`, created from the OPAF canvas.
+
+The test answers above are the same as those of the PL/SQL-built team in C2. The objects are identical whether I create them with `DBMS_CLOUD_AI_AGENT` or on the OPAF canvas. The only prerequisite is a good Select AI profile over commented tables.
 
 So far OPAF has reached the database over a database connection. In Chapter 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.
 

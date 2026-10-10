@@ -4,7 +4,7 @@
 
 <div class="post-intro">
 <p>Chapter 4 showed two extremes: plain Select AI is fast but answers with one SQL statement, while the in-database team plans the analysis but takes longer. Chapter 7 put an OPAF agent in front of database tools over MCP. In this last chapter I combine the two ideas without MCP.</p>
-<p>The <strong>Select AI Bridge</strong> node wraps a Select AI profile and action, or an in-database team, as a tool for an OPAF Agent node — the native alternative to MCP tools. With two bridges, one OPAF agent routes each question to the right database capability: simple lookups to fast single-query NL2SQL, analytical questions to the in-database agent team.</p>
+<p>The <strong>Select AI Bridge</strong> node wraps a Select AI profile and action, or an in-database team, as a tool for an OPAF Agent node. It is the native alternative to MCP tools. With two bridges, one OPAF agent routes each question to the right database capability: simple lookups to fast single-query NL2SQL, analytical questions to the in-database agent team.</p>
 </div>
 
 <!--more-->
@@ -45,7 +45,7 @@
 </tbody>
 </table>
 </div>
-<p>Sub-agents and the Agent output port stay unconnected. The bridges have no inputs — the agent calls them and passes the question itself.</p>
+<p>Sub-agents and the Agent output port stay unconnected. The bridges have no inputs; the agent calls them and passes the question itself.</p>
 <img alt="Flow D canvas with Select AI Bridge nodes and the Agent" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/18-opaf-flow-d-canvas.png">
 <h2>Agent instructions</h2>
 <pre><code>SCOPE RULE (highest priority): You only answer questions about the company's sales database. If a question is not about sales data, reply exactly: &quot;I'm sorry, but I can only answer questions about the sales database.&quot; Do not call any tool for such questions.
@@ -108,8 +108,8 @@ OUTPUT RULES:
 <img alt="Flow D chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/19-opaf-flow-d-chat.png">
 <p>The agent sends the lookup to Run SQL and the comparison to the team, and both answers match the ground truth from Chapter 3.</p>
 <h2>Why there is no Show SQL bridge</h2>
-<p>A third bridge with action <strong>Show SQL</strong> — still visible in the canvas screenshot above — did not return SQL in this OPAF release. Without it, the agent either invented a plausible-looking query with non-existent columns, or, with an explicit "copy the SQL exactly" rule, reported that no SQL could be generated. The same Show SQL action works in the Select AI node (flow C1 in Chapter 4), so the issue is in the bridge path, not in the database.</p>
-<p>SQL transparency therefore stays with Flow A (MCP, <code>showsql</code>) from Chapter 7 and with C1. Flow D declines SQL requests explicitly instead of risking an invented query — an OPAF agent that cannot get SQL from a tool needs a rule to decline rather than write SQL itself.</p>
+<p>A third bridge with action <strong>Show SQL</strong> (still visible in the canvas screenshot above) did not return SQL in this OPAF release. Without it, the agent either invented a plausible-looking query with non-existent columns, or, with an explicit "copy the SQL exactly" rule, reported that no SQL could be generated. The same Show SQL action works in the Select AI node (flow C1 in Chapter 4), so the issue is in the bridge path, not in the database.</p>
+<p>SQL transparency therefore stays with Flow A (MCP, <code>showsql</code>) from Chapter 7 and with C1. Flow D declines SQL requests explicitly instead of risking an invented query. An OPAF agent that cannot get SQL from a tool needs a rule to decline rather than write SQL itself.</p>
 <p>That completes the six flows. The <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction</a> compares all of them side by side.</p>
 <hr>
 <p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction and list of chapters</a>.</p>

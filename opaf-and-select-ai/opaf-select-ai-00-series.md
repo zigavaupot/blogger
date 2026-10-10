@@ -2,9 +2,9 @@
 
 ![Select AI Agent meets OPAF](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
-This is the introduction to my blog in eight chapters on using Select AI Agents in Oracle Private Agent Factory. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (`OABOOTCAMP`) and build it six ways in OPAF — plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.
+This is the introduction to my blog in eight chapters on using Select AI Agents in Oracle Private Agent Factory. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (`OABOOTCAMP`) and build it six ways in OPAF: plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.
 
-When I started, I only wanted to try out how Select AI Agent works with OPAF. It turned into quite an exploratory journey: each experiment opened another way to connect the two, and I ended up with six scenarios. I doubt these are all — there are most likely alternatives I haven't explored yet.
+When I started, I only wanted to try out how Select AI Agent works with OPAF. It turned into quite an exploratory journey: each experiment opened another way to connect the two, and I ended up with six scenarios. I doubt these are all; there are most likely alternatives I haven't explored yet.
 
 ## What the chapters cover
 
@@ -23,7 +23,7 @@ In all six flows, natural language is turned into SQL inside the database by Sel
 
 | Flow | OPAF building blocks | How OPAF reaches the database | Who plans the analysis |
 |---|---|---|---|
-| C1 | Select AI node | Database connection (wallet) | Nobody — one question, one SQL statement |
+| C1 | Select AI node | Database connection (wallet) | Nobody (one question, one SQL statement) |
 | C2 | In-Database Team node, existing team | Database connection (wallet) | Select AI Agent in ADB |
 | C3 | In-Database Tool, Task, Agent and Team nodes, created on the canvas | Database connection (wallet) | Select AI Agent in ADB |
 | A | Agent node + MCP server node (`SALES_NL2SQL`) | ADB built-in MCP server | OPAF agent |
@@ -35,19 +35,19 @@ In all six flows, natural language is turned into SQL inside the database by Sel
 My environment:
 
 - Autonomous AI Database (ADW) 26ai, version `23.26.4.1.0`, public endpoint ("Allow secure access from everywhere") with mTLS required for SQL*Net connections
-- OCI Generative AI in Germany Central (Frankfurt), model `openai.gpt-oss-120b` — used both by the Select AI profile in the database and by the Agent nodes in OPAF
+- OCI Generative AI in Germany Central (Frankfurt), model `openai.gpt-oss-120b`, used both by the Select AI profile in the database and by the Agent nodes in OPAF
 - OPAF 26.7 on OCI, in a private subnet
 
 ## Chapters
 
-1. [Chapter 1: Making a star schema Select AI-ready](https://zigavaupot.blogspot.com/2026/10/chapter-1-preparing-schema-for-select-ai.html) — join validation, exact literals, business rules and comments as the semantic layer.
-2. [Chapter 2: Connecting Autonomous Database to OCI Generative AI](https://zigavaupot.blogspot.com/2026/10/chapter-2-connecting-adb-to-oci.html) — dynamic group, policy, resource principal, the Select AI profile and smoke tests.
-3. [Chapter 3: Building a Select AI Agent team in PL/SQL](https://zigavaupot.blogspot.com/2026/10/chapter-3-select-ai-agent-team-in-plsql.html) — tool, agent, task and team, checked against ground truth.
-4. [Chapter 4: Select AI and the in-database team as native OPAF nodes](https://zigavaupot.blogspot.com/2026/10/chapter-4-native-select-ai-nodes-in-opaf.html) — flows C1 and C2.
-5. [Chapter 5: No-code Select AI Agent](CHAPTER5-URL) — flow C3.
-6. [Chapter 6: The Autonomous Database built-in MCP server](CHAPTER6-URL) — enabling it with a tag, testing with curl, wrapping the team as a tool.
-7. [Chapter 7: OPAF over MCP — database orchestrates vs OPAF orchestrates](CHAPTER7-URL) — flows B and A.
-8. [Chapter 8: Native routing with Select AI Bridge](CHAPTER8-URL) — flow D.
+1. [Chapter 1: Making a star schema Select AI-ready](https://zigavaupot.blogspot.com/2026/10/chapter-1-preparing-schema-for-select-ai.html): join validation, exact literals, business rules and comments as the semantic layer.
+2. [Chapter 2: Connecting Autonomous Database to OCI Generative AI](https://zigavaupot.blogspot.com/2026/10/chapter-2-connecting-adb-to-oci.html): dynamic group, policy, resource principal, the Select AI profile and smoke tests.
+3. [Chapter 3: Building a Select AI Agent team in PL/SQL](https://zigavaupot.blogspot.com/2026/10/chapter-3-select-ai-agent-team-in-plsql.html): tool, agent, task and team, checked against ground truth.
+4. [Chapter 4: Select AI and the in-database team as native OPAF nodes](https://zigavaupot.blogspot.com/2026/10/chapter-4-native-select-ai-nodes-in-opaf.html): flows C1 and C2.
+5. [Chapter 5: No-code Select AI Agent](https://zigavaupot.blogspot.com/2026/10/chapter-5-no-code-select-ai-agent.html): flow C3.
+6. [Chapter 6: The Autonomous Database built-in MCP server](https://zigavaupot.blogspot.com/2026/10/chapter-6-adb-built-in-mcp-server.html): enabling it with a tag, testing with curl, wrapping the team as a tool.
+7. [Chapter 7: OPAF over MCP, database orchestrates vs OPAF orchestrates](https://zigavaupot.blogspot.com/2026/10/chapter-7-opaf-agents-over-mcp.html): flows B and A.
+8. [Chapter 8: Native routing with Select AI Bridge](https://zigavaupot.blogspot.com/2026/10/chapter-8-routing-with-select-ai-bridge.html): flow D.
 
 ## All six flows compared
 
@@ -68,7 +68,7 @@ In the table, *DB* means a database connection with the wallet, and *ADB team* m
 
 </div>
 
-All flows that answer return the same numbers: the business definitions live in the database, so every path — native node, MCP or routing — gets the same semantics.
+All flows that answer return the same numbers: the business definitions live in the database, so every path (native node, MCP or routing) gets the same semantics.
 
 ## Key takeaways
 

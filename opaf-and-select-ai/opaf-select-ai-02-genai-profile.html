@@ -15,7 +15,7 @@
 </code></pre>
 <p>The result is <code>Oracle AI Database 26ai Enterprise Edition 23.26.4.1.0</code>. <code>DBMS_CLOUD_AI_AGENT</code> requires 23.26 or later on 26ai, so Select AI Agent is available.</p>
 <p>In the OCI GenAI Playground (Chat) in Germany Central (Frankfurt) I confirmed that <code>openai.gpt-oss-120b</code> is available on-demand. Fallback models in the same region are <code>meta.llama-3.3-70b-instruct</code>, <code>cohere.command-a-03-2025</code> and <code>google.gemini-2.5-*</code>.</p>
-<!-- TODO: OCI GenAI Playground screenshot (01-genai-playground-models.png) is missing — decide later -->
+<!-- TODO: OCI GenAI Playground screenshot (01-genai-playground-models.png) is missing, decide later -->
 <img alt="" src="IMAGE-TBD">
 <h2>IAM: dynamic group and policy</h2>
 <p>The database needs IAM permission to call OCI Generative AI.</p>
@@ -23,7 +23,7 @@
 <li>Copy the ADW OCID: <strong>Oracle Database → Autonomous Database → (my ADW) → OCID → Copy</strong>.</li>
 <li><strong>Identity &amp; Security → Domains → Default → Dynamic groups → Create dynamic group</strong>.</li>
 <li>Name: <code>dg-adw-selectai</code>. Description: <code>ADW OABOOTCAMP - Select AI access to OCI GenAI</code>.</li>
-<li>Choose "Match any rules defined below" and type the rules directly into the rule fields — the rule builder does not offer Autonomous Database:</li>
+<li>Choose "Match any rules defined below" and type the rules directly into the rule fields, because the rule builder does not offer Autonomous Database:</li>
 </ol>
 <pre><code>resource.id = 'ocid1.autonomousdatabase.oc1.eu-frankfurt-1.&lt;adw-ocid&gt;'
 </code></pre>
@@ -36,11 +36,11 @@ allow any-user to use generative-ai-family in tenancy where request.principal.ty
 </code></pre>
 <p>The second statement matches any Autonomous Database resource principal regardless of the dynamic group.</p>
 <img alt="Policy statements" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/03-policy.png">
-<p>IAM changes take a few minutes to propagate. If Select AI returns <code>ORA-20404</code> "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound — an IAM problem, not a missing model.</p>
+<p>IAM changes take a few minutes to propagate. If Select AI returns <code>ORA-20404</code> "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound: an IAM problem, not a missing model.</p>
 <h2>Resource principal, grants and network access</h2>
 <p>The IAM policy allows Autonomous Databases to call OCI Generative AI, but the database user still has to be able to use that permission. This step prepares <code>OABOOTCAMP</code> for it, in three parts:</p>
 <ul>
-<li><strong>Resource principal:</strong> <code>ENABLE_RESOURCE_PRINCIPAL</code> creates the <code>OCI$RESOURCE_PRINCIPAL</code> credential and makes it available to <code>OABOOTCAMP</code>. With it, the user authenticates to OCI as the database itself — no API key or password is stored in the database.</li>
+<li><strong>Resource principal:</strong> <code>ENABLE_RESOURCE_PRINCIPAL</code> creates the <code>OCI$RESOURCE_PRINCIPAL</code> credential and makes it available to <code>OABOOTCAMP</code>. With it, the user authenticates to OCI as the database itself, so no API key or password is stored in the database.</li>
 <li><strong>Grants:</strong> <code>EXECUTE</code> on <code>DBMS_CLOUD_AI</code> (Select AI), <code>DBMS_CLOUD_AI_AGENT</code> (Select AI Agent, used from Chapter 3 on) and <code>DBMS_CLOUD</code>.</li>
 <li><strong>Network ACL:</strong> allows <code>OABOOTCAMP</code> to make HTTP calls to the OCI Generative AI inference endpoint in Frankfurt.</li>
 </ul>
@@ -67,8 +67,8 @@ END;
 </code></pre>
 <p>For the demo I use the <code>OABOOTCAMP</code> user directly; it later also becomes the MCP identity.</p>
 <h2>The Select AI profile</h2>
-<p>A Select AI profile ties everything together: which AI provider and model to call, which credential to use, and which database objects Select AI may describe to the LLM. Every Select AI call names a profile — <code>SELECT AI</code> after <code>SET_PROFILE</code>, or <code>DBMS_CLOUD_AI.GENERATE</code> with <code>profile_name</code> — and so does every Select AI Agent tool and agent in the following chapters.</p>
-<p>To generate SQL, Select AI sends the LLM the question together with the metadata of the objects in <code>object_list</code> — table and column names, and with <code>comments</code> enabled also the comments from Chapter 1 — not the table data. The result of this step is <code>OABOOTCAMP_AI</code>, the single place where the model and the data scope are defined. Switching to another model later means changing the profile, not the flows built on top of it.</p>
+<p>A Select AI profile ties everything together: which AI provider and model to call, which credential to use, and which database objects Select AI may describe to the LLM. Every Select AI call names a profile (<code>SELECT AI</code> after <code>SET_PROFILE</code>, or <code>DBMS_CLOUD_AI.GENERATE</code> with <code>profile_name</code>), and so does every Select AI Agent tool and agent in the following chapters.</p>
+<p>To generate SQL, Select AI sends the LLM the question together with the metadata of the objects in <code>object_list</code> (table and column names and, with <code>comments</code> enabled, also the comments from Chapter 1), not the table data. The result of this step is <code>OABOOTCAMP_AI</code>, the single place where the model and the data scope are defined. Switching to another model later means changing the profile, not the flows built on top of it.</p>
 <p>As <strong>OABOOTCAMP</strong> <code>[OABOOTCAMP]</code>:</p>
 <pre><code class="language-sql">BEGIN
   DBMS_CLOUD_AI.CREATE_PROFILE(

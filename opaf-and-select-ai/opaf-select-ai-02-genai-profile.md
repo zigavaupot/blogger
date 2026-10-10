@@ -18,7 +18,7 @@ The result is `Oracle AI Database 26ai Enterprise Edition 23.26.4.1.0`. `DBMS_CL
 
 In the OCI GenAI Playground (Chat) in Germany Central (Frankfurt) I confirmed that `openai.gpt-oss-120b` is available on-demand. Fallback models in the same region are `meta.llama-3.3-70b-instruct`, `cohere.command-a-03-2025` and `google.gemini-2.5-*`.
 
-<!-- TODO: OCI GenAI Playground screenshot (01-genai-playground-models.png) is missing — decide later -->
+<!-- TODO: OCI GenAI Playground screenshot (01-genai-playground-models.png) is missing, decide later -->
 ![](IMAGE-TBD)
 
 ## IAM: dynamic group and policy
@@ -28,7 +28,7 @@ The database needs IAM permission to call OCI Generative AI.
 1. Copy the ADW OCID: **Oracle Database → Autonomous Database → (my ADW) → OCID → Copy**.
 2. **Identity & Security → Domains → Default → Dynamic groups → Create dynamic group**.
 3. Name: `dg-adw-selectai`. Description: `ADW OABOOTCAMP - Select AI access to OCI GenAI`.
-4. Choose "Match any rules defined below" and type the rules directly into the rule fields — the rule builder does not offer Autonomous Database:
+4. Choose "Match any rules defined below" and type the rules directly into the rule fields, because the rule builder does not offer Autonomous Database:
 
 ```
 resource.id = 'ocid1.autonomousdatabase.oc1.eu-frankfurt-1.<adw-ocid>'
@@ -51,13 +51,13 @@ The second statement matches any Autonomous Database resource principal regardle
 
 ![Policy statements](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/03-policy.png)
 
-IAM changes take a few minutes to propagate. If Select AI returns `ORA-20404` "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound — an IAM problem, not a missing model.
+IAM changes take a few minutes to propagate. If Select AI returns `ORA-20404` "Object not found" from the GenAI endpoint, that is OCI's NotAuthorizedOrNotFound: an IAM problem, not a missing model.
 
 ## Resource principal, grants and network access
 
 The IAM policy allows Autonomous Databases to call OCI Generative AI, but the database user still has to be able to use that permission. This step prepares `OABOOTCAMP` for it, in three parts:
 
-- **Resource principal:** `ENABLE_RESOURCE_PRINCIPAL` creates the `OCI$RESOURCE_PRINCIPAL` credential and makes it available to `OABOOTCAMP`. With it, the user authenticates to OCI as the database itself — no API key or password is stored in the database.
+- **Resource principal:** `ENABLE_RESOURCE_PRINCIPAL` creates the `OCI$RESOURCE_PRINCIPAL` credential and makes it available to `OABOOTCAMP`. With it, the user authenticates to OCI as the database itself, so no API key or password is stored in the database.
 - **Grants:** `EXECUTE` on `DBMS_CLOUD_AI` (Select AI), `DBMS_CLOUD_AI_AGENT` (Select AI Agent, used from Chapter 3 on) and `DBMS_CLOUD`.
 - **Network ACL:** allows `OABOOTCAMP` to make HTTP calls to the OCI Generative AI inference endpoint in Frankfurt.
 
@@ -89,9 +89,9 @@ For the demo I use the `OABOOTCAMP` user directly; it later also becomes the MCP
 
 ## The Select AI profile
 
-A Select AI profile ties everything together: which AI provider and model to call, which credential to use, and which database objects Select AI may describe to the LLM. Every Select AI call names a profile — `SELECT AI` after `SET_PROFILE`, or `DBMS_CLOUD_AI.GENERATE` with `profile_name` — and so does every Select AI Agent tool and agent in the following chapters.
+A Select AI profile ties everything together: which AI provider and model to call, which credential to use, and which database objects Select AI may describe to the LLM. Every Select AI call names a profile (`SELECT AI` after `SET_PROFILE`, or `DBMS_CLOUD_AI.GENERATE` with `profile_name`), and so does every Select AI Agent tool and agent in the following chapters.
 
-To generate SQL, Select AI sends the LLM the question together with the metadata of the objects in `object_list` — table and column names, and with `comments` enabled also the comments from Chapter 1 — not the table data. The result of this step is `OABOOTCAMP_AI`, the single place where the model and the data scope are defined. Switching to another model later means changing the profile, not the flows built on top of it.
+To generate SQL, Select AI sends the LLM the question together with the metadata of the objects in `object_list` (table and column names and, with `comments` enabled, also the comments from Chapter 1), not the table data. The result of this step is `OABOOTCAMP_AI`, the single place where the model and the data scope are defined. Switching to another model later means changing the profile, not the flows built on top of it.
 
 As **OABOOTCAMP** `[OABOOTCAMP]`:
 

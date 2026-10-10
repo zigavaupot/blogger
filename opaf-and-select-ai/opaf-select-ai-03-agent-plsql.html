@@ -3,7 +3,7 @@
 <img alt="Select AI Agent meets OPAF" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png">
 
 <div class="post-intro">
-<p>A single <code>SELECT AI</code> call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results — all inside the database.</p>
+<p>A single <code>SELECT AI</code> call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results, all inside the database.</p>
 <p>In this chapter I build an in-database sales analyst with <code>DBMS_CLOUD_AI_AGENT</code> on top of the Select AI profile from Chapter 2: one SQL tool, one agent, one task and one team. I run it, check its numbers against hand-written SQL, and show what made its answers repeatable. This team is the one OPAF calls in the following chapters.</p>
 </div>
 
@@ -12,18 +12,18 @@
 <h2>The building blocks</h2>
 <p>Select AI Agent is a set of database objects created with <code>DBMS_CLOUD_AI_AGENT</code>. I think of them as a small analytics department:</p>
 <ul>
-<li><strong>Tool</strong> — a skill the department has. A tool is something an agent can <em>call</em>: a built-in type such as SQL (NL2SQL through a Select AI profile), RAG or web search, or my own PL/SQL function. Its instruction tells the agent when the tool is useful. Here it is one SQL tool over the sales tables.</li>
-<li><strong>Agent</strong> — the analyst. An agent has a role (who it is, what it may and may not do) and its own Select AI profile, which defines the LLM it reasons with. The agent decides <em>how</em> to solve a request: which tool to call, with what input, and when it has enough to answer.</li>
-<li><strong>Task</strong> — the assignment brief. A task says <em>what</em> has to be done: its instruction contains a <code>{query}</code> placeholder for the user's question and the expected shape of the answer, and it lists the tools the agent may use for it.</li>
-<li><strong>Team</strong> — the department. A team pairs agents with tasks and defines the process (here sequential). The team is the object I actually run.</li>
-<li><strong>Conversation</strong> — the case file. It keeps the context of a run, so follow-up questions in the same conversation can build on earlier ones.</li>
+<li><strong>Tool</strong>: a skill the department has. A tool is something an agent can <em>call</em>: a built-in type such as SQL (NL2SQL through a Select AI profile), RAG or web search, or my own PL/SQL function. Its instruction tells the agent when the tool is useful. Here it is one SQL tool over the sales tables.</li>
+<li><strong>Agent</strong>: the analyst. An agent has a role (who it is, what it may and may not do) and its own Select AI profile, which defines the LLM it reasons with. The agent decides <em>how</em> to solve a request: which tool to call, with what input, and when it has enough to answer.</li>
+<li><strong>Task</strong>: the assignment brief. A task says <em>what</em> has to be done: its instruction contains a <code>{query}</code> placeholder for the user's question and the expected shape of the answer, and it lists the tools the agent may use for it.</li>
+<li><strong>Team</strong>: the department. A team pairs agents with tasks and defines the process (here sequential). The team is the object I actually run.</li>
+<li><strong>Conversation</strong>: the case file. It keeps the context of a run, so follow-up questions in the same conversation can build on earlier ones.</li>
 </ul>
 <p>The SQL tool brings its own Select AI profile, which is not necessarily the agent's: the agent's profile is for reasoning, the tool's profile for generating SQL over the objects in its <code>object_list</code>. In my setup both are <code>OABOOTCAMP_AI</code>.</p>
 <h3>How they work together</h3>
 <p>When I run the team with a question:</p>
 <ol>
 <li><code>RUN_TEAM</code> starts the team in a conversation and hands the question to the first agent–task pair.</li>
-<li>The task instruction is filled in — <code>{query}</code> becomes the user's question — and given to the agent together with its role.</li>
+<li>The task instruction is filled in (<code>{query}</code> becomes the user's question) and given to the agent together with its role.</li>
 <li>The agent plans, then calls an allowed tool. The SQL tool turns its input into SQL with Select AI, runs it and returns the result.</li>
 <li>The agent looks at the result and either calls a tool again or decides it has enough.</li>
 <li>The agent writes the final answer in the form the task asks for, and the team returns it.</li>
@@ -169,7 +169,7 @@ END;
 </ul>
 <p>All channels saw higher profit in 2025, but the <strong>Store channel improved the most</strong>, with an increase of about <strong>$1.28 million</strong>. (Profit is calculated as revenue − fixed cost − variable cost, including all order statuses.)</p>
 </blockquote>
-<p>The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner — the kind of question a single <code>SELECT AI</code> call struggles with.</p>
+<p>The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner. This is the kind of question a single <code>SELECT AI</code> call struggles with.</p>
 <h2>Checking against ground truth</h2>
 <p>Before I trust an agent in a demo, I compare its answer with hand-written SQL that involves no LLM:</p>
 <pre><code class="language-sql">SELECT f.channel_name,

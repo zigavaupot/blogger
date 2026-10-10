@@ -17,7 +17,7 @@ In OPAF: **Add MCP server**
   - Username: `OABOOTCAMP`
   - Password: the OABOOTCAMP database password
 
-With **Auth Request**, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. **Bearer Token** mode also works with a token from Chapter 6, but it expires after an hour — fine for a quick test only. **OAuth** needs a client ID and secret, which the ADB database-credential login does not provide.
+With **Auth Request**, OPAF requests a fresh token from the ADB token endpoint itself, so the one-hour token lifetime is not a problem. **Bearer Token** mode also works with a token from Chapter 6, but it expires after an hour, which is fine for a quick test only. **OAuth** needs a client ID and secret, which the ADB database-credential login does not provide.
 
 **Test connection** returns "MCP connection successful", which also confirms that OPAF in its private subnet reaches the public ADB MCP endpoint.
 
@@ -33,8 +33,8 @@ OPAF offers two MCP node types: **MCP server** (exposes tools to an Agent node; 
 
 | Flow | Allowed tool | Who plans the analysis |
 |---|---|---|
-| B – "Database orchestrates" | `ASK_SALES_ANALYST` | Select AI Agent inside ADB |
-| A – "OPAF orchestrates" | `SALES_NL2SQL` | OPAF agent, calling NL2SQL in ADB |
+| B: "Database orchestrates" | `ASK_SALES_ANALYST` | Select AI Agent inside ADB |
+| A: "OPAF orchestrates" | `SALES_NL2SQL` | OPAF agent, calling NL2SQL in ADB |
 
 </div>
 
@@ -70,7 +70,7 @@ If the question is not about sales data, say that you can only answer questions 
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 (Online $2,099,559.05, Catalog $1,360,396.31) | ~25 s |
-| 2025 vs 2024 comparison | Store +1,275,248; Online +660,738; Catalog +660,924 — matches ground truth | ~23 s |
+| 2025 vs 2024 comparison | Store +1,275,248; Online +660,738; Catalog +660,924; matches ground truth | ~23 s |
 | Capital of France | "I'm sorry, but I can only answer questions about the sales database." | ~5 s |
 
 </div>
@@ -114,7 +114,7 @@ END;
 /
 ```
 
-Any unexpected `action` value falls back to `runsql`, so the tool can only ever read data. The built-in `OABOOTCAMP_SALES_SQL` stays — the in-database agent team uses it internally.
+Any unexpected `action` value falls back to `runsql`, so the tool can only ever read data. The built-in `OABOOTCAMP_SALES_SQL` stays, because the in-database agent team uses it internally.
 
 Local test:
 
@@ -147,7 +147,7 @@ Report only numbers exactly as returned by the tool; you may compute simple diff
 Answer concisely with the key numbers formatted with thousand separators, followed by one or two sentences of interpretation.
 ```
 
-The scope rule sits at the top: placed at the end, it was ignored and the LLM answered off-topic questions from general knowledge. Business rules (gross revenue, profit definition, all order statuses) are not repeated — they live in the database comments, which the NL2SQL tool applies for every client.
+The scope rule sits at the top: placed at the end, it was ignored and the LLM answered off-topic questions from general knowledge. Business rules (gross revenue, profit definition, all order statuses) are not repeated: they live in the database comments, which the NL2SQL tool applies for every client.
 
 ![Flow A canvas](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/11-opaf-flow-a-canvas.png)
 
@@ -156,7 +156,7 @@ The scope rule sits at the top: placed at the end, it was ignored and the LLM an
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 | ~12 s |
-| 2025 vs 2024 comparison | Store +1,275,247.94; Catalog +660,923.73; Online +660,737.84 — matches ground truth | ~20 s |
+| 2025 vs 2024 comparison | Store +1,275,247.94; Catalog +660,923.73; Online +660,737.84; matches ground truth | ~20 s |
 | Capital of France | "I'm sorry, but I can only answer questions about the sales database." | ~5 s |
 | Show me the SQL you used for profit by channel in 2025 | Generated SQL (`showsql`) shown in chat | ~12 s |
 
@@ -168,7 +168,7 @@ The scope rule sits at the top: placed at the end, it was ignored and the LLM an
 
 <div class="zv-table-compact" markdown="1">
 
-| | Flow B – Database orchestrates | Flow A – OPAF orchestrates |
+| | Flow B: Database orchestrates | Flow A: OPAF orchestrates |
 |---|---|---|
 | MCP tool | `ASK_SALES_ANALYST` | `SALES_NL2SQL` |
 | Planning | Select AI Agent in ADB | OPAF agent |

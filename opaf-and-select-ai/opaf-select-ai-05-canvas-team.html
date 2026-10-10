@@ -13,15 +13,15 @@
 <p>Flow name: <code>SELECT AI - no PL/SQL</code>. All objects get a <code>C3_</code> prefix so they don't collide with the PL/SQL-created objects from Chapter 3.</p>
 <p>Every node is in <strong>+ Create new</strong> mode, and there are two kinds of wires:</p>
 <ul>
-<li><strong>Definition chain</strong> (dark ports) — how the team is assembled: <code>In-Database Tool</code> → Task <strong>Choose AI Tools</strong> · Task <strong>Task</strong> → Agent <strong>Task</strong> · Agent <strong>Agent</strong> → Team <strong>Agents</strong></li>
-<li><strong>Message flow</strong> (blue ports) — what happens at runtime: <code>Chat input</code> <strong>Message</strong> → Team <strong>Prompt</strong> · Team <strong>Result</strong> → <code>Chat output</code> <strong>Message</strong></li>
+<li><strong>Definition chain</strong> (dark ports) shows how the team is assembled: <code>In-Database Tool</code> → Task <strong>Choose AI Tools</strong> · Task <strong>Task</strong> → Agent <strong>Task</strong> · Agent <strong>Agent</strong> → Team <strong>Agents</strong></li>
+<li><strong>Message flow</strong> (blue ports) shows what happens at runtime: <code>Chat input</code> <strong>Message</strong> → Team <strong>Prompt</strong> · Team <strong>Result</strong> → <code>Chat output</code> <strong>Message</strong></li>
 </ul>
 <pre><code>In-Database Tool ──► In-Database Task ──► In-Database Agent ──► In-Database Team ──► Chat output
                                                                         ▲
                                                            Chat input ──┘
 </code></pre>
 <img alt="Flow C3 canvas: In-Database Tool, Task, Agent and Team nodes in Create new mode" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/20-opaf-flow-c3-canvas.png">
-<p>In Create new mode the Task node gets a <strong>Choose AI Tools</strong> input and the Team node an <strong>Agents</strong> input — that is how the definition chain is wired.</p>
+<p>In Create new mode the Task node gets a <strong>Choose AI Tools</strong> input and the Team node an <strong>Agents</strong> input. That is how the definition chain is wired.</p>
 <h2>Node settings</h2>
 <p><strong>In-Database Tool</strong></p>
 <div class="zv-table-compact">
@@ -173,7 +173,7 @@
 </tr>
 <tr>
 <td>2025 vs 2024 comparison</td>
-<td>Store +$1,275,247.94; Online +$660,737.84; Catalog +$660,923.73 — matches ground truth</td>
+<td>Store +$1,275,247.94; Online +$660,737.84; Catalog +$660,923.73; matches ground truth</td>
 <td>~18 s</td>
 </tr>
 <tr>
@@ -185,7 +185,17 @@
 </table>
 </div>
 <img alt="Flow C3 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/21-opaf-flow-c3-chat.png">
-<p>These are the same answers as the PL/SQL-built team in C2. The objects are identical whether I create them with <code>DBMS_CLOUD_AI_AGENT</code> or on the OPAF canvas — the only prerequisite is a good Select AI profile over commented tables.</p>
+<h2>Checking the database</h2>
+<p>The canvas does not keep its own copy of the team: in Create new mode OPAF creates real Select AI Agent objects in the database, as the user of the database connection. As <code>OABOOTCAMP</code>:</p>
+<pre><code class="language-sql">SELECT agent_team_name, status FROM user_ai_agent_teams;
+</code></pre>
+<pre><code>AGENT_TEAM_NAME       STATUS  
+--------------------- ------- 
+OABOOTCAMP_SALES_TEAM ENABLED 
+C3_SALES_TEAM         ENABLED
+</code></pre>
+<p>Both teams are there: <code>OABOOTCAMP_SALES_TEAM</code>, created in PL/SQL in Chapter 3, and <code>C3_SALES_TEAM</code>, created from the OPAF canvas.</p>
+<p>The test answers above are the same as those of the PL/SQL-built team in C2. The objects are identical whether I create them with <code>DBMS_CLOUD_AI_AGENT</code> or on the OPAF canvas. The only prerequisite is a good Select AI profile over commented tables.</p>
 <p>So far OPAF has reached the database over a database connection. In Chapter 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.</p>
 <hr>
 <p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction and list of chapters</a>.</p>
