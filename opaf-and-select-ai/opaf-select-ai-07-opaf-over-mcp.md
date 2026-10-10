@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 7: OPAF Agents over MCP
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 In Part 6 I enabled the Autonomous Database built-in MCP server and exposed the in-database agent team as a tool. Now OPAF becomes the MCP client.
 

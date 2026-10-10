@@ -9,7 +9,7 @@
 - Converter: `python3 tools/md2blogger.py <file.md>` → writes `<file>.html` and runs the checklist.
 
 ## Open
-1. Featured images: `FEATURED-IMAGE-URL` placeholder in all 9 posts.
+1. Featured images: DONE — all 9 posts use images/select-ai-opaf-blog-series.png.
 2. Links: `SERIES-URL` (Parts 1–8), `PART1-URL`…`PART8-URL` (Part 0) — replace after publishing.
 3. Missing screenshots (`IMAGE-TBD` + TODO comment): GenAI Playground (Part 2), Select AI node palette (Part 4).
 4. Screenshots that contradict text (used as-is so far): 11 Flow A canvas shows OABOOTCAMP_SALES_SQL; 18 Flow D canvas has third Show SQL bridge (Part 8 text mentions it — remove phrase if retaken); 14 C1 dropdown on Chat, not Narrate.

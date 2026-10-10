@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 6: The ADB Built-in MCP Server
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 So far OPAF has reached the database through its native Select AI nodes. Those only exist in OPAF. To make the same in-database agent available to any MCP client, Autonomous AI Database has an MCP server built in: there is no MCP infrastructure to host, and it exposes the Select AI Agent tools the authenticated database user can access.
 

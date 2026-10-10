@@ -1,8 +1,10 @@
 # Select AI Agent meets OPAF Series
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 This is the overview of my Select AI Agent meets OPAF series. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (`OABOOTCAMP`) and build it six ways in OPAF — plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.
+
+When I started, I only wanted to try out how Select AI Agent works with OPAF. It turned into quite an exploratory journey: each experiment opened another way to connect the two, and I ended up with six scenarios. I doubt these are all — there are most likely alternatives I haven't explored yet.
 
 ## What the series covers
 
@@ -45,16 +47,22 @@ My environment:
 
 ## All six flows compared
 
+In the table, *DB* means a database connection with the wallet, and *ADB team* means the Select AI Agent team running in the database.
+
+<div class="zv-table-compact" markdown="1">
+
 | | C1 | C2 | C3 | A | B | D |
 |---|---|---|---|---|---|---|
-| Connection | DB connection | DB connection | DB connection | MCP | MCP | DB connection |
-| LLM in OPAF | none | none | none | plans and calls tools | routes only | routes between bridges |
-| Planning | none (one SQL) | Select AI Agent in ADB | Select AI Agent in ADB | OPAF agent | Select AI Agent in ADB | team for analytical questions |
-| Multi-step comparison | partial (winner only) | full | full | full | full | full |
-| Exact numbers | rounded (Narrate) | yes | yes | yes | yes | yes (team answer rounded to whole dollars) |
-| Can show SQL | yes (Show SQL action) | no | no | yes (`showsql`) | no | no (declines explicitly) |
-| Off-topic guardrail | `enforce_object_list` (raw ORA message) | agent role in ADB | agent role in ADB | explicit scope rule in OPAF | OPAF scope rule | OPAF scope rule |
+| Connection | DB | DB | DB | MCP | MCP | DB |
+| LLM in OPAF | none | none | none | plans, calls tools | routes only | routes between bridges |
+| Planning | none (one SQL) | ADB team | ADB team | OPAF agent | ADB team | ADB team for analytical questions |
+| Multi-step | partial (winner only) | full | full | full | full | full |
+| Exact numbers | rounded (Narrate) | yes | yes | yes | yes | yes (team rounds to whole dollars) |
+| Shows SQL | yes (Show SQL) | no | no | yes (`showsql`) | no | no (declines) |
+| Guardrail | `enforce_object_list` (raw ORA error) | agent role | agent role | OPAF scope rule | OPAF scope rule | OPAF scope rule |
 | Typical time | 4–9 s | 9–19 s | 11–18 s | 12–20 s | 23–25 s | 7–19 s |
+
+</div>
 
 All flows that answer return the same numbers: the business definitions live in the database, so every path — native node, MCP or routing — gets the same semantics.
 

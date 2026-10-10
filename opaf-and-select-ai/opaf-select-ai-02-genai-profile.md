@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 2: Connecting Autonomous Database to OCI Generative AI
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 With the schema prepared in Part 1, the next step is giving Select AI an LLM to work with. In my setup the database calls OCI Generative AI with its own resource principal, so no API keys are stored anywhere in the database.
 

@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 4: Select AI and the in-database team as native OPAF nodes
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 With the Select AI profile from Part 2 and the agent team from Part 3 in the database, the simplest way to put them in front of users is OPAF's own Select AI nodes. They talk to the database over a database connection — no MCP server, no wrapper functions and no LLM in OPAF.
 

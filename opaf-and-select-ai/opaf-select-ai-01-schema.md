@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 1: Making a star schema Select AI-ready
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 Select AI turns a question into SQL, but it only knows what the data dictionary tells it. My OA Bootcamp schema (`OABOOTCAMP`) is a classic sales star schema with no declared keys and no comments, so out of the box Select AI has nothing to go on except column names.
 

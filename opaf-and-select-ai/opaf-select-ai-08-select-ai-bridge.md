@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 8: Routing with Select AI Bridge
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 Part 4 showed two extremes: plain Select AI is fast but answers with one SQL statement, while the in-database team plans the analysis but takes longer. Part 7 put an OPAF agent in front of database tools over MCP. In this last part I combine the two ideas without MCP.
 

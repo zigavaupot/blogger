@@ -1,6 +1,6 @@
 import re, sys, markdown
 def convert(md):
-    html = markdown.markdown(md, extensions=['tables','fenced_code'], output_format='html')
+    html = markdown.markdown(md, extensions=['tables','fenced_code','md_in_html'], output_format='html')
     html = re.sub(r'<h1>.*?</h1>\s*', '', html, count=1, flags=re.S)
     html = re.sub(r'\s+style="[^"]*"', '', html)
     html = re.sub(r'<p>\s*(<img [^>]*>)\s*</p>', r'\1', html)

@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 5: No-code Select AI Agent
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 In Part 3 I built the in-database sales analyst with `DBMS_CLOUD_AI_AGENT` in PL/SQL, and in Part 4 OPAF ran it with the In-Database Team node. The Select AI nodes can do more than run existing objects: in **Create new** mode they create them.
 

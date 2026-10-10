@@ -1,9 +1,10 @@
 <article class="zv-blog-post">
 
-<img alt="" src="FEATURED-IMAGE-URL">
+<img alt="Select AI Agent meets OPAF blog series" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png">
 
 <div class="post-intro">
 <p>This is the overview of my Select AI Agent meets OPAF series. It answers one question: how do Select AI Agent in Autonomous Database 26ai and Oracle Private Agent Factory (OPAF) fit together? I take one sales analyst over my OA Bootcamp sales schema (<code>OABOOTCAMP</code>) and build it six ways in OPAF — plain Select AI, the in-database agent team called natively, the same team built visually without PL/SQL, two flows through the Autonomous Database built-in MCP server, and a native routing flow. Every flow returns the same numbers, because the business definitions live in the database, not in the agent.</p>
+<p>When I started, I only wanted to try out how Select AI Agent works with OPAF. It turned into quite an exploratory journey: each experiment opened another way to connect the two, and I ended up with six scenarios. I doubt these are all — there are most likely alternatives I haven't explored yet.</p>
 </div>
 
 <!--more-->
@@ -85,6 +86,8 @@
 <li><a href="PART8-URL">Part 8: Native routing with Select AI Bridge</a> — flow D.</li>
 </ol>
 <h2>All six flows compared</h2>
+<p>In the table, <em>DB</em> means a database connection with the wallet, and <em>ADB team</em> means the Select AI Agent team running in the database.</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -100,33 +103,33 @@
 <tbody>
 <tr>
 <td>Connection</td>
-<td>DB connection</td>
-<td>DB connection</td>
-<td>DB connection</td>
+<td>DB</td>
+<td>DB</td>
+<td>DB</td>
 <td>MCP</td>
 <td>MCP</td>
-<td>DB connection</td>
+<td>DB</td>
 </tr>
 <tr>
 <td>LLM in OPAF</td>
 <td>none</td>
 <td>none</td>
 <td>none</td>
-<td>plans and calls tools</td>
+<td>plans, calls tools</td>
 <td>routes only</td>
 <td>routes between bridges</td>
 </tr>
 <tr>
 <td>Planning</td>
 <td>none (one SQL)</td>
-<td>Select AI Agent in ADB</td>
-<td>Select AI Agent in ADB</td>
+<td>ADB team</td>
+<td>ADB team</td>
 <td>OPAF agent</td>
-<td>Select AI Agent in ADB</td>
-<td>team for analytical questions</td>
+<td>ADB team</td>
+<td>ADB team for analytical questions</td>
 </tr>
 <tr>
-<td>Multi-step comparison</td>
+<td>Multi-step</td>
 <td>partial (winner only)</td>
 <td>full</td>
 <td>full</td>
@@ -141,23 +144,23 @@
 <td>yes</td>
 <td>yes</td>
 <td>yes</td>
-<td>yes (team answer rounded to whole dollars)</td>
+<td>yes (team rounds to whole dollars)</td>
 </tr>
 <tr>
-<td>Can show SQL</td>
-<td>yes (Show SQL action)</td>
+<td>Shows SQL</td>
+<td>yes (Show SQL)</td>
 <td>no</td>
 <td>no</td>
 <td>yes (<code>showsql</code>)</td>
 <td>no</td>
-<td>no (declines explicitly)</td>
+<td>no (declines)</td>
 </tr>
 <tr>
-<td>Off-topic guardrail</td>
-<td><code>enforce_object_list</code> (raw ORA message)</td>
-<td>agent role in ADB</td>
-<td>agent role in ADB</td>
-<td>explicit scope rule in OPAF</td>
+<td>Guardrail</td>
+<td><code>enforce_object_list</code> (raw ORA error)</td>
+<td>agent role</td>
+<td>agent role</td>
+<td>OPAF scope rule</td>
 <td>OPAF scope rule</td>
 <td>OPAF scope rule</td>
 </tr>
@@ -172,6 +175,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>All flows that answer return the same numbers: the business definitions live in the database, so every path — native node, MCP or routing — gets the same semantics.</p>
 <h2>Key takeaways</h2>
 <ul>

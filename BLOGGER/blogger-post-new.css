@@ -83,6 +83,15 @@
 .zv-blog-post th, .zv-blog-post td { border: 1px solid var(--zv-line); padding: 8px 10px; text-align: left; vertical-align: top; }
 .zv-blog-post th { background: var(--zv-paper-hi); font-weight: 600; font-family: "Inter", sans-serif; }
 
+/* Compact table for wide comparison tables: <div class="zv-table-compact"><table>...</table></div> */
+.zv-blog-post .zv-table-compact { margin: 0 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.zv-blog-post .zv-table-compact table { font-size: 13.5px; line-height: 1.4; margin: 0; }
+.zv-blog-post .zv-table-compact th,
+.zv-blog-post .zv-table-compact td { hyphens: manual; overflow-wrap: normal; padding: 6px 8px; word-break: normal; }
+.zv-blog-post .zv-table-compact th:first-child,
+.zv-blog-post .zv-table-compact td:first-child { font-weight: 600; white-space: nowrap; }
+.zv-blog-post .zv-table-compact code { font-size: 12px; white-space: nowrap; }
+
 /* Series overview grid — same visual style as Posts grid */
 .zv-blog-post .zv-series-grid {
   display: grid;

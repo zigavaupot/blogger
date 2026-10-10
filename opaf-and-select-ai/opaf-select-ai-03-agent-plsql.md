@@ -1,6 +1,6 @@
 # Select AI Agent meets OPAF, Part 3: Building a Select AI Agent team in PL/SQL
 
-![](FEATURED-IMAGE-URL)
+![Select AI Agent meets OPAF blog series](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png)
 
 A single `SELECT AI` call answers one question with one SQL statement. Ask it to compare profit between two years by channel and pick the winner, and it has no step in which to plan that. Select AI Agent adds exactly that step: an agent can break a question into tool calls, run them and combine the results — all inside the database.
 
