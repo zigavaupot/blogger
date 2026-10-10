@@ -79,7 +79,7 @@ The tool can also be called directly. A `tools/call` request with `ACTION` set t
 
 ## Wrapping the team as a tool
 
-To let an MCP client delegate a whole question to the in-database agent team, I wrap `RUN_TEAM` in a PL/SQL function and register it as a custom tool, as `OABOOTCAMP`:
+Calling the SQL tool directly leaves the planning to the MCP client: its LLM has to decide which data questions to ask, possibly in several calls, and combine the results itself. The alternative is to hand the whole question to the in-database agent team from Chapter 3, which plans the analysis inside the database and returns a finished answer. MCP exposes tools, not teams, so I wrap `RUN_TEAM` in a PL/SQL function and register it as a custom tool, as `OABOOTCAMP`:
 
 ```sql
 CREATE OR REPLACE FUNCTION ask_sales_analyst(question IN CLOB) RETURN CLOB AS

@@ -64,7 +64,7 @@ curl -s -X POST &quot;$BASE/mcp/v1/databases/$DB_OCID&quot; \
 <p>The tool can also be called directly. A <code>tools/call</code> request with <code>ACTION</code> set to <code>runsql</code> and <code>QUERY</code> set to <em>total revenue by sales channel in 2025</em> returns the query result as JSON: Store 48,870,536.68, Online 28,325,625.87 and Catalog 16,223,837.45, the same 2025 revenue as in the ground truth table in Chapter 3.</p>
 <img alt="MCP tools/call to OABOOTCAMP_SALES_SQL with runsql" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/06a-mcp-curl-sql-tool.png">
 <h2>Wrapping the team as a tool</h2>
-<p>To let an MCP client delegate a whole question to the in-database agent team, I wrap <code>RUN_TEAM</code> in a PL/SQL function and register it as a custom tool, as <code>OABOOTCAMP</code>:</p>
+<p>Calling the SQL tool directly leaves the planning to the MCP client: its LLM has to decide which data questions to ask, possibly in several calls, and combine the results itself. The alternative is to hand the whole question to the in-database agent team from Chapter 3, which plans the analysis inside the database and returns a finished answer. MCP exposes tools, not teams, so I wrap <code>RUN_TEAM</code> in a PL/SQL function and register it as a custom tool, as <code>OABOOTCAMP</code>:</p>
 <pre><code class="language-sql">CREATE OR REPLACE FUNCTION ask_sales_analyst(question IN CLOB) RETURN CLOB AS
   l_conv   VARCHAR2(100);
   l_answer CLOB;
