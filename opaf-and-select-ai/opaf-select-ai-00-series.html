@@ -20,6 +20,7 @@
 </ul>
 <h2>Architecture: one database, six front ends</h2>
 <p>In all six flows, natural language is turned into SQL inside the database by Select AI. OPAF is always the front end. What changes from flow to flow is how OPAF reaches the database and who plans the analysis.</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -68,6 +69,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>My environment:</p>
 <ul>
 <li>Autonomous AI Database (ADW) 26ai, version <code>23.26.4.1.0</code>, public endpoint ("Allow secure access from everywhere") with mTLS required for SQL*Net connections</li>

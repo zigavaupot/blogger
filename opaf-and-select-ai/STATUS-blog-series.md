@@ -16,7 +16,7 @@
 5. Decide whether "All six flows compared" and "Key takeaways" stay in Part 0.
 6. Parts 1–4, 6–8 titles: short alternatives proposed, author kept current ones (only Part 5 changed).
 7. Unrelated screenshot `Posnetek zaslona 2026–10–08 ob 09.54.54.png` (personal data) in images/ — don't push.
-8. `BLOGGER/blogger-post-new.css` line 22 stray fragment.
+8. CSS: line 21 stray fragment FIXED; zv-table-compact rules added — push BLOGGER/blogger-post-new.css to GitHub.
 
 ## Suggested labels
 - Part 0: Series, Hero, OPAF, Select AI, MCP, Autonomous Database

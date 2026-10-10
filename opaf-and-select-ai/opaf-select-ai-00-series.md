@@ -19,6 +19,8 @@ When I started, I only wanted to try out how Select AI Agent works with OPAF. It
 
 In all six flows, natural language is turned into SQL inside the database by Select AI. OPAF is always the front end. What changes from flow to flow is how OPAF reaches the database and who plans the analysis.
 
+<div class="zv-table-compact" markdown="1">
+
 | Flow | OPAF building blocks | How OPAF reaches the database | Who plans the analysis |
 |---|---|---|---|
 | C1 | Select AI node | Database connection (wallet) | Nobody — one question, one SQL statement |
@@ -27,6 +29,8 @@ In all six flows, natural language is turned into SQL inside the database by Sel
 | A | Agent node + MCP server node (`SALES_NL2SQL`) | ADB built-in MCP server | OPAF agent |
 | B | Agent node + MCP server node (`ASK_SALES_ANALYST`) | ADB built-in MCP server | Select AI Agent in ADB |
 | D | Agent node + two Select AI Bridges (Run SQL, Team) | Database connection (wallet) | OPAF agent routes; the in-database team plans analytical questions |
+
+</div>
 
 My environment:
 
