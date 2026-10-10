@@ -24,6 +24,7 @@
 <p>In Create new mode the Task node gets a <strong>Choose AI Tools</strong> input and the Team node an <strong>Agents</strong> input — that is how the definition chain is wired.</p>
 <h2>Node settings</h2>
 <p><strong>In-Database Tool</strong></p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -54,10 +55,12 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>Instruction:</p>
 <pre><code>Use this tool for any question about sales, revenue, profit, discounts, units, orders, customers, products, geography or time periods. It translates the question into SQL over the sales database and returns the result.
 </code></pre>
 <p><strong>In-Database Task</strong></p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -80,8 +83,10 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>The instruction is the task instruction from Chapter 3, with two changes: it names the <code>C3_SALES_SQL</code> tool, and it does not ask for the <code>runsql</code> action. <code>{query}</code> is replaced with the user's question at runtime.</p>
 <p><strong>In-Database Agent</strong></p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -112,10 +117,12 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>The Agent Role is the role from Chapter 3 plus one sentence that tells the agent how to refuse off-topic questions:</p>
 <pre><code>You are a sales analyst for a consumer electronics company. You answer business questions using data from the sales database only, never from general knowledge. If a question is not about sales data, reply that you can only answer questions about the sales database. Revenue is gross unless the user asks for net revenue (revenue minus discount). Profit is revenue minus fixed and variable cost. Include all order statuses unless the user explicitly asks about a specific status. Sales data covers January 2024 to September 2026.
 </code></pre>
 <p><strong>In-Database Team</strong></p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -146,8 +153,10 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>The forms have no human-tool setting. The agent never paused for clarification in my tests, so the defaults work for this non-interactive use.</p>
 <h2>Tests</h2>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -174,6 +183,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <img alt="Flow C3 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/21-opaf-flow-c3-chat.png">
 <p>These are the same answers as the PL/SQL-built team in C2. The objects are identical whether I create them with <code>DBMS_CLOUD_AI_AGENT</code> or on the OPAF canvas — the only prerequisite is a good Select AI profile over commented tables.</p>
 <p>So far OPAF has reached the database over a database connection. In Chapter 6 I open the same agent to any MCP client with the Autonomous Database built-in MCP server.</p>

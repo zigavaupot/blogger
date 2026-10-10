@@ -18,12 +18,16 @@ Flow name: `Sales Analyst – Native Select AI`.
                                        Message ─┴──► Message [Chat output]
 ```
 
+<div class="zv-table-compact" markdown="1">
+
 | Node | Settings |
 |---|---|
 | Select AI Bridge | Profile mode, database `adw001`, profile `OABOOTCAMP_AI`, action **Run SQL** |
 | Select AI Bridge | Team mode, database `adw001`, team `OABOOTCAMP_SALES_TEAM` |
 | Agent | `openai.gpt-oss-120b (oci)`, temperature 0.01; both bridge **Tool** outputs connected to its **Tools** input |
 | Chat input / Chat output | Message → Agent Prompt; Agent Message → Chat output |
+
+</div>
 
 Sub-agents and the Agent output port stay unconnected. The bridges have no inputs — the agent calls them and passes the question itself.
 
@@ -54,12 +58,16 @@ The "Answered with" line makes the routing decision visible. The "Output only th
 
 ## Tests
 
+<div class="zv-table-compact" markdown="1">
+
 | Question | Route | Answer | Time |
 |---|---|---|---|
 | Highest profit in 2025 | Run SQL | Store, $3,498,467.01 | ~15 s |
 | 2025 vs 2024 comparison | In-database team | Store +$1,275,248; Online +$660,738; Catalog +$660,924 (rounded to whole dollars) | ~19 s |
 | Show me the SQL for profit by channel in 2025 | none | Declined, points to the NL2SQL flow | ~9 s |
 | Capital of France | none | Refusal | ~7 s |
+
+</div>
 
 ![Flow D chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/19-opaf-flow-d-chat.png)
 

@@ -38,6 +38,8 @@ Steps 3 and 4 are the difference from plain Select AI: the agent can split one q
 
 Each piece carries different knowledge, so it helps to decide up front where each rule lives:
 
+<div class="zv-table-compact" markdown="1">
+
 | What | Where it lives |
 |---|---|
 | Joins, metric definitions, allowed values, default order status rule | Table and column comments (Chapter 1) |
@@ -46,6 +48,8 @@ Each piece carries different knowledge, so it helps to decide up front where eac
 | Persona, data-only scope, business rules restated | Agent role |
 | How to answer: one grouped query, only returned numbers, format | Task instruction |
 | Which agent does which task, process | Team |
+
+</div>
 
 All blocks below run as `OABOOTCAMP`. I use `q'[...]'` quoting so single quotes inside instructions need no escaping.
 
@@ -168,8 +172,6 @@ All three runs returned the same numbers. One of them:
 >
 > All channels saw higher profit in 2025, but the **Store channel improved the most**, with an increase of about **$1.28 million**. (Profit is calculated as revenue − fixed cost − variable cost, including all order statuses.)
 
-![RUN_TEAM in a fresh conversation with the answer in the script output](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/create-conversation.png)
-
 The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner — the kind of question a single `SELECT AI` call struggles with.
 
 ## Checking against ground truth
@@ -190,6 +192,8 @@ GROUP  BY f.channel_name, t.cal_year
 ORDER  BY f.channel_name, t.cal_year;
 ```
 
+<div class="zv-table-compact" markdown="1">
+
 | Channel | Year | Revenue | Fixed cost | Variable cost | Profit |
 |---|---|---:|---:|---:|---:|
 | Catalog | 2024 | 14,690,302 | 3,146,801 | 10,844,028 | 699,473 |
@@ -198,6 +202,8 @@ ORDER  BY f.channel_name, t.cal_year;
 | Online | 2025 | 28,325,626 | 5,752,537 | 20,473,530 | 2,099,559 |
 | Store | 2024 | 39,442,126 | 8,300,655 | 28,918,252 | 2,223,219 |
 | Store | 2025 | 48,870,537 | 9,861,679 | 35,510,391 | 3,498,467 |
+
+</div>
 
 The agent's answers match exactly. These numbers are the ground truth for every flow in the following chapters.
 

@@ -121,6 +121,7 @@ WHERE dt.&quot;CAL_YEAR&quot; = 2025
 </code></pre>
 <p>The join on <code>DAY_DT</code>, the year filter on <code>CAL_YEAR</code> and the absence of an <code>ORDER_STATUS</code> filter all come from the comments.</p>
 <p>Further checks with <code>showsql</code> and <code>runsql</code>:</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -143,6 +144,7 @@ WHERE dt.&quot;CAL_YEAR&quot; = 2025
 </tr>
 </tbody>
 </table>
+</div>
 <p>A single <code>SELECT AI</code> call answers one question with one SQL statement. In Chapter 3 I build a Select AI Agent team on top of this profile, which can plan a question, call the SQL tool several times and combine the results.</p>
 <hr>
 <p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction and list of chapters</a>.</p>

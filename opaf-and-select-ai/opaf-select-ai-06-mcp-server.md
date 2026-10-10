@@ -120,10 +120,14 @@ It matches the ground truth from Chapter 3.
 
 After creating the wrapper, `tools/list` returns both tools:
 
+<div class="zv-table-compact" markdown="1">
+
 | Tool | Input schema | Purpose |
 |---|---|---|
 | `OABOOTCAMP_SALES_SQL` | `ACTION`, `QUERY` | The client agent calls NL2SQL directly |
 | `ASK_SALES_ANALYST` | `QUESTION` | The client delegates the question to the in-database agent team |
+
+</div>
 
 ![MCP tools/list returning both tools](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/06-mcp-curl.png)
 

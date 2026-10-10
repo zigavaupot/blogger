@@ -10,7 +10,7 @@
 <!--more-->
 
 <h2>The Select AI node group</h2>
-<p>Besides MCP, OPAF Custom Flows have a <strong>Select AI</strong> node group: In-Database Agent, Select AI, In-Database Task, In-Database Team and In-Database Tool.</p>
+<p>OPAF Custom Flows have a <strong>Select AI</strong> node group: In-Database Agent, Select AI, In-Database Task, In-Database Team and In-Database Tool.</p>
 <!-- TODO: OPAF Select AI node palette screenshot (13-opaf-select-ai-nodes.png) is missing — decide later -->
 <img alt="" src="IMAGE-TBD">
 <h2>Database connection</h2>
@@ -40,6 +40,7 @@
 <p>The other actions are Run SQL (result data), Show SQL, Explain SQL, Show prompt and Chat. Chat sends the prompt straight to the LLM without touching the database, so it is not suitable here.</p>
 <img alt="Select AI node with the list of Select AI actions" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/14-opaf-flow-c1-canvas.png">
 <p>There is no LLM in OPAF in this flow — all the intelligence is the Select AI profile in the database.</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -66,6 +67,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <img alt="Flow C1 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/15-opaf-flow-c1-chat.png">
 <p>C1 is the fastest of the six flows, and correct, but:</p>
 <ul>
@@ -83,6 +85,7 @@
 </ul>
 <p>The node runs the team from Chapter 3 directly. It handles the conversation itself; there is no conversation setting.</p>
 <img alt="Flow C2 canvas with the In-Database Team node" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/16-opaf-flow-c2-canvas.png">
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -109,6 +112,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <img alt="Flow C2 chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/17-opaf-flow-c2-chat.png">
 <p>Here the refusal comes from the in-database agent itself — its role ("using data from the sales database only, never from general knowledge") is enough.</p>
 <p>The two nodes show the difference between Select AI and Select AI Agent in one picture: C1 answers in one SQL statement, C2 plans the comparison and reports every channel with exact numbers. The In-Database Team node also offers <strong>Create new</strong>, which builds the team from In-Database Agent, Task and Tool nodes on the canvas instead of PL/SQL — the topic of Chapter 5.</p>

@@ -17,6 +17,7 @@
 [Chat input] Message ─────────────────► Prompt  │
                                        Message ─┴──► Message [Chat output]
 </code></pre>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -43,6 +44,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>Sub-agents and the Agent output port stay unconnected. The bridges have no inputs — the agent calls them and passes the question itself.</p>
 <img alt="Flow D canvas with Select AI Bridge nodes and the Agent" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/18-opaf-flow-d-canvas.png">
 <h2>Agent instructions</h2>
@@ -65,6 +67,7 @@ OUTPUT RULES:
 </code></pre>
 <p>The "Answered with" line makes the routing decision visible. The "Output only the final answer" rule stops gpt-oss from leaking draft fragments into the message.</p>
 <h2>Tests</h2>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -101,6 +104,7 @@ OUTPUT RULES:
 </tr>
 </tbody>
 </table>
+</div>
 <img alt="Flow D chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/19-opaf-flow-d-chat.png">
 <p>The agent sends the lookup to Run SQL and the comparison to the team, and both answers match the ground truth from Chapter 3.</p>
 <h2>Why there is no Show SQL bridge</h2>

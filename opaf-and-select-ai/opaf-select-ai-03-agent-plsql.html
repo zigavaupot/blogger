@@ -34,6 +34,7 @@
 </code></pre>
 <p>Steps 3 and 4 are the difference from plain Select AI: the agent can split one question into several tool calls and combine the results.</p>
 <p>Each piece carries different knowledge, so it helps to decide up front where each rule lives:</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -68,6 +69,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>All blocks below run as <code>OABOOTCAMP</code>. I use <code>q'[...]'</code> quoting so single quotes inside instructions need no escaping.</p>
 <h2>Tool</h2>
 <p>A built-in tool of type <code>SQL</code>, bound to the <code>OABOOTCAMP_AI</code> profile:</p>
@@ -167,7 +169,6 @@ END;
 </ul>
 <p>All channels saw higher profit in 2025, but the <strong>Store channel improved the most</strong>, with an increase of about <strong>$1.28 million</strong>. (Profit is calculated as revenue − fixed cost − variable cost, including all order statuses.)</p>
 </blockquote>
-<img alt="RUN_TEAM in a fresh conversation with the answer in the script output" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/create-conversation.png">
 <p>The agent planned the comparison, retrieved profit for both years per channel, computed the deltas and picked the winner — the kind of question a single <code>SELECT AI</code> call struggles with.</p>
 <h2>Checking against ground truth</h2>
 <p>Before I trust an agent in a demo, I compare its answer with hand-written SQL that involves no LLM:</p>
@@ -183,6 +184,7 @@ WHERE  t.cal_year IN (2024, 2025)
 GROUP  BY f.channel_name, t.cal_year
 ORDER  BY f.channel_name, t.cal_year;
 </code></pre>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -245,6 +247,7 @@ ORDER  BY f.channel_name, t.cal_year;
 </tr>
 </tbody>
 </table>
+</div>
 <p>The agent's answers match exactly. These numbers are the ground truth for every flow in the following chapters.</p>
 <h2>What made it repeatable</h2>
 <p>A business rule that lives only in comments and role text may be applied in one run and skipped in the next. Three things made the team return the same answer every time:</p>

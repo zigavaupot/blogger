@@ -8,7 +8,7 @@ In this chapter I build two minimal OPAF Custom Flows: C1 runs plain Select AI w
 
 ## The Select AI node group
 
-Besides MCP, OPAF Custom Flows have a **Select AI** node group: In-Database Agent, Select AI, In-Database Task, In-Database Team and In-Database Tool.
+OPAF Custom Flows have a **Select AI** node group: In-Database Agent, Select AI, In-Database Task, In-Database Team and In-Database Tool.
 
 <!-- TODO: OPAF Select AI node palette screenshot (13-opaf-select-ai-nodes.png) is missing — decide later -->
 ![](IMAGE-TBD)
@@ -50,11 +50,15 @@ The other actions are Run SQL (result data), Show SQL, Explain SQL, Show prompt 
 
 There is no LLM in OPAF in this flow — all the intelligence is the Select AI profile in the database.
 
+<div class="zv-table-compact" markdown="1">
+
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, "about 3.5 million dollars" | ~9 s |
 | 2025 vs 2024 comparison | Store, ~3.5 M vs ~2.2 M, increase ~1.28 M — correct winner, but only Store is reported | ~6 s |
 | Capital of France | Refused: no valid SELECT could be generated with the enforced object list (message ends with `ORA-00900: invalid SQL statement`) | ~4 s |
+
+</div>
 
 ![Flow C1 chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/15-opaf-flow-c1-chat.png)
 
@@ -78,11 +82,15 @@ The node runs the team from Chapter 3 directly. It handles the conversation itse
 
 ![Flow C2 canvas with the In-Database Team node](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/16-opaf-flow-c2-canvas.png)
 
+<div class="zv-table-compact" markdown="1">
+
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 (Online $2,099,559.05; Catalog $1,360,396.31) | ~9 s |
 | 2025 vs 2024 comparison | Full year × channel table; Store +$1,275,247.94, Catalog +$660,923.72, Online +$660,737.84 — matches ground truth | ~19 s |
 | Capital of France | "I'm sorry, but I can only provide answers based on the sales data in the database. ..." | ~5 s |
+
+</div>
 
 ![Flow C2 chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/17-opaf-flow-c2-chat.png)
 

@@ -56,6 +56,8 @@ What I found:
 
 The resulting joins:
 
+<div class="zv-table-compact" markdown="1">
+
 | Fact column | Dimension column |
 |---|---|
 | `F_REVENUE.PROD_ITEM_KEY` | `D_PRODUCTS.PROD_ITEM_KEY` |
@@ -63,6 +65,8 @@ The resulting joins:
 | `F_REVENUE.CUST_NUMBER` | `D_CUSTOMERS.CUST_NUMBER` |
 | `F_REVENUE.TIME_BILL_DT` | `D_TIME.DAY_DT` (default sales date) |
 | `F_REVENUE.TIME_PAID_DT` | `D_TIME.DAY_DT` (payment questions only) |
+
+</div>
 
 ## Collecting exact literals
 

@@ -25,6 +25,7 @@
 <p>In a Custom Flow, the MCP server node with server <code>adw_oabootcamp</code> lists the Select AI Agent tools under <strong>Allowed tools</strong>:</p>
 <img alt="OPAF MCP server node listing the ADB tools" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/08-opaf-mcp-tools.png">
 <p>OPAF offers two MCP node types: <strong>MCP server</strong> (exposes tools to an Agent node; the LLM decides when to call them) and <strong>MCP Deterministic Tool</strong> (calls one tool directly with mapped inputs, no LLM). I use <strong>MCP server</strong> for both flows:</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -46,6 +47,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h2>Flow B: the database orchestrates</h2>
 <p>Flow name: <code>Sales Analyst – In-Database Agent</code>. A Custom Flow with four nodes:</p>
 <pre><code>Chat input ──► Agent ──► Chat output
@@ -65,6 +67,7 @@ If the question is not about sales data, say that you can only answer questions 
 </code></pre>
 <p>"Unchanged" and "as-is" keep OPAF's LLM from rephrasing the question or adding its own analysis, so the answer clearly comes from the database agent.</p>
 <img alt="Flow B canvas" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/09-opaf-flow-b-canvas.png">
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -91,6 +94,7 @@ If the question is not about sales data, say that you can only answer questions 
 </tr>
 </tbody>
 </table>
+</div>
 <img alt="Flow B chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/10-opaf-flow-b-chat.png">
 <p>Here the refusal comes from OPAF's agent, which never delegates the off-topic question.</p>
 <h2>An NL2SQL tool OPAF accepts</h2>
@@ -150,6 +154,7 @@ Answer concisely with the key numbers formatted with thousand separators, follow
 </code></pre>
 <p>The scope rule sits at the top: placed at the end, it was ignored and the LLM answered off-topic questions from general knowledge. Business rules (gross revenue, profit definition, all order statuses) are not repeated — they live in the database comments, which the NL2SQL tool applies for every client.</p>
 <img alt="Flow A canvas" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/11-opaf-flow-a-canvas.png">
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -181,8 +186,10 @@ Answer concisely with the key numbers formatted with thousand separators, follow
 </tr>
 </tbody>
 </table>
+</div>
 <img alt="Flow A chat tests" src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/12-opaf-flow-a-chat.png">
 <h2>Flow A vs Flow B</h2>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -224,6 +231,7 @@ Answer concisely with the key numbers formatted with thousand separators, follow
 </tr>
 </tbody>
 </table>
+</div>
 <p>Both flows return identical numbers for the same question, because the semantic layer lives in the database. In Chapter 8 I combine the two ideas without MCP: one OPAF agent that routes simple questions to fast NL2SQL and analytical ones to the in-database team, using Select AI Bridge.</p>
 <hr>
 <p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">introduction and list of chapters</a>.</p>

@@ -43,7 +43,7 @@ My environment:
 1. [Chapter 1: Making a star schema Select AI-ready](https://zigavaupot.blogspot.com/2026/10/chapter-1-preparing-schema-for-select-ai.html) — join validation, exact literals, business rules and comments as the semantic layer.
 2. [Chapter 2: Connecting Autonomous Database to OCI Generative AI](https://zigavaupot.blogspot.com/2026/10/chapter-2-connecting-adb-to-oci.html) — dynamic group, policy, resource principal, the Select AI profile and smoke tests.
 3. [Chapter 3: Building a Select AI Agent team in PL/SQL](https://zigavaupot.blogspot.com/2026/10/chapter-3-select-ai-agent-team-in-plsql.html) — tool, agent, task and team, checked against ground truth.
-4. [Chapter 4: Select AI and the in-database team as native OPAF nodes](CHAPTER4-URL) — flows C1 and C2.
+4. [Chapter 4: Select AI and the in-database team as native OPAF nodes](https://zigavaupot.blogspot.com/2026/10/chapter-4-native-select-ai-nodes-in-opaf.html) — flows C1 and C2.
 5. [Chapter 5: No-code Select AI Agent](CHAPTER5-URL) — flow C3.
 6. [Chapter 6: The Autonomous Database built-in MCP server](CHAPTER6-URL) — enabling it with a tag, testing with curl, wrapping the team as a tool.
 7. [Chapter 7: OPAF over MCP — database orchestrates vs OPAF orchestrates](CHAPTER7-URL) — flows B and A.

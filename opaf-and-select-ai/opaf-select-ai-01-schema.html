@@ -53,6 +53,7 @@ SELECT 'CUST',   COUNT(*)         FROM f_revenue f WHERE NOT EXISTS (SELECT 1 FR
 <li><code>D_TIME</code> covers about 71 years, far more than the fact data, so the comments state the actual data range.</li>
 </ul>
 <p>The resulting joins:</p>
+<div class="zv-table-compact">
 <table>
 <thead>
 <tr>
@@ -83,6 +84,7 @@ SELECT 'CUST',   COUNT(*)         FROM f_revenue f WHERE NOT EXISTS (SELECT 1 FR
 </tr>
 </tbody>
 </table>
+</div>
 <h2>Collecting exact literals</h2>
 <p>For low-cardinality columns I listed the distinct values:</p>
 <pre><code class="language-sql">SELECT 'ORDER_STATUS' col, LISTAGG(DISTINCT order_status, ' | ') vals FROM f_revenue   UNION ALL

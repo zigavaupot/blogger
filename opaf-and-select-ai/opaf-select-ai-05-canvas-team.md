@@ -29,6 +29,8 @@ In Create new mode the Task node gets a **Choose AI Tools** input and the Team n
 
 **In-Database Tool**
 
+<div class="zv-table-compact" markdown="1">
+
 | Field | Value |
 |---|---|
 | Tool Type | SQL |
@@ -36,6 +38,8 @@ In Create new mode the Task node gets a **Choose AI Tools** input and the Team n
 | Choose database | `adw001` |
 | Choose SQL profile | `OABOOTCAMP_AI` |
 | Description | NL2SQL over the OABOOTCAMP sales star schema (F_REVENUE with time, customer, geography and product dimensions). |
+
+</div>
 
 Instruction:
 
@@ -45,15 +49,21 @@ Use this tool for any question about sales, revenue, profit, discounts, units, o
 
 **In-Database Task**
 
+<div class="zv-table-compact" markdown="1">
+
 | Field | Value |
 |---|---|
 | Choose AI Tools | wired from the Tool node |
 | Task Name | `C3_SALES_ANALYSIS_TASK` |
 | Description | Answers sales questions with data from the sales database. |
 
+</div>
+
 The instruction is the task instruction from Chapter 3, with two changes: it names the `C3_SALES_SQL` tool, and it does not ask for the `runsql` action. `{query}` is replaced with the user's question at runtime.
 
 **In-Database Agent**
+
+<div class="zv-table-compact" markdown="1">
 
 | Field | Value |
 |---|---|
@@ -63,6 +73,8 @@ The instruction is the task instruction from Chapter 3, with two changes: it nam
 | Choose profile | `OABOOTCAMP_AI` |
 | Description | Sales analyst over the OABOOTCAMP sales data. |
 
+</div>
+
 The Agent Role is the role from Chapter 3 plus one sentence that tells the agent how to refuse off-topic questions:
 
 ```
@@ -70,6 +82,8 @@ You are a sales analyst for a consumer electronics company. You answer business 
 ```
 
 **In-Database Team**
+
+<div class="zv-table-compact" markdown="1">
 
 | Field | Value |
 |---|---|
@@ -79,15 +93,21 @@ You are a sales analyst for a consumer electronics company. You answer business 
 | Prompt | wired from Chat input |
 | Description | Sales analyst team built visually in OPAF: one agent, one task, one SQL tool. |
 
+</div>
+
 The forms have no human-tool setting. The agent never paused for clarification in my tests, so the defaults work for this non-interactive use.
 
 ## Tests
+
+<div class="zv-table-compact" markdown="1">
 
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 (Online $2,099,559.05; Catalog $1,360,396.31) | ~17 s |
 | 2025 vs 2024 comparison | Store +$1,275,247.94; Online +$660,737.84; Catalog +$660,923.73 — matches ground truth | ~18 s |
 | Capital of France | "I can only answer questions about the sales database." | ~11 s |
+
+</div>
 
 ![Flow C3 chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/21-opaf-flow-c3-chat.png)
 

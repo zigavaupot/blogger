@@ -159,11 +159,15 @@ The join on `DAY_DT`, the year filter on `CAL_YEAR` and the absence of an `ORDER
 
 Further checks with `showsql` and `runsql`:
 
+<div class="zv-table-compact" markdown="1">
+
 | Prompt | Verified |
 |---|---|
 | profit by product line of business and channel in 2025 | join to `D_PRODUCTS`; profit = `REVENUE - COST_FIXED - COST_VARIABLE` |
 | how much revenue was paid in August 2026 | join switches to `TIME_PAID_DT` (role-playing date) |
 | top 5 countries by net revenue in 2025 | end-to-end run; net = `REVENUE - DISCNT_VALUE`; `runsql` returns JSON |
+
+</div>
 
 A single `SELECT AI` call answers one question with one SQL statement. In Chapter 3 I build a Select AI Agent team on top of this profile, which can plan a question, call the SQL tool several times and combine the results.
 

@@ -29,10 +29,14 @@ In a Custom Flow, the MCP server node with server `adw_oabootcamp` lists the Sel
 
 OPAF offers two MCP node types: **MCP server** (exposes tools to an Agent node; the LLM decides when to call them) and **MCP Deterministic Tool** (calls one tool directly with mapped inputs, no LLM). I use **MCP server** for both flows:
 
+<div class="zv-table-compact" markdown="1">
+
 | Flow | Allowed tool | Who plans the analysis |
 |---|---|---|
 | B – "Database orchestrates" | `ASK_SALES_ANALYST` | Select AI Agent inside ADB |
 | A – "OPAF orchestrates" | `SALES_NL2SQL` | OPAF agent, calling NL2SQL in ADB |
+
+</div>
 
 ## Flow B: the database orchestrates
 
@@ -61,11 +65,15 @@ If the question is not about sales data, say that you can only answer questions 
 
 ![Flow B canvas](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/09-opaf-flow-b-canvas.png)
 
+<div class="zv-table-compact" markdown="1">
+
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 (Online $2,099,559.05, Catalog $1,360,396.31) | ~25 s |
 | 2025 vs 2024 comparison | Store +1,275,248; Online +660,738; Catalog +660,924 — matches ground truth | ~23 s |
 | Capital of France | "I'm sorry, but I can only answer questions about the sales database." | ~5 s |
+
+</div>
 
 ![Flow B chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/10-opaf-flow-b-chat.png)
 
@@ -143,6 +151,8 @@ The scope rule sits at the top: placed at the end, it was ignored and the LLM an
 
 ![Flow A canvas](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/11-opaf-flow-a-canvas.png)
 
+<div class="zv-table-compact" markdown="1">
+
 | Question | Answer | Time |
 |---|---|---|
 | Highest profit in 2025 | Store, $3,498,467.01 | ~12 s |
@@ -150,9 +160,13 @@ The scope rule sits at the top: placed at the end, it was ignored and the LLM an
 | Capital of France | "I'm sorry, but I can only answer questions about the sales database." | ~5 s |
 | Show me the SQL you used for profit by channel in 2025 | Generated SQL (`showsql`) shown in chat | ~12 s |
 
+</div>
+
 ![Flow A chat tests](https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/12-opaf-flow-a-chat.png)
 
 ## Flow A vs Flow B
+
+<div class="zv-table-compact" markdown="1">
 
 | | Flow B – Database orchestrates | Flow A – OPAF orchestrates |
 |---|---|---|
@@ -162,6 +176,8 @@ The scope rule sits at the top: placed at the end, it was ignored and the LLM an
 | Off-topic guardrail | Comes with the architecture (only option is delegation) | Needs an explicit, top-placed scope rule |
 | Can show generated SQL | No (finished answer only) | Yes (`showsql`) |
 | Typical answer time | ~23–25 s | ~12–20 s |
+
+</div>
 
 Both flows return identical numbers for the same question, because the semantic layer lives in the database. In Chapter 8 I combine the two ideas without MCP: one OPAF agent that routes simple questions to fast NL2SQL and analytical ones to the in-database team, using Select AI Bridge.
 
