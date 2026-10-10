@@ -75,7 +75,7 @@ The agent sends the lookup to Run SQL and the comparison to the team, and both a
 
 ## Why there is no Show SQL bridge
 
-A third bridge with action **Show SQL** (still visible in the canvas screenshot above) did not return SQL in this OPAF release. Without it, the agent either invented a plausible-looking query with non-existent columns, or, with an explicit "copy the SQL exactly" rule, reported that no SQL could be generated. The same Show SQL action works in the Select AI node (flow C1 in Chapter 4), so the issue is in the bridge path, not in the database.
+A third bridge with action **Show SQL** did not return SQL in this OPAF release. Without it, the agent either invented a plausible-looking query with non-existent columns, or, with an explicit "copy the SQL exactly" rule, reported that no SQL could be generated. The same Show SQL action works in the Select AI node (flow C1 in Chapter 4), so the issue is in the bridge path, not in the database.
 
 SQL transparency therefore stays with Flow A (MCP, `showsql`) from Chapter 7 and with C1. Flow D declines SQL requests explicitly instead of risking an invented query. An OPAF agent that cannot get SQL from a tool needs a rule to decline rather than write SQL itself.
 
