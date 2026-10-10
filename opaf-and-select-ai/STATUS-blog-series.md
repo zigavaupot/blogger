@@ -11,7 +11,7 @@
 ## Open
 1. Featured images: DONE — all 9 posts use images/select-ai-opaf-blog-series.png.
 2. Links: `INTRO-URL` (Chapters 1–8), `CHAPTER2-URL`…`CHAPTER8-URL` (introduction); CHAPTER1 done — replace after publishing.
-3. Missing screenshots (`IMAGE-TBD` + TODO comment): GenAI Playground (Part 2), Select AI node palette (Part 4).
+3. Missing screenshots (`IMAGE-TBD` + TODO comment): GenAI Playground (Part 2), Select AI node palette (Chapter 4) DONE — images/select-ai-nodes.png.
 4. Screenshots that contradict text (used as-is so far): 11 Flow A canvas shows OABOOTCAMP_SALES_SQL; 18 Flow D canvas has third Show SQL bridge (Part 8 text mentions it — remove phrase if retaken); 14 C1 dropdown on Chat, not Narrate.
 5. Decide whether "All six flows compared" and "Key takeaways" stay in Part 0.
 6. Parts 1–4, 6–8 titles: short alternatives proposed, author kept current ones (only Part 5 changed).
