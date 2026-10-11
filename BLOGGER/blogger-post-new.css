@@ -136,6 +136,21 @@
   color: var(--zv-bronze-dim);
 }
 
+/* Series grid modifiers (opt-in, existing posts unaffected):
+   .zv-series-fit  shows the whole 16:9 featured image instead of cropping it to 4:3
+   .zv-series-3    three columns on wide screens (for overviews with three posts) */
+.zv-blog-post .zv-series-grid.zv-series-fit .zv-series-card img {
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #ffffff;
+}
+
+@media screen and (min-width: 901px) {
+  .zv-blog-post .zv-series-grid.zv-series-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media screen and (max-width: 900px) {
   .zv-blog-post .zv-series-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -47,9 +47,20 @@ The order follows how an agent should work: find the subject area, learn its exa
 
 ## Posts
 
-1. [Setting up the OAS MCP server](https://zigavaupot.blogspot.com/2026/10/setting-up-oas-mcp-server.html): the code, installation as a systemd service, tests with `curl` and the network rules.
-2. [Using the OAS MCP server in OPAF](https://zigavaupot.blogspot.com/2026/10/using-oas-mcp-server-in-opaf.html): proxy settings, registration, the agent flow and tests.
-3. Using the OAS MCP server from Claude (coming soon).
+<div class="zv-series-grid zv-series-fit zv-series-3">
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/setting-up-oas-mcp-server.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-server-architecture.png" alt="Architecture of the OAS MCP server">
+<p>Setting up the OAS MCP server</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/using-oas-mcp-server-in-opaf.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-server-architecture.png" alt="OPAF agent querying Oracle Analytics Server through the OAS MCP server">
+<p>Using the OAS MCP server in OPAF</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/using-claude-desktop-with-oas-mcp.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-claude.png" alt="Claude Desktop querying Oracle Analytics Server">
+<p>Using the OAS MCP server from Claude</p>
+</a>
+</div>
 
 ## Useful links and documentation
 
