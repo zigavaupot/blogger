@@ -375,7 +375,7 @@ The first paragraph sets the order of tool calls. The second one is about the an
 
 I test with two questions:
 
-- *Which subject areas are available?*
+- *What subject areas are available for sales data?*
 - *What is the revenue by region? Which region is the highest?*
 
 For the second question the agent goes through the whole sequence: it finds the subject area, reads its tables and columns, writes Logical SQL and presents the result as a sorted table with a one-sentence summary.
