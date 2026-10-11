@@ -1,0 +1,104 @@
+<article class="zv-blog-post">
+
+<img alt="Claude Desktop querying Oracle Analytics Server through the OAS MCP server" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-claude.png">
+
+<div class="post-intro">
+<p>In the previous post an OPAF agent queried Oracle Analytics Server through my MCP server. MCP is an open protocol, so the same server works with any MCP client, without changing a line of code on <code>oas001</code>.</p>
+<p>In this post I connect Claude Desktop on my Mac to the OAS MCP server through an SSH tunnel and ask it the same questions as the OPAF agent. Then I go further: charts, a follow-up drill-down, and a short comparison of the two clients.</p>
+</div>
+
+<!--more-->
+
+<h2>How Claude reaches the server</h2>
+<p>The OAS MCP server listens on port 8000 inside the VCN, and that port is not open to the internet. Instead of changing the network, I bring the port to my laptop with an SSH tunnel. Port 22 on <code>oas001</code> is already open for administration, so nothing changes on the OCI side.</p>
+<p>Claude Desktop starts local MCP servers as processes on the laptop. For a remote HTTP server like mine, the open-source <code>mcp-remote</code> package acts as the local process: Claude Desktop talks to it, and it forwards every request to <code>http://localhost:18000/mcp</code> with the Bearer token added. The only prerequisite on the laptop is Node.js 18 or newer, because <code>mcp-remote</code> runs through <code>npx</code>.</p>
+<h2>The SSH tunnel</h2>
+<pre><code class="language-bash">ssh -i ~/.ssh/oas001_key -N -L 18000:localhost:8000 opc@&lt;oas001-public-ip&gt;
+</code></pre>
+<p><code>-L 18000:localhost:8000</code> forwards local port 18000 to port 8000 on <code>oas001</code>, and <code>-N</code> keeps the connection open without starting a shell. I use local port 18000 because 8000 is already taken on my Mac. The tunnel has to run while Claude uses the tools.</p>
+<p>A quick check from a second terminal window:</p>
+<pre><code class="language-bash">curl http://localhost:18000/health; echo
+</code></pre>
+<p>The answer <code>{"status":"ok","service":"oas-mcp-server"}</code> comes from <code>oas001</code>, through the tunnel.</p>
+<h2>Configuring Claude Desktop</h2>
+<p>In Claude Desktop, <strong>Settings → Developer → Edit Config</strong> opens <code>claude_desktop_config.json</code>. I add one entry under <code>mcpServers</code>:</p>
+<pre><code class="language-json">&quot;oas001&quot;: {
+  &quot;command&quot;: &quot;/usr/local/bin/npx&quot;,
+  &quot;args&quot;: [&quot;-y&quot;, &quot;mcp-remote&quot;, &quot;http://localhost:18000/mcp&quot;,
+           &quot;--header&quot;, &quot;Authorization:${OAS_MCP_AUTH}&quot;],
+  &quot;env&quot;: { &quot;OAS_MCP_AUTH&quot;: &quot;Bearer &lt;MCP_API_KEY&gt;&quot; }
+}
+</code></pre>
+<ul>
+<li><code>command</code> is the full path to <code>npx</code> (<code>which npx</code>), because Claude Desktop does not always see the shell's <code>PATH</code>.</li>
+<li><code>mcp-remote</code> gets the URL of the tunnel and one extra header.</li>
+<li>The header value comes from the environment variable <code>OAS_MCP_AUTH</code>. Unlike in OPAF, the value here includes the word <code>Bearer</code>, because it is the complete header value.</li>
+</ul>
+<p>After a full restart of Claude Desktop (<strong>Cmd+Q</strong>, then start it again), <strong>Settings → Developer</strong> shows <code>oas001</code> as running, and the four tools appear in the chat's tools menu.</p>
+<h2>Asking questions</h2>
+<p>I start with the two questions from the OPAF test, then continue the conversation.</p>
+<h3>Which subject areas are there?</h3>
+<p><em>What subject areas are available for sales data?</em></p>
+<p>Claude called <code>list_subject_areas</code> and then, without being asked, <code>describe_subject_area</code>. The answer lists the folders of <code>MCP Test Sales</code>, separates attributes from measures by their aggregation rule, and points out that none of the columns have descriptions in the semantic model. That last remark is a useful hint: descriptions in the semantic model are what an AI client reads to understand the data.</p>
+<img alt="Claude listing the subject area, its folders, attributes and measures" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/claude-subject-areas.png">
+<h3>Revenue by region</h3>
+<p><em>What is the revenue by region? Which region is the highest?</em></p>
+<p>The numbers are the same as in OPAF: Southern Europe 667.5, Central Europe 276 and Northern Europe 135. Both clients use the same server and the same Logical SQL against the same subject area, so they cannot disagree. Claude added each region's share of the total and a word of caution: the numbers are small, so a few large orders could be behind Southern Europe's lead.</p>
+<img alt="Claude answering revenue by region with shares" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/claude-revenue-by-region.png">
+<h3>Visualize results</h3>
+<p><em>visualize results</em></p>
+<p>This request did not reach OAS at all. Claude reused the result it already had and drew a bar chart with three key figures above it: total revenue, top region and its share.</p>
+<img alt="Claude visualizing the revenue by region" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/claude-visualize-results.png">
+<h3>Revenue by product category and customer segment</h3>
+<p><em>Show revenue by product category and customer segment as a chart.</em></p>
+<p>One more Logical SQL with two attributes, and Claude chose a stacked bar chart: Chocolate 517.5, Coffee 426 and Tea 135, each split into wholesale and retail. Wholesale makes up 667.5 of the total, retail 411, and Tea has no wholesale sales at all.</p>
+<img alt="Claude charting revenue by product category and customer segment" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/claude-revenue-category-segment.png">
+<h3>Drill down into wholesale</h3>
+<p><em>drill down into wholesale</em></p>
+<p>A short follow-up in the same conversation is enough. Claude queried the individual orders and found that the whole wholesale revenue comes from two orders, both in Southern Europe. That also explains the regional result from the second question: Southern Europe's lead is exactly these two orders, which confirms the caution Claude raised earlier.</p>
+<img alt="Claude drilling down into wholesale orders" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/claude-drill-down-wholesale.png">
+<h2>OPAF agent and Claude side by side</h2>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>OPAF agent</th>
+<th>Claude Desktop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Where the client runs</td>
+<td>OPAF in the private subnet</td>
+<td>My laptop</td>
+</tr>
+<tr>
+<td>Path to the MCP server</td>
+<td>Direct, inside the VCN (NSG on port 8000)</td>
+<td>SSH tunnel to <code>oas001</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Bearer token in the MCP server registration</td>
+<td>Bearer token in <code>claude_desktop_config.json</code>, sent by <code>mcp-remote</code></td>
+</tr>
+<tr>
+<td>Answer format</td>
+<td>Defined in the agent instructions</td>
+<td>Chosen by Claude: tables, charts, key figures</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>A shared agent in a governed flow, for many users</td>
+<td>Personal, exploratory analysis in a conversation</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The server did not change between the two posts. Both clients send Logical SQL through the same four tools, so the joins, aggregation rules and calculations of the OAS semantic model apply in both, and the numbers match. The difference is in the client: OPAF is where I would build a governed agent for a team, and Claude is where I explore the data in a conversation.</p>
+<p>One thing is the same in both setups: every query runs as the OAS user configured on the server, whoever asks the question. For anything beyond a demo, that user should be a dedicated read-only account, as described in the previous post.</p>
+<hr>
+<p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/oas-mcp-server-and-opaf.html">introduction and list of posts</a>.</p>
+
+</article>

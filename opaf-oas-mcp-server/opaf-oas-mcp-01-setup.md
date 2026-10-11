@@ -1,6 +1,6 @@
 # Setting up the OAS MCP server
 
-![Oracle Analytics Server MCP & Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server](https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-architecture.png)
+![Oracle Analytics Server MCP & Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server](https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-server-architecture.png)
 
 In the introduction I described the architecture and the four tools the server exposes. In this post I build it.
 

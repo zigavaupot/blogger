@@ -1,7 +1,7 @@
 # Oracle Analytics Server MCP & Use cases
 
 <!-- IMAGE (featured, shared by all posts): architecture diagram. OPAF agent in subnet-opaf-private -> HTTP /mcp (Bearer token, NSG nsg-oas-mcp) -> oas-mcp Python service on oas001 -> SOAP /analytics-ws -> OAS bi_server1 :9502. -->
-![Oracle Analytics Server MCP & Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server](https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-architecture.png)
+![Oracle Analytics Server MCP & Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server](https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-server-architecture.png)
 
 Oracle Analytics Cloud has an MCP server built in. Oracle Analytics Server does not. Many customers run OAS on premises or on their own compute, and their semantic models hold years of curated business logic that AI agents should be able to use instead of rebuilding it from raw tables.
 
