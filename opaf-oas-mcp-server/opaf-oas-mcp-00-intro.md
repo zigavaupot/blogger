@@ -53,7 +53,7 @@ The order follows how an agent should work: find the subject area, learn its exa
 <p>Setting up the OAS MCP server</p>
 </a>
 <a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/using-oas-mcp-server-in-opaf.html">
-<img src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-server-architecture.png" alt="OPAF agent querying Oracle Analytics Server through the OAS MCP server">
+<img src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-opaf.png" alt="OPAF agent querying Oracle Analytics Server through the OAS MCP server">
 <p>Using the OAS MCP server in OPAF</p>
 </a>
 <a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/using-claude-desktop-with-oas-mcp.html">

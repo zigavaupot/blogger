@@ -1,6 +1,6 @@
 # Using the OAS MCP server in OPAF
 
-![Oracle Analytics Server MCP & Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server](https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-server-architecture.png)
+![OPAF agent querying Oracle Analytics Server through the OAS MCP server](https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-opaf.png)
 
 In the previous post I built the OAS MCP server and opened port 8000 for the OPAF subnet. Now OPAF becomes the MCP client.
 
