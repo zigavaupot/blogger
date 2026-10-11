@@ -1,0 +1,98 @@
+<article class="zv-blog-post">
+
+<img alt="Oracle Analytics Server MCP &amp; Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-architecture.png">
+
+<div class="post-intro">
+<p>In the previous post I built the OAS MCP server and opened port 8000 for the OPAF subnet. Now OPAF becomes the MCP client.</p>
+<p>In this post I change two OPAF proxy settings, register the server with a Bearer token and build a Custom Flow with an MCP server node and an Agent node. Then I test the agent with business questions and check in the service log which Logical SQL it sent to OAS. I close with what I would change before using the server with a customer's OAS.</p>
+</div>
+
+<!--more-->
+
+<h2>Proxy Settings</h2>
+<p>By default OPAF refuses MCP servers on private IP addresses and over plain HTTP. Both apply here, so as an OPAF administrator I change two preferences in <strong>Application Settings → Proxy Settings</strong>:</p>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th>Preference</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Allow Insecure Http Urls</td>
+<td><strong>Yes</strong></td>
+<td>The MCP server uses HTTP inside the VCN</td>
+</tr>
+<tr>
+<td>Allow User Supplied Proxy</td>
+<td>No</td>
+<td>Not needed</td>
+</tr>
+<tr>
+<td>Block Private Outbound Urls</td>
+<td><strong>No</strong></td>
+<td>The MCP server is on a private IP (10.0.1.205)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>These settings are global for the OPAF instance. Without them, registration fails with "MCP server URL must use https" or "resolves to a private or non-routable network address".</p>
+<img alt="OPAF Proxy Settings" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-proxy-settings.png">
+<p>HTTP is acceptable for this setup because the traffic stays inside the private VCN, the NSG admits only the OPAF subnet, and every request needs the Bearer token. The server also supports TLS (<code>MCP_SSL_CERTFILE</code> and <code>MCP_SSL_KEYFILE</code> in <code>.env</code>), but OPAF accepts only certificates from a CA it trusts and rejects self-signed ones. With a trusted certificate, Allow Insecure Http Urls can go back to No.</p>
+<h2>Registering the MCP server</h2>
+<p>In OPAF: <strong>Add MCP server</strong></p>
+<ul>
+<li>Server name: <code>oas001-mcp</code></li>
+<li>Server URL: <code>http://10.0.1.205:8000/mcp</code></li>
+<li>Authentication mode: <strong>Bearer Token</strong></li>
+<li>Bearer token: only the value of <code>MCP_API_KEY</code>, without the word <code>Bearer</code></li>
+</ul>
+<p>I read the key on <code>oas001</code> with <code>grep ^MCP_API_KEY /opt/oas-mcp-server/.env | cut -d= -f2</code>. <strong>Test connection</strong> returns "MCP connection successful", then <strong>Add MCP server</strong>.</p>
+<img alt="OPAF Add MCP server for oas001-mcp" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-add-mcp-server.png">
+<p>The URL must end with <code>/mcp</code>. With a wrong path, OPAF can still report a successful connection but discover zero tools.</p>
+<h2>The agent flow</h2>
+<p>In Agent Builder I create a Custom Flow with two nodes:</p>
+<ol>
+<li>An <strong>MCP server</strong> node with server <code>oas001-mcp</code>, timeout <code>120</code> and <strong>Allowed tools</strong> left empty, which means all four tools. The dropdown lists <code>describe_subject_area</code>, <code>execute_logical_sql</code>, <code>get_server_info</code> and <code>list_subject_areas</code>.</li>
+<li>An <strong>Agent</strong> node. The <strong>Tools</strong> output of the MCP server node connects to it.</li>
+</ol>
+<img alt="OPAF MCP server node listing the four OAS tools" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-mcp-tools.png">
+<img alt="OPAF Custom Flow with the OAS MCP server and an Agent node" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-flow-canvas.png">
+<p>The agent instructions:</p>
+<blockquote>
+<p>You answer questions about sales data in Oracle Analytics Server. Always call
+list_subject_areas and describe_subject_area first to learn exact table and column names,
+then use execute_logical_sql. Never invent column names.
+Always answer in natural language. Present data as a markdown table with clear column
+headings, sorted in a meaningful order (e.g. highest value first). Add a one-sentence
+summary of the key finding. Never return raw JSON.</p>
+</blockquote>
+<p>The first paragraph sets the order of tool calls. The second one is about the answer format: without it, the first answer in a new chat may come back as raw JSON from the tool.</p>
+<h2>Testing the agent</h2>
+<p>I test with two questions:</p>
+<ul>
+<li><em>What subject areas are available for sales data?</em></li>
+<li><em>What is the revenue by region? Which region is the highest?</em></li>
+</ul>
+<p>For the second question the agent goes through the whole sequence: it finds the subject area, reads its tables and columns, writes Logical SQL and presents the result as a sorted table with a one-sentence summary.</p>
+<img alt="OPAF agent answering questions from OAS" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-chat.png">
+<p>The service log on <code>oas001</code> shows every Logical SQL statement the agent sends, which is the easiest way to see what the agent actually asked OAS:</p>
+<pre><code class="language-bash">journalctl -u oas-mcp -f
+</code></pre>
+<img alt="Logical SQL generated by the OPAF agent in the oas-mcp log" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/journalctl-logical-sql.png">
+<h2>From proof of concept to customer deployment</h2>
+<p>The server works as a proof of concept. Before using it with a customer's OAS, I would change three things:</p>
+<ul>
+<li><strong>A dedicated read-only OAS user</strong> instead of <code>admin</code>. The agent then sees only the subject areas and data that user is allowed to see, enforced by OAS security.</li>
+<li><strong>HTTPS with a CA-signed certificate</strong>, so Allow Insecure Http Urls can be switched back to No.</li>
+<li><strong>Block Private Outbound Urls = No stays.</strong> An on-premises OAS is always on a private address from OPAF's point of view, so this setting is a requirement for this pattern, not a shortcut.</li>
+</ul>
+<p>The pattern itself carries over unchanged: a thin MCP layer that exposes the semantic model, not the database. The agent asks questions in business terms, and OAS keeps doing what it has always done: joins, aggregations, calculations and security.</p>
+<p>If you work with Oracle Analytics Cloud or Autonomous Database instead, both have built-in MCP servers. I used the Autonomous Database one with OPAF in <a href="https://zigavaupot.blogspot.com/2026/10/chapter-6-adb-built-in-mcp-server.html">The ADB built-in MCP server</a> and <a href="https://zigavaupot.blogspot.com/2026/10/chapter-7-opaf-agents-over-mcp.html">OPAF agents over MCP</a>, both part of <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">Select AI Agent meets OPAF</a>.</p>
+<hr>
+<p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/oas-mcp-server-and-opaf.html">introduction and list of posts</a>.</p>
+
+</article>

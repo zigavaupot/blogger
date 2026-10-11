@@ -1,6 +1,6 @@
 <article class="zv-blog-post">
 
-<img alt="OPAF agent querying Oracle Analytics Server through a custom MCP server" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/00-oas-mcp-architecture.png">
+<img alt="OPAF agent querying Oracle Analytics Server through a custom MCP server" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-architecture.png">
 
 <div class="post-intro">
 <p>Oracle Analytics Cloud has an MCP server built in. Oracle Analytics Server does not. Many customers run OAS on premises or on their own compute, and their semantic models hold years of curated business logic that AI agents should be able to use instead of rebuilding it from raw tables.</p>
@@ -202,7 +202,7 @@ python test_oas.py &quot;MCP Test Sales&quot;
 python test_oas.py --sql 'SELECT &quot;Sales Details&quot;.&quot;REGION&quot;, &quot;Sales Facts&quot;.&quot;REVENUE&quot; FROM &quot;MCP Test Sales&quot; ORDER BY 2 DESC FETCH FIRST 1 ROWS ONLY'
 </code></pre>
 <p>The first call logs on and lists the subject areas, the second lists tables and columns without quotes, and the third returns one row: the region with the highest revenue. The last test also proves that sorting and top-N work, because OAS itself ignores both.</p>
-<img alt="test_oas.py: logon, subject areas, describe and a Logical SQL query" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/01-test-oas.png">
+<img alt="test_oas.py: logon, subject areas, describe and a Logical SQL query" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/test-oas.png">
 <h3>Running as a systemd service</h3>
 <p>The unit file runs the server as <code>opc</code> from <code>/opt/oas-mcp-server</code>, starts it on boot and restarts it on failure:</p>
 <pre><code class="language-ini">[Unit]
@@ -241,7 +241,7 @@ curl -s -X POST http://localhost:8000/mcp \
   -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;method&quot;:&quot;tools/list&quot;}' | python3 -m json.tool | grep '&quot;name&quot;'
 </code></pre>
 <p><code>tools/list</code> is the same first request OPAF sends after connecting, so if this works, the server side is ready.</p>
-<img alt="oas-mcp service running, health check, 401 without key and tools/list" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/02-mcp-service-curl.png">
+<img alt="oas-mcp service running, health check, 401 without key and tools/list" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/mcp-service-curl.png">
 <h2>Opening the network for OPAF only</h2>
 <p>Port 8000 must be reachable from OPAF and from nowhere else. Two layers need a rule.</p>
 <p>The OS firewall on <code>oas001</code>:</p>
@@ -295,7 +295,7 @@ sudo firewall-cmd --list-ports            # 8000/tcp
 </table>
 </div>
 <p>Then I attach it to the instance: <strong>Compute → Instances → <code>oas001</code> → Networking → Attached VNICs → VNIC <code>oas001</code> → Network Security Groups → Edit</strong>, add <code>nsg-oas-mcp</code> and save.</p>
-<img alt="NSG nsg-oas-mcp allowing TCP 8000 from the OPAF subnet" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/03-nsg-oas-mcp.png">
+<img alt="NSG nsg-oas-mcp allowing TCP 8000 from the OPAF subnet" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/nsg-oas-mcp.png">
 <p>On the OPAF side nothing changes: <code>subnet-opaf-private</code> uses the Default Security List, which allows all egress. Port 8000 is not open to the internet, because the security list of <code>subnet-oas-public</code> allows only SSH from outside.</p>
 <p>To check the path manually, I open a Bastion port forwarding session to the OPAF VM and run, on <code>agentfactoryvm</code>:</p>
 <pre><code class="language-bash">curl -m 5 http://10.0.1.205:8000/health
@@ -333,7 +333,7 @@ sudo firewall-cmd --list-ports            # 8000/tcp
 </table>
 </div>
 <p>These settings are global for the OPAF instance. Without them, registration fails with "MCP server URL must use https" or "resolves to a private or non-routable network address".</p>
-<img alt="OPAF Proxy Settings" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/04-opaf-proxy-settings.png">
+<img alt="OPAF Proxy Settings" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-proxy-settings.png">
 <p>HTTP is acceptable for this setup because the traffic stays inside the private VCN, the NSG admits only the OPAF subnet, and every request needs the Bearer token. The server also supports TLS (<code>MCP_SSL_CERTFILE</code> and <code>MCP_SSL_KEYFILE</code> in <code>.env</code>), but OPAF accepts only certificates from a CA it trusts and rejects self-signed ones. With a trusted certificate, Allow Insecure Http Urls can go back to No.</p>
 <h3>Registering the MCP server</h3>
 <p>In OPAF: <strong>Add MCP server</strong></p>
@@ -344,7 +344,7 @@ sudo firewall-cmd --list-ports            # 8000/tcp
 <li>Bearer token: only the value of <code>MCP_API_KEY</code>, without the word <code>Bearer</code></li>
 </ul>
 <p>I read the key on <code>oas001</code> with <code>grep ^MCP_API_KEY /opt/oas-mcp-server/.env | cut -d= -f2</code>. <strong>Test connection</strong> returns "MCP connection successful", then <strong>Add MCP server</strong>.</p>
-<img alt="OPAF Add MCP server for oas001-mcp" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/05-opaf-add-mcp-server.png">
+<img alt="OPAF Add MCP server for oas001-mcp" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-add-mcp-server.png">
 <p>The URL must end with <code>/mcp</code>. With a wrong path, OPAF can still report a successful connection but discover zero tools.</p>
 <h3>The agent flow</h3>
 <p>In Agent Builder I create a Custom Flow with two nodes:</p>
@@ -352,8 +352,8 @@ sudo firewall-cmd --list-ports            # 8000/tcp
 <li>An <strong>MCP server</strong> node with server <code>oas001-mcp</code>, timeout <code>120</code> and <strong>Allowed tools</strong> left empty, which means all four tools. The dropdown lists <code>describe_subject_area</code>, <code>execute_logical_sql</code>, <code>get_server_info</code> and <code>list_subject_areas</code>.</li>
 <li>An <strong>Agent</strong> node. The <strong>Tools</strong> output of the MCP server node connects to it.</li>
 </ol>
-<img alt="OPAF MCP server node listing the four OAS tools" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/06-opaf-mcp-tools.png">
-<img alt="OPAF Custom Flow with the OAS MCP server and an Agent node" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/07-opaf-flow-canvas.png">
+<img alt="OPAF MCP server node listing the four OAS tools" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-mcp-tools.png">
+<img alt="OPAF Custom Flow with the OAS MCP server and an Agent node" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-flow-canvas.png">
 <p>The agent instructions:</p>
 <blockquote>
 <p>You answer questions about sales data in Oracle Analytics Server. Always call
@@ -371,78 +371,11 @@ summary of the key finding. Never return raw JSON.</p>
 <li><em>What is the revenue by region? Which region is the highest?</em></li>
 </ul>
 <p>For the second question the agent goes through the whole sequence: it finds the subject area, reads its tables and columns, writes Logical SQL and presents the result as a sorted table with a one-sentence summary.</p>
-<img alt="OPAF agent answering questions from OAS" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/08-opaf-chat.png">
+<img alt="OPAF agent answering questions from OAS" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/opaf-chat.png">
 <p>The service log on <code>oas001</code> shows every Logical SQL statement the agent sends, which is the easiest way to see what the agent actually asked OAS:</p>
 <pre><code class="language-bash">journalctl -u oas-mcp -f
 </code></pre>
-<img alt="Logical SQL generated by the OPAF agent in the oas-mcp log" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/09-journalctl-logical-sql.png">
-<h2>Operations</h2>
-<p>A few things to know when the server runs for longer than a demo:</p>
-<ul>
-<li><strong>After a reboot</strong> both OAS (<code>oas-full-stack.service</code>) and the MCP server start automatically. The MCP server is up within seconds, OAS needs 3 to 4 minutes. Agent requests in that window fail and work again once OAS is up.</li>
-<li><strong>Status:</strong> <code>systemctl is-active oas-full-stack oas-mcp</code> and <code>curl http://localhost:8000/health</code>.</li>
-<li><strong>New code version:</strong> copy <code>server.py</code> and <code>oas_client.py</code> to <code>/opt/oas-mcp-server/</code> and run <code>sudo systemctl restart oas-mcp</code>.</li>
-<li><strong>Key rotation:</strong> generate a new key, replace <code>MCP_API_KEY</code> in <code>.env</code>, restart the service and update the Bearer token of <code>oas001-mcp</code> in OPAF:</li>
-</ul>
-<pre><code class="language-bash">cd /opt/oas-mcp-server
-NEW=$(venv/bin/python -c &quot;import secrets; print(secrets.token_urlsafe(32))&quot;)
-sed -i &quot;s/^MCP_API_KEY=.*/MCP_API_KEY=$NEW/&quot; .env
-sudo systemctl restart oas-mcp
-echo $NEW
-</code></pre>
-<h2>Troubleshooting</h2>
-<div class="zv-table-compact">
-<table>
-<thead>
-<tr>
-<th>Symptom</th>
-<th>Check / fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/health</code> does not respond</td>
-<td><code>systemctl status oas-mcp</code>, <code>journalctl -u oas-mcp -n 50</code></td>
-</tr>
-<tr>
-<td>Service exits with status 3</td>
-<td>Port 8000 in use: stop any manually started <code>python server.py</code></td>
-</tr>
-<tr>
-<td>Tools return "Oracle Analytics error"</td>
-<td>OAS down or still starting: <code>systemctl status oas-full-stack</code>; test with <code>venv/bin/python test_oas.py</code></td>
-</tr>
-<tr>
-<td><code>Authentication failed</code> from OAS</td>
-<td><code>OAS_USER</code> / <code>OAS_PASSWORD</code> in <code>.env</code></td>
-</tr>
-<tr>
-<td><code>/mcp</code> returns 401</td>
-<td>Wrong or missing Bearer token</td>
-</tr>
-<tr>
-<td>OPAF: "MCP server URL must use https"</td>
-<td>Proxy Settings → Allow Insecure Http Urls = Yes</td>
-</tr>
-<tr>
-<td>OPAF: "resolves to a private or non-routable network address"</td>
-<td>Proxy Settings → Block Private Outbound Urls = No</td>
-</tr>
-<tr>
-<td>OPAF: "Could not connect to the remote MCP server"</td>
-<td>From the OPAF VM: <code>curl -m 5 http://10.0.1.205:8000/health</code>; a timeout means NSG or firewall</td>
-</tr>
-<tr>
-<td>OPAF shows connected but 0 tools</td>
-<td>Wrong URL path: it must end with <code>/mcp</code></td>
-</tr>
-<tr>
-<td>Logical SQL error</td>
-<td>Column names must match <code>describe_subject_area</code> exactly (<code>"Table"."Column"</code>)</td>
-</tr>
-</tbody>
-</table>
-</div>
+<img alt="Logical SQL generated by the OPAF agent in the oas-mcp log" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/journalctl-logical-sql.png">
 <h2>From proof of concept to customer deployment</h2>
 <p>The server works as a proof of concept. Before using it with a customer's OAS, I would change three things:</p>
 <ul>

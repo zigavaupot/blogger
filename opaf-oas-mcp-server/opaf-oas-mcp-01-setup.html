@@ -1,0 +1,234 @@
+<article class="zv-blog-post">
+
+<img alt="Oracle Analytics Server MCP &amp; Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-architecture.png">
+
+<div class="post-intro">
+<p>In the introduction I described the architecture and the four tools the server exposes. In this post I build it.</p>
+<p>I walk through the Python code that talks to the OAS SOAP web services and wraps them as MCP tools, install the server on <code>oas001</code> as a systemd service, test it with <code>curl</code> and open port 8000 for the OPAF subnet only. At the end the server answers <code>tools/list</code> with four tools, ready for an MCP client. The next post connects OPAF to it.</p>
+</div>
+
+<!--more-->
+
+<h2>Why the SOAP web services</h2>
+<p>The SOAP web services under <code>/analytics-ws/saw.dll</code> provide exactly the three things an agent needs: metadata about subject areas, column details and query execution. A quick check on <code>oas001</code> shows whether they respond:</p>
+<pre><code class="language-bash">curl -s -o /dev/null -w &quot;%{http_code}\n&quot; http://localhost:9502/analytics-ws/saw.dll/wsdl/v12   # expect 200
+</code></pre>
+<h2>The code</h2>
+<p>The project has two main files, and the split is deliberate:</p>
+<ul>
+<li><code>oas_client.py</code> talks only to OAS: logon, subject areas, describe, Logical SQL, sorting and top-N. It contains no MCP code.</li>
+<li><code>server.py</code> is the MCP server built with FastMCP. It wraps the client methods as tools and adds the HTTP layer with the Bearer token check and <code>/health</code>.</li>
+</ul>
+<p>With this split I can test OAS access with <code>test_oas.py</code> before MCP is involved at all. Together the two files are about 520 lines of Python. The dependencies are in <code>requirements.txt</code>:</p>
+<pre><code>mcp&gt;=1.25,&lt;2
+requests&gt;=2.31
+uvicorn&gt;=0.30
+python-dotenv&gt;=1.0
+</code></pre>
+<h3>Talking to OAS</h3>
+<p>Every call is a SOAP envelope posted to <code>saw.dll</code> with the service name in the <code>SoapImpl</code> parameter. The client logs on once with <code>nQSessionService</code>, keeps the session ID and logs on again if the session expires. Running Logical SQL looks like this:</p>
+<pre><code class="language-python">root = self._call(
+    &quot;xmlViewService&quot;,
+    &quot;&lt;v12:executeSQLQuery&gt;&quot;
+    f&quot;&lt;v12:sql&gt;{_esc(sql)}&lt;/v12:sql&gt;&quot;
+    &quot;&lt;v12:outputFormat&gt;SAWRowsetSchemaAndData&lt;/v12:outputFormat&gt;&quot;
+    &quot;&lt;v12:executionOptions&gt;&lt;v12:async&gt;false&lt;/v12:async&gt;&quot;
+    f&quot;&lt;v12:maxRowsPerPage&gt;{page}&lt;/v12:maxRowsPerPage&gt;&quot;
+    &quot;&lt;v12:refresh&gt;true&lt;/v12:refresh&gt;&lt;v12:presentationInfo&gt;true&lt;/v12:presentationInfo&gt;&quot;
+    &quot;&lt;v12:type&gt;query&lt;/v12:type&gt;&lt;/v12:executionOptions&gt;&quot;
+    &quot;&lt;v12:sessionID&gt;{sid}&lt;/v12:sessionID&gt;&lt;/v12:executeSQLQuery&gt;&quot;,
+)
+</code></pre>
+<p><code>SAWRowsetSchemaAndData</code> returns an XML schema with the column headings together with the rows. The client reads the column headings and data types from the schema, converts numeric values and fetches further pages with <code>fetchNext</code> until the result is complete or the row limit is reached.</p>
+<h3>Behaviour of the OAS web service</h3>
+<p>Three things in the OAS answers are handled in code, so the agent does not have to deal with them:</p>
+<ul>
+<li><strong>Names come back in double quotes</strong> (<code>"Sales Facts"</code>). The client removes the quotes, so the names returned by <code>describe_subject_area</code> can be used directly in Logical SQL.</li>
+<li><strong><code>executeSQLQuery</code> ignores <code>ORDER BY</code> and <code>FETCH FIRST n ROWS ONLY</code>.</strong> The client parses both clauses from the query, sorts the rows and applies the row limit itself. Without this, "which region has the highest revenue" would return an unsorted list.</li>
+<li><strong>Large results.</strong> If a result has more rows than <code>MAX_ROWS</code>, sorting and top-N apply only to the rows fetched. The tool then returns a <code>warning</code> that asks the agent to add filters.</li>
+</ul>
+<h3>Read-only by design</h3>
+<p>Logical SQL can contain <code>EXECUTE PHYSICAL</code>, which sends SQL straight to a database connection. An agent must never do that, so every query passes a check before it reaches OAS:</p>
+<pre><code class="language-python"># Words that must never appear in a query sent by an AI agent (read-only PoC).
+FORBIDDEN_SQL = re.compile(
+    r&quot;\b(EXECUTE\s+PHYSICAL|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|TRUNCATE|MERGE|CALL|GRANT|REVOKE)\b&quot;,
+    re.IGNORECASE,
+)
+</code></pre>
+<p><code>check_read_only</code> first removes quoted names and strings, so a column called <code>"Last Update Date"</code> does not trigger the filter. Then it requires the statement to start with <code>SELECT</code> (optionally after <code>SET VARIABLE ...;</code>) and rejects any forbidden keyword.</p>
+<h3>The MCP server</h3>
+<p>FastMCP turns each Python function into a tool. The docstring becomes the tool description, which the agent's LLM reads to decide when and how to call the tool, so I put the Logical SQL rules there:</p>
+<pre><code class="language-python">@mcp.tool()
+async def execute_logical_sql(sql: str, max_rows: int = 100) -&gt; dict:
+    &quot;&quot;&quot;Execute a read-only Logical SQL SELECT against Oracle Analytics Server and return
+    column headings and rows.
+
+    Logical SQL rules:
+      - Reference columns as &quot;Table&quot;.&quot;Column&quot; exactly as returned by describe_subject_area.
+      - FROM contains only the subject area name in double quotes, e.g. FROM &quot;Sample Sales&quot;.
+      - No joins and no GROUP BY: measures are aggregated automatically by the attributes selected.
+      - Filter with WHERE, sort with ORDER BY, limit with FETCH FIRST n ROWS ONLY.
+
+    Args:
+        sql: the Logical SQL SELECT statement
+        max_rows: maximum number of rows to return (default 100)
+    &quot;&quot;&quot;
+    limit = max(1, min(int(max_rows), MAX_ROWS))
+    log.info(&quot;Logical SQL (max %s rows): %s&quot;, limit, sql)
+    return await _run(oas.execute_logical_sql, sql, limit)
+</code></pre>
+<p>The SOAP calls are blocking, so <code>_run</code> executes them in a worker thread and turns OAS errors into a readable tool error ("Oracle Analytics error: ..."). The server is created with <code>stateless_http=True</code> and <code>json_response=True</code>: every request stands on its own, and answers are plain JSON instead of an event stream.</p>
+<p>Authentication is a small ASGI middleware in front of the MCP app. It requires <code>Authorization: Bearer &lt;MCP_API_KEY&gt;</code> on every request except <code>/health</code>:</p>
+<pre><code class="language-python">headers = {k.decode().lower(): v.decode() for k, v in scope[&quot;headers&quot;]}
+token = headers.get(&quot;authorization&quot;, &quot;&quot;)
+token = token[7:] if token.lower().startswith(&quot;bearer &quot;) else headers.get(&quot;x-api-key&quot;, &quot;&quot;)
+if token != self.api_key:
+    return await JSONResponse({&quot;error&quot;: &quot;unauthorized&quot;}, status_code=401)(scope, receive, send)
+</code></pre>
+<h2>Installing the server on oas001</h2>
+<p>Oracle Linux 8 ships with Python 3.6, which is too old for the MCP SDK. I use Python 3.11 (<code>/usr/bin/python3.11</code>). Outbound internet access is needed once, for <code>pip install</code>.</p>
+<p>From my Mac I copy the project to the server:</p>
+<pre><code class="language-bash">cd ~/Documents/GitHub
+scp -i ~/.ssh/oas001_key -r oas-mcp-server opc@&lt;oas001-public-ip&gt;:/tmp/
+</code></pre>
+<p>On <code>oas001</code> I put it in <code>/opt/oas-mcp-server</code> and create the virtual environment:</p>
+<pre><code class="language-bash">sudo mkdir -p /opt/oas-mcp-server
+sudo cp -r /tmp/oas-mcp-server/. /opt/oas-mcp-server/
+sudo chown -R opc:opc /opt/oas-mcp-server
+
+cd /opt/oas-mcp-server
+python3.11 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+</code></pre>
+<h3>Configuration</h3>
+<p>All settings come from a <code>.env</code> file. I generate a random API key and fill in the OAS password:</p>
+<pre><code class="language-bash">cp .env.example .env
+python -c &quot;import secrets; print(secrets.token_urlsafe(32))&quot;    # -&gt; value for MCP_API_KEY
+nano .env
+chmod 600 .env
+</code></pre>
+<pre><code class="language-ini">OAS_URL=http://localhost:9502
+OAS_USER=admin
+OAS_PASSWORD=&lt;OAS admin password&gt;
+OAS_VERIFY_SSL=true
+OAS_TIMEOUT=120
+MAX_ROWS=500
+
+MCP_HOST=0.0.0.0
+MCP_PORT=8000
+MCP_API_KEY=&lt;generated key&gt;
+</code></pre>
+<p><code>.env</code> stays out of Git.</p>
+<h3>Testing OAS access without MCP</h3>
+<p><code>test_oas.py</code> uses only the client, so it confirms that the SOAP layer works before the MCP server runs. My test subject area is <code>MCP Test Sales</code>:</p>
+<pre><code class="language-bash">python test_oas.py
+python test_oas.py &quot;MCP Test Sales&quot;
+python test_oas.py --sql 'SELECT &quot;Sales Details&quot;.&quot;REGION&quot;, &quot;Sales Facts&quot;.&quot;REVENUE&quot; FROM &quot;MCP Test Sales&quot; ORDER BY 2 DESC FETCH FIRST 1 ROWS ONLY'
+</code></pre>
+<p>The first call logs on and lists the subject areas, the second lists tables and columns without quotes, and the third returns one row: the region with the highest revenue. The last test also proves that sorting and top-N work, because OAS itself ignores both.</p>
+<img alt="test_oas.py: logon, subject areas, describe and a Logical SQL query" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/test-oas.png">
+<h3>Running as a systemd service</h3>
+<p>The unit file runs the server as <code>opc</code> from <code>/opt/oas-mcp-server</code>, starts it on boot and restarts it on failure:</p>
+<pre><code class="language-ini">[Unit]
+Description=Oracle Analytics Server MCP server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=opc
+WorkingDirectory=/opt/oas-mcp-server
+ExecStart=/opt/oas-mcp-server/venv/bin/python server.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<pre><code class="language-bash">sudo cp /opt/oas-mcp-server/oas-mcp.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now oas-mcp
+sudo systemctl status oas-mcp --no-pager | head -8      # Active: active (running)
+curl http://localhost:8000/health                        # {&quot;status&quot;:&quot;ok&quot;,...}
+</code></pre>
+<h3>Testing the MCP endpoint</h3>
+<p>Two checks with <code>curl</code>: a request without a key must be rejected, and <code>tools/list</code> with the key must return the four tool names.</p>
+<pre><code class="language-bash">KEY=$(grep ^MCP_API_KEY /opt/oas-mcp-server/.env | cut -d= -f2)
+
+# without key -&gt; 401
+curl -s -o /dev/null -w &quot;%{http_code}\n&quot; -X POST http://localhost:8000/mcp
+
+# list tools -&gt; 4 names
+curl -s -X POST http://localhost:8000/mcp \
+  -H &quot;Authorization: Bearer $KEY&quot; -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Accept: application/json, text/event-stream&quot; \
+  -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;method&quot;:&quot;tools/list&quot;}' | python3 -m json.tool | grep '&quot;name&quot;'
+</code></pre>
+<p><code>tools/list</code> is the same first request OPAF sends after connecting, so if this works, the server side is ready.</p>
+<img alt="oas-mcp service running, health check, 401 without key and tools/list" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/mcp-service-curl.png">
+<h2>Opening the network for OPAF only</h2>
+<p>Port 8000 must be reachable from OPAF and from nowhere else. Two layers need a rule.</p>
+<p>The OS firewall on <code>oas001</code>:</p>
+<pre><code class="language-bash">sudo firewall-cmd --permanent --add-port=8000/tcp
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-ports            # 8000/tcp
+</code></pre>
+<p>In OCI I create a dedicated Network Security Group, so the existing OAS security lists and NSGs stay unchanged: <strong>Networking → Virtual Cloud Networks → <code>vcn-analytics-shared</code> → Network Security Groups → Create Network Security Group</strong>.</p>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td><code>nsg-oas-mcp</code></td>
+</tr>
+<tr>
+<td>Compartment</td>
+<td><code>shared</code></td>
+</tr>
+<tr>
+<td>Direction</td>
+<td>Ingress</td>
+</tr>
+<tr>
+<td>Stateless</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Source type / CIDR</td>
+<td>CIDR / <code>10.0.3.0/24</code> (subnet-opaf-private)</td>
+</tr>
+<tr>
+<td>IP protocol</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>Destination port</td>
+<td><code>8000</code></td>
+</tr>
+<tr>
+<td>Description</td>
+<td><code>OPAF -&gt; OAS MCP server</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Then I attach it to the instance: <strong>Compute → Instances → <code>oas001</code> → Networking → Attached VNICs → VNIC <code>oas001</code> → Network Security Groups → Edit</strong>, add <code>nsg-oas-mcp</code> and save.</p>
+<img alt="NSG nsg-oas-mcp allowing TCP 8000 from the OPAF subnet" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/nsg-oas-mcp.png">
+<p>On the OPAF side nothing changes: <code>subnet-opaf-private</code> uses the Default Security List, which allows all egress. Port 8000 is not open to the internet, because the security list of <code>subnet-oas-public</code> allows only SSH from outside.</p>
+<p>To check the path manually, I open a Bastion port forwarding session to the OPAF VM and run, on <code>agentfactoryvm</code>:</p>
+<pre><code class="language-bash">curl -m 5 http://10.0.1.205:8000/health
+</code></pre>
+<p>A timeout here points to the NSG or the firewall. OPAF itself does not need the Bastion; it connects to the MCP server directly.</p>
+<p>The server is ready. In the next post I register it in OPAF and build an agent on top of it.</p>
+<hr>
+<p>Back to the <a href="https://zigavaupot.blogspot.com/2026/10/oas-mcp-server-and-opaf.html">introduction and list of posts</a>.</p>
+
+</article>

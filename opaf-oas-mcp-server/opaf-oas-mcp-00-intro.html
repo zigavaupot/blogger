@@ -1,0 +1,101 @@
+<article class="zv-blog-post">
+
+<img alt="Oracle Analytics Server MCP &amp; Use cases: OPAF agent querying Oracle Analytics Server through a custom MCP server" src="https://zigavaupot.github.io/blogger/opaf-oas-mcp-server/images/oas-mcp-architecture.png">
+
+<div class="post-intro">
+<p>Oracle Analytics Cloud has an MCP server built in. Oracle Analytics Server does not. Many customers run OAS on premises or on their own compute, and their semantic models hold years of curated business logic that AI agents should be able to use instead of rebuilding it from raw tables.</p>
+<p>In three short posts I build a small MCP server for OAS in Python, run it as a service next to OAS on an OCI compute instance and connect AI agents to it, starting with Oracle Private Agent Factory (OPAF). The server exposes four read-only tools on top of the OAS SOAP web services, which have been part of the product since OBIEE.</p>
+</div>
+
+<!--more-->
+
+<h2>Why go through the semantic model</h2>
+<p>Working through the semantic layer has a practical benefit. The agent writes Logical SQL against subject areas, so joins, aggregation rules, calculated measures and data security defined in the OAS semantic model all apply. The agent never sees physical tables.</p>
+<h2>Architecture</h2>
+<p>The environment runs in my OCI tenancy in Frankfurt, in one VCN (<code>vcn-analytics-shared</code>) with two subnets:</p>
+<ul>
+<li><code>oas001</code> is an Oracle Linux 8.10 compute instance with OAS, in <code>subnet-oas-public</code> (10.0.1.0/24). The MCP server runs on the same host, so it talks to OAS on <code>localhost</code>.</li>
+<li>OPAF runs on <code>agentfactoryvm</code> in <code>subnet-opaf-private</code> (10.0.3.0/24).</li>
+</ul>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCP transport</td>
+<td>Streamable HTTP (stateless, JSON responses), endpoint <code>/mcp</code>, health check <code>/health</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Bearer token (<code>MCP_API_KEY</code>)</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>Port 8000 open only to the OPAF subnet, through a dedicated NSG</td>
+</tr>
+<tr>
+<td>OAS access</td>
+<td>SOAP web services under <code>/analytics-ws/saw.dll</code></td>
+</tr>
+<tr>
+<td>Query scope</td>
+<td>Read-only: only Logical SQL <code>SELECT</code> is allowed</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2>The four MCP tools</h2>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+<th>OAS web service</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_server_info</code></td>
+<td>Connectivity check, OAS user in use</td>
+<td>nQSessionService.getCurUser</td>
+</tr>
+<tr>
+<td><code>list_subject_areas</code></td>
+<td>List subject areas</td>
+<td>metadataService.getSubjectAreas</td>
+</tr>
+<tr>
+<td><code>describe_subject_area</code></td>
+<td>Tables (folders) and columns; columns with an aggregation rule are measures</td>
+<td>metadataService.describeSubjectArea</td>
+</tr>
+<tr>
+<td><code>execute_logical_sql</code></td>
+<td>Run a read-only Logical SQL <code>SELECT</code>, return columns and rows</td>
+<td>xmlViewService.executeSQLQuery / fetchNext</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The order follows how an agent should work: find the subject area, learn its exact table and column names, then query. The aggregation rule returned by <code>describe_subject_area</code> tells the agent which columns are measures, which is all it needs to know, because Logical SQL has no joins and no <code>GROUP BY</code>. OAS aggregates measures by the attributes selected.</p>
+<h2>Posts</h2>
+<ol>
+<li><a href="https://zigavaupot.blogspot.com/2026/10/setting-up-oas-mcp-server.html">Setting up the OAS MCP server</a>: the code, installation as a systemd service, tests with <code>curl</code> and the network rules.</li>
+<li><a href="https://zigavaupot.blogspot.com/2026/10/using-oas-mcp-server-in-opaf.html">Using the OAS MCP server in OPAF</a>: proxy settings, registration, the agent flow and tests.</li>
+<li>Using the OAS MCP server from Claude (coming soon).</li>
+</ol>
+<h2>Useful links and documentation</h2>
+<ul>
+<li><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol</a></li>
+<li><a href="https://github.com/modelcontextprotocol/python-sdk" target="_blank" rel="noopener">MCP Python SDK</a></li>
+<li><a href="https://docs.oracle.com/en/database/oracle/agent-factory" target="_blank" rel="noopener">Oracle AI Database Private Agent Factory documentation</a></li>
+<li><a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html" target="_blank" rel="noopener">Select AI Agent meets OPAF</a>, where I used the Autonomous Database built-in MCP server with OPAF</li>
+</ul>
+
+</article>
