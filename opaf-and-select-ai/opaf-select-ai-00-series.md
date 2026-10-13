@@ -40,14 +40,40 @@ My environment:
 
 ## Chapters
 
-1. [Chapter 1: Making a star schema Select AI-ready](https://zigavaupot.blogspot.com/2026/10/chapter-1-preparing-schema-for-select-ai.html): join validation, exact literals, business rules and comments as the semantic layer.
-2. [Chapter 2: Connecting Autonomous Database to OCI Generative AI](https://zigavaupot.blogspot.com/2026/10/chapter-2-connecting-adb-to-oci.html): dynamic group, policy, resource principal, the Select AI profile and smoke tests.
-3. [Chapter 3: Building a Select AI Agent team in PL/SQL](https://zigavaupot.blogspot.com/2026/10/chapter-3-select-ai-agent-team-in-plsql.html): tool, agent, task and team, checked against ground truth.
-4. [Chapter 4: Select AI and the in-database team as native OPAF nodes](https://zigavaupot.blogspot.com/2026/10/chapter-4-native-select-ai-nodes-in-opaf.html): flows C1 and C2.
-5. [Chapter 5: No-code Select AI Agent](https://zigavaupot.blogspot.com/2026/10/chapter-5-no-code-select-ai-agent.html): flow C3.
-6. [Chapter 6: The Autonomous Database built-in MCP server](https://zigavaupot.blogspot.com/2026/10/chapter-6-adb-built-in-mcp-server.html): enabling it with a tag, testing with curl, wrapping the team as a tool.
-7. [Chapter 7: OPAF over MCP, database orchestrates vs OPAF orchestrates](https://zigavaupot.blogspot.com/2026/10/chapter-7-opaf-agents-over-mcp.html): flows B and A.
-8. [Chapter 8: Native routing with Select AI Bridge](https://zigavaupot.blogspot.com/2026/10/chapter-8-routing-with-select-ai-bridge.html): flow D.
+<div class="zv-series-grid zv-series-fit">
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-1-preparing-schema-for-select-ai.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 1: Making a star schema Select AI-ready">
+<p>Chapter 1: Making a star schema Select AI-ready</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-2-connecting-adb-to-oci.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 2: Connecting Autonomous Database to OCI Generative AI">
+<p>Chapter 2: Connecting Autonomous Database to OCI Generative AI</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-3-select-ai-agent-team-in-plsql.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 3: Building a Select AI Agent team in PL/SQL">
+<p>Chapter 3: Building a Select AI Agent team in PL/SQL</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-4-native-select-ai-nodes-in-opaf.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 4: Select AI and the in-database team as native OPAF nodes">
+<p>Chapter 4: Select AI and the in-database team as native OPAF nodes</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-5-no-code-select-ai-agent.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 5: No-code Select AI Agent">
+<p>Chapter 5: No-code Select AI Agent</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-6-adb-built-in-mcp-server.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 6: The Autonomous Database built-in MCP server">
+<p>Chapter 6: The Autonomous Database built-in MCP server</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-7-opaf-agents-over-mcp.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 7: OPAF over MCP, database orchestrates vs OPAF orchestrates">
+<p>Chapter 7: OPAF over MCP, database orchestrates vs OPAF orchestrates</p>
+</a>
+<a class="zv-series-card" href="https://zigavaupot.blogspot.com/2026/10/chapter-8-routing-with-select-ai-bridge.html">
+<img src="https://zigavaupot.github.io/blogger/opaf-and-select-ai/images/select-ai-opaf-blog-series.png" alt="Select AI Agent meets OPAF, Chapter 8: Native routing with Select AI Bridge">
+<p>Chapter 8: Native routing with Select AI Bridge</p>
+</a>
+</div>
 
 ## All six flows compared
 
