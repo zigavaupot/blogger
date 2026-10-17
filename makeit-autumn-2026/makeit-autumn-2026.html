@@ -4,7 +4,7 @@
 
 <div class="post-intro">
 <p>On 13 October 2026 I presented at the MakeIT conference in Ljubljana. The session was called <strong>No slides, just agents</strong> (in Slovenian: <em>Sestavimo agenta AI z Oracle Private Agent Factory</em>), and the title was meant literally: a few slides to set the scene, then live agents built and run in Oracle Private Agent Factory (OPAF).</p>
-<p>In this post I summarise what I showed: what OPAF is and where to get it, its architecture, and five demos, from the pre-built Knowledge Agent through Select AI RAG and six Select AI Agent scenarios to the OAS MCP server. The slides are available for download at the end.</p>
+<p>In this post I summarise what I showed: what OPAF is, where to get it, and five demos, from the pre-built Knowledge Agent through Select AI RAG and six Select AI Agent scenarios to the OAS MCP server. The slides are available for download at the end.</p>
 </div>
 
 <!--more-->
@@ -19,12 +19,9 @@
 <h2>Where to get it</h2>
 <p>There are two options:</p>
 <ul>
-<li><a href="https://marketplace.oracle.com/app/agentfactory">Oracle Marketplace</a>, a one-click installation in OCI.</li>
-<li><a href="https://www.oracle.com/database/technologies/private-agent-factory-downloads.html">Oracle Software Delivery Cloud</a>, for a local installation.</li>
+<li><a href="https://marketplace.oracle.com/app/agentfactory" target="_blank" rel="noopener">Oracle Marketplace</a>, a one-click installation in OCI.</li>
+<li><a href="https://www.oracle.com/database/technologies/private-agent-factory-downloads.html" target="_blank" rel="noopener">Oracle Software Delivery Cloud</a>, for a local installation.</li>
 </ul>
-<h2>Architecture</h2>
-<img alt="Oracle Private Agent Factory architecture: users and external A2A clients, OPAF application, models, tools, data sources, observability and Oracle AI Database 26ai as the repository" src="https://zigavaupot.github.io/blogger/makeit-autumn-2026/images/opaf-architecture.png">
-<p>Users reach the OPAF application through a load balancer or reverse proxy, and external A2A clients can call published agents. The application contains pre-built agents, the agent builder, management and security. Around it sit models, tools (including MCP), data sources and observability. Oracle AI Database 26ai is the repository and the "brain" of the platform.</p>
 <h2>The demos</h2>
 <img alt="Demos in the session: Prebuilt Knowledge Agent, Custom Flow: Select AI RAG, Custom Flow: Select AI Agent (several scenarios), OAS MCP Server and a complex custom flow example" src="https://zigavaupot.github.io/blogger/makeit-autumn-2026/images/opaf-scenarios.png">
 <p>The rest of the session was live:</p>
@@ -36,12 +33,12 @@
 <li>Complex custom flow example</li>
 </ol>
 <h3>RAG agents in OPAF</h3>
-<p>For the RAG part I used a well-known Slovenian children's book about Piki, the teddy bear, and asked four test questions:</p>
+<p>For the RAG part I used a well-known Slovenian children's book about Piki Jakob, the teddy bear, and asked four test questions:</p>
 <ul>
-<li>How many penalty points did Piki collect on his driving test?</li>
+<li>How many penalty points did Piki Jakob collect on his driving test?</li>
 <li>What role does the family cat play in the book? List all the stories it appears in and what happens.</li>
-<li>When does Piki take words or instructions literally? What comes of it?</li>
-<li>Write Piki's CV: all the roles he takes on throughout the book and how each one ends.</li>
+<li>When does Piki Jakob take words or instructions literally? What comes of it?</li>
+<li>Write Piki Jakob's CV: all the roles he takes on throughout the book and how each one ends.</li>
 </ul>
 <p>I compared four approaches:</p>
 <div class="zv-table-compact">
@@ -228,10 +225,10 @@
 </tbody>
 </table>
 </div>
-<p>Each scenario is described step by step in the blog series <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">Select AI Agent meets OPAF</a>.</p>
+<p>Each scenario is described step by step in the blog series <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html" target="_blank" rel="noopener">Select AI Agent meets OPAF</a>.</p>
 <h3>OPAF and the OAS MCP server</h3>
-<p>The last integration demo connected an OPAF agent to Oracle Analytics Server through a custom MCP server, so the agent queries subject areas with Logical SQL and uses the semantic model instead of raw tables. The full setup is in <a href="https://zigavaupot.blogspot.com/2026/10/oas-mcp-server-and-opaf.html">Oracle Analytics Server MCP &amp; Use cases</a>.</p>
+<p>The last integration demo connected an OPAF agent to Oracle Analytics Server through a custom MCP server, so the agent queries subject areas with Logical SQL and uses the semantic model instead of raw tables. The full setup is in <a href="https://zigavaupot.blogspot.com/2026/10/oas-mcp-server-and-opaf.html" target="_blank" rel="noopener">Oracle Analytics Server MCP &amp; Use cases</a>.</p>
 <h2>Slides</h2>
-<p>Download the slides (in Slovenian) <a href="https://zigavaupot.github.io/blogger/makeit-autumn-2026/files/ZigaVaupot%20-%20OPAF.pptx">here</a>.</p>
+<p>Download the slides (in Slovenian) <a href="https://zigavaupot.github.io/blogger/makeit-autumn-2026/files/ZigaVaupot%20-%20OPAF.pptx" target="_blank" rel="noopener">here</a>.</p>
 
 </article>

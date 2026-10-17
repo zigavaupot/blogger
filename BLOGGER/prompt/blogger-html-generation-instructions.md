@@ -294,7 +294,21 @@ Convert Markdown links into normal anchors:
 
 Preserve the original destination URL exactly unless explicitly asked to update it.
 
-Do not add `target="_blank"` unless specifically requested.
+### Links that open in a new tab
+
+All links to other sites and all download links must open in a new browser tab, so the reader can keep the post open and continue reading. Add `target="_blank" rel="noopener"` to:
+
+- links to any site other than `zigavaupot.blogspot.com` (for example Oracle documentation, Oracle Marketplace, GitHub repositories);
+- links to downloadable files (for example slides, PDFs, scripts or archives hosted under `zigavaupot.github.io/blogger/.../files/`).
+
+```html
+<a href="https://marketplace.oracle.com/app/agentfactory" target="_blank" rel="noopener">Oracle Marketplace</a>
+<a href="https://zigavaupot.github.io/blogger/my-post/files/slides.pdf" target="_blank" rel="noopener">Download the slides</a>
+```
+
+Links to other posts on `zigavaupot.blogspot.com` (including series cards) stay normal anchors and open in the same tab.
+
+In the Markdown source, write these links as HTML anchors with `target="_blank" rel="noopener"`, because Markdown link syntax cannot set a target.
 
 ---
 
@@ -578,6 +592,7 @@ Before returning the generated HTML, verify:
 - [ ] Main sections begin with `<h2>`.
 - [ ] Code content has not been altered.
 - [ ] Links and image URLs have been preserved.
+- [ ] Links to other sites and download links have `target="_blank" rel="noopener"`; links to `zigavaupot.blogspot.com` posts do not.
 - [ ] Images are not Base64 encoded.
 - [ ] No unnecessary inline styles are present.
 - [ ] Long article content remains after the jump break.
