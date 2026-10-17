@@ -1,0 +1,237 @@
+<article class="zv-blog-post">
+
+<img alt="No slides, just agents: building an AI agent with Oracle Private Agent Factory, MakeIT, Ljubljana, 13 October 2026" src="https://zigavaupot.github.io/blogger/makeit-autumn-2026/images/makeit-autumn-2026.png">
+
+<div class="post-intro">
+<p>On 13 October 2026 I presented at the MakeIT conference in Ljubljana. The session was called <strong>No slides, just agents</strong> (in Slovenian: <em>Sestavimo agenta AI z Oracle Private Agent Factory</em>), and the title was meant literally: a few slides to set the scene, then live agents built and run in Oracle Private Agent Factory (OPAF).</p>
+<p>In this post I summarise what I showed: what OPAF is and where to get it, its architecture, and five demos, from the pre-built Knowledge Agent through Select AI RAG and six Select AI Agent scenarios to the OAS MCP server. The slides are available for download at the end.</p>
+</div>
+
+<!--more-->
+
+<h2>What is Oracle Private Agent Factory?</h2>
+<p>I described OPAF with three words:</p>
+<ul>
+<li><strong>No-code.</strong> OPAF is a no-code platform for building, testing, managing and running AI agents.</li>
+<li><strong>Free.</strong> It is a free extension of the Oracle Database, which is the foundation of the solution. It does require Oracle AI Database 26ai (for example, for Vector Search).</li>
+<li><strong>Open / air-gapped.</strong> Because of its container-based architecture OPAF is portable. It can run in the cloud (for example, on OCI) or completely locally, inside your own isolated (air-gapped) network.</li>
+</ul>
+<h2>Where to get it</h2>
+<p>There are two options:</p>
+<ul>
+<li><a href="https://marketplace.oracle.com/app/agentfactory">Oracle Marketplace</a>, a one-click installation in OCI.</li>
+<li><a href="https://www.oracle.com/database/technologies/private-agent-factory-downloads.html">Oracle Software Delivery Cloud</a>, for a local installation.</li>
+</ul>
+<h2>Architecture</h2>
+<img alt="Oracle Private Agent Factory architecture: users and external A2A clients, OPAF application, models, tools, data sources, observability and Oracle AI Database 26ai as the repository" src="https://zigavaupot.github.io/blogger/makeit-autumn-2026/images/opaf-architecture.png">
+<p>Users reach the OPAF application through a load balancer or reverse proxy, and external A2A clients can call published agents. The application contains pre-built agents, the agent builder, management and security. Around it sit models, tools (including MCP), data sources and observability. Oracle AI Database 26ai is the repository and the "brain" of the platform.</p>
+<h2>The demos</h2>
+<img alt="Demos in the session: Prebuilt Knowledge Agent, Custom Flow: Select AI RAG, Custom Flow: Select AI Agent (several scenarios), OAS MCP Server and a complex custom flow example" src="https://zigavaupot.github.io/blogger/makeit-autumn-2026/images/opaf-scenarios.png">
+<p>The rest of the session was live:</p>
+<ol>
+<li>Pre-built Knowledge Agent</li>
+<li>Custom flow: Select AI RAG</li>
+<li>Custom flow: Select AI Agent (several scenarios)</li>
+<li>OAS MCP Server</li>
+<li>Complex custom flow example</li>
+</ol>
+<h3>RAG agents in OPAF</h3>
+<p>For the RAG part I used a well-known Slovenian children's book about Piki, the teddy bear, and asked four test questions:</p>
+<ul>
+<li>How many penalty points did Piki collect on his driving test?</li>
+<li>What role does the family cat play in the book? List all the stories it appears in and what happens.</li>
+<li>When does Piki take words or instructions literally? What comes of it?</li>
+<li>Write Piki's CV: all the roles he takes on throughout the book and how each one ends.</li>
+</ul>
+<p>I compared four approaches:</p>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Cat</th>
+<th>Literally</th>
+<th>CV</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Knowledge Agent</td>
+<td>3/8</td>
+<td>0/3</td>
+<td>5/15</td>
+<td>~10 s</td>
+</tr>
+<tr>
+<td>Deep Data Research Agent</td>
+<td>6/8</td>
+<td>2/3</td>
+<td>8–10/15</td>
+<td>~3 min</td>
+</tr>
+<tr>
+<td>Flow: Agent + DDRA</td>
+<td>~2/8</td>
+<td>2/3</td>
+<td>5/15</td>
+<td>20–40 s</td>
+</tr>
+<tr>
+<td>Select AI RAG in OPAF</td>
+<td>8/8</td>
+<td>3/3</td>
+<td>15/15</td>
+<td>12–40 s</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The pre-built Knowledge Agent is the fastest to set up and to answer, but it missed most of what the questions asked for. Select AI RAG, used in an OPAF custom flow, answered all three questions completely.</p>
+<h3>Select AI Agents: six scenarios</h3>
+<p>The second part used the same four test questions on a sales star schema in Autonomous Database:</p>
+<ul>
+<li>Which sales channel had the highest profit in 2025?</li>
+<li>Show me the SQL for profit by channel in 2025.</li>
+<li>Compare profit in 2025 vs 2024 by sales channel and tell me which channel improved the most.</li>
+<li>What is the capital of France?</li>
+</ul>
+<p>The last question is the guardrail test. I ran the questions through six flows:</p>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>OPAF building blocks</th>
+<th>How OPAF reaches the database</th>
+<th>Who plans the analysis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Select AI node</td>
+<td>Database connection (wallet)</td>
+<td>Nobody (one question, one SQL statement)</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>In-Database Team node, existing team</td>
+<td>Database connection (wallet)</td>
+<td>Select AI Agent in ADB</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>In-Database Tool, Task, Agent and Team nodes, created on the canvas</td>
+<td>Database connection (wallet)</td>
+<td>Select AI Agent in ADB</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Agent node + MCP server node (<code>SALES_NL2SQL</code>)</td>
+<td>ADB built-in MCP server</td>
+<td>OPAF agent</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Agent node + MCP server node (<code>ASK_SALES_ANALYST</code>)</td>
+<td>ADB built-in MCP server</td>
+<td>Select AI Agent in ADB</td>
+</tr>
+<tr>
+<td>D</td>
+<td>Agent node + two Select AI Bridges (Run SQL, Team)</td>
+<td>Database connection (wallet)</td>
+<td>OPAF agent routes; the in-database team plans analytical questions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>And the results:</p>
+<div class="zv-table-compact">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C1</th>
+<th>C2</th>
+<th>C3</th>
+<th>A</th>
+<th>B</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Connection</td>
+<td>DB</td>
+<td>DB</td>
+<td>DB</td>
+<td>MCP</td>
+<td>MCP</td>
+<td>DB</td>
+</tr>
+<tr>
+<td>LLM in OPAF</td>
+<td>none</td>
+<td>none</td>
+<td>none</td>
+<td>plans, calls tools</td>
+<td>routes only</td>
+<td>routes between bridges</td>
+</tr>
+<tr>
+<td>Planning</td>
+<td>none (one SQL)</td>
+<td>ADB team</td>
+<td>ADB team</td>
+<td>OPAF agent</td>
+<td>ADB team</td>
+<td>ADB team for analytical questions</td>
+</tr>
+<tr>
+<td>Multi-step</td>
+<td>partial (winner only)</td>
+<td>full</td>
+<td>full</td>
+<td>full</td>
+<td>full</td>
+<td>full</td>
+</tr>
+<tr>
+<td>Exact numbers</td>
+<td>rounded (Narrate)</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes (team rounds to whole dollars)</td>
+</tr>
+<tr>
+<td>Shows SQL</td>
+<td>yes (Show SQL)</td>
+<td>no</td>
+<td>no</td>
+<td>yes (<code>showsql</code>)</td>
+<td>no</td>
+<td>no (declines)</td>
+</tr>
+<tr>
+<td>Guardrail</td>
+<td><code>enforce_object_list</code> (raw ORA error)</td>
+<td>agent role</td>
+<td>agent role</td>
+<td>OPAF scope rule</td>
+<td>OPAF scope rule</td>
+<td>OPAF scope rule</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each scenario is described step by step in the blog series <a href="https://zigavaupot.blogspot.com/2026/10/introduction-to-select-ai-agent-meets.html">Select AI Agent meets OPAF</a>.</p>
+<h3>OPAF and the OAS MCP server</h3>
+<p>The last integration demo connected an OPAF agent to Oracle Analytics Server through a custom MCP server, so the agent queries subject areas with Logical SQL and uses the semantic model instead of raw tables. The full setup is in <a href="https://zigavaupot.blogspot.com/2026/10/oas-mcp-server-and-opaf.html">Oracle Analytics Server MCP &amp; Use cases</a>.</p>
+<h2>Slides</h2>
+<p>Download the slides (in Slovenian) <a href="https://zigavaupot.github.io/blogger/makeit-autumn-2026/files/ZigaVaupot%20-%20OPAF.pptx">here</a>.</p>
+
+</article>
