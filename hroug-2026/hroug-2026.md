@@ -1,12 +1,14 @@
 # AI meets Oracle Analytics and No Slides, Just Streams: my presentations at HROUG 2026
 
-![AI meets Oracle Analytics: How are we doing and the next question? HROUG, Rovinj, 15 October 2026](https://zigavaupot.github.io/blogger/hroug-2026/images/hroug-2026.png)
+![HROUG 2026, Rovinj: AI meets Oracle Analytics and No Slides, Just Streams (placeholder, image to be generated)](https://zigavaupot.github.io/blogger/hroug-2026/images/hroug-2026.png)
 
 This week I was in Rovinj at the HROUG 2026 conference, where I delivered two sessions. On 15 October I presented **AI meets Oracle Analytics: How are we doing and the next question?**, and on 16 October **No Slides, Just Streams: From live data streams to real-time analytics and chat on Oracle AI Data Platform**.
 
 In this post I summarise what each session was about. Both slide decks are available for download at the end.
 
 ## AI meets Oracle Analytics: How are we doing and the next question?
+
+![AI meets Oracle Analytics: How are we doing and the next question? HROUG, Rovinj, 15 October 2026](https://zigavaupot.github.io/blogger/hroug-2026/images/ai-meets-oa-title.png)
 
 ### How are we doing?
 
